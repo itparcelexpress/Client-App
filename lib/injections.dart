@@ -1,0 +1,83 @@
+import 'package:client_app/features/auth/cubit/auth_cubit.dart';
+import 'package:client_app/features/auth/data/repositories/auth_repository.dart';
+import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
+import 'package:client_app/features/shipment/data/repositories/order_repository.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+final getIt = GetIt.instance;
+
+Future<void> initInj() async {
+  // Register SharedPreferences
+  final sharedPreferences = await SharedPreferences.getInstance();
+  getIt.registerSingleton<SharedPreferences>(sharedPreferences);
+
+  // Register Dio
+  final dio = Dio();
+  dio.options.baseUrl = 'http://16.16.75.11/api/';
+  dio.options.connectTimeout = const Duration(seconds: 100);
+  dio.options.receiveTimeout = const Duration(seconds: 30);
+  dio.options.sendTimeout = const Duration(seconds: 100);
+
+  // Add headers for better compatibility
+  dio.options.headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  };
+
+  // Add PrettyDioLogger interceptor
+  dio.interceptors.add(
+    PrettyDioLogger(
+      requestHeader: true,
+      requestBody: true,
+      responseBody: true,
+      responseHeader: false,
+      error: true,
+      compact: true,
+      maxWidth: 90,
+      enabled: kDebugMode,
+      filter: (options, args) {
+        // don't print requests with uris containing '/posts'
+        if (options.path.contains('/posts')) {
+          return false;
+        }
+        // don't print responses with unit8 list data
+        return !args.isResponse || !args.hasUint8ListData;
+      },
+    ),
+  );
+
+  // Add error interceptor for better error handling
+  dio.interceptors.add(
+    InterceptorsWrapper(
+      onError: (DioException error, ErrorInterceptorHandler handler) {
+        if (kDebugMode) {
+          print('🔴 DioError: ${error.type}');
+          print('🔴 Message: ${error.message}');
+          print('🔴 URL: ${error.requestOptions.uri}');
+
+          if (error.type == DioExceptionType.connectionError) {
+            print('🔴 Network connection error - check internet connectivity');
+            print('🔴 Try switching between WiFi and mobile data');
+          }
+        }
+        handler.next(error);
+      },
+    ),
+  );
+
+  getIt.registerSingleton<Dio>(dio);
+
+  // Register repositories
+  getIt.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
+  getIt.registerLazySingleton<OrderRepository>(() => OrderRepository());
+
+  // Register cubits
+  getIt.registerFactory<AuthCubit>(() => AuthCubit(getIt<AuthRepository>()));
+  getIt.registerFactory<ShipmentCubit>(
+    () => ShipmentCubit(getIt<OrderRepository>()),
+  );
+}
