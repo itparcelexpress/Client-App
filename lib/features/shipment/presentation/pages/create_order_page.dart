@@ -1,4 +1,6 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:client_app/core/models/location_models.dart';
+import 'package:client_app/core/services/location_service.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/data/models/order_models.dart';
@@ -33,9 +35,15 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   // Dropdown values
   String _paymentType = 'COD';
   final int _countryId = 165; // Default Oman
-  final int _governorateId = 1;
-  final int _stateId = 1;
-  final int _placeId = 1;
+
+  // Location dropdowns
+  List<Governorate> _governorates = [];
+  List<StateModel> _states = [];
+  List<Place> _places = [];
+
+  Governorate? _selectedGovernorate;
+  StateModel? _selectedState;
+  Place? _selectedPlace;
 
   @override
   void initState() {
@@ -43,6 +51,45 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     // Set default values
     _deliveryFeeController.text = '5.00';
     _amountController.text = '0';
+    _loadLocationData();
+  }
+
+  void _loadLocationData() {
+    setState(() {
+      _governorates = LocationService.getAllGovernorates();
+      // Set default selection to first governorate
+      if (_governorates.isNotEmpty) {
+        _selectedGovernorate = _governorates.first;
+        _loadStatesForGovernorate(_selectedGovernorate!.id);
+      }
+    });
+  }
+
+  void _loadStatesForGovernorate(int governorateId) {
+    setState(() {
+      _states = LocationService.getStatesByGovernorateId(governorateId);
+      _selectedState = null;
+      _selectedPlace = null;
+      _places = [];
+
+      // Set default selection to first state
+      if (_states.isNotEmpty) {
+        _selectedState = _states.first;
+        _loadPlacesForState(_selectedState!.id);
+      }
+    });
+  }
+
+  void _loadPlacesForState(int stateId) {
+    setState(() {
+      _places = LocationService.getPlacesByStateId(stateId);
+      _selectedPlace = null;
+
+      // Set default selection to first place
+      if (_places.isNotEmpty) {
+        _selectedPlace = _places.first;
+      }
+    });
   }
 
   @override
@@ -298,6 +345,54 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       title: 'Address Information',
       icon: Icons.location_on_rounded,
       children: [
+        // Governorate Dropdown
+        _buildLocationDropdown<Governorate>(
+          label: 'Governorate',
+          value: _selectedGovernorate,
+          items: _governorates,
+          onChanged: (governorate) {
+            setState(() {
+              _selectedGovernorate = governorate;
+              if (governorate != null) {
+                _loadStatesForGovernorate(governorate.id);
+              }
+            });
+          },
+          displayText: (governorate) => governorate.enName,
+          icon: Icons.location_city_outlined,
+        ),
+        const SizedBox(height: 16),
+        // State Dropdown
+        _buildLocationDropdown<StateModel>(
+          label: 'State',
+          value: _selectedState,
+          items: _states,
+          onChanged: (state) {
+            setState(() {
+              _selectedState = state;
+              if (state != null) {
+                _loadPlacesForState(state.id);
+              }
+            });
+          },
+          displayText: (state) => state.enName,
+          icon: Icons.location_searching_outlined,
+        ),
+        const SizedBox(height: 16),
+        // Place Dropdown
+        _buildLocationDropdown<Place>(
+          label: 'Place',
+          value: _selectedPlace,
+          items: _places,
+          onChanged: (place) {
+            setState(() {
+              _selectedPlace = place;
+            });
+          },
+          displayText: (place) => place.enName,
+          icon: Icons.place_outlined,
+        ),
+        const SizedBox(height: 16),
         _buildTextField(
           controller: _streetAddressController,
           label: 'Street Address',
@@ -316,6 +411,66 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           keyboardType: TextInputType.number,
           validator:
               (value) => value?.isEmpty == true ? 'Zip code is required' : null,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLocationDropdown<T>({
+    required String label,
+    required T? value,
+    required List<T> items,
+    required void Function(T?) onChanged,
+    required String Function(T) displayText,
+    required IconData icon,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF1a1a1a),
+          ),
+        ),
+        const SizedBox(height: 8),
+        DropdownButtonFormField<T>(
+          value: value,
+          onChanged: onChanged,
+          validator: (value) => value == null ? '$label is required' : null,
+          decoration: InputDecoration(
+            prefixIcon: Icon(icon, color: Colors.grey[400], size: 20),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.grey[200]!),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.grey[200]!),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFF667eea), width: 2),
+            ),
+            filled: true,
+            fillColor: Colors.grey[50],
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
+          ),
+          items:
+              items.map((item) {
+                return DropdownMenuItem<T>(
+                  value: item,
+                  child: Text(
+                    displayText(item),
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                );
+              }).toList(),
         ),
       ],
     );
@@ -603,8 +758,17 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
   void _submitOrder() {
     if (_formKey.currentState!.validate()) {
+      // Validate location selections
+      if (_selectedGovernorate == null ||
+          _selectedState == null ||
+          _selectedPlace == null) {
+        _showErrorToast('Please select governorate, state, and place');
+        return;
+      }
+
       final user = LocalData.user;
-      final clientId = 8;
+      final clientId =
+          user?.client?.id ?? 8; // Default to 8 if no client ID found
 
       final request = CreateOrderRequest(
         name: _nameController.text.trim(),
@@ -613,9 +777,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         email: _emailController.text.trim(),
         district: "", // Default empty as per API spec
         countryId: _countryId,
-        governorateId: _governorateId,
-        stateId: _stateId,
-        placeId: _placeId,
+        governorateId: _selectedGovernorate!.id,
+        stateId: _selectedState!.id,
+        placeId: _selectedPlace!.id,
         cityId: 1, // Default as per API spec
         zipcode: _zipcodeController.text.trim(),
         streetAddress: _streetAddressController.text.trim(),

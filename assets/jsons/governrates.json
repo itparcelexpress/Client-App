@@ -1,0 +1,72 @@
+{
+    "message": "Governorates",
+    "success": true,
+    "data": [{
+            "id": 1,
+            "en_name": "Muscat",
+            "ar_name": "محافظة مسقط",
+            "country_id": 165
+        },
+        {
+            "id": 2,
+            "en_name": "Dhofar",
+            "ar_name": "محافظة ظفار",
+            "country_id": 165
+        },
+        {
+            "id": 3,
+            "en_name": "Musandam",
+            "ar_name": "محافظة مسندم",
+            "country_id": 165
+        },
+        {
+            "id": 4,
+            "en_name": "Al Sharqiyah North",
+            "ar_name": "محافظة شمال الشرقية",
+            "country_id": 165
+        },
+        {
+            "id": 5,
+            "en_name": "Al Batinah North",
+            "ar_name": "محافظة شمال الباطنة",
+            "country_id": 165
+        },
+        {
+            "id": 6,
+            "en_name": "Al Sharqiyah South",
+            "ar_name": "محافظة جنوب الشرقية",
+            "country_id": 165
+        },
+        {
+            "id": 7,
+            "en_name": "Al Batinah South",
+            "ar_name": "محافظة جنوب الباطنة",
+            "country_id": 165
+        },
+        {
+            "id": 8,
+            "en_name": "Al Wusta",
+            "ar_name": "محافظة الوسطي",
+            "country_id": 165
+        },
+        {
+            "id": 9,
+            "en_name": "Al Dhahira",
+            "ar_name": "محافظة الظاهرة",
+            "country_id": 165
+        },
+        {
+            "id": 10,
+            "en_name": "Al Dakhiliyah",
+            "ar_name": "محافظة الداخلية",
+            "country_id": 165
+        },
+        {
+            "id": 11,
+            "en_name": "Al-Buraimi",
+            "ar_name": "محافظة البريمي",
+            "country_id": 165
+        }
+    ],
+    "errors": []
+}

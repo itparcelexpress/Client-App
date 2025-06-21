@@ -1,0 +1,838 @@
+{
+    "message": "States",
+    "success": true,
+    "data": [{
+            "id": 1,
+            "en_name": "Muscat",
+            "ar_name": "مسقط ",
+            "governorate_id": 1,
+            "zones": [],
+            "governorate": {
+                "id": 1,
+                "en_name": "Muscat",
+                "ar_name": "محافظة مسقط",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 2,
+            "en_name": "Muttrah",
+            "ar_name": "مطرح ",
+            "governorate_id": 1,
+            "zones": [],
+            "governorate": {
+                "id": 1,
+                "en_name": "Muscat",
+                "ar_name": "محافظة مسقط",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 3,
+            "en_name": "Al Amarat",
+            "ar_name": "العامرات ",
+            "governorate_id": 1,
+            "zones": [],
+            "governorate": {
+                "id": 1,
+                "en_name": "Muscat",
+                "ar_name": "محافظة مسقط",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 4,
+            "en_name": "Bawshar",
+            "ar_name": "بوشر",
+            "governorate_id": 1,
+            "zones": [],
+            "governorate": {
+                "id": 1,
+                "en_name": "Muscat",
+                "ar_name": "محافظة مسقط",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 5,
+            "en_name": "Seeb",
+            "ar_name": "السيب",
+            "governorate_id": 1,
+            "zones": [],
+            "governorate": {
+                "id": 1,
+                "en_name": "Muscat",
+                "ar_name": "محافظة مسقط",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 6,
+            "en_name": "Quriyat",
+            "ar_name": "قريات",
+            "governorate_id": 1,
+            "zones": [],
+            "governorate": {
+                "id": 1,
+                "en_name": "Muscat",
+                "ar_name": "محافظة مسقط",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 7,
+            "en_name": "Al-Mazyunah",
+            "ar_name": "المزيونة",
+            "governorate_id": 2,
+            "zones": [],
+            "governorate": {
+                "id": 2,
+                "en_name": "Dhofar",
+                "ar_name": "محافظة ظفار",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 8,
+            "en_name": "Thumrait",
+            "ar_name": "ثـمـريــت",
+            "governorate_id": 2,
+            "zones": [],
+            "governorate": {
+                "id": 2,
+                "en_name": "Dhofar",
+                "ar_name": "محافظة ظفار",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 9,
+            "en_name": "Rakhyut",
+            "ar_name": "رخــيــوت",
+            "governorate_id": 2,
+            "zones": [],
+            "governorate": {
+                "id": 2,
+                "en_name": "Dhofar",
+                "ar_name": "محافظة ظفار",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 10,
+            "en_name": "Sadah",
+            "ar_name": "ســـــدح",
+            "governorate_id": 2,
+            "zones": [],
+            "governorate": {
+                "id": 2,
+                "en_name": "Dhofar",
+                "ar_name": "محافظة ظفار",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 11,
+            "en_name": "Shaleem and the Halaniyat Islands",
+            "ar_name": "شليم, وجزر, الحلانيات",
+            "governorate_id": 2,
+            "zones": [],
+            "governorate": {
+                "id": 2,
+                "en_name": "Dhofar",
+                "ar_name": "محافظة ظفار",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 12,
+            "en_name": "Salalah",
+            "ar_name": "صــلالـــة",
+            "governorate_id": 2,
+            "zones": [],
+            "governorate": {
+                "id": 2,
+                "en_name": "Dhofar",
+                "ar_name": "محافظة ظفار",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 13,
+            "en_name": " Dhalkut",
+            "ar_name": "ضـلـكــوت",
+            "governorate_id": 2,
+            "zones": [],
+            "governorate": {
+                "id": 2,
+                "en_name": "Dhofar",
+                "ar_name": "محافظة ظفار",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 14,
+            "en_name": "Taqah",
+            "ar_name": "طــاقـــة",
+            "governorate_id": 2,
+            "zones": [],
+            "governorate": {
+                "id": 2,
+                "en_name": "Dhofar",
+                "ar_name": "محافظة ظفار",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 15,
+            "en_name": "Mirbat",
+            "ar_name": "مرباط",
+            "governorate_id": 2,
+            "zones": [],
+            "governorate": {
+                "id": 2,
+                "en_name": "Dhofar",
+                "ar_name": "محافظة ظفار",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 16,
+            "en_name": "Maqshan",
+            "ar_name": "مــقــشــن",
+            "governorate_id": 2,
+            "zones": [],
+            "governorate": {
+                "id": 2,
+                "en_name": "Dhofar",
+                "ar_name": "محافظة ظفار",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 17,
+            "en_name": "Bukha",
+            "ar_name": "بخا   ",
+            "governorate_id": 3,
+            "zones": [],
+            "governorate": {
+                "id": 3,
+                "en_name": "Musandam",
+                "ar_name": "محافظة مسندم",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 18,
+            "en_name": "Khasab",
+            "ar_name": "خصب",
+            "governorate_id": 3,
+            "zones": [],
+            "governorate": {
+                "id": 3,
+                "en_name": "Musandam",
+                "ar_name": "محافظة مسندم",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 19,
+            "en_name": "Dibba",
+            "ar_name": "دبا",
+            "governorate_id": 3,
+            "zones": [],
+            "governorate": {
+                "id": 3,
+                "en_name": "Musandam",
+                "ar_name": "محافظة مسندم",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 20,
+            "en_name": "Al-Biyah",
+            "ar_name": "البيعة",
+            "governorate_id": 3,
+            "zones": [],
+            "governorate": {
+                "id": 3,
+                "en_name": "Musandam",
+                "ar_name": "محافظة مسندم",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 21,
+            "en_name": "Madha",
+            "ar_name": "مدحا",
+            "governorate_id": 3,
+            "zones": [],
+            "governorate": {
+                "id": 3,
+                "en_name": "Musandam",
+                "ar_name": "محافظة مسندم",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 22,
+            "en_name": "Ibra",
+            "ar_name": "ابراء",
+            "governorate_id": 4,
+            "zones": [],
+            "governorate": {
+                "id": 4,
+                "en_name": "Al Sharqiyah North",
+                "ar_name": "محافظة شمال الشرقية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 23,
+            "en_name": "Al-Qabil",
+            "ar_name": "القابل ",
+            "governorate_id": 4,
+            "zones": [],
+            "governorate": {
+                "id": 4,
+                "en_name": "Al Sharqiyah North",
+                "ar_name": "محافظة شمال الشرقية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 24,
+            "en_name": "Al-Mudaybi",
+            "ar_name": "المضيبي",
+            "governorate_id": 4,
+            "zones": [],
+            "governorate": {
+                "id": 4,
+                "en_name": "Al Sharqiyah North",
+                "ar_name": "محافظة شمال الشرقية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 25,
+            "en_name": "Bidiyah",
+            "ar_name": "بدية",
+            "governorate_id": 4,
+            "zones": [],
+            "governorate": {
+                "id": 4,
+                "en_name": "Al Sharqiyah North",
+                "ar_name": "محافظة شمال الشرقية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 26,
+            "en_name": " Dima' Al-Ta'iyyin",
+            "ar_name": "دماء الطائيين",
+            "governorate_id": 4,
+            "zones": [],
+            "governorate": {
+                "id": 4,
+                "en_name": "Al Sharqiyah North",
+                "ar_name": "محافظة شمال الشرقية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 27,
+            "en_name": "Sinaw",
+            "ar_name": "سناو",
+            "governorate_id": 4,
+            "zones": [],
+            "governorate": {
+                "id": 4,
+                "en_name": "Al Sharqiyah North",
+                "ar_name": "محافظة شمال الشرقية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 28,
+            "en_name": "Wadi Bani Khalid",
+            "ar_name": "وادي بني خالد",
+            "governorate_id": 4,
+            "zones": [],
+            "governorate": {
+                "id": 4,
+                "en_name": "Al Sharqiyah North",
+                "ar_name": "محافظة شمال الشرقية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 29,
+            "en_name": "Al-Khaburah",
+            "ar_name": "الــخــابـورة  ",
+            "governorate_id": 5,
+            "zones": [],
+            "governorate": {
+                "id": 5,
+                "en_name": "Al Batinah North",
+                "ar_name": "محافظة شمال الباطنة",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 30,
+            "en_name": "As-Suwaiq",
+            "ar_name": "الـسـويـــق",
+            "governorate_id": 5,
+            "zones": [],
+            "governorate": {
+                "id": 5,
+                "en_name": "Al Batinah North",
+                "ar_name": "محافظة شمال الباطنة",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 31,
+            "en_name": "Shinas",
+            "ar_name": "شناص",
+            "governorate_id": 5,
+            "zones": [],
+            "governorate": {
+                "id": 5,
+                "en_name": "Al Batinah North",
+                "ar_name": "محافظة شمال الباطنة",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 32,
+            "en_name": "Sahar",
+            "ar_name": "صــحـــار",
+            "governorate_id": 5,
+            "zones": [],
+            "governorate": {
+                "id": 5,
+                "en_name": "Al Batinah North",
+                "ar_name": "محافظة شمال الباطنة",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 33,
+            "en_name": "Saham",
+            "ar_name": "صحم",
+            "governorate_id": 5,
+            "zones": [],
+            "governorate": {
+                "id": 5,
+                "en_name": "Al Batinah North",
+                "ar_name": "محافظة شمال الباطنة",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 34,
+            "en_name": "Luwa",
+            "ar_name": "لـــوى",
+            "governorate_id": 5,
+            "zones": [],
+            "governorate": {
+                "id": 5,
+                "en_name": "Al Batinah North",
+                "ar_name": "محافظة شمال الباطنة",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 35,
+            "en_name": "Al-Kamil and Al-Wafi",
+            "ar_name": "الكـامل والـوافـي",
+            "governorate_id": 6,
+            "zones": [],
+            "governorate": {
+                "id": 6,
+                "en_name": "Al Sharqiyah South",
+                "ar_name": "محافظة جنوب الشرقية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 36,
+            "en_name": "Ja'lan Bani Bu Hassan",
+            "ar_name": " جعـلان بنى بوحسـن",
+            "governorate_id": 6,
+            "zones": [],
+            "governorate": {
+                "id": 6,
+                "en_name": "Al Sharqiyah South",
+                "ar_name": "محافظة جنوب الشرقية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 37,
+            "en_name": "Ja'lan Bani Bu Ali",
+            "ar_name": "جـعـلان بنى بـوعـلى",
+            "governorate_id": 6,
+            "zones": [],
+            "governorate": {
+                "id": 6,
+                "en_name": "Al Sharqiyah South",
+                "ar_name": "محافظة جنوب الشرقية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 38,
+            "en_name": "Sur",
+            "ar_name": "صور",
+            "governorate_id": 6,
+            "zones": [],
+            "governorate": {
+                "id": 6,
+                "en_name": "Al Sharqiyah South",
+                "ar_name": "محافظة جنوب الشرقية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 39,
+            "en_name": "Masirah",
+            "ar_name": "مصيرة",
+            "governorate_id": 6,
+            "zones": [],
+            "governorate": {
+                "id": 6,
+                "en_name": "Al Sharqiyah South",
+                "ar_name": "محافظة جنوب الشرقية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 40,
+            "en_name": "Al Rustaq",
+            "ar_name": "الرستاق",
+            "governorate_id": 7,
+            "zones": [],
+            "governorate": {
+                "id": 7,
+                "en_name": "Al Batinah South",
+                "ar_name": "محافظة جنوب الباطنة",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 41,
+            "en_name": " Al Awabi",
+            "ar_name": "العوابي",
+            "governorate_id": 7,
+            "zones": [],
+            "governorate": {
+                "id": 7,
+                "en_name": "Al Batinah South",
+                "ar_name": "محافظة جنوب الباطنة",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 42,
+            "en_name": "Al Musannah",
+            "ar_name": "المصنعة",
+            "governorate_id": 7,
+            "zones": [],
+            "governorate": {
+                "id": 7,
+                "en_name": "Al Batinah South",
+                "ar_name": "محافظة جنوب الباطنة",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 43,
+            "en_name": "Barka",
+            "ar_name": "بركاء",
+            "governorate_id": 7,
+            "zones": [],
+            "governorate": {
+                "id": 7,
+                "en_name": "Al Batinah South",
+                "ar_name": "محافظة جنوب الباطنة",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 44,
+            "en_name": "Nakhl",
+            "ar_name": "نخل",
+            "governorate_id": 7,
+            "zones": [],
+            "governorate": {
+                "id": 7,
+                "en_name": "Al Batinah South",
+                "ar_name": "محافظة جنوب الباطنة",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 45,
+            "en_name": "Wadi Al Ma'awal",
+            "ar_name": "وادي المعاول",
+            "governorate_id": 7,
+            "zones": [],
+            "governorate": {
+                "id": 7,
+                "en_name": "Al Batinah South",
+                "ar_name": "محافظة جنوب الباطنة",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 46,
+            "en_name": "Al-Jazir",
+            "ar_name": "الجـازر",
+            "governorate_id": 8,
+            "zones": [],
+            "governorate": {
+                "id": 8,
+                "en_name": "Al Wusta",
+                "ar_name": "محافظة الوسطي",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 47,
+            "en_name": "Al-Daqm",
+            "ar_name": "الـدقــم",
+            "governorate_id": 8,
+            "zones": [],
+            "governorate": {
+                "id": 8,
+                "en_name": "Al Wusta",
+                "ar_name": "محافظة الوسطي",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 48,
+            "en_name": "Mahout",
+            "ar_name": "مـحــوت",
+            "governorate_id": 8,
+            "zones": [],
+            "governorate": {
+                "id": 8,
+                "en_name": "Al Wusta",
+                "ar_name": "محافظة الوسطي",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 49,
+            "en_name": "Hayma",
+            "ar_name": "هـيـمــاء",
+            "governorate_id": 8,
+            "zones": [],
+            "governorate": {
+                "id": 8,
+                "en_name": "Al Wusta",
+                "ar_name": "محافظة الوسطي",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 50,
+            "en_name": "Dhank",
+            "ar_name": "ضنك ",
+            "governorate_id": 9,
+            "zones": [],
+            "governorate": {
+                "id": 9,
+                "en_name": "Al Dhahira",
+                "ar_name": "محافظة الظاهرة",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 51,
+            "en_name": "Ibri",
+            "ar_name": "عبري",
+            "governorate_id": 9,
+            "zones": [],
+            "governorate": {
+                "id": 9,
+                "en_name": "Al Dhahira",
+                "ar_name": "محافظة الظاهرة",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 52,
+            "en_name": "Yanqul",
+            "ar_name": "ينقل",
+            "governorate_id": 9,
+            "zones": [],
+            "governorate": {
+                "id": 9,
+                "en_name": "Al Dhahira",
+                "ar_name": "محافظة الظاهرة",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 53,
+            "en_name": "Adam",
+            "ar_name": "ادم",
+            "governorate_id": 10,
+            "zones": [],
+            "governorate": {
+                "id": 10,
+                "en_name": "Al Dakhiliyah",
+                "ar_name": "محافظة الداخلية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 54,
+            "en_name": "Izki",
+            "ar_name": "ازكي",
+            "governorate_id": 10,
+            "zones": [],
+            "governorate": {
+                "id": 10,
+                "en_name": "Al Dakhiliyah",
+                "ar_name": "محافظة الداخلية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 55,
+            "en_name": "Jabal Al Akhdar",
+            "ar_name": "الجبل الأخضر",
+            "governorate_id": 10,
+            "zones": [],
+            "governorate": {
+                "id": 10,
+                "en_name": "Al Dakhiliyah",
+                "ar_name": "محافظة الداخلية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 56,
+            "en_name": "Al Hamra",
+            "ar_name": "الحمراء",
+            "governorate_id": 10,
+            "zones": [],
+            "governorate": {
+                "id": 10,
+                "en_name": "Al Dakhiliyah",
+                "ar_name": "محافظة الداخلية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 57,
+            "en_name": "Bidbid",
+            "ar_name": "بدبد",
+            "governorate_id": 10,
+            "zones": [],
+            "governorate": {
+                "id": 10,
+                "en_name": "Al Dakhiliyah",
+                "ar_name": "محافظة الداخلية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 58,
+            "en_name": "Bahla",
+            "ar_name": "بــهـــلاء",
+            "governorate_id": 10,
+            "zones": [],
+            "governorate": {
+                "id": 10,
+                "en_name": "Al Dakhiliyah",
+                "ar_name": "محافظة الداخلية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 59,
+            "en_name": "Samail",
+            "ar_name": "سمائل",
+            "governorate_id": 10,
+            "zones": [],
+            "governorate": {
+                "id": 10,
+                "en_name": "Al Dakhiliyah",
+                "ar_name": "محافظة الداخلية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 60,
+            "en_name": "Manah",
+            "ar_name": "منح",
+            "governorate_id": 10,
+            "zones": [],
+            "governorate": {
+                "id": 10,
+                "en_name": "Al Dakhiliyah",
+                "ar_name": "محافظة الداخلية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 61,
+            "en_name": "Nizwa",
+            "ar_name": "نــــزوى",
+            "governorate_id": 10,
+            "zones": [],
+            "governorate": {
+                "id": 10,
+                "en_name": "Al Dakhiliyah",
+                "ar_name": "محافظة الداخلية",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 62,
+            "en_name": "Al-Buraimi",
+            "ar_name": "البريمي",
+            "governorate_id": 11,
+            "zones": [],
+            "governorate": {
+                "id": 11,
+                "en_name": "Al-Buraimi",
+                "ar_name": "محافظة البريمي",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 63,
+            "en_name": "Al-Sunainah",
+            "ar_name": "السنينة",
+            "governorate_id": 11,
+            "zones": [],
+            "governorate": {
+                "id": 11,
+                "en_name": "Al-Buraimi",
+                "ar_name": "محافظة البريمي",
+                "country_id": 165
+            }
+        },
+        {
+            "id": 64,
+            "en_name": "Mahdhah",
+            "ar_name": "محضة",
+            "governorate_id": 11,
+            "zones": [],
+            "governorate": {
+                "id": 11,
+                "en_name": "Al-Buraimi",
+                "ar_name": "محافظة البريمي",
+                "country_id": 165
+            }
+        }
+    ],
+    "errors": []
+}
