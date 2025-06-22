@@ -16,6 +16,7 @@ class AppEndPoints {
   // Orders
   static const String orders = 'orders';
   static const String createOrder = 'orders/store';
+  static const String clientOrders = 'client/orders';
 
   // Home
   static const String homeStatus = 'mobile_app_homepage_stats';

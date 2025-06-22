@@ -17,7 +17,6 @@ class ShipmentPage extends StatefulWidget {
 class _ShipmentPageState extends State<ShipmentPage> {
   final TextEditingController _stickerController = TextEditingController();
   MobileScannerController? _scannerController;
-  bool _isScanning = false;
 
   @override
   void initState() {
@@ -257,7 +256,7 @@ class _ShipmentPageState extends State<ShipmentPage> {
             ),
           ),
           const SizedBox(height: 16),
-          if (!_isScanning) _buildScanButton() else _buildScannerView(),
+          _buildScanButton(),
         ],
       ),
     );
@@ -265,7 +264,7 @@ class _ShipmentPageState extends State<ShipmentPage> {
 
   Widget _buildScanButton() {
     return GestureDetector(
-      onTap: _startScan,
+      onTap: _showScanBottomSheet,
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -288,46 +287,6 @@ class _ShipmentPageState extends State<ShipmentPage> {
                 color: Colors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildScannerView() {
-    return Container(
-      height: 200,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.black,
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: Stack(
-          children: [
-            MobileScanner(
-              controller: _scannerController,
-              onDetect: (capture) {
-                context.read<ShipmentCubit>().onBarcodeDetected(capture);
-                _stopScan();
-              },
-            ),
-            Positioned(
-              top: 12,
-              right: 12,
-              child: GestureDetector(
-                onTap: _stopScan,
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.black54,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(Icons.close, color: Colors.white, size: 16),
-                ),
               ),
             ),
           ],
@@ -480,26 +439,114 @@ class _ShipmentPageState extends State<ShipmentPage> {
     );
   }
 
-  Future<void> _startScan() async {
+  void _showScanBottomSheet() async {
     final permission = await Permission.camera.request();
     if (permission.isGranted) {
       setState(() {
-        _isScanning = true;
         _scannerController = MobileScannerController();
       });
-    } else {
       if (mounted) {
-        context.read<ShipmentCubit>().showScanError('Camera permission denied');
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (context) => _buildScanBottomSheet(),
+        ).then((_) {
+          // Dispose controller when bottom sheet is closed
+          _scannerController?.dispose();
+          _scannerController = null;
+        });
       }
+    } else if (mounted) {
+      context.read<ShipmentCubit>().showScanError('Camera permission denied');
     }
   }
 
-  void _stopScan() {
-    setState(() {
-      _isScanning = false;
-      _scannerController?.dispose();
-      _scannerController = null;
-    });
+  Widget _buildScanBottomSheet() {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.8,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
+        ),
+      ),
+      child: Column(
+        children: [
+          // Handle bar
+          Container(
+            margin: const EdgeInsets.only(top: 12),
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          // Header
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: [
+                const Expanded(
+                  child: Text(
+                    'Scan Barcode',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF1a1a1a),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(Icons.close, size: 20),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Scanner
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.black,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: MobileScanner(
+                    controller: _scannerController,
+                    onDetect: (capture) {
+                      context.read<ShipmentCubit>().onBarcodeDetected(capture);
+                      Navigator.pop(context); // Close bottom sheet
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // Instructions
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Text(
+              'Position the barcode within the frame to scan',
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Color _getResultColor(ShipmentState state) {
@@ -509,18 +556,22 @@ class _ShipmentPageState extends State<ShipmentPage> {
   }
 
   Color _getResultBackgroundColor(ShipmentState state) {
-    if (state is ShipmentScanError)
+    if (state is ShipmentScanError) {
       return const Color(0xFFef4444).withValues(alpha: 0.1);
-    if (state is ShipmentScanSuccess)
+    }
+    if (state is ShipmentScanSuccess) {
       return const Color(0xFF10b981).withValues(alpha: 0.1);
+    }
     return const Color(0xFF667eea).withValues(alpha: 0.1);
   }
 
   Color _getResultBorderColor(ShipmentState state) {
-    if (state is ShipmentScanError)
+    if (state is ShipmentScanError) {
       return const Color(0xFFef4444).withValues(alpha: 0.3);
-    if (state is ShipmentScanSuccess)
+    }
+    if (state is ShipmentScanSuccess) {
       return const Color(0xFF10b981).withValues(alpha: 0.3);
+    }
     return const Color(0xFF667eea).withValues(alpha: 0.3);
   }
 

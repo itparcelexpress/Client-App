@@ -1,7 +1,9 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
-import 'package:client_app/features/auth/presentation/pages/login_page.dart';
+import 'package:client_app/features/dashboard/cubit/dashboard_cubit.dart';
+import 'package:client_app/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/presentation/pages/orders_list_page.dart';
 import 'package:client_app/features/shipment/presentation/pages/shipment_page.dart';
@@ -82,7 +84,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           controller: _pageController,
           onPageChanged: _onPageChanged,
           children: [
-            _buildDashboardPage(),
+            BlocProvider(
+              create: (context) => getIt<DashboardCubit>(),
+              child: const DashboardPage(),
+            ),
             _buildOrdersPage(),
             _buildProfilePage(),
           ],
@@ -277,30 +282,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     }
   }
 
-  Widget _buildDashboardPage() {
-    final user = LocalData.user;
-
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            _buildDashboardHeader(),
-            const SizedBox(height: 24),
-            _buildWelcomeCard(user?.name ?? 'User'),
-            const SizedBox(height: 24),
-            _buildQuickStats(),
-            const SizedBox(height: 24),
-            _buildQuickActions(),
-            const SizedBox(height: 24),
-            _buildRecentActivity(),
-            const SizedBox(height: 100), // Space for FAB
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildOrdersPage() {
     return BlocProvider(
       create: (context) => getIt<ShipmentCubit>(),
@@ -313,106 +294,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     return SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
+          context,
+          const EdgeInsets.all(20),
+        ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 40)),
             _buildProfileHeader(),
-            const SizedBox(height: 24),
+            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 24)),
             _buildProfileCard(user),
-            const SizedBox(height: 24),
+            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 24)),
             _buildSettingsSection(),
-            const SizedBox(height: 100), // Space for FAB
+            SizedBox(
+              height: ResponsiveUtils.getResponsivePadding(context, 80),
+            ), // Space for FAB - reduced from 100
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildDashboardHeader() {
-    return FadeInDown(
-      duration: const Duration(milliseconds: 400),
-      child: Row(
-        children: [
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF667eea), Color(0xFF764ba2)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF667eea).withValues(alpha: 0.3),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: const Icon(
-              Icons.dashboard_rounded,
-              color: Colors.white,
-              size: 24,
-            ),
-          ),
-          const SizedBox(width: 16),
-          const Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Dashboard',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF1a1a1a),
-                  ),
-                ),
-                Text(
-                  'Welcome to your control center',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFF666666),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          BlocListener<AuthCubit, AuthState>(
-            listener: (context, state) {
-              if (state is AuthInitial) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                );
-              }
-            },
-            child: GestureDetector(
-              onTap: () => _showLogoutDialog(context),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.logout_rounded,
-                  size: 20,
-                  color: Color(0xFF666666),
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -423,8 +322,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       child: Row(
         children: [
           Container(
-            width: 50,
-            height: 50,
+            width: ResponsiveUtils.getResponsiveWidth(context, 50),
+            height: ResponsiveUtils.getResponsiveHeight(context, 50),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [Color(0xFF8b5cf6), Color(0xFF7c3aed)],
@@ -440,31 +339,37 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ),
               ],
             ),
-            child: const Icon(
+            child: Icon(
               Icons.person_rounded,
               color: Colors.white,
-              size: 24,
+              size: ResponsiveUtils.getResponsiveWidth(context, 24),
             ),
           ),
-          const SizedBox(width: 16),
-          const Expanded(
+          SizedBox(width: ResponsiveUtils.getResponsivePadding(context, 16)),
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Profile',
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: ResponsiveUtils.getResponsiveFontSize(
+                      context,
+                      24,
+                    ),
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF1a1a1a),
+                    color: const Color(0xFF1a1a1a),
                   ),
                 ),
                 Text(
                   'Manage your account settings',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: ResponsiveUtils.getResponsiveFontSize(
+                      context,
+                      14,
+                    ),
                     fontWeight: FontWeight.w400,
-                    color: Color(0xFF666666),
+                    color: const Color(0xFF666666),
                   ),
                 ),
               ],
@@ -472,431 +377,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildWelcomeCard(String userName) {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 500),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF667eea), Color(0xFF764ba2)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF667eea).withValues(alpha: 0.4),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 70,
-              height: 70,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.3),
-                  width: 2,
-                ),
-              ),
-              child: const Icon(
-                Icons.person_rounded,
-                color: Colors.white,
-                size: 32,
-              ),
-            ),
-            const SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Welcome back,',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white.withValues(alpha: 0.9),
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    userName,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Text(
-                      'Premium Member',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildQuickStats() {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 600),
-      child: Row(
-        children: [
-          Expanded(
-            child: _buildStatCard(
-              icon: Icons.local_shipping_rounded,
-              title: 'Total Orders',
-              value: '24',
-              change: '+12%',
-              color: const Color(0xFF667eea),
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: _buildStatCard(
-              icon: Icons.check_circle_rounded,
-              title: 'Delivered',
-              value: '18',
-              change: '+8%',
-              color: const Color(0xFF10b981),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatCard({
-    required IconData icon,
-    required String title,
-    required String value,
-    required String change,
-    required Color color,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Icon(icon, color: color, size: 24),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF10b981).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  change,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF10b981),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF1a1a1a),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[600],
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildQuickActions() {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 700),
-      child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 15,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Quick Actions',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF1a1a1a),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildActionCard(
-                    icon: Icons.qr_code_scanner_rounded,
-                    title: 'Quick Scan',
-                    subtitle: 'Scan barcode',
-                    color: const Color(0xFF10b981),
-                    onTap: _navigateToScan,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _buildActionCard(
-                    icon: Icons.analytics_rounded,
-                    title: 'Analytics',
-                    subtitle: 'View stats',
-                    color: const Color(0xFFef4444),
-                    onTap: () => _showComingSoon(context, 'Analytics'),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionCard({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withValues(alpha: 0.2)),
-        ),
-        child: Column(
-          children: [
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: color.withValues(alpha: 0.3),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Icon(icon, color: Colors.white, size: 24),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF1a1a1a),
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              subtitle,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-                fontWeight: FontWeight.w400,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRecentActivity() {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 800),
-      child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 15,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Recent Activity',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF1a1a1a),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => _onNavItemTapped(1), // Go to orders tab
-                  child: const Text(
-                    'View All',
-                    style: TextStyle(
-                      color: Color(0xFF667eea),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            _buildActivityItem(
-              icon: Icons.add_circle_outline,
-              title: 'Order Created',
-              subtitle: 'PE190625674430 • Just now',
-              color: const Color(0xFF10b981),
-            ),
-            const SizedBox(height: 12),
-            _buildActivityItem(
-              icon: Icons.local_shipping_outlined,
-              title: 'Order Shipped',
-              subtitle: 'PE190625674429 • 2 hours ago',
-              color: const Color(0xFF667eea),
-            ),
-            const SizedBox(height: 12),
-            _buildActivityItem(
-              icon: Icons.check_circle_outline,
-              title: 'Order Delivered',
-              subtitle: 'PE190625674428 • Yesterday',
-              color: const Color(0xFF8b5cf6),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActivityItem({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required Color color,
-  }) {
-    return Row(
-      children: [
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(icon, color: color, size: 20),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF1a1a1a),
-                ),
-              ),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 
@@ -904,7 +384,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return FadeInUp(
       duration: const Duration(milliseconds: 500),
       child: Container(
-        padding: const EdgeInsets.all(24),
+        padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
+          context,
+          const EdgeInsets.all(24),
+        ),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -919,8 +402,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: Column(
           children: [
             Container(
-              width: 90,
-              height: 90,
+              width: ResponsiveUtils.getResponsiveWidth(context, 90),
+              height: ResponsiveUtils.getResponsiveHeight(context, 90),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [Color(0xFF8b5cf6), Color(0xFF7c3aed)],
@@ -936,31 +419,31 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.person_rounded,
                 color: Colors.white,
-                size: 45,
+                size: ResponsiveUtils.getResponsiveWidth(context, 45),
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 20)),
             Text(
               user?.name ?? 'User',
-              style: const TextStyle(
-                fontSize: 22,
+              style: TextStyle(
+                fontSize: ResponsiveUtils.getResponsiveFontSize(context, 22),
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF1a1a1a),
+                color: const Color(0xFF1a1a1a),
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 8)),
             Text(
               user?.email ?? 'N/A',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: ResponsiveUtils.getResponsiveFontSize(context, 14),
                 color: Colors.grey[600],
                 fontWeight: FontWeight.w400,
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 24)),
             Row(
               children: [
                 Expanded(
@@ -972,7 +455,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ),
                 if (user?.client?.address != null) ...[
-                  const SizedBox(width: 16),
+                  SizedBox(
+                    width: ResponsiveUtils.getResponsivePadding(context, 16),
+                  ),
                   Expanded(
                     child: _buildInfoItem(
                       icon: Icons.location_on_rounded,
@@ -1161,19 +646,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void _navigateToCreateOrder() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder:
-            (context) => BlocProvider(
-              create: (context) => getIt<ShipmentCubit>(),
-              child: const ShipmentPage(),
-            ),
-      ),
-    );
-  }
-
-  void _navigateToScan() {
     Navigator.push(
       context,
       MaterialPageRoute(

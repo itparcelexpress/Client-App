@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/auth/presentation/pages/home_page.dart';
 import 'package:client_app/injections.dart';
@@ -75,32 +76,50 @@ class _LoginPageState extends State<LoginPage> {
                     textColor: Colors.white,
                     fontSize: 16.0,
                   );
-                } else if (state is AuthCheckSuccess &&
-                    !state.isAuthenticated) {
-                  Fluttertoast.showToast(
-                    msg: "Please login to continue",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.TOP,
-                    backgroundColor: const Color(0xFFf59e0b),
-                    textColor: Colors.white,
-                    fontSize: 16.0,
-                  );
                 }
               },
               builder: (context, state) {
                 return SingleChildScrollView(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
+                    context,
+                    const EdgeInsets.all(24.0),
+                  ),
                   child: Column(
                     children: [
-                      const SizedBox(height: 40),
+                      SizedBox(
+                        height: ResponsiveUtils.getResponsivePadding(
+                          context,
+                          40,
+                        ),
+                      ),
                       _buildHeader(),
-                      const SizedBox(height: 60),
+                      SizedBox(
+                        height: ResponsiveUtils.getResponsivePadding(
+                          context,
+                          60,
+                        ),
+                      ),
                       _buildLoginForm(context, state),
-                      const SizedBox(height: 24),
+                      SizedBox(
+                        height: ResponsiveUtils.getResponsivePadding(
+                          context,
+                          24,
+                        ),
+                      ),
                       _buildForgotPassword(),
-                      const SizedBox(height: 40),
+                      SizedBox(
+                        height: ResponsiveUtils.getResponsivePadding(
+                          context,
+                          40,
+                        ),
+                      ),
                       _buildLoginButton(context, state),
-                      const SizedBox(height: 60), // Added extra space at bottom
+                      SizedBox(
+                        height: ResponsiveUtils.getResponsivePadding(
+                          context,
+                          60,
+                        ),
+                      ), // Added extra space at bottom
                     ],
                   ),
                 );
@@ -118,8 +137,8 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: [
           Container(
-            height: 120,
-            width: 120,
+            height: ResponsiveUtils.getResponsiveHeight(context, 120),
+            width: ResponsiveUtils.getResponsiveWidth(context, 120),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: LinearGradient(
@@ -133,26 +152,34 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ],
             ),
-            child: const Icon(
+            child: Icon(
               Icons.local_shipping,
-              size: 60,
+              size: ResponsiveUtils.getResponsiveWidth(context, 60),
               color: Colors.white,
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 24)),
           Text(
             'Parcel Express',
             style: _systemFont(
-              fontSize: 32,
+              fontSize: ResponsiveUtils.getResponsiveFontSize(context, 32),
               fontWeight: FontWeight.bold,
               color: Colors.grey.shade800,
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Welcome back! Please sign in to continue.',
-            style: _systemFont(fontSize: 16, color: Colors.grey.shade600),
-            textAlign: TextAlign.center,
+          SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 8)),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: ResponsiveUtils.getResponsivePadding(context, 16),
+            ),
+            child: Text(
+              'Welcome back! Please sign in to continue.',
+              style: _systemFont(
+                fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
+                color: Colors.grey.shade600,
+              ),
+              textAlign: TextAlign.center,
+            ),
           ),
         ],
       ),
@@ -163,7 +190,10 @@ class _LoginPageState extends State<LoginPage> {
     return FadeInUp(
       duration: const Duration(milliseconds: 800),
       child: Container(
-        padding: const EdgeInsets.all(24),
+        padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
+          context,
+          const EdgeInsets.all(24),
+        ),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -180,9 +210,13 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: [
               _buildEmailField(),
-              const SizedBox(height: 20),
+              SizedBox(
+                height: ResponsiveUtils.getResponsivePadding(context, 20),
+              ),
               _buildPasswordField(),
-              const SizedBox(height: 20),
+              SizedBox(
+                height: ResponsiveUtils.getResponsivePadding(context, 20),
+              ),
               _buildRememberMe(),
             ],
           ),
