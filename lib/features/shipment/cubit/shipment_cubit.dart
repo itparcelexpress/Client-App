@@ -84,6 +84,91 @@ class ShipmentCubit extends Cubit<ShipmentState> {
     }
   }
 
+  // Client Orders Methods (new)
+  Future<void> loadClientOrders({
+    String? status,
+    String? fromDate,
+    String? toDate,
+    String? query,
+    int page = 1,
+  }) async {
+    if (isClosed) return;
+
+    try {
+      emit(ClientOrdersLoading());
+      final response = await _orderRepository.getClientOrders(
+        status: status,
+        fromDate: fromDate,
+        toDate: toDate,
+        query: query,
+        page: page,
+      );
+
+      if (!isClosed) {
+        final orders =
+            response.data.data
+                .map(
+                  (pickupOrder) =>
+                      PickupOrderSummary.fromPickupOrder(pickupOrder),
+                )
+                .toList();
+
+        emit(
+          ClientOrdersLoaded(
+            orders: orders,
+            currentPage: response.data.currentPage,
+            totalPages: response.data.lastPage,
+            totalOrders: response.data.total,
+            hasNextPage: response.data.nextPageUrl != null,
+            hasPreviousPage: response.data.prevPageUrl != null,
+          ),
+        );
+      }
+    } catch (e) {
+      if (!isClosed) {
+        emit(ClientOrdersError(message: e.toString()));
+      }
+    }
+  }
+
+  // Load next page of client orders
+  Future<void> loadNextPage({
+    String? status,
+    String? fromDate,
+    String? toDate,
+    String? query,
+  }) async {
+    final currentState = state;
+    if (currentState is ClientOrdersLoaded && currentState.hasNextPage) {
+      await loadClientOrders(
+        status: status,
+        fromDate: fromDate,
+        toDate: toDate,
+        query: query,
+        page: currentState.currentPage + 1,
+      );
+    }
+  }
+
+  // Load previous page of client orders
+  Future<void> loadPreviousPage({
+    String? status,
+    String? fromDate,
+    String? toDate,
+    String? query,
+  }) async {
+    final currentState = state;
+    if (currentState is ClientOrdersLoaded && currentState.hasPreviousPage) {
+      await loadClientOrders(
+        status: status,
+        fromDate: fromDate,
+        toDate: toDate,
+        query: query,
+        page: currentState.currentPage - 1,
+      );
+    }
+  }
+
   // Reset to initial state
   void reset() {
     if (isClosed) return;

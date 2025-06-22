@@ -79,3 +79,43 @@ class OrdersError extends ShipmentState {
   @override
   List<Object?> get props => [message];
 }
+
+// Client Orders States (new)
+class ClientOrdersLoading extends ShipmentState {}
+
+class ClientOrdersLoaded extends ShipmentState {
+  final List<PickupOrderSummary> orders;
+  final int currentPage;
+  final int totalPages;
+  final int totalOrders;
+  final bool hasNextPage;
+  final bool hasPreviousPage;
+
+  const ClientOrdersLoaded({
+    required this.orders,
+    required this.currentPage,
+    required this.totalPages,
+    required this.totalOrders,
+    required this.hasNextPage,
+    required this.hasPreviousPage,
+  });
+
+  @override
+  List<Object?> get props => [
+    orders,
+    currentPage,
+    totalPages,
+    totalOrders,
+    hasNextPage,
+    hasPreviousPage,
+  ];
+}
+
+class ClientOrdersError extends ShipmentState {
+  final String message;
+
+  const ClientOrdersError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

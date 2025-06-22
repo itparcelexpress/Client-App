@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:client_app/core/models/location_models.dart';
 import 'package:client_app/core/services/location_service.dart';
+import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/data/models/order_models.dart';
@@ -31,6 +32,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   final _streetAddressController = TextEditingController();
   final _deliveryFeeController = TextEditingController();
   final _amountController = TextEditingController();
+  final _locationUrlController = TextEditingController();
 
   // Dropdown values
   String _paymentType = 'COD';
@@ -102,6 +104,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     _streetAddressController.dispose();
     _deliveryFeeController.dispose();
     _amountController.dispose();
+    _locationUrlController.dispose();
 
     _scrollController.dispose();
     super.dispose();
@@ -119,30 +122,65 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               child: BlocListener<ShipmentCubit, ShipmentState>(
                 listener: (context, state) {
                   if (state is OrderCreated) {
+                    print('Order created successfully: ${state.orderData.id}');
                     _showSuccessDialog(state.orderData);
                   } else if (state is OrderCreationError) {
+                    print('Order creation error: ${state.message}');
                     _showErrorToast(state.message);
                   }
                 },
                 child: SingleChildScrollView(
                   controller: _scrollController,
-                  padding: const EdgeInsets.all(20),
+                  padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
+                    context,
+                    const EdgeInsets.all(20),
+                  ),
                   child: Form(
                     key: _formKey,
                     child: Column(
                       children: [
                         _buildHeader(),
-                        const SizedBox(height: 24),
+                        SizedBox(
+                          height: ResponsiveUtils.getResponsivePadding(
+                            context,
+                            24,
+                          ),
+                        ),
                         _buildStickerInfo(),
-                        const SizedBox(height: 24),
+                        SizedBox(
+                          height: ResponsiveUtils.getResponsivePadding(
+                            context,
+                            24,
+                          ),
+                        ),
                         _buildPersonalInfoSection(),
-                        const SizedBox(height: 24),
+                        SizedBox(
+                          height: ResponsiveUtils.getResponsivePadding(
+                            context,
+                            24,
+                          ),
+                        ),
                         _buildAddressSection(),
-                        const SizedBox(height: 24),
+                        SizedBox(
+                          height: ResponsiveUtils.getResponsivePadding(
+                            context,
+                            24,
+                          ),
+                        ),
                         _buildOrderDetailsSection(),
-                        const SizedBox(height: 40),
+                        SizedBox(
+                          height: ResponsiveUtils.getResponsivePadding(
+                            context,
+                            40,
+                          ),
+                        ),
                         _buildSubmitButton(),
-                        const SizedBox(height: 20),
+                        SizedBox(
+                          height: ResponsiveUtils.getResponsivePadding(
+                            context,
+                            20,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -159,7 +197,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     return FadeInDown(
       duration: const Duration(milliseconds: 400),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
+          context,
+          const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        ),
         color: Colors.white,
         child: Row(
           children: [
@@ -174,13 +215,13 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 child: const Icon(Icons.arrow_back, size: 20),
               ),
             ),
-            const Expanded(
+            Expanded(
               child: Text(
                 'Create Order',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: ResponsiveUtils.getResponsiveFontSize(context, 18),
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1a1a1a),
+                  color: const Color(0xFF1a1a1a),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -198,8 +239,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       child: Column(
         children: [
           Container(
-            width: 80,
-            height: 80,
+            width: ResponsiveUtils.getResponsiveWidth(context, 80),
+            height: ResponsiveUtils.getResponsiveHeight(context, 80),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [Color(0xFF667eea), Color(0xFF764ba2)],
@@ -208,28 +249,34 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               ),
               borderRadius: BorderRadius.circular(25),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.add_box_rounded,
               color: Colors.white,
-              size: 40,
+              size: ResponsiveUtils.getResponsiveWidth(context, 40),
             ),
           ),
-          const SizedBox(height: 20),
-          const Text(
+          SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 20)),
+          Text(
             'New Order',
             style: TextStyle(
-              fontSize: 28,
+              fontSize: ResponsiveUtils.getResponsiveFontSize(context, 28),
               fontWeight: FontWeight.w700,
-              color: Color(0xFF1a1a1a),
+              color: const Color(0xFF1a1a1a),
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Fill in the details to create your order',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-              fontWeight: FontWeight.w400,
+          SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 8)),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: ResponsiveUtils.getResponsivePadding(context, 16),
+            ),
+            child: Text(
+              'Fill in the details to create your order',
+              style: TextStyle(
+                fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
+                color: Colors.grey[600],
+                fontWeight: FontWeight.w400,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
         ],
@@ -520,6 +567,24 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             ),
           ],
         ),
+        const SizedBox(height: 16),
+        _buildTextField(
+          controller: _locationUrlController,
+          label: 'Location URL (Optional)',
+          hint: 'https://maps.app.goo.gl/...',
+          icon: Icons.location_on_outlined,
+          keyboardType: TextInputType.url,
+          validator: (value) {
+            if (value != null && value.isNotEmpty) {
+              // Only validate if the field is not empty
+              final uri = Uri.tryParse(value);
+              if (uri == null || !uri.hasAbsolutePath) {
+                return 'Please enter a valid URL';
+              }
+            }
+            return null;
+          },
+        ),
       ],
     );
   }
@@ -767,10 +832,13 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       }
 
       final user = LocalData.user;
+      // Use the correct client ID from the user data
       final clientId =
-          user?.client?.id ?? 8; // Default to 8 if no client ID found
+          user?.client?.id ?? 1; // Default to 1 if no client ID found
 
       final request = CreateOrderRequest(
+        stickerNumber:
+            widget.stickerNumber, // Use the sticker number from widget
         name: _nameController.text.trim(),
         cellphone: _phoneController.text.trim(),
         alternatePhone: _alternatePhoneController.text.trim(),
@@ -793,6 +861,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         amount: double.parse(_amountController.text),
         deliveryFee: double.parse(_deliveryFeeController.text),
         clientId: clientId,
+        locationUrl:
+            _locationUrlController.text.trim().isEmpty
+                ? "https://maps.app.goo.gl/q9CvYn3SKy9DVxBAA" // Default location URL if none provided
+                : _locationUrlController.text.trim(),
       );
 
       context.read<ShipmentCubit>().createOrder(request);
@@ -834,19 +906,44 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 12),
+                // Show order ID and consignee info instead of tracking number if it's null/empty
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: const Color(0xFF10b981).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Text(
-                    'Tracking: ${orderData.trackingNo}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF10b981),
-                    ),
+                  child: Column(
+                    children: [
+                      if (orderData.trackingNo.isNotEmpty) ...[
+                        Text(
+                          'Tracking: ${orderData.trackingNo}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF10b981),
+                          ),
+                        ),
+                      ] else ...[
+                        Text(
+                          'Order ID: ${orderData.id}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF10b981),
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 8),
+                      Text(
+                        'For: ${orderData.consignee.name}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF6b7280),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -871,6 +968,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   }
 
   void _showErrorToast(String message) {
+    // Don't show empty error messages
+    if (message.trim().isEmpty) return;
+
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_LONG,
