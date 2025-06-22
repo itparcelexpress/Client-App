@@ -9,8 +9,6 @@ import 'package:client_app/features/auth/presentation/pages/home_page.dart';
 import 'package:client_app/features/auth/presentation/pages/login_page.dart';
 import 'package:client_app/features/splash/splash.dart';
 import 'package:client_app/injections.dart';
-import 'package:device_preview/device_preview.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,10 +26,7 @@ Future<void> main() async {
   FlutterError.onError = (FlutterErrorDetails details) {};
 
   runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => MyApp(), // Wrap your app
-    ),
+    MyApp(), // Wrap your app
   );
 }
 
@@ -41,8 +36,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
       debugShowCheckedModeBanner: false,
       title: 'Client App',
       theme: AppThemes.theme,
