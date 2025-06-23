@@ -3,6 +3,7 @@ import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client_app/features/dashboard/presentation/widgets/dashboard_widgets.dart';
+import 'package:client_app/features/notifications/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -72,24 +73,56 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget _buildGreeting(String userName) {
     return FadeInDown(
       duration: const Duration(milliseconds: 400),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Text(
-            'Hello, $userName! 👋',
-            style: TextStyle(
-              fontSize: ResponsiveUtils.getResponsiveFontSize(context, 28),
-              fontWeight: FontWeight.w700,
-              color: const Color(0xFF1a1a1a),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Hello, $userName! 👋',
+                  style: TextStyle(
+                    fontSize: ResponsiveUtils.getResponsiveFontSize(
+                      context,
+                      28,
+                    ),
+                    fontWeight: FontWeight.w700,
+                    color: const Color(0xFF1a1a1a),
+                  ),
+                ),
+                SizedBox(
+                  height: ResponsiveUtils.getResponsivePadding(context, 8),
+                ),
+                Text(
+                  'Here\'s your business overview',
+                  style: TextStyle(
+                    fontSize: ResponsiveUtils.getResponsiveFontSize(
+                      context,
+                      16,
+                    ),
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 8)),
-          Text(
-            'Here\'s your business overview',
-            style: TextStyle(
-              fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
-              color: Colors.grey[600],
-              fontWeight: FontWeight.w400,
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.all(12),
+            child: const NotificationIconWidget(
+              size: 24,
+              color: Color(0xFF667eea),
             ),
           ),
         ],

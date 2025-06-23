@@ -18,6 +18,9 @@ class AppEndPoints {
   static const String createOrder = 'orders/store';
   static const String clientOrders = 'client/orders';
 
+  // Notifications
+  static const String notifications = 'client/notifications';
+
   // Home
   static const String homeStatus = 'mobile_app_homepage_stats';
   static const String driverRunsheet = 'driver/driver_runsheets';
