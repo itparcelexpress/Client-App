@@ -90,16 +90,19 @@ class NotificationRepository {
   // Get notification statistics
   Future<Map<String, dynamic>> getNotificationStats() async {
     try {
-      final unreadCount = await getUnreadNotificationsCount();
       final allNotifications = await getNotifications(page: 1, perPage: 100);
 
-      if (allNotifications != null) {
+      if (allNotifications != null && allNotifications.success) {
+        final notifications = allNotifications.data.notifications;
         final totalCount = allNotifications.data.total;
+
+        // Calculate unread count from notifications
+        final unreadCount = notifications.where((n) => !n.isRead).length;
         final readCount = totalCount - unreadCount;
 
         // Count notifications by type
         final typeCount = <String, int>{};
-        for (final notification in allNotifications.data.notifications) {
+        for (final notification in notifications) {
           typeCount[notification.type] =
               (typeCount[notification.type] ?? 0) + 1;
         }
@@ -114,7 +117,7 @@ class NotificationRepository {
 
       return {
         'total_count': 0,
-        'unread_count': unreadCount,
+        'unread_count': 0,
         'read_count': 0,
         'type_distribution': <String, int>{},
       };

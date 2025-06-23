@@ -53,7 +53,9 @@ class NotificationCubit extends Cubit<NotificationState> {
         _currentPage = paginationData.currentPage;
         _totalPages = paginationData.lastPage;
         _totalNotifications = paginationData.total;
-        _unreadCount = await _repository.getUnreadNotificationsCount();
+
+        // Calculate unread count from loaded notifications
+        _unreadCount = _allNotifications.where((n) => !n.isRead).length;
 
         if (_allNotifications.isEmpty) {
           emit(const NotificationEmpty());
@@ -393,7 +395,8 @@ class NotificationCubit extends Cubit<NotificationState> {
   // Get unread count only
   Future<void> updateUnreadCount() async {
     try {
-      _unreadCount = await _repository.getUnreadNotificationsCount();
+      // Calculate unread count from current notifications
+      _unreadCount = _allNotifications.where((n) => !n.isRead).length;
 
       // Update current state if it's loaded
       if (state is NotificationLoaded) {
