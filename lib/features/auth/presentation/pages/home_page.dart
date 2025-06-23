@@ -4,6 +4,7 @@ import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client_app/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:client_app/features/notifications/notifications.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/presentation/pages/orders_list_page.dart';
 import 'package:client_app/features/shipment/presentation/pages/shipment_page.dart';
@@ -375,6 +376,25 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ],
             ),
           ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.all(12),
+            child: const NotificationIconWidget(
+              size: 24,
+              color: Color(0xFF8b5cf6),
+              showBadge: true,
+            ),
+          ),
         ],
       ),
     );
@@ -508,7 +528,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               title: 'Notifications',
               subtitle: 'Manage your notifications',
               color: const Color(0xFF667eea),
-              onTap: () => _showComingSoon(context, 'Notifications'),
+              onTap:
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NotificationsPage(),
+                    ),
+                  ),
             ),
             const SizedBox(height: 16),
             _buildSettingItem(

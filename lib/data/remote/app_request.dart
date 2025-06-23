@@ -58,9 +58,35 @@ class AppRequest {
     );
     return res;
   }
+
+  static Future<AppResponse> patch(
+    String path,
+    bool isAuth, {
+    bool mustAuth = false,
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? initHeader,
+  }) async {
+    AppResponse res = await remote_data.requestDio(
+      path,
+      reqType: ReqType.patch,
+      data: data,
+      headers:
+          (initHeader ?? {})
+            ..addAll(headers)
+            ..addAll(
+              (isAuth && (LocalData.token.isNotEmpty || mustAuth))
+                  ? {'Authorization': 'Bearer ${LocalData.token}'}
+                  : {},
+            ),
+      queryParameters: queryParameters,
+    );
+    return res;
+  }
 }
 
 class ReqType {
   static const String get = 'GET';
   static const String post = 'POST';
+  static const String patch = 'PATCH';
 }
