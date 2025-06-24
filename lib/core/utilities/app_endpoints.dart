@@ -21,6 +21,9 @@ class AppEndPoints {
   // Notifications
   static const String notifications = 'client/notifications';
 
+  // Client Settings
+  static const String clientSettings = 'client_settings';
+
   // Home
   static const String homeStatus = 'mobile_app_homepage_stats';
   static const String driverRunsheet = 'driver/driver_runsheets';

@@ -5,6 +5,7 @@ import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client_app/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:client_app/features/notifications/notifications.dart';
+import 'package:client_app/features/profile/presentation/pages/notification_settings_page.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/presentation/pages/orders_list_page.dart';
 import 'package:client_app/features/shipment/presentation/pages/shipment_page.dart';
@@ -524,10 +525,35 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
             const SizedBox(height: 20),
             _buildSettingItem(
-              icon: Icons.notifications_rounded,
-              title: 'Notifications',
-              subtitle: 'Manage your notifications',
+              icon: Icons.settings_rounded,
+              title: 'Notification Settings',
+              subtitle: 'Manage notification preferences',
               color: const Color(0xFF667eea),
+              onTap: () {
+                final user = LocalData.user;
+                final clientId =
+                    user?.id; // Use the main user ID, not client.id
+
+                if (clientId != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) =>
+                              NotificationSettingsPage(clientId: clientId),
+                    ),
+                  );
+                } else {
+                  _showComingSoon(context, 'Notification Settings');
+                }
+              },
+            ),
+            const SizedBox(height: 16),
+            _buildSettingItem(
+              icon: Icons.notifications_rounded,
+              title: 'View Notifications',
+              subtitle: 'View all notifications',
+              color: const Color(0xFF8b5cf6),
               onTap:
                   () => Navigator.push(
                     context,

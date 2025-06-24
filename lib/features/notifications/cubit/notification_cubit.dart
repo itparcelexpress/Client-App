@@ -97,6 +97,9 @@ class NotificationCubit extends Cubit<NotificationState> {
         _allNotifications.addAll(paginationData.notifications);
         _currentPage = nextPage;
 
+        // Recalculate unread count with all notifications
+        _unreadCount = _allNotifications.where((n) => !n.isRead).length;
+
         emit(
           NotificationLoaded(
             notifications: List.from(_allNotifications),

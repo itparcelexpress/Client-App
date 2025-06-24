@@ -25,37 +25,19 @@ class NotificationIconWidget extends StatelessWidget {
         builder: (context, state) {
           int unreadCount = 0;
 
-          print(
-            'NotificationIconWidget - Current state: ${state.runtimeType}',
-          ); // Debug
-
           // Calculate unread count from different states
           if (state is NotificationLoaded) {
             unreadCount = state.unreadCount;
-            print(
-              'NotificationIconWidget - Unread count from loaded state: $unreadCount',
-            ); // Debug
           } else if (state is NotificationMarkAsReadSuccess) {
             // Count unread notifications manually
             unreadCount =
                 state.updatedNotifications.where((n) => !n.isRead).length;
-            print(
-              'NotificationIconWidget - Unread count from mark read success: $unreadCount',
-            ); // Debug
           } else if (state is NotificationDeleteSuccess) {
             // Count unread notifications manually
             unreadCount =
                 state.remainingNotifications.where((n) => !n.isRead).length;
-            print(
-              'NotificationIconWidget - Unread count from delete success: $unreadCount',
-            ); // Debug
           }
 
-          print(
-            'NotificationIconWidget - Final unread count: $unreadCount, showBadge: $showBadge',
-          ); // Debug
-
-          // Test with simple Stack widget to verify badge visibility
           return GestureDetector(
             onTap: () => _navigateToNotifications(context),
             child: Stack(
@@ -66,30 +48,31 @@ class NotificationIconWidget extends StatelessWidget {
                   size: size,
                   color: color ?? Colors.grey[600],
                 ),
-                // Simple badge test - always visible
-                Positioned(
-                  right: -8,
-                  top: -8,
-                  child: Container(
-                    width: 18,
-                    height: 18,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFef4444),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '5',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
+                // Only show badge if there are unread notifications
+                if (showBadge && unreadCount > 0)
+                  Positioned(
+                    right: -8,
+                    top: -8,
+                    child: Container(
+                      width: 18,
+                      height: 18,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFef4444),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: Center(
+                        child: Text(
+                          unreadCount > 99 ? '99+' : unreadCount.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
               ],
             ),
           );

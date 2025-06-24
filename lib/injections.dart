@@ -4,6 +4,8 @@ import 'package:client_app/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client_app/features/dashboard/data/repositories/dashboard_repository.dart';
 import 'package:client_app/features/notifications/cubit/notification_cubit.dart';
 import 'package:client_app/features/notifications/data/repositories/notification_repository.dart';
+import 'package:client_app/features/profile/cubit/client_settings_cubit.dart';
+import 'package:client_app/features/profile/data/repositories/client_settings_repository.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/data/repositories/order_repository.dart';
 import 'package:dio/dio.dart';
@@ -82,6 +84,9 @@ Future<void> initInj() async {
   getIt.registerLazySingleton<NotificationRepository>(
     () => NotificationRepository(),
   );
+  getIt.registerLazySingleton<ClientSettingsRepository>(
+    () => ClientSettingsRepository(),
+  );
 
   // Register cubits
   getIt.registerFactory<AuthCubit>(() => AuthCubit(getIt<AuthRepository>()));
@@ -93,5 +98,8 @@ Future<void> initInj() async {
   );
   getIt.registerFactory<NotificationCubit>(
     () => NotificationCubit(getIt<NotificationRepository>()),
+  );
+  getIt.registerFactory<ClientSettingsCubit>(
+    () => ClientSettingsCubit(getIt<ClientSettingsRepository>()),
   );
 }
