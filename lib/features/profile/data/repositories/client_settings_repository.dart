@@ -9,10 +9,12 @@ class ClientSettingsRepository {
 
   // Update client settings
   Future<ClientSettingsResponse?> updateClientSettings(
+    int userId,
     int clientId,
     NotificationSettings notifications,
   ) async {
     return await ClientSettingsService.updateClientSettings(
+      userId,
       clientId,
       notifications,
     );
@@ -20,11 +22,13 @@ class ClientSettingsRepository {
 
   // Toggle WhatsApp notifications
   Future<ClientSettingsResponse?> toggleWhatsAppNotifications(
+    int userId,
     int clientId,
     bool currentWhatsAppSetting,
     bool currentEmailSetting,
   ) async {
     return await ClientSettingsService.toggleWhatsAppNotifications(
+      userId,
       clientId,
       currentWhatsAppSetting,
       currentEmailSetting,
@@ -33,11 +37,13 @@ class ClientSettingsRepository {
 
   // Toggle Email notifications
   Future<ClientSettingsResponse?> toggleEmailNotifications(
+    int userId,
     int clientId,
     bool currentWhatsAppSetting,
     bool currentEmailSetting,
   ) async {
     return await ClientSettingsService.toggleEmailNotifications(
+      userId,
       clientId,
       currentWhatsAppSetting,
       currentEmailSetting,

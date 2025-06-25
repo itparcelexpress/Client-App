@@ -34,6 +34,7 @@ class ClientSettingsCubit extends Cubit<ClientSettingsState> {
 
   // Update notification settings
   Future<void> updateNotificationSettings(
+    int userId,
     int clientId,
     NotificationSettings notifications,
   ) async {
@@ -46,6 +47,7 @@ class ClientSettingsCubit extends Cubit<ClientSettingsState> {
 
     try {
       final response = await _repository.updateClientSettings(
+        userId,
         clientId,
         notifications,
       );
@@ -80,7 +82,7 @@ class ClientSettingsCubit extends Cubit<ClientSettingsState> {
   }
 
   // Toggle WhatsApp notifications
-  Future<void> toggleWhatsAppNotifications(int clientId) async {
+  Future<void> toggleWhatsAppNotifications(int userId, int clientId) async {
     if (_currentSettings?.notifications == null) {
       emit(const ClientSettingsError('No notification settings available'));
       return;
@@ -90,6 +92,7 @@ class ClientSettingsCubit extends Cubit<ClientSettingsState> {
 
     try {
       final response = await _repository.toggleWhatsAppNotifications(
+        userId,
         clientId,
         currentNotifications.whatsapp,
         currentNotifications.email,
@@ -126,7 +129,7 @@ class ClientSettingsCubit extends Cubit<ClientSettingsState> {
   }
 
   // Toggle Email notifications
-  Future<void> toggleEmailNotifications(int clientId) async {
+  Future<void> toggleEmailNotifications(int userId, int clientId) async {
     if (_currentSettings?.notifications == null) {
       emit(const ClientSettingsError('No notification settings available'));
       return;
@@ -136,6 +139,7 @@ class ClientSettingsCubit extends Cubit<ClientSettingsState> {
 
     try {
       final response = await _repository.toggleEmailNotifications(
+        userId,
         clientId,
         currentNotifications.whatsapp,
         currentNotifications.email,

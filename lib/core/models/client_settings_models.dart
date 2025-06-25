@@ -164,8 +164,10 @@ class UpdateSettingsRequest extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       'client_id': clientId,
-      'notifications[whatsapp]': notifications.whatsapp ? 'true' : 'false',
-      'notifications[email]': notifications.email ? 'true' : 'false',
+      'notifications': {
+        'whatsapp': notifications.whatsapp,
+        'email': notifications.email,
+      },
     };
   }
 

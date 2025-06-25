@@ -531,16 +531,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               color: const Color(0xFF667eea),
               onTap: () {
                 final user = LocalData.user;
+                final userId = user?.id; // Main user ID for the API endpoint
                 final clientId =
-                    user?.id; // Use the main user ID, not client.id
+                    user?.client?.id; // Client ID for the form data
 
-                if (clientId != null) {
+                if (userId != null && clientId != null) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder:
-                          (context) =>
-                              NotificationSettingsPage(clientId: clientId),
+                          (context) => NotificationSettingsPage(
+                            userId: userId, // For API endpoint
+                            clientId: clientId, // For form data
+                          ),
                     ),
                   );
                 } else {

@@ -6,25 +6,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NotificationSettingsPage extends StatelessWidget {
+  final int userId;
   final int clientId;
 
-  const NotificationSettingsPage({super.key, required this.clientId});
+  const NotificationSettingsPage({
+    super.key,
+    required this.userId,
+    required this.clientId,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create:
-          (context) =>
-              getIt<ClientSettingsCubit>()..loadClientSettings(clientId),
-      child: NotificationSettingsView(clientId: clientId),
+          (context) => getIt<ClientSettingsCubit>()..loadClientSettings(userId),
+      child: NotificationSettingsView(userId: userId, clientId: clientId),
     );
   }
 }
 
 class NotificationSettingsView extends StatelessWidget {
+  final int userId;
   final int clientId;
 
-  const NotificationSettingsView({super.key, required this.clientId});
+  const NotificationSettingsView({
+    super.key,
+    required this.userId,
+    required this.clientId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +58,7 @@ class NotificationSettingsView extends StatelessWidget {
               return IconButton(
                 onPressed: () {
                   context.read<ClientSettingsCubit>().refreshClientSettings(
-                    clientId,
+                    userId,
                   );
                 },
                 icon: Container(
@@ -104,9 +113,7 @@ class NotificationSettingsView extends StatelessWidget {
         builder: (context, state) {
           return RefreshIndicator(
             onRefresh: () async {
-              context.read<ClientSettingsCubit>().refreshClientSettings(
-                clientId,
-              );
+              context.read<ClientSettingsCubit>().refreshClientSettings(userId);
             },
             child: _buildBody(context, state),
           );
@@ -195,6 +202,7 @@ class NotificationSettingsView extends StatelessWidget {
             value: notifications.whatsapp,
             onChanged: (value) {
               context.read<ClientSettingsCubit>().toggleWhatsAppNotifications(
+                userId,
                 clientId,
               );
             },
@@ -209,6 +217,7 @@ class NotificationSettingsView extends StatelessWidget {
             value: notifications.email,
             onChanged: (value) {
               context.read<ClientSettingsCubit>().toggleEmailNotifications(
+                userId,
                 clientId,
               );
             },
@@ -410,9 +419,7 @@ class NotificationSettingsView extends StatelessWidget {
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              context.read<ClientSettingsCubit>().refreshClientSettings(
-                clientId,
-              );
+              context.read<ClientSettingsCubit>().refreshClientSettings(userId);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF667eea),
