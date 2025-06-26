@@ -66,6 +66,8 @@ class AuthRepositoryImpl implements AuthRepository {
       // Clear local data regardless of API response
       await LocalData.logout();
 
+      // Check if the logout was successful based on the new API response format
+      // Expected response: {"message": "Logout Successfull", "success": [], "data": [], "errors": []}
       return response.success;
     } catch (e) {
       // Clear local data even if API call fails

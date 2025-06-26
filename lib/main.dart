@@ -54,6 +54,10 @@ class AuthWrapper extends StatelessWidget {
       child: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           // Handle state changes if needed
+          if (state is AuthInitial) {
+            // User has been logged out - the builder will automatically show LoginPage
+            // No additional navigation needed since we're already in the AuthWrapper
+          }
         },
         builder: (context, state) {
           if (state is AuthLoading) {

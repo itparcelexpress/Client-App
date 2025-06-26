@@ -10,9 +10,9 @@ import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/presentation/pages/orders_list_page.dart';
 import 'package:client_app/features/shipment/presentation/pages/shipment_page.dart';
 import 'package:client_app/injections.dart';
+import 'package:client_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -78,63 +78,56 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<AuthCubit>(),
-      child: Scaffold(
-        backgroundColor: Colors.grey[50],
-        body: PageView(
-          controller: _pageController,
-          onPageChanged: _onPageChanged,
-          children: [
-            BlocProvider(
-              create: (context) => getIt<DashboardCubit>(),
-              child: const DashboardPage(),
-            ),
-            _buildOrdersPage(),
-            _buildProfilePage(),
-          ],
-        ),
-        floatingActionButton: ScaleTransition(
-          scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-              parent: _fabAnimationController,
-              curve: Curves.elasticOut,
-            ),
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: _onPageChanged,
+        children: [
+          BlocProvider(
+            create: (context) => getIt<DashboardCubit>(),
+            child: const DashboardPage(),
           ),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF667eea).withValues(alpha: 0.4),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: FloatingActionButton.extended(
-              onPressed: _navigateToCreateOrder,
-              backgroundColor: const Color(0xFF667eea),
-              elevation: 0,
-              icon: const Icon(
-                Icons.add_rounded,
-                color: Colors.white,
-                size: 24,
-              ),
-              label: const Text(
-                'Create Order',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: _buildModernBottomNav(),
+          _buildOrdersPage(),
+          _buildProfilePage(),
+        ],
       ),
+      floatingActionButton: ScaleTransition(
+        scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: _fabAnimationController,
+            curve: Curves.elasticOut,
+          ),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF667eea).withValues(alpha: 0.4),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: FloatingActionButton.extended(
+            onPressed: _navigateToCreateOrder,
+            backgroundColor: const Color(0xFF667eea),
+            elevation: 0,
+            icon: const Icon(Icons.add_rounded, color: Colors.white, size: 24),
+            label: const Text(
+              'Create Order',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: _buildModernBottomNav(),
     );
   }
 
@@ -547,7 +540,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                   );
                 } else {
-                  _showComingSoon(context, 'Notification Settings');
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('User information not available'),
+                      backgroundColor: Colors.orange,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  );
                 }
               },
             ),
@@ -565,22 +567,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                   ),
             ),
-            const SizedBox(height: 16),
-            _buildSettingItem(
-              icon: Icons.security_rounded,
-              title: 'Privacy & Security',
-              subtitle: 'Manage your privacy settings',
-              color: const Color(0xFF10b981),
-              onTap: () => _showComingSoon(context, 'Privacy Settings'),
-            ),
-            const SizedBox(height: 16),
-            _buildSettingItem(
-              icon: Icons.help_rounded,
-              title: 'Help & Support',
-              subtitle: 'Get help and support',
-              color: const Color(0xFFf59e0b),
-              onTap: () => _showComingSoon(context, 'Help & Support'),
-            ),
+
             const SizedBox(height: 16),
             _buildSettingItem(
               icon: Icons.logout_rounded,
@@ -713,21 +700,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  void _showComingSoon(BuildContext context, String feature) {
-    Fluttertoast.showToast(
-      msg: '$feature coming soon! 🚀',
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      backgroundColor: const Color(0xFF667eea),
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
-  }
-
   void _showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -739,13 +715,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           content: const Text('Are you sure you want to logout?'),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.pop(dialogContext),
               child: Text('Cancel', style: TextStyle(color: Colors.grey[600])),
             ),
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
-                context.read<AuthCubit>().logout();
+                Navigator.pop(dialogContext);
+                // Call logout using a callback approach to ensure we use the right instance
+                _performLogout();
               },
               child: const Text(
                 'Logout',
@@ -756,6 +733,52 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         );
       },
     );
+  }
+
+  void _performLogout() async {
+    try {
+      // Try to find the AuthCubit in the current widget tree
+      final authCubit = BlocProvider.of<AuthCubit>(context, listen: false);
+      await authCubit.logout();
+
+      // Show success message
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Logout Successful'),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      // Fallback: Clear local data and let AuthWrapper handle navigation
+      await LocalData.logout();
+
+      if (mounted) {
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Logout Successful'),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+
+        // The AuthWrapper will automatically show LoginPage when it detects no auth
+        // Force refresh the AuthWrapper by navigating to it
+        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const AuthWrapper()),
+          (route) => false,
+        );
+      }
+    }
   }
 }
 

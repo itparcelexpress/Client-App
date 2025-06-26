@@ -21,7 +21,6 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController(text: '12345678');
 
   bool _isPasswordVisible = false;
-  bool _rememberMe = false;
 
   @override
   void dispose() {
@@ -100,13 +99,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       _buildLoginForm(context, state),
-                      SizedBox(
-                        height: ResponsiveUtils.getResponsivePadding(
-                          context,
-                          24,
-                        ),
-                      ),
-                      _buildForgotPassword(),
                       SizedBox(
                         height: ResponsiveUtils.getResponsivePadding(
                           context,
@@ -214,10 +206,6 @@ class _LoginPageState extends State<LoginPage> {
                 height: ResponsiveUtils.getResponsivePadding(context, 20),
               ),
               _buildPasswordField(),
-              SizedBox(
-                height: ResponsiveUtils.getResponsivePadding(context, 20),
-              ),
-              _buildRememberMe(),
             ],
           ),
         ),
@@ -301,49 +289,6 @@ class _LoginPageState extends State<LoginPage> {
         }
         return null;
       },
-    );
-  }
-
-  Widget _buildRememberMe() {
-    return Row(
-      children: [
-        Checkbox(
-          value: _rememberMe,
-          onChanged: (value) {
-            setState(() {
-              _rememberMe = value ?? false;
-            });
-          },
-          activeColor: Colors.blue.shade400,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-        ),
-        Text(
-          'Remember me',
-          style: _systemFont(fontSize: 14, color: Colors.grey.shade600),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildForgotPassword() {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 1000),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: TextButton(
-          onPressed: () {
-            // Handle forgot password
-          },
-          child: Text(
-            'Forgot Password?',
-            style: _systemFont(
-              fontSize: 14,
-              color: Colors.blue.shade400,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ),
     );
   }
 

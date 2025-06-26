@@ -43,10 +43,15 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
 
     try {
-      await _authRepository.logout();
-      emit(AuthInitial());
+      final success = await _authRepository.logout();
+      if (success) {
+        emit(AuthInitial());
+      } else {
+        // Still clear the state even if API call failed, but user data is cleared
+        emit(AuthInitial());
+      }
     } catch (e) {
-      // Even if logout fails, clear the state
+      // Even if logout fails, clear the state since local data is cleared
       emit(AuthInitial());
     }
   }
