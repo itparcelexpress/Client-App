@@ -8,7 +8,7 @@ class OrderRepository {
   Future<CreateOrderResponse> createOrder(CreateOrderRequest request) async {
     try {
       final AppResponse response = await AppRequest.post(
-        'client/order/store',
+        AppEndPoints.createOrder,
         true, // requires authentication
         data: request.toJson(),
       );
@@ -42,7 +42,7 @@ class OrderRepository {
   Future<List<OrderSummary>> getUserOrders() async {
     try {
       final AppResponse response = await AppRequest.get(
-        'orders',
+        AppEndPoints.orders,
         true, // requires authentication
       );
 
@@ -63,7 +63,7 @@ class OrderRepository {
   Future<OrderData> getOrderDetails(int orderId) async {
     try {
       final AppResponse response = await AppRequest.get(
-        'orders/$orderId',
+        AppEndPoints.orderDetails(orderId),
         true, // requires authentication
       );
 

@@ -1,9 +1,15 @@
+import 'package:client_app/core/utilities/app_endpoints.dart';
+import 'package:client_app/features/address_book/cubit/address_book_cubit.dart';
+import 'package:client_app/features/address_book/data/repositories/address_book_repository.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/auth/data/repositories/auth_repository.dart';
 import 'package:client_app/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client_app/features/dashboard/data/repositories/dashboard_repository.dart';
+import 'package:client_app/features/invoices/cubit/invoice_cubit.dart';
 import 'package:client_app/features/notifications/cubit/notification_cubit.dart';
 import 'package:client_app/features/notifications/data/repositories/notification_repository.dart';
+import 'package:client_app/features/pricing/cubit/pricing_cubit.dart';
+import 'package:client_app/features/pricing/data/repositories/pricing_repository.dart';
 import 'package:client_app/features/profile/cubit/client_settings_cubit.dart';
 import 'package:client_app/features/profile/data/repositories/client_settings_repository.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
@@ -23,7 +29,7 @@ Future<void> initInj() async {
 
   // Register Dio
   final dio = Dio();
-  dio.options.baseUrl = 'http://16.16.75.11/api/';
+  dio.options.baseUrl = AppEndPoints.baseUrl;
   dio.options.connectTimeout = const Duration(seconds: 100);
   dio.options.receiveTimeout = const Duration(seconds: 30);
   dio.options.sendTimeout = const Duration(seconds: 100);
@@ -78,6 +84,9 @@ Future<void> initInj() async {
   getIt.registerSingleton<Dio>(dio);
 
   // Register repositories
+  getIt.registerLazySingleton<AddressBookRepository>(
+    () => AddressBookRepositoryImpl(),
+  );
   getIt.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
   getIt.registerLazySingleton<OrderRepository>(() => OrderRepository());
   getIt.registerLazySingleton<DashboardRepository>(() => DashboardRepository());
@@ -87,8 +96,12 @@ Future<void> initInj() async {
   getIt.registerLazySingleton<ClientSettingsRepository>(
     () => ClientSettingsRepository(),
   );
+  getIt.registerLazySingleton<PricingRepository>(() => PricingRepository());
 
   // Register cubits
+  getIt.registerFactory<AddressBookCubit>(
+    () => AddressBookCubit(getIt<AddressBookRepository>()),
+  );
   getIt.registerFactory<AuthCubit>(() => AuthCubit(getIt<AuthRepository>()));
   getIt.registerFactory<ShipmentCubit>(
     () => ShipmentCubit(getIt<OrderRepository>()),
@@ -96,10 +109,14 @@ Future<void> initInj() async {
   getIt.registerFactory<DashboardCubit>(
     () => DashboardCubit(getIt<DashboardRepository>()),
   );
+  getIt.registerFactory<InvoiceCubit>(() => InvoiceCubit());
   getIt.registerFactory<NotificationCubit>(
     () => NotificationCubit(getIt<NotificationRepository>()),
   );
   getIt.registerFactory<ClientSettingsCubit>(
     () => ClientSettingsCubit(getIt<ClientSettingsRepository>()),
+  );
+  getIt.registerFactory<PricingCubit>(
+    () => PricingCubit(getIt<PricingRepository>()),
   );
 }

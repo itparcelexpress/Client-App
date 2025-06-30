@@ -1,3 +1,5 @@
+import 'package:client_app/core/utilities/app_endpoints.dart';
+
 class AppSettingsModel {
   final bool success;
   final String message;
@@ -33,15 +35,11 @@ class AppSettingsModel {
 class AppSettingsData {
   final String value;
 
-  AppSettingsData({
-    required this.value,
-  });
+  AppSettingsData({required this.value});
 
   factory AppSettingsData.fromJson(Map<String, dynamic> json) {
     try {
-      return AppSettingsData(
-        value: json['value'] ?? '',
-      );
+      return AppSettingsData(value: json['value'] ?? '');
     } catch (e) {
       return AppSettingsData(value: '');
     }
@@ -55,8 +53,8 @@ class AppSettingsData {
       return value;
     }
 
-    // Construct the full URL using the correct base URL
-    final fullUrl = 'http://16.16.75.11/storage/images/$value';
+    // Construct the full URL using the centralized site configuration
+    final fullUrl = '${AppEndPoints.site}/storage/images/$value';
     return fullUrl;
   }
 }

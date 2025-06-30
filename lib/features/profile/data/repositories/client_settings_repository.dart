@@ -3,8 +3,8 @@ import 'package:client_app/core/services/client_settings_service.dart';
 
 class ClientSettingsRepository {
   // Get client settings
-  Future<ClientSettingsResponse?> getClientSettings(int clientId) async {
-    return await ClientSettingsService.getClientSettings(clientId);
+  Future<ClientSettingsResponse?> getClientSettings(int userId) async {
+    return await ClientSettingsService.getClientSettings(userId);
   }
 
   // Update client settings

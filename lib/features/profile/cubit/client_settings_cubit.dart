@@ -15,11 +15,11 @@ class ClientSettingsCubit extends Cubit<ClientSettingsState> {
   ClientSettingsData? get currentSettings => _currentSettings;
 
   // Load client settings
-  Future<void> loadClientSettings(int clientId) async {
+  Future<void> loadClientSettings(int userId) async {
     emit(ClientSettingsLoading());
 
     try {
-      final response = await _repository.getClientSettings(clientId);
+      final response = await _repository.getClientSettings(userId);
 
       if (response != null && response.success) {
         _currentSettings = response.data;
@@ -176,8 +176,8 @@ class ClientSettingsCubit extends Cubit<ClientSettingsState> {
   }
 
   // Refresh client settings
-  Future<void> refreshClientSettings(int clientId) async {
-    await loadClientSettings(clientId);
+  Future<void> refreshClientSettings(int userId) async {
+    await loadClientSettings(userId);
   }
 
   // Reset to initial state

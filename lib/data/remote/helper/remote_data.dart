@@ -9,21 +9,35 @@ Future<AppResponse> requestDio(
   Object? data,
   Map<String, dynamic>? headers,
   Map<String, dynamic>? queryParameters,
+  ResponseType? responseType,
 }) async {
   try {
     // Make the request - any auth errors will be handled by Dio interceptors
     Response response = await getIt<Dio>().request(
       path,
-      options: Options(headers: headers, method: reqType),
+      options: Options(
+        headers: headers,
+        method: reqType,
+        responseType: responseType,
+      ),
       data: data,
       queryParameters: queryParameters,
     );
 
-    // Parse the response normally - the interceptors will handle auth errors
+    // Parse the response based on response type
     try {
-      // Improved logging with response data type info
+      // Handle binary responses (like PDFs)
+      if (responseType == ResponseType.bytes) {
+        return AppResponse(
+          data: response.data, // This will be List<int> for bytes
+          message: 'Binary data downloaded successfully',
+          success: true,
+          statusCode: response.statusCode,
+          origin: {'content_type': response.headers.value('content-type')},
+        );
+      }
 
-      // Check if the response data is a Map before parsing
+      // Handle regular JSON responses
       if (response.data is Map<String, dynamic>) {
         return AppResponse.fromJson(response.data, response.statusCode);
       } else if (response.data is Map) {

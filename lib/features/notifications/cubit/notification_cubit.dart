@@ -14,7 +14,6 @@ class NotificationCubit extends Cubit<NotificationState> {
   int _totalPages = 1;
   int _totalNotifications = 0;
   int _unreadCount = 0;
-  String? _currentFilter;
 
   // Getters for current state
   List<NotificationModel> get allNotifications => _allNotifications;
@@ -304,7 +303,6 @@ class NotificationCubit extends Cubit<NotificationState> {
     int perPage = 10,
   }) async {
     emit(NotificationLoading());
-    _currentFilter = type;
 
     try {
       final response = await _repository.getNotificationsByType(
@@ -336,7 +334,6 @@ class NotificationCubit extends Cubit<NotificationState> {
   // Show only unread notifications
   Future<void> showUnreadNotifications({int perPage = 10}) async {
     emit(NotificationLoading());
-    _currentFilter = 'unread';
 
     try {
       final response = await _repository.getUnreadNotifications(
@@ -366,7 +363,6 @@ class NotificationCubit extends Cubit<NotificationState> {
 
   // Clear filter and show all notifications
   Future<void> clearFilter() async {
-    _currentFilter = null;
     await loadNotifications(refresh: true);
   }
 

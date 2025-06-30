@@ -3,8 +3,10 @@ import 'package:client_app/core/models/location_models.dart';
 import 'package:client_app/core/services/location_service.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/data/local/local_data.dart';
+import 'package:client_app/features/address_book/address_book.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/data/models/order_models.dart';
+import 'package:client_app/injections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -47,6 +49,23 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   StateModel? _selectedState;
   Place? _selectedPlace;
 
+  // Address book selection
+  AddressBookEntry? _selectedAddress;
+
+  // Track if form has data to suggest saving as address book entry
+  bool get _hasFormData {
+    return _nameController.text.isNotEmpty &&
+        _phoneController.text.isNotEmpty &&
+        _emailController.text.isNotEmpty &&
+        _streetAddressController.text.isNotEmpty &&
+        _selectedGovernorate != null &&
+        _selectedState != null &&
+        _selectedPlace != null;
+  }
+
+  // Track if user dismissed the save suggestion
+  bool _dismissedSaveSuggestion = false;
+
   @override
   void initState() {
     super.initState();
@@ -54,6 +73,21 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     _deliveryFeeController.text = '5.00';
     _amountController.text = '0';
     _loadLocationData();
+
+    // Add listeners to form fields to detect when user has filled form
+    _nameController.addListener(_onFormDataChanged);
+    _phoneController.addListener(_onFormDataChanged);
+    _emailController.addListener(_onFormDataChanged);
+    _streetAddressController.addListener(_onFormDataChanged);
+  }
+
+  void _onFormDataChanged() {
+    setState(() {
+      // Reset dismissed flag when form data changes
+      if (!_hasFormData) {
+        _dismissedSaveSuggestion = false;
+      }
+    });
   }
 
   void _loadLocationData() {
@@ -91,6 +125,132 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       if (_places.isNotEmpty) {
         _selectedPlace = _places.first;
       }
+    });
+  }
+
+  void _onAddressSelected(AddressBookEntry? address) {
+    setState(() {
+      _selectedAddress = address;
+    });
+
+    if (address != null) {
+      // Auto-fill form fields from selected address
+      _nameController.text = address.name;
+      _phoneController.text = address.cellphone;
+      _alternatePhoneController.text = address.alternatePhone;
+      _emailController.text = address.email;
+      _streetAddressController.text = address.streetAddress;
+
+      if (address.zipcode != null) {
+        _zipcodeController.text = address.zipcode!;
+      }
+
+      // Set location dropdowns based on selected address
+      if (address.governorate != null) {
+        // Find and set governorate
+        final governorate = _governorates.firstWhere(
+          (g) => g.id == address.governorateId,
+          orElse: () => _governorates.first,
+        );
+        _selectedGovernorate = governorate;
+        _loadStatesForGovernorate(governorate.id);
+
+        // Set state after loading
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (address.state != null && _states.isNotEmpty) {
+            final stateIndex = _states.indexWhere(
+              (s) => s.id == address.stateId,
+            );
+            final state = stateIndex >= 0 ? _states[stateIndex] : _states.first;
+
+            setState(() {
+              _selectedState = state;
+            });
+            _loadPlacesForState(state.id);
+
+            // Set place after loading
+            Future.delayed(const Duration(milliseconds: 100), () {
+              if (address.place != null && _places.isNotEmpty) {
+                final placeIndex = _places.indexWhere(
+                  (p) => p.id == address.placeId,
+                );
+                final place =
+                    placeIndex >= 0 ? _places[placeIndex] : _places.first;
+
+                setState(() {
+                  _selectedPlace = place;
+                });
+              }
+            });
+          }
+        });
+      }
+    }
+  }
+
+  void _saveCurrentFormAsAddress() async {
+    if (!_hasFormData) return;
+
+    final request = AddressBookRequest(
+      name: _nameController.text.trim(),
+      email: _emailController.text.trim(),
+      cellphone: _phoneController.text.trim(),
+      alternatePhone: _alternatePhoneController.text.trim(),
+      countryId: 165, // Oman's country ID
+      governorateId: _selectedGovernorate!.id,
+      stateId: _selectedState!.id,
+      placeId: _selectedPlace!.id,
+      streetAddress: _streetAddressController.text.trim(),
+      zipcode:
+          _zipcodeController.text.trim().isNotEmpty
+              ? _zipcodeController.text.trim()
+              : null,
+      locationUrl:
+          _locationUrlController.text.trim().isNotEmpty
+              ? _locationUrlController.text.trim()
+              : null,
+    );
+
+    try {
+      // Create a temporary cubit to save the address
+      final addressBookCubit = getIt<AddressBookCubit>();
+      await addressBookCubit.createAddressBookEntry(request);
+
+      setState(() {
+        _dismissedSaveSuggestion = true;
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Address saved to address book successfully!'),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Failed to save address. Please try again.'),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  void _dismissSaveSuggestion() {
+    setState(() {
+      _dismissedSaveSuggestion = true;
     });
   }
 
@@ -153,6 +313,13 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                             24,
                           ),
                         ),
+                        _buildAddressBookSection(),
+                        SizedBox(
+                          height: ResponsiveUtils.getResponsivePadding(
+                            context,
+                            24,
+                          ),
+                        ),
                         _buildPersonalInfoSection(),
                         SizedBox(
                           height: ResponsiveUtils.getResponsivePadding(
@@ -167,6 +334,19 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                             24,
                           ),
                         ),
+                        if (_hasFormData &&
+                            _selectedAddress == null &&
+                            !_dismissedSaveSuggestion)
+                          _buildSaveAddressSuggestion(),
+                        if (_hasFormData &&
+                            _selectedAddress == null &&
+                            !_dismissedSaveSuggestion)
+                          SizedBox(
+                            height: ResponsiveUtils.getResponsivePadding(
+                              context,
+                              24,
+                            ),
+                          ),
                         _buildOrderDetailsSection(),
                         SizedBox(
                           height: ResponsiveUtils.getResponsivePadding(
@@ -327,6 +507,122 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 ],
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAddressBookSection() {
+    return FadeInUp(
+      duration: const Duration(milliseconds: 500),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF06b6d4), Color(0xFF0891b2)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.contacts_rounded,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const Text(
+                  'Saved Addresses',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF1a1a1a),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            BlocProvider(
+              create: (context) => getIt<AddressBookCubit>(),
+              child: AddressSelectionWidget(
+                selectedAddress: _selectedAddress,
+                onAddressSelected: _onAddressSelected,
+                label: 'Select from saved addresses to auto-fill',
+                isRequired: false,
+              ),
+            ),
+            if (_selectedAddress != null) ...[
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF10b981).withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: const Color(0xFF10b981).withValues(alpha: 0.2),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.check_circle_rounded,
+                      color: Color(0xFF10b981),
+                      size: 16,
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      'Form auto-filled with selected address',
+                      style: TextStyle(
+                        color: Color(0xFF10b981),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () => _onAddressSelected(null),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: const Text(
+                        'Clear',
+                        style: TextStyle(
+                          color: Color(0xFF10b981),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ],
         ),
       ),
@@ -978,6 +1274,171 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       backgroundColor: const Color(0xFFef4444),
       textColor: Colors.white,
       fontSize: 16.0,
+    );
+  }
+
+  Widget _buildSaveAddressSuggestion() {
+    return FadeInUp(
+      duration: const Duration(milliseconds: 500),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              const Color(0xFF06b6d4).withValues(alpha: 0.1),
+              const Color(0xFF0891b2).withValues(alpha: 0.05),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: const Color(0xFF06b6d4).withValues(alpha: 0.2),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF06b6d4).withValues(alpha: 0.1),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF06b6d4), Color(0xFF0891b2)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF06b6d4).withValues(alpha: 0.3),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.bookmark_add_rounded,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Save for Later',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF1a1a1a),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Add this address to your address book',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.7),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.lightbulb_rounded,
+                    color: const Color(0xFF06b6d4),
+                    size: 20,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Save this address to make future orders faster and easier!',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[700],
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: _saveCurrentFormAsAddress,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF06b6d4),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
+                    ),
+                    icon: const Icon(Icons.save_rounded, size: 18),
+                    label: const Text(
+                      'Save Address',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                TextButton(
+                  onPressed: _dismissSaveSuggestion,
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    'Not Now',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

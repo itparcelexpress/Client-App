@@ -1,3 +1,4 @@
+import 'package:client_app/core/utilities/app_endpoints.dart';
 import 'package:client_app/data/remote/app_request.dart';
 import 'package:client_app/data/remote/helper/app_response.dart';
 import 'package:client_app/features/dashboard/data/models/dashboard_models.dart';
@@ -7,7 +8,7 @@ class DashboardRepository {
   Future<DashboardResponse> getDashboardStats() async {
     try {
       final AppResponse response = await AppRequest.get(
-        'client/dashboard',
+        AppEndPoints.clientDashboard,
         true, // requires authentication
       );
 

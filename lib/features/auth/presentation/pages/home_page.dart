@@ -4,7 +4,9 @@ import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client_app/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:client_app/features/invoices/invoices.dart';
 import 'package:client_app/features/notifications/notifications.dart';
+import 'package:client_app/features/pricing/pricing.dart';
 import 'package:client_app/features/profile/presentation/pages/notification_settings_page.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/presentation/pages/orders_list_page.dart';
@@ -37,6 +39,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       icon: Icons.receipt_long_rounded,
       label: 'Orders',
       color: const Color(0xFF10b981),
+    ),
+    NavItem(
+      icon: Icons.receipt_rounded,
+      label: 'Invoices',
+      color: const Color(0xFFf59e0b),
     ),
     NavItem(
       icon: Icons.person_rounded,
@@ -89,6 +96,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             child: const DashboardPage(),
           ),
           _buildOrdersPage(),
+          _buildInvoicesPage(),
           _buildProfilePage(),
         ],
       ),
@@ -110,17 +118,28 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ),
             ],
           ),
-          child: FloatingActionButton.extended(
-            onPressed: _navigateToCreateOrder,
-            backgroundColor: const Color(0xFF667eea),
-            elevation: 0,
-            icon: const Icon(Icons.add_rounded, color: Colors.white, size: 24),
-            label: const Text(
-              'Create Order',
-              style: TextStyle(
+          child: Padding(
+            padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
+              context,
+              const EdgeInsets.only(bottom: 16),
+            ),
+            child: FloatingActionButton.extended(
+              onPressed: _navigateToCreateOrder,
+
+              backgroundColor: const Color(0xFF667eea),
+              elevation: 0,
+              icon: const Icon(
+                Icons.add_rounded,
                 color: Colors.white,
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
+                size: 24,
+              ),
+              label: const Text(
+                'Create Order',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
               ),
             ),
           ),
@@ -284,8 +303,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
+  Widget _buildInvoicesPage() {
+    return BlocProvider(
+      create: (context) => getIt<InvoiceCubit>(),
+      child: const InvoicesPage(showAppBar: false),
+    );
+  }
+
   Widget _buildProfilePage() {
     final user = LocalData.user;
+
+    // Debug: Print user data when profile page loads
+    print('🟢 Profile Page - User Data:');
+    print('🟢 User ID: ${user?.id}');
+    print('🟢 Client ID: ${user?.client?.id}');
+    print('🟢 Full User: ${user?.toJson()}');
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -528,7 +560,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 final clientId =
                     user?.client?.id; // Client ID for the form data
 
+                print('🟢 User Data Debug:');
+                print('🟢 User ID: $userId');
+                print('🟢 Client ID: $clientId');
+                print('🟢 User: ${user?.toJson()}');
+                print('🟢 Client: ${user?.client?.toJson()}');
+
                 if (userId != null && clientId != null) {
+                  print(
+                    '🟢 Navigating to NotificationSettingsPage with userId: $userId, clientId: $clientId',
+                  );
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -540,9 +581,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                   );
                 } else {
+                  print(
+                    '🔴 Missing user data - userId: $userId, clientId: $clientId',
+                  );
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: const Text('User information not available'),
+                      content: Text(
+                        'User information not available - User ID: $userId, Client ID: $clientId',
+                      ),
                       backgroundColor: Colors.orange,
                       behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(
@@ -567,7 +613,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                   ),
             ),
-
+            const SizedBox(height: 16),
+            _buildSettingItem(
+              icon: Icons.price_check_rounded,
+              title: 'View Pricing',
+              subtitle: 'View delivery pricing per state',
+              color: const Color(0xFF10b981),
+              onTap:
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PricingPage(),
+                    ),
+                  ),
+            ),
             const SizedBox(height: 16),
             _buildSettingItem(
               icon: Icons.logout_rounded,

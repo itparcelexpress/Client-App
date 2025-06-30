@@ -1,6 +1,7 @@
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/data/remote/helper/app_response.dart';
 import 'package:client_app/data/remote/helper/remote_data.dart' as remote_data;
+import 'package:dio/dio.dart';
 
 class AppRequest {
   static Map<String, dynamic> get headers => {
@@ -16,6 +17,7 @@ class AppRequest {
     Object? data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? initHeader,
+    ResponseType? responseType,
   }) async {
     AppResponse res = await remote_data.requestDio(
       path,
@@ -30,6 +32,7 @@ class AppRequest {
                   : {},
             ),
       queryParameters: queryParameters,
+      responseType: responseType,
     );
     return res;
   }
@@ -83,10 +86,62 @@ class AppRequest {
     );
     return res;
   }
+
+  static Future<AppResponse> put(
+    String path,
+    bool isAuth, {
+    bool mustAuth = false,
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? initHeader,
+  }) async {
+    AppResponse res = await remote_data.requestDio(
+      path,
+      reqType: ReqType.put,
+      data: data,
+      headers:
+          (initHeader ?? {})
+            ..addAll(headers)
+            ..addAll(
+              (isAuth && (LocalData.token.isNotEmpty || mustAuth))
+                  ? {'Authorization': 'Bearer ${LocalData.token}'}
+                  : {},
+            ),
+      queryParameters: queryParameters,
+    );
+    return res;
+  }
+
+  static Future<AppResponse> delete(
+    String path,
+    bool isAuth, {
+    bool mustAuth = false,
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? initHeader,
+  }) async {
+    AppResponse res = await remote_data.requestDio(
+      path,
+      reqType: ReqType.delete,
+      data: data,
+      headers:
+          (initHeader ?? {})
+            ..addAll(headers)
+            ..addAll(
+              (isAuth && (LocalData.token.isNotEmpty || mustAuth))
+                  ? {'Authorization': 'Bearer ${LocalData.token}'}
+                  : {},
+            ),
+      queryParameters: queryParameters,
+    );
+    return res;
+  }
 }
 
 class ReqType {
   static const String get = 'GET';
   static const String post = 'POST';
   static const String patch = 'PATCH';
+  static const String put = 'PUT';
+  static const String delete = 'DELETE';
 }
