@@ -73,8 +73,7 @@ class DashboardData extends Equatable {
     if (json['order_statuses'] != null && json['order_statuses'] is Map) {
       final statusMap = json['order_statuses'] as Map<String, dynamic>;
       statusMap.forEach((key, value) {
-        orderStatuses[key] =
-            (value is int) ? value : int.tryParse(value.toString()) ?? 0;
+        orderStatuses[key] = (value as num?)?.toInt() ?? 0;
       });
     }
 
@@ -100,19 +99,19 @@ class DashboardData extends Equatable {
     }
 
     return DashboardData(
-      totalOrders: json['total_orders'] ?? 0,
-      todayOrders: json['today_orders'] ?? 0,
-      pendingPickup: json['pending_pickup'] ?? 0,
-      pickedOrders: json['picked_orders'] ?? 0,
-      activeTasks: json['active_tasks'] ?? 0,
-      completedTasks: json['completed_tasks'] ?? 0,
-      totalOrderValue: json['total_order_value'] ?? '0.00',
-      thisMonthValue: json['this_month_value'] ?? '0.00',
-      accountBalance: json['account_balance'] ?? '0.00',
-      parcelValue: json['parcel_value'] ?? '0.00',
-      avgOrderValue: json['avg_order_value'] ?? '0.00',
-      deliveryRate: json['delivery_rate'] ?? 0,
-      deliveredOrders: json['delivered_orders'] ?? 0,
+      totalOrders: (json['total_orders'] as num?)?.toInt() ?? 0,
+      todayOrders: (json['today_orders'] as num?)?.toInt() ?? 0,
+      pendingPickup: (json['pending_pickup'] as num?)?.toInt() ?? 0,
+      pickedOrders: (json['picked_orders'] as num?)?.toInt() ?? 0,
+      activeTasks: (json['active_tasks'] as num?)?.toInt() ?? 0,
+      completedTasks: (json['completed_tasks'] as num?)?.toInt() ?? 0,
+      totalOrderValue: json['total_order_value']?.toString() ?? '0.00',
+      thisMonthValue: json['this_month_value']?.toString() ?? '0.00',
+      accountBalance: json['account_balance']?.toString() ?? '0.00',
+      parcelValue: json['parcel_value']?.toString() ?? '0.00',
+      avgOrderValue: json['avg_order_value']?.toString() ?? '0.00',
+      deliveryRate: (json['delivery_rate'] as num?)?.toInt() ?? 0,
+      deliveredOrders: (json['delivered_orders'] as num?)?.toInt() ?? 0,
       orderStatuses: orderStatuses,
       paymentTypes: paymentTypes,
       recentActivity: recentActivity,
@@ -156,8 +155,8 @@ class PaymentTypeData extends Equatable {
 
   factory PaymentTypeData.fromJson(Map<String, dynamic> json) {
     return PaymentTypeData(
-      paymentType: json['payment_type'] ?? '',
-      count: json['count'] ?? 0,
+      paymentType: json['payment_type']?.toString() ?? '',
+      count: (json['count'] as num?)?.toInt() ?? 0,
       totalAmount: json['total_amount']?.toString() ?? '0.00',
     );
   }
@@ -174,7 +173,10 @@ class ActivityData extends Equatable {
   const ActivityData({required this.date, required this.count});
 
   factory ActivityData.fromJson(Map<String, dynamic> json) {
-    return ActivityData(date: json['date'] ?? '', count: json['count'] ?? 0);
+    return ActivityData(
+      date: json['date']?.toString() ?? '',
+      count: (json['count'] as num?)?.toInt() ?? 0,
+    );
   }
 
   @override
@@ -195,9 +197,9 @@ class DashboardSummary extends Equatable {
 
   factory DashboardSummary.fromJson(Map<String, dynamic> json) {
     return DashboardSummary(
-      ordersThisWeek: json['orders_this_week'] ?? 0,
-      ordersThisMonth: json['orders_this_month'] ?? 0,
-      pendingTasks: json['pending_tasks'] ?? 0,
+      ordersThisWeek: (json['orders_this_week'] as num?)?.toInt() ?? 0,
+      ordersThisMonth: (json['orders_this_month'] as num?)?.toInt() ?? 0,
+      pendingTasks: (json['pending_tasks'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -220,9 +222,9 @@ class OrderStatus extends Equatable {
 
   factory OrderStatus.fromJson(Map<String, dynamic> json) {
     return OrderStatus(
-      status: json['status'] ?? '',
-      count: json['count'] ?? 0,
-      color: json['color'] ?? '#667eea',
+      status: json['status']?.toString() ?? '',
+      count: (json['count'] as num?)?.toInt() ?? 0,
+      color: json['color']?.toString() ?? '#667eea',
     );
   }
 
@@ -244,9 +246,9 @@ class PaymentType extends Equatable {
 
   factory PaymentType.fromJson(Map<String, dynamic> json) {
     return PaymentType(
-      type: json['type'] ?? '',
-      count: json['count'] ?? 0,
-      percentage: json['percentage'] ?? '0%',
+      type: json['type']?.toString() ?? '',
+      count: (json['count'] as num?)?.toInt() ?? 0,
+      percentage: json['percentage']?.toString() ?? '0%',
     );
   }
 
@@ -270,10 +272,10 @@ class RecentActivity extends Equatable {
 
   factory RecentActivity.fromJson(Map<String, dynamic> json) {
     return RecentActivity(
-      action: json['action'] ?? '',
-      description: json['description'] ?? '',
-      timestamp: json['timestamp'] ?? '',
-      icon: json['icon'] ?? 'info',
+      action: json['action']?.toString() ?? '',
+      description: json['description']?.toString() ?? '',
+      timestamp: json['timestamp']?.toString() ?? '',
+      icon: json['icon']?.toString() ?? 'info',
     );
   }
 

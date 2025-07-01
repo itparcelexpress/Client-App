@@ -45,4 +45,9 @@ class AppEndPoints {
       'client/invoices/$userId/$invoiceId/download';
   static String clientInvoicesSearch(int userId) =>
       'client/invoices/$userId/search';
+
+  // Client Payments
+  static const String clientPaymentTransactions =
+      'client/payments/transactions';
+  static const String clientPaymentSummary = 'client/payments/summary';
 }
