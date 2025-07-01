@@ -164,4 +164,52 @@ class InvoiceRepository {
       throw Exception('Network error occurred while searching invoices');
     }
   }
+
+  /// Get payment transactions
+  static Future<PaymentTransactionsResponse> getPaymentTransactions() async {
+    try {
+      final AppResponse response = await AppRequest.get(
+        AppEndPoints.clientPaymentTransactions,
+        true,
+      );
+
+      if (response.success && response.origin != null) {
+        return PaymentTransactionsResponse.fromJson(response.origin!);
+      } else {
+        throw Exception(
+          response.message ?? 'Failed to fetch payment transactions',
+        );
+      }
+    } catch (e) {
+      Logger.error('Error fetching payment transactions: $e');
+      if (e.toString().contains('message')) {
+        rethrow;
+      }
+      throw Exception(
+        'Network error occurred while fetching payment transactions',
+      );
+    }
+  }
+
+  /// Get payment summary
+  static Future<PaymentSummaryResponse> getPaymentSummary() async {
+    try {
+      final AppResponse response = await AppRequest.get(
+        AppEndPoints.clientPaymentSummary,
+        true,
+      );
+
+      if (response.success && response.origin != null) {
+        return PaymentSummaryResponse.fromJson(response.origin!);
+      } else {
+        throw Exception(response.message ?? 'Failed to fetch payment summary');
+      }
+    } catch (e) {
+      Logger.error('Error fetching payment summary: $e');
+      if (e.toString().contains('message')) {
+        rethrow;
+      }
+      throw Exception('Network error occurred while fetching payment summary');
+    }
+  }
 }

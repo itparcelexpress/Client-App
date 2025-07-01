@@ -6,6 +6,8 @@ import 'package:client_app/features/invoices/data/models/invoice_models.dart';
 import 'package:client_app/features/invoices/presentation/pages/invoice_detail_page.dart';
 import 'package:client_app/features/invoices/presentation/widgets/invoice_card_widget.dart';
 import 'package:client_app/features/invoices/presentation/widgets/invoice_statistics_widget.dart';
+import 'package:client_app/features/invoices/presentation/widgets/payment_summary_widget.dart';
+import 'package:client_app/features/invoices/presentation/widgets/payment_transaction_card.dart';
 import 'package:client_app/injections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,16 +21,19 @@ class InvoicesPage extends StatefulWidget {
   State<InvoicesPage> createState() => _InvoicesPageState();
 }
 
-class _InvoicesPageState extends State<InvoicesPage> {
+class _InvoicesPageState extends State<InvoicesPage>
+    with TickerProviderStateMixin {
   final _searchController = TextEditingController();
   final _scrollController = ScrollController();
   String? _selectedStatusFilter;
+  late TabController _tabController;
 
   final List<String> _statusFilters = ['All', 'Paid', 'Pending', 'Overdue'];
 
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
     _loadInvoices();
     _scrollController.addListener(_onScroll);
   }
@@ -37,6 +42,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
   void dispose() {
     _searchController.dispose();
     _scrollController.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -82,39 +88,23 @@ class _InvoicesPageState extends State<InvoicesPage> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async {
-            _searchController.clear();
-            _selectedStatusFilter = null;
-            _loadInvoices();
-          },
-          child: CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    if (widget.showAppBar) _buildAppBar(),
-                    if (!widget.showAppBar) _buildInlineHeader(),
-                    Padding(
-                      padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
-                        context,
-                        const EdgeInsets.all(20),
-                      ),
-                      child: Column(
-                        children: [
-                          _buildSearchAndFilter(),
-                          const SizedBox(height: 20),
-                          _buildStatistics(),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+        child: Column(
+          children: [
+            // Header section
+            if (widget.showAppBar) _buildAppBar(),
+            if (!widget.showAppBar) _buildInlineHeader(),
+
+            // Tab bar
+            _buildTabBar(),
+
+            // Tab content
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [_buildInvoicesTab(), _buildPaymentsTab()],
               ),
-              _buildInvoicesList(),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -141,7 +131,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
             ),
             const Expanded(
               child: Text(
-                'Invoices',
+                'Invoices & Payments',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -186,7 +176,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
             const SizedBox(width: 12),
             const Expanded(
               child: Text(
-                'Invoices',
+                'Invoices & Payments',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
@@ -222,6 +212,454 @@ class _InvoicesPageState extends State<InvoicesPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildTabBar() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: TabBar(
+        controller: _tabController,
+        indicator: BoxDecoration(
+          color: const Color(0xFF667eea),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        indicatorSize: TabBarIndicatorSize.tab,
+        dividerColor: Colors.transparent,
+        labelColor: Colors.white,
+        unselectedLabelColor: Colors.grey[600],
+        labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+        unselectedLabelStyle: const TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 14,
+        ),
+        tabs: const [Tab(text: 'Invoices'), Tab(text: 'Payments')],
+      ),
+    );
+  }
+
+  Widget _buildInvoicesTab() {
+    return RefreshIndicator(
+      onRefresh: () async {
+        _searchController.clear();
+        _selectedStatusFilter = null;
+        _loadInvoices();
+      },
+      child: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                Padding(
+                  padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
+                    context,
+                    const EdgeInsets.all(20),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildSearchAndFilter(),
+                      const SizedBox(height: 20),
+                      _buildStatistics(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          _buildInvoicesList(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPaymentsTab() {
+    return BlocBuilder<InvoiceCubit, InvoiceState>(
+      builder: (context, state) {
+        // Auto-load payment data when switching to payments tab
+        if (state is! PaymentLoading &&
+            state is! PaymentCombinedLoaded &&
+            state is! PaymentSummaryLoaded &&
+            state is! PaymentTransactionsLoaded &&
+            state is! PaymentError &&
+            state is! PaymentEmpty) {
+          context.read<InvoiceCubit>().loadPaymentData();
+        }
+
+        if (state is PaymentLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is PaymentError) {
+          return _buildPaymentErrorWidget(state.message);
+        } else if (state is PaymentEmpty) {
+          return _buildPaymentEmptyWidget();
+        } else if (state is PaymentCombinedLoaded) {
+          return _buildPaymentLoadedWidget(state);
+        } else if (state is PaymentSummaryLoaded) {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: PaymentSummaryWidget(summary: state.summary),
+          );
+        } else if (state is PaymentTransactionsLoaded) {
+          return _buildPaymentTransactionsOnly(state.transactions);
+        }
+
+        // Default loading state
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Widget _buildPaymentLoadedWidget(PaymentCombinedLoaded state) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<InvoiceCubit>().refreshPaymentData();
+      },
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            PaymentSummaryWidget(summary: state.summary),
+            const SizedBox(height: 16),
+            _buildPaymentTransactionsSection(state.transactions),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPaymentTransactionsOnly(List transactions) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<InvoiceCubit>().refreshPaymentData();
+      },
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(16),
+        child: _buildPaymentTransactionsSection(transactions),
+      ),
+    );
+  }
+
+  Widget _buildPaymentTransactionsSection(List transactions) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Recent Transactions',
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            IconButton(
+              icon: const Icon(Icons.filter_list),
+              onPressed: _showPaymentFilterBottomSheet,
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        if (transactions.isEmpty)
+          Container(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              children: [
+                Icon(Icons.receipt_long, size: 64, color: Colors.grey[400]),
+                const SizedBox(height: 16),
+                Text(
+                  'No transactions found',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(color: Colors.grey[600]),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Try adjusting your filters or check back later.',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: Colors.grey[500]),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          )
+        else
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: transactions.length,
+            itemBuilder: (context, index) {
+              final transaction = transactions[index];
+              return PaymentTransactionCard(
+                transaction: transaction,
+                onTap: () => _showPaymentTransactionDetails(transaction),
+              );
+            },
+          ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget _buildPaymentErrorWidget(String message) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: Colors.red[400]),
+            const SizedBox(height: 16),
+            Text(
+              'Error Loading Payments',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: Colors.red[700],
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                context.read<InvoiceCubit>().loadPaymentData();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF667eea),
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPaymentEmptyWidget() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.payment, size: 64, color: Colors.grey[400]),
+            const SizedBox(height: 16),
+            Text(
+              'No Payment Data',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: Colors.grey[600],
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'No payment transactions found.\nCheck back later for updates.',
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: Colors.grey[500]),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                context.read<InvoiceCubit>().loadPaymentData();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF667eea),
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('Refresh'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showPaymentFilterBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Filter Payments',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text('Filter by Type:'),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                children:
+                    ['All', 'COD', 'Card', 'Bank'].map((type) {
+                      return FilterChip(
+                        label: Text(type),
+                        selected: false,
+                        onSelected: (selected) {
+                          if (type == 'All') {
+                            context.read<InvoiceCubit>().refreshPaymentData();
+                          } else {
+                            context
+                                .read<InvoiceCubit>()
+                                .filterTransactionsByType(type.toLowerCase());
+                          }
+                          Navigator.pop(context);
+                        },
+                      );
+                    }).toList(),
+              ),
+              const SizedBox(height: 20),
+              Text('Filter by Status:'),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                children:
+                    ['All', 'Pending', 'Completed', 'Failed'].map((status) {
+                      return FilterChip(
+                        label: Text(status),
+                        selected: false,
+                        onSelected: (selected) {
+                          if (status == 'All') {
+                            context.read<InvoiceCubit>().refreshPaymentData();
+                          } else {
+                            context
+                                .read<InvoiceCubit>()
+                                .filterTransactionsByStatus(
+                                  status.toLowerCase(),
+                                );
+                          }
+                          Navigator.pop(context);
+                        },
+                      );
+                    }).toList(),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showPaymentTransactionDetails(dynamic transaction) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.7,
+          maxChildSize: 0.9,
+          minChildSize: 0.5,
+          builder: (context, scrollController) {
+            return Container(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Transaction Details',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      controller: scrollController,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildDetailRow(
+                            'Tracking No',
+                            transaction.trackingNo ?? 'N/A',
+                          ),
+                          _buildDetailRow(
+                            'Amount',
+                            transaction.formattedAmount ?? 'N/A',
+                          ),
+                          _buildDetailRow(
+                            'Type',
+                            transaction.typeLabel ?? 'N/A',
+                          ),
+                          _buildDetailRow(
+                            'Status',
+                            transaction.status ?? 'N/A',
+                          ),
+                          _buildDetailRow(
+                            'Customer',
+                            transaction.customerName ?? 'N/A',
+                          ),
+                          _buildDetailRow(
+                            'Phone',
+                            transaction.customerPhone ?? 'N/A',
+                          ),
+                          _buildDetailRow(
+                            'Date',
+                            transaction.formattedDate ?? 'N/A',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 100,
+            child: Text(
+              '$label:',
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(fontWeight: FontWeight.w500),
+            ),
+          ),
+        ],
       ),
     );
   }

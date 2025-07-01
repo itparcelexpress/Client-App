@@ -19,9 +19,9 @@ class InvoiceCubit extends Cubit<InvoiceState> {
     if (refresh) {
       _currentPage = 1;
       _allInvoices = [];
-      emit(InvoiceLoading());
+      if (!isClosed) emit(InvoiceLoading());
     } else if (_currentPage == 1) {
-      emit(InvoiceLoading());
+      if (!isClosed) emit(InvoiceLoading());
     }
 
     try {
@@ -32,29 +32,31 @@ class InvoiceCubit extends Cubit<InvoiceState> {
         perPage: 10,
       );
 
-      if (response.data.isEmpty && _currentPage == 1) {
-        emit(InvoiceEmpty());
-        return;
+      if (!isClosed) {
+        if (response.data.isEmpty && _currentPage == 1) {
+          emit(InvoiceEmpty());
+          return;
+        }
+
+        if (refresh) {
+          _allInvoices = response.data;
+        } else {
+          _allInvoices.addAll(response.data);
+        }
+
+        // For now, assume all data is loaded since API doesn't return pagination info
+        final hasReachedMax = true;
+
+        emit(
+          InvoiceLoaded(
+            invoices: List.from(_allInvoices),
+            hasReachedMax: hasReachedMax,
+          ),
+        );
       }
-
-      if (refresh) {
-        _allInvoices = response.data;
-      } else {
-        _allInvoices.addAll(response.data);
-      }
-
-      // For now, assume all data is loaded since API doesn't return pagination info
-      final hasReachedMax = true;
-
-      emit(
-        InvoiceLoaded(
-          invoices: List.from(_allInvoices),
-          hasReachedMax: hasReachedMax,
-        ),
-      );
     } catch (e) {
       Logger.error('Error loading invoices: $e');
-      emit(InvoiceError(message: e.toString()));
+      if (!isClosed) emit(InvoiceError(message: e.toString()));
     } finally {
       _isLoadingMore = false;
     }
@@ -72,27 +74,29 @@ class InvoiceCubit extends Cubit<InvoiceState> {
 
   /// Load specific invoice details
   Future<void> loadInvoiceDetails(int invoiceId) async {
-    emit(InvoiceDetailLoading());
+    if (!isClosed) emit(InvoiceDetailLoading());
 
     try {
       final response = await InvoiceRepository.getInvoiceDetails(invoiceId);
-      emit(InvoiceDetailLoaded(invoice: response.data));
+      if (!isClosed) emit(InvoiceDetailLoaded(invoice: response.data));
     } catch (e) {
       Logger.error('Error loading invoice details: $e');
-      emit(InvoiceDetailError(message: e.toString()));
+      if (!isClosed) emit(InvoiceDetailError(message: e.toString()));
     }
   }
 
   /// Download invoice PDF
   Future<void> downloadInvoicePdf(int invoiceId, String invoiceNo) async {
-    emit(InvoicePdfDownloading());
+    if (!isClosed) emit(InvoicePdfDownloading());
 
     try {
       final pdfBytes = await InvoiceRepository.downloadInvoicePdf(invoiceId);
-      emit(InvoicePdfDownloaded(pdfBytes: pdfBytes, invoiceNo: invoiceNo));
+      if (!isClosed) {
+        emit(InvoicePdfDownloaded(pdfBytes: pdfBytes, invoiceNo: invoiceNo));
+      }
     } catch (e) {
       Logger.error('Error downloading invoice PDF: $e');
-      emit(InvoicePdfDownloadError(message: e.toString()));
+      if (!isClosed) emit(InvoicePdfDownloadError(message: e.toString()));
     }
   }
 
@@ -102,7 +106,7 @@ class InvoiceCubit extends Cubit<InvoiceState> {
     String? status,
     int page = 1,
   }) async {
-    emit(InvoiceSearching());
+    if (!isClosed) emit(InvoiceSearching());
 
     try {
       final response = await InvoiceRepository.searchInvoices(
@@ -112,21 +116,23 @@ class InvoiceCubit extends Cubit<InvoiceState> {
         perPage: 10,
       );
 
-      if (response.data.isEmpty) {
-        emit(InvoiceSearchEmpty(searchQuery: invoiceNo ?? status ?? ''));
-        return;
-      }
+      if (!isClosed) {
+        if (response.data.isEmpty) {
+          emit(InvoiceSearchEmpty(searchQuery: invoiceNo ?? status ?? ''));
+          return;
+        }
 
-      emit(
-        InvoiceSearchResults(
-          invoices: response.data,
-          searchQuery: invoiceNo ?? '',
-          searchStatus: status,
-        ),
-      );
+        emit(
+          InvoiceSearchResults(
+            invoices: response.data,
+            searchQuery: invoiceNo ?? '',
+            searchStatus: status,
+          ),
+        );
+      }
     } catch (e) {
       Logger.error('Error searching invoices: $e');
-      emit(InvoiceSearchError(message: e.toString()));
+      if (!isClosed) emit(InvoiceSearchError(message: e.toString()));
     }
   }
 
@@ -144,6 +150,8 @@ class InvoiceCubit extends Cubit<InvoiceState> {
 
   /// Filter invoices by status from current loaded invoices
   void filterInvoicesByStatus(String? status) {
+    if (isClosed) return;
+
     final currentState = state;
     if (currentState is InvoiceLoaded) {
       if (status == null || status.isEmpty) {
@@ -208,5 +216,141 @@ class InvoiceCubit extends Cubit<InvoiceState> {
     return _allInvoices
         .where((invoice) => invoice.status.toLowerCase() != 'paid')
         .fold(0.0, (sum, invoice) => sum + double.parse(invoice.amount));
+  }
+
+  // Payment Methods
+
+  /// Load payment summary only
+  Future<void> loadPaymentSummary() async {
+    if (!isClosed) emit(PaymentLoading());
+
+    try {
+      final response = await InvoiceRepository.getPaymentSummary();
+      if (!isClosed) emit(PaymentSummaryLoaded(summary: response.data));
+    } catch (e) {
+      Logger.error('Error loading payment summary: $e');
+      if (!isClosed) emit(PaymentError(message: e.toString()));
+    }
+  }
+
+  /// Load payment transactions only
+  Future<void> loadPaymentTransactions() async {
+    if (!isClosed) emit(PaymentLoading());
+
+    try {
+      final response = await InvoiceRepository.getPaymentTransactions();
+
+      if (!isClosed) {
+        if (response.data.isEmpty) {
+          emit(PaymentEmpty());
+          return;
+        }
+
+        emit(PaymentTransactionsLoaded(transactions: response.data));
+      }
+    } catch (e) {
+      Logger.error('Error loading payment transactions: $e');
+      if (!isClosed) emit(PaymentError(message: e.toString()));
+    }
+  }
+
+  /// Load both payment summary and transactions
+  Future<void> loadPaymentData() async {
+    if (!isClosed) emit(PaymentLoading());
+
+    try {
+      final summaryFuture = InvoiceRepository.getPaymentSummary();
+      final transactionsFuture = InvoiceRepository.getPaymentTransactions();
+
+      final results = await Future.wait([summaryFuture, transactionsFuture]);
+
+      if (!isClosed) {
+        final summaryResponse = results[0] as PaymentSummaryResponse;
+        final transactionsResponse = results[1] as PaymentTransactionsResponse;
+
+        emit(
+          PaymentCombinedLoaded(
+            summary: summaryResponse.data,
+            transactions: transactionsResponse.data,
+          ),
+        );
+      }
+    } catch (e) {
+      Logger.error('Error loading payment data: $e');
+      if (!isClosed) emit(PaymentError(message: e.toString()));
+    }
+  }
+
+  /// Refresh payment data
+  Future<void> refreshPaymentData() async {
+    await loadPaymentData();
+  }
+
+  /// Filter transactions by type
+  void filterTransactionsByType(String? type) {
+    if (isClosed) return;
+
+    final currentState = state;
+    if (currentState is PaymentCombinedLoaded) {
+      if (type == null || type.isEmpty) {
+        // Show all transactions
+        emit(currentState);
+        return;
+      }
+
+      final filteredTransactions =
+          currentState.transactions
+              .where(
+                (transaction) =>
+                    transaction.type.toLowerCase() == type.toLowerCase(),
+              )
+              .toList();
+
+      if (filteredTransactions.isEmpty) {
+        emit(PaymentEmpty());
+        return;
+      }
+
+      emit(
+        PaymentCombinedLoaded(
+          summary: currentState.summary,
+          transactions: filteredTransactions,
+        ),
+      );
+    }
+  }
+
+  /// Filter transactions by status
+  void filterTransactionsByStatus(String? status) {
+    if (isClosed) return;
+
+    final currentState = state;
+    if (currentState is PaymentCombinedLoaded) {
+      if (status == null || status.isEmpty) {
+        // Show all transactions
+        emit(currentState);
+        return;
+      }
+
+      final filteredTransactions =
+          currentState.transactions
+              .where(
+                (transaction) =>
+                    transaction.status.toLowerCase() == status.toLowerCase(),
+              )
+              .toList();
+
+      if (filteredTransactions.isEmpty) {
+        emit(PaymentEmpty());
+        return;
+      }
+
+      emit(
+        PaymentCombinedLoaded(
+          summary: currentState.summary,
+          transactions: filteredTransactions,
+        ),
+      );
+    }
   }
 }

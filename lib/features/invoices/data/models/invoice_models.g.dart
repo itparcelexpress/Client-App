@@ -190,3 +190,81 @@ Map<String, dynamic> _$InvoiceDetailResponseToJson(
       'data': instance.data,
       'errors': instance.errors,
     };
+
+PaymentTransaction _$PaymentTransactionFromJson(Map<String, dynamic> json) =>
+    PaymentTransaction(
+      id: (json['id'] as num).toInt(),
+      trackingNo: json['tracking_no'] as String,
+      amount: json['amount'] as String,
+      type: json['type'] as String,
+      status: json['status'] as String,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      customerName: json['customer_name'] as String,
+      customerPhone: json['customer_phone'] as String,
+    );
+
+Map<String, dynamic> _$PaymentTransactionToJson(PaymentTransaction instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'tracking_no': instance.trackingNo,
+      'amount': instance.amount,
+      'type': instance.type,
+      'status': instance.status,
+      'created_at': instance.createdAt.toIso8601String(),
+      'customer_name': instance.customerName,
+      'customer_phone': instance.customerPhone,
+    };
+
+PaymentSummary _$PaymentSummaryFromJson(Map<String, dynamic> json) =>
+    PaymentSummary(
+      codCollected: (json['cod_collected'] as num).toDouble(),
+      settled: (json['settled'] as num).toDouble(),
+      pending: (json['pending'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$PaymentSummaryToJson(PaymentSummary instance) =>
+    <String, dynamic>{
+      'cod_collected': instance.codCollected,
+      'settled': instance.settled,
+      'pending': instance.pending,
+    };
+
+PaymentTransactionsResponse _$PaymentTransactionsResponseFromJson(
+        Map<String, dynamic> json) =>
+    PaymentTransactionsResponse(
+      message: json['message'] as String,
+      success: json['success'] as bool,
+      data: (json['data'] as List<dynamic>)
+          .map((e) => PaymentTransaction.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      errors:
+          (json['errors'] as List<dynamic>).map((e) => e as String).toList(),
+    );
+
+Map<String, dynamic> _$PaymentTransactionsResponseToJson(
+        PaymentTransactionsResponse instance) =>
+    <String, dynamic>{
+      'message': instance.message,
+      'success': instance.success,
+      'data': instance.data,
+      'errors': instance.errors,
+    };
+
+PaymentSummaryResponse _$PaymentSummaryResponseFromJson(
+        Map<String, dynamic> json) =>
+    PaymentSummaryResponse(
+      message: json['message'] as String,
+      success: json['success'] as bool,
+      data: PaymentSummary.fromJson(json['data'] as Map<String, dynamic>),
+      errors:
+          (json['errors'] as List<dynamic>).map((e) => e as String).toList(),
+    );
+
+Map<String, dynamic> _$PaymentSummaryResponseToJson(
+        PaymentSummaryResponse instance) =>
+    <String, dynamic>{
+      'message': instance.message,
+      'success': instance.success,
+      'data': instance.data,
+      'errors': instance.errors,
+    };

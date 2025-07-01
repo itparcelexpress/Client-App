@@ -131,3 +131,48 @@ class InvoiceSearchEmpty extends InvoiceState {
   @override
   List<Object?> get props => [searchQuery];
 }
+
+// Payment States
+class PaymentLoading extends InvoiceState {}
+
+class PaymentSummaryLoaded extends InvoiceState {
+  final PaymentSummary summary;
+
+  const PaymentSummaryLoaded({required this.summary});
+
+  @override
+  List<Object?> get props => [summary];
+}
+
+class PaymentTransactionsLoaded extends InvoiceState {
+  final List<PaymentTransaction> transactions;
+
+  const PaymentTransactionsLoaded({required this.transactions});
+
+  @override
+  List<Object?> get props => [transactions];
+}
+
+class PaymentCombinedLoaded extends InvoiceState {
+  final PaymentSummary summary;
+  final List<PaymentTransaction> transactions;
+
+  const PaymentCombinedLoaded({
+    required this.summary,
+    required this.transactions,
+  });
+
+  @override
+  List<Object?> get props => [summary, transactions];
+}
+
+class PaymentError extends InvoiceState {
+  final String message;
+
+  const PaymentError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class PaymentEmpty extends InvoiceState {}

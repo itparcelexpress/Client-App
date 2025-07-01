@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'invoice_models.g.dart';
@@ -247,4 +248,152 @@ class InvoiceDetailResponse {
       _$InvoiceDetailResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$InvoiceDetailResponseToJson(this);
+}
+
+// Payment Models
+@JsonSerializable()
+class PaymentTransaction {
+  final int id;
+  @JsonKey(name: 'tracking_no')
+  final String trackingNo;
+  final String amount;
+  final String type;
+  final String status;
+  @JsonKey(name: 'created_at')
+  final DateTime createdAt;
+  @JsonKey(name: 'customer_name')
+  final String customerName;
+  @JsonKey(name: 'customer_phone')
+  final String customerPhone;
+
+  PaymentTransaction({
+    required this.id,
+    required this.trackingNo,
+    required this.amount,
+    required this.type,
+    required this.status,
+    required this.createdAt,
+    required this.customerName,
+    required this.customerPhone,
+  });
+
+  factory PaymentTransaction.fromJson(Map<String, dynamic> json) =>
+      _$PaymentTransactionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PaymentTransactionToJson(this);
+
+  String get statusColor {
+    switch (status.toLowerCase()) {
+      case 'completed':
+        return '#4CAF50'; // Green
+      case 'pending':
+        return '#FF9800'; // Orange
+      case 'failed':
+        return '#F44336'; // Red
+      case 'cancelled':
+        return '#9E9E9E'; // Grey
+      default:
+        return '#9E9E9E'; // Grey
+    }
+  }
+
+  String get typeLabel {
+    switch (type.toLowerCase()) {
+      case 'cod':
+        return 'Cash on Delivery';
+      case 'card':
+        return 'Card Payment';
+      case 'bank':
+        return 'Bank Transfer';
+      default:
+        return type.toUpperCase();
+    }
+  }
+
+  String get formattedAmount {
+    return '${double.parse(amount).toStringAsFixed(2)} OMR';
+  }
+
+  String get formattedDate {
+    return DateFormat('MMM d, yyyy h:mm a').format(createdAt);
+  }
+}
+
+@JsonSerializable()
+class PaymentSummary {
+  @JsonKey(name: 'cod_collected')
+  final double codCollected;
+  final double settled;
+  final double pending;
+
+  PaymentSummary({
+    required this.codCollected,
+    required this.settled,
+    required this.pending,
+  });
+
+  factory PaymentSummary.fromJson(Map<String, dynamic> json) =>
+      _$PaymentSummaryFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PaymentSummaryToJson(this);
+
+  String get formattedCodCollected {
+    return '${codCollected.toStringAsFixed(2)} OMR';
+  }
+
+  String get formattedSettled {
+    return '${settled.toStringAsFixed(2)} OMR';
+  }
+
+  String get formattedPending {
+    return '${pending.toStringAsFixed(2)} OMR';
+  }
+
+  double get totalBalance {
+    return codCollected + settled + pending;
+  }
+
+  String get formattedTotalBalance {
+    return '${totalBalance.toStringAsFixed(2)} OMR';
+  }
+}
+
+@JsonSerializable()
+class PaymentTransactionsResponse {
+  final String message;
+  final bool success;
+  final List<PaymentTransaction> data;
+  final List<String> errors;
+
+  PaymentTransactionsResponse({
+    required this.message,
+    required this.success,
+    required this.data,
+    required this.errors,
+  });
+
+  factory PaymentTransactionsResponse.fromJson(Map<String, dynamic> json) =>
+      _$PaymentTransactionsResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PaymentTransactionsResponseToJson(this);
+}
+
+@JsonSerializable()
+class PaymentSummaryResponse {
+  final String message;
+  final bool success;
+  final PaymentSummary data;
+  final List<String> errors;
+
+  PaymentSummaryResponse({
+    required this.message,
+    required this.success,
+    required this.data,
+    required this.errors,
+  });
+
+  factory PaymentSummaryResponse.fromJson(Map<String, dynamic> json) =>
+      _$PaymentSummaryResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PaymentSummaryResponseToJson(this);
 }
