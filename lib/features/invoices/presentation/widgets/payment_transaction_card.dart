@@ -53,7 +53,7 @@ class PaymentTransactionCard extends StatelessWidget {
                         transaction.formattedAmount,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: AppColors.primaryColor,
+                          color: AppColor.primaryColor,
                         ),
                       ),
                       const SizedBox(height: 4),

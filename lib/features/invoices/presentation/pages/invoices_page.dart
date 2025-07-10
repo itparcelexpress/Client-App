@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:client_app/core/utilities/app_color.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/features/invoices/cubit/invoice_cubit.dart';
 import 'package:client_app/features/invoices/cubit/invoice_state.dart';
@@ -226,7 +227,7 @@ class _InvoicesPageState extends State<InvoicesPage>
       child: TabBar(
         controller: _tabController,
         indicator: BoxDecoration(
-          color: const Color(0xFF667eea),
+          color: AppColor.accentColor,
           borderRadius: BorderRadius.circular(10),
         ),
         indicatorSize: TabBarIndicatorSize.tab,
@@ -438,7 +439,7 @@ class _InvoicesPageState extends State<InvoicesPage>
                 context.read<InvoiceCubit>().loadPaymentData();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF667eea),
+                backgroundColor: AppColor.accentColor,
                 foregroundColor: Colors.white,
               ),
               child: const Text('Retry'),
@@ -479,7 +480,7 @@ class _InvoicesPageState extends State<InvoicesPage>
                 context.read<InvoiceCubit>().loadPaymentData();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF667eea),
+                backgroundColor: AppColor.accentColor,
                 foregroundColor: Colors.white,
               ),
               child: const Text('Refresh'),
@@ -741,14 +742,14 @@ class _InvoicesPageState extends State<InvoicesPage>
                         _onStatusFilterChanged(selected ? status : null);
                       },
                       backgroundColor: Colors.grey[100],
-                      selectedColor: const Color(
-                        0xFF667eea,
-                      ).withValues(alpha: 0.2),
-                      checkmarkColor: const Color(0xFF667eea),
+                      selectedColor: AppColor.accentColor.withValues(
+                        alpha: 0.2,
+                      ),
+                      checkmarkColor: AppColor.accentColor,
                       labelStyle: TextStyle(
                         color:
                             isSelected
-                                ? const Color(0xFF667eea)
+                                ? AppColor.accentColor
                                 : Colors.grey[600],
                         fontWeight:
                             isSelected ? FontWeight.w600 : FontWeight.w400,
@@ -756,7 +757,7 @@ class _InvoicesPageState extends State<InvoicesPage>
                       side: BorderSide(
                         color:
                             isSelected
-                                ? const Color(0xFF667eea)
+                                ? AppColor.accentColor
                                 : Colors.grey[300]!,
                       ),
                     ),
@@ -860,7 +861,7 @@ class _InvoicesPageState extends State<InvoicesPage>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF667eea)),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColor.accentColor),
             ),
             const SizedBox(height: 16),
             Text(
@@ -899,7 +900,7 @@ class _InvoicesPageState extends State<InvoicesPage>
             ElevatedButton(
               onPressed: _loadInvoices,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF667eea),
+                backgroundColor: AppColor.accentColor,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -970,7 +971,7 @@ class _InvoicesPageState extends State<InvoicesPage>
                 context.read<InvoiceCubit>().clearSearch();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF667eea),
+                backgroundColor: AppColor.accentColor,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -1001,7 +1002,7 @@ class _InvoicesPageState extends State<InvoicesPage>
       ),
       child: const Center(
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF667eea)),
+          valueColor: AlwaysStoppedAnimation<Color>(AppColor.accentColor),
         ),
       ),
     );

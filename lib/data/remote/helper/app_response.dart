@@ -1,3 +1,5 @@
+import 'dart:developer' as dev;
+
 class AppResponse {
   dynamic data;
   String? message;
@@ -18,39 +20,29 @@ class AppResponse {
     this.statusCode, {
     Map<String, dynamic>? originData,
   }) {
+    dev.log('AppResponse.fromJson - Raw JSON: $json');
     origin = json;
 
-    // Debug log for response structure
+    // Handle data field
+    data = json['data'];
+    dev.log('AppResponse.fromJson - Parsed data: $data');
 
-    if (json.containsKey('data') && json['data'] != null) {
-      data = json['data'];
-      if (data is Map) {}
-    } else {
-      data = null;
+    // Handle message field
+    message = json['message']?.toString() ?? json['msg']?.toString() ?? '';
+    dev.log('AppResponse.fromJson - Parsed message: $message');
+
+    // Handle success field - simplified logic
+    success =
+        json['success'] == true ||
+        (statusCode != null && statusCode! >= 200 && statusCode! < 300);
+
+    dev.log(
+      'AppResponse.fromJson - Parsed success: $success (from json: ${json['success']}, statusCode: $statusCode)',
+    );
+
+    // Validate response structure
+    if (success && data == null) {
+      dev.log('Warning: Response marked as success but data is null');
     }
-
-    if (json.containsKey('message') && json['message'] != null) {
-      message = json['message'].toString();
-    } else if (json.containsKey('msg') && json['msg'] != null) {
-      message = json['msg'].toString();
-    } else {
-      message = '';
-    }
-
-    if (json.containsKey('success')) {
-      if (json['success'] is bool) {
-        success = json['success'];
-      } else if (json['success'] is List) {
-        // CRITICAL FIX: For this API, an empty list [] means success!
-        // The actual presence of the 'success' key with any value means success
-        success = true;
-      } else {
-        success = json['success'].toString() == 'true';
-      }
-    } else {
-      success = statusCode != null && statusCode! >= 200 && statusCode! < 300;
-    }
-
-    // Final debug log of processed response
   }
 }

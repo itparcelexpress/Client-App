@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:client_app/data/remote/app_request.dart';
 import 'package:client_app/data/remote/helper/app_response.dart';
 import 'package:client_app/injections.dart';
@@ -29,7 +31,7 @@ Future<AppResponse> requestDio(
       // Handle binary responses (like PDFs)
       if (responseType == ResponseType.bytes) {
         return AppResponse(
-          data: response.data, // This will be List<int> for bytes
+          data: response.data,
           message: 'Binary data downloaded successfully',
           success: true,
           statusCode: response.statusCode,
@@ -37,29 +39,40 @@ Future<AppResponse> requestDio(
         );
       }
 
-      // Handle regular JSON responses
+      // Ensure we have a Map<String, dynamic>
+      Map<String, dynamic> responseData;
       if (response.data is Map<String, dynamic>) {
-        return AppResponse.fromJson(response.data, response.statusCode);
+        responseData = response.data;
       } else if (response.data is Map) {
-        // Convert to Map<String, dynamic> if it's a generic Map
-        return AppResponse.fromJson(
-          Map<String, dynamic>.from(response.data),
-          response.statusCode,
-        );
+        responseData = Map<String, dynamic>.from(response.data);
+      } else if (response.data is String) {
+        // Try to parse string as JSON if needed
+        try {
+          responseData = jsonDecode(response.data);
+        } catch (_) {
+          responseData = {
+            'data': response.data,
+            'message': 'Success',
+            'success': true,
+          };
+        }
       } else {
-        // Handle non-map response types
-        return AppResponse(
-          data: response.data,
-          message: 'Success',
-          success: true,
-          statusCode: response.statusCode,
-          origin: {'raw_response': response.data},
-        );
+        responseData = {
+          'data': response.data,
+          'message': 'Success',
+          'success': true,
+        };
       }
+
+      return AppResponse.fromJson(
+        responseData,
+        response.statusCode,
+        originData: response.data is Map ? response.data : null,
+      );
     } catch (e) {
       // Return a fallback response with some debugging info
       return AppResponse(
-        data: null,
+        data: response.data,
         message: 'Failed to parse response: ${e.toString()}',
         success: false,
         statusCode: response.statusCode ?? 500,

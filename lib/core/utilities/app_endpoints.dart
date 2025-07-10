@@ -2,7 +2,7 @@ class AppEndPoints {
   AppEndPoints._();
 
   static const String site =
-      'http://13.48.204.169'; // Change this to your actual site URL
+      'http://13.49.210.150'; // Change this to your actual site URL
   // 'https://api.parcelexpress.om';
   static const String baseUrl = '$site/api/';
   static const String filePath = '$site/files';
@@ -50,4 +50,7 @@ class AppEndPoints {
   static const String clientPaymentTransactions =
       'client/payments/transactions';
   static const String clientPaymentSummary = 'client/payments/summary';
+
+  // Customer Orders
+  static const String customerOrders = '/customer-orders/store';
 }

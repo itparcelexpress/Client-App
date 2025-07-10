@@ -5,6 +5,8 @@ import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/auth/data/repositories/auth_repository.dart';
 import 'package:client_app/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client_app/features/dashboard/data/repositories/dashboard_repository.dart';
+import 'package:client_app/features/guest/cubit/guest_cubit.dart';
+import 'package:client_app/features/guest/data/repositories/guest_repository.dart';
 import 'package:client_app/features/invoices/cubit/invoice_cubit.dart';
 import 'package:client_app/features/notifications/cubit/notification_cubit.dart';
 import 'package:client_app/features/notifications/data/repositories/notification_repository.dart';
@@ -119,4 +121,8 @@ Future<void> initInj() async {
   getIt.registerFactory<PricingCubit>(
     () => PricingCubit(getIt<PricingRepository>()),
   );
+
+  // Guest Feature
+  getIt.registerFactory(() => GuestCubit(getIt()));
+  getIt.registerLazySingleton(() => GuestRepository());
 }

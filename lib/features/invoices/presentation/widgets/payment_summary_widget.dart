@@ -31,7 +31,7 @@ class PaymentSummaryWidget extends StatelessWidget {
                     context,
                     'COD Collected',
                     summary.formattedCodCollected,
-                    AppColors.primaryColor,
+                    AppColor.primaryColor,
                     Icons.money,
                   ),
                 ),
@@ -62,9 +62,9 @@ class PaymentSummaryWidget extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.primaryColor.withValues(alpha: 0.1),
+                color: AppColor.primaryColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.primaryColor),
+                border: Border.all(color: AppColor.primaryColor),
               ),
               child: Column(
                 children: [
@@ -72,7 +72,7 @@ class PaymentSummaryWidget extends StatelessWidget {
                     'Total Balance',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.primaryColor,
+                      color: AppColor.primaryColor,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -80,7 +80,7 @@ class PaymentSummaryWidget extends StatelessWidget {
                     summary.formattedTotalBalance,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.primaryColor,
+                      color: AppColor.primaryColor,
                     ),
                   ),
                 ],

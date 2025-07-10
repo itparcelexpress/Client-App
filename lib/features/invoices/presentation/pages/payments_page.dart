@@ -28,7 +28,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Payments'),
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
         actions: [
           IconButton(
@@ -184,7 +184,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                 context.read<InvoiceCubit>().loadPaymentData();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryColor,
+                backgroundColor: AppColor.primaryColor,
                 foregroundColor: Colors.white,
               ),
               child: const Text('Retry'),
@@ -225,7 +225,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                 context.read<InvoiceCubit>().loadPaymentData();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryColor,
+                backgroundColor: AppColor.primaryColor,
                 foregroundColor: Colors.white,
               ),
               child: const Text('Refresh'),
