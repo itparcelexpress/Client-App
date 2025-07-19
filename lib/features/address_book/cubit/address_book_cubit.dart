@@ -1,3 +1,4 @@
+import 'package:client_app/core/utilities/error_message_sanitizer.dart';
 import 'package:client_app/features/address_book/cubit/address_book_state.dart';
 import 'package:client_app/features/address_book/data/models/address_book_models.dart';
 import 'package:client_app/features/address_book/data/repositories/address_book_repository.dart';
@@ -83,12 +84,9 @@ class AddressBookCubit extends Cubit<AddressBookState> {
         print('🔴 AddressBookCubit loadAddressBookEntries Error: $e');
       }
       if (!isClosed) {
-        emit(
-          AddressBookError(
-            message: 'An error occurred while loading address book entries',
-            errors: [e.toString()],
-          ),
-        );
+        // Sanitize the error message to make it user-friendly
+        String errorMessage = ErrorMessageSanitizer.sanitize(e.toString());
+        emit(AddressBookError(message: errorMessage, errors: [errorMessage]));
       }
     }
   }
@@ -141,12 +139,9 @@ class AddressBookCubit extends Cubit<AddressBookState> {
       // Revert page increment on error
       _currentPage--;
       if (!isClosed) {
-        emit(
-          AddressBookError(
-            message: 'An error occurred while loading more entries',
-            errors: [e.toString()],
-          ),
-        );
+        // Sanitize the error message to make it user-friendly
+        String errorMessage = ErrorMessageSanitizer.sanitize(e.toString());
+        emit(AddressBookError(message: errorMessage, errors: [errorMessage]));
       }
     }
   }
@@ -189,11 +184,10 @@ class AddressBookCubit extends Cubit<AddressBookState> {
         print('🔴 AddressBookCubit createAddressBookEntry Error: $e');
       }
       if (!isClosed) {
+        // Sanitize the error message to make it user-friendly
+        String errorMessage = ErrorMessageSanitizer.sanitize(e.toString());
         emit(
-          AddressBookCreateError(
-            message: 'An error occurred while creating address book entry',
-            errors: [e.toString()],
-          ),
+          AddressBookCreateError(message: errorMessage, errors: [errorMessage]),
         );
       }
     }

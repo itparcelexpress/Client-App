@@ -1,3 +1,4 @@
+import 'package:client_app/core/utilities/error_message_sanitizer.dart';
 import 'package:client_app/features/shipment/data/models/order_models.dart';
 import 'package:client_app/features/shipment/data/repositories/order_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -61,7 +62,9 @@ class ShipmentCubit extends Cubit<ShipmentState> {
       }
     } catch (e) {
       if (!isClosed) {
-        emit(OrderCreationError(message: e.toString()));
+        // Sanitize the error message to make it user-friendly
+        String errorMessage = ErrorMessageSanitizer.sanitize(e.toString());
+        emit(OrderCreationError(message: errorMessage));
       }
     }
   }
@@ -79,7 +82,9 @@ class ShipmentCubit extends Cubit<ShipmentState> {
       }
     } catch (e) {
       if (!isClosed) {
-        emit(OrdersError(message: e.toString()));
+        // Sanitize the error message to make it user-friendly
+        String errorMessage = ErrorMessageSanitizer.sanitize(e.toString());
+        emit(OrdersError(message: errorMessage));
       }
     }
   }
@@ -126,7 +131,9 @@ class ShipmentCubit extends Cubit<ShipmentState> {
       }
     } catch (e) {
       if (!isClosed) {
-        emit(ClientOrdersError(message: e.toString()));
+        // Sanitize the error message to make it user-friendly
+        String errorMessage = ErrorMessageSanitizer.sanitize(e.toString());
+        emit(ClientOrdersError(message: errorMessage));
       }
     }
   }

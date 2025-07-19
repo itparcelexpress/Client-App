@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:client_app/core/models/location_models.dart';
 import 'package:client_app/core/services/location_service.dart';
+import 'package:client_app/core/utilities/error_message_sanitizer.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/address_book/address_book.dart';
@@ -1267,8 +1268,11 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     // Don't show empty error messages
     if (message.trim().isEmpty) return;
 
+    // Sanitize the error message to make it user-friendly
+    String sanitizedMessage = ErrorMessageSanitizer.sanitize(message);
+
     Fluttertoast.showToast(
-      msg: message,
+      msg: sanitizedMessage,
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.TOP,
       backgroundColor: const Color(0xFFef4444),

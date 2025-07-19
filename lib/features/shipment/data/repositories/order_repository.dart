@@ -1,4 +1,5 @@
 import 'package:client_app/core/utilities/app_endpoints.dart';
+import 'package:client_app/core/utilities/error_message_sanitizer.dart';
 import 'package:client_app/data/remote/app_request.dart';
 import 'package:client_app/data/remote/helper/app_response.dart';
 import 'package:client_app/features/shipment/data/models/order_models.dart';
@@ -17,24 +18,16 @@ class OrderRepository {
         // Parse from response.origin which contains the full API response
         return CreateOrderResponse.fromJson(response.origin!);
       } else {
-        // Extract error message from API response
-        String errorMessage = response.message ?? 'Failed to create order';
-
-        // Check if there are specific errors in the response
-        if (response.origin != null) {
-          final origin = response.origin!;
-          if (origin['errors'] != null && origin['errors'] is List) {
-            final errors = origin['errors'] as List;
-            if (errors.isNotEmpty) {
-              errorMessage = errors.join(', ');
-            }
-          }
-        }
-
+        // Use the error sanitizer to make error messages user-friendly
+        String errorMessage = ErrorMessageSanitizer.sanitizeApiError(
+          response.origin,
+        );
         throw Exception(errorMessage);
       }
     } catch (e) {
-      throw Exception('Error creating order: ${e.toString()}');
+      // Sanitize the error message to make it user-friendly
+      String errorMessage = ErrorMessageSanitizer.sanitize(e.toString());
+      throw Exception(errorMessage);
     }
   }
 
@@ -52,10 +45,14 @@ class OrderRepository {
             .map((json) => OrderSummary.fromOrderData(OrderData.fromJson(json)))
             .toList();
       } else {
-        throw Exception(response.message ?? 'Failed to fetch orders');
+        String errorMessage = ErrorMessageSanitizer.sanitizeApiError(
+          response.origin,
+        );
+        throw Exception(errorMessage);
       }
     } catch (e) {
-      throw Exception('Error fetching orders: ${e.toString()}');
+      String errorMessage = ErrorMessageSanitizer.sanitize(e.toString());
+      throw Exception(errorMessage);
     }
   }
 
@@ -70,10 +67,14 @@ class OrderRepository {
       if (response.success) {
         return OrderData.fromJson(response.data['data']);
       } else {
-        throw Exception(response.message ?? 'Failed to fetch order details');
+        String errorMessage = ErrorMessageSanitizer.sanitizeApiError(
+          response.origin,
+        );
+        throw Exception(errorMessage);
       }
     } catch (e) {
-      throw Exception('Error fetching order details: ${e.toString()}');
+      String errorMessage = ErrorMessageSanitizer.sanitize(e.toString());
+      throw Exception(errorMessage);
     }
   }
 
@@ -111,24 +112,15 @@ class OrderRepository {
         // Parse from response.origin which contains the full API response
         return GetOrdersResponse.fromJson(response.origin!);
       } else {
-        // Extract error message from API response
-        String errorMessage = response.message ?? 'Failed to fetch orders';
-
-        // Check if there are specific errors in the response
-        if (response.origin != null) {
-          final origin = response.origin!;
-          if (origin['errors'] != null && origin['errors'] is List) {
-            final errors = origin['errors'] as List;
-            if (errors.isNotEmpty) {
-              errorMessage = errors.join(', ');
-            }
-          }
-        }
-
+        // Use the error sanitizer to make error messages user-friendly
+        String errorMessage = ErrorMessageSanitizer.sanitizeApiError(
+          response.origin,
+        );
         throw Exception(errorMessage);
       }
     } catch (e) {
-      throw Exception('Error fetching client orders: ${e.toString()}');
+      String errorMessage = ErrorMessageSanitizer.sanitize(e.toString());
+      throw Exception(errorMessage);
     }
   }
 }

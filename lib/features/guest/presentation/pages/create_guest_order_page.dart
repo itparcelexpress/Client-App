@@ -4,6 +4,7 @@ import 'package:client_app/core/services/location_service.dart';
 import 'package:client_app/core/utilities/app_color.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/core/utilities/taost_service.dart';
+import 'package:client_app/core/utilities/validators.dart';
 import 'package:client_app/features/guest/cubit/guest_cubit.dart';
 import 'package:client_app/features/guest/cubit/guest_state.dart';
 import 'package:client_app/features/guest/data/models/guest_order_models.dart';
@@ -146,6 +147,7 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
                   duration: const Duration(milliseconds: 500),
                   child: Form(
                     key: _formKey,
+                    autovalidateMode: AutovalidateMode.always,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -234,38 +236,52 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
             decoration: _inputDecoration('Full Name *'),
             validator:
                 (value) =>
-                    value?.isEmpty ?? true ? 'Please enter your name' : null,
+                    Validators.requiredField(value, fieldName: 'Full Name'),
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _emailController,
             decoration: _inputDecoration('Email *'),
-            validator:
-                (value) =>
-                    value?.isEmpty ?? true ? 'Please enter your email' : null,
+            validator: Validators.email,
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _phoneController,
             decoration: _inputDecoration('Phone Number *'),
             validator:
-                (value) =>
-                    value?.isEmpty ?? true ? 'Please enter your phone' : null,
+                (value) => Validators.phone(value, fieldName: 'Phone Number'),
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _alternatePhoneController,
             decoration: _inputDecoration('Alternate Phone'),
+            validator:
+                (value) => Validators.optionalPhone(
+                  value,
+                  fieldName: 'Alternate Phone',
+                ),
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _identifyController,
             decoration: _inputDecoration('Identification'),
+            validator:
+                (value) => Validators.optionalMinLength(
+                  value,
+                  6,
+                  fieldName: 'Identification',
+                ),
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _taxNumberController,
             decoration: _inputDecoration('Tax Number'),
+            validator:
+                (value) => Validators.optionalMinLength(
+                  value,
+                  6,
+                  fieldName: 'Tax Number',
+                ),
           ),
         ],
       ),
@@ -376,7 +392,7 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
             decoration: _inputDecoration('District'),
             validator:
                 (value) =>
-                    value?.isEmpty ?? true ? 'Please enter district' : null,
+                    Validators.requiredField(value, fieldName: 'District'),
           ),
           const SizedBox(height: 16),
           TextFormField(
@@ -384,25 +400,23 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
             decoration: _inputDecoration('Zipcode'),
             validator:
                 (value) =>
-                    value?.isEmpty ?? true ? 'Please enter zipcode' : null,
+                    Validators.requiredField(value, fieldName: 'Zipcode'),
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _streetAddressController,
             decoration: _inputDecoration('Street Address'),
             validator:
-                (value) =>
-                    value?.isEmpty ?? true
-                        ? 'Please enter street address'
-                        : null,
+                (value) => Validators.requiredField(
+                  value,
+                  fieldName: 'Street Address',
+                ),
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _locationUrlController,
             decoration: _inputDecoration('Location URL *'),
-            validator:
-                (value) =>
-                    value?.isEmpty ?? true ? 'Please enter location URL' : null,
+            validator: Validators.locationUrl,
           ),
         ],
       ),
@@ -440,32 +454,21 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
             decoration: _inputDecoration('Customer Name *'),
             validator:
                 (value) =>
-                    value?.isEmpty ?? true
-                        ? 'Please enter customer name'
-                        : null,
+                    Validators.requiredField(value, fieldName: 'Customer Name'),
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _customerPhoneController,
             decoration: _inputDecoration('Customer Phone *'),
             validator:
-                (value) =>
-                    value?.isEmpty ?? true
-                        ? 'Please enter customer phone'
-                        : null,
+                (value) => Validators.phone(value, fieldName: 'Customer Phone'),
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _amountController,
             decoration: _inputDecoration('Amount *'),
             keyboardType: TextInputType.numberWithOptions(decimal: true),
-            validator: (value) {
-              if (value?.isEmpty ?? true) return 'Please enter amount';
-              final amount = double.tryParse(value!);
-              if (amount == null || amount <= 0)
-                return 'Please enter a valid amount';
-              return null;
-            },
+            validator: Validators.amount,
           ),
           const SizedBox(height: 16),
           TextFormField(

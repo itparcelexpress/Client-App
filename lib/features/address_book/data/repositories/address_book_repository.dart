@@ -1,4 +1,5 @@
 import 'package:client_app/core/utilities/app_endpoints.dart';
+import 'package:client_app/core/utilities/error_message_sanitizer.dart';
 import 'package:client_app/data/remote/app_request.dart';
 import 'package:client_app/data/remote/helper/app_response.dart';
 import 'package:client_app/features/address_book/data/models/address_book_models.dart';
@@ -45,8 +46,11 @@ class AddressBookRepositoryImpl implements AddressBookRepository {
         if (kDebugMode) {
           print('🔴 Address Book List Error: ${response.message}');
         }
+        String errorMessage = ErrorMessageSanitizer.sanitizeApiError(
+          response.origin,
+        );
         return AddressBookListResponse(
-          message: response.message ?? 'Failed to load address book entries',
+          message: errorMessage,
           success: false,
           data: const AddressBookPaginationData(
             currentPage: 1,
@@ -61,15 +65,16 @@ class AddressBookRepositoryImpl implements AddressBookRepository {
             to: 0,
             total: 0,
           ),
-          errors: [response.message ?? 'Unknown error'],
+          errors: [errorMessage],
         );
       }
     } catch (e) {
       if (kDebugMode) {
         print('🔴 Address Book List Exception: $e');
       }
+      String errorMessage = ErrorMessageSanitizer.sanitize(e.toString());
       return AddressBookListResponse(
-        message: 'An error occurred while loading address book entries',
+        message: errorMessage,
         success: false,
         data: const AddressBookPaginationData(
           currentPage: 1,
@@ -84,7 +89,7 @@ class AddressBookRepositoryImpl implements AddressBookRepository {
           to: 0,
           total: 0,
         ),
-        errors: [e.toString()],
+        errors: [errorMessage],
       );
     }
   }
@@ -114,20 +119,24 @@ class AddressBookRepositoryImpl implements AddressBookRepository {
         if (kDebugMode) {
           print('🔴 Create Address Book Error: ${response.message}');
         }
+        String errorMessage = ErrorMessageSanitizer.sanitizeApiError(
+          response.origin,
+        );
         return AddressBookResponse(
-          message: response.message ?? 'Failed to create address book entry',
+          message: errorMessage,
           success: false,
-          errors: [response.message ?? 'Unknown error'],
+          errors: [errorMessage],
         );
       }
     } catch (e) {
       if (kDebugMode) {
         print('🔴 Create Address Book Exception: $e');
       }
+      String errorMessage = ErrorMessageSanitizer.sanitize(e.toString());
       return AddressBookResponse(
-        message: 'An error occurred while creating address book entry',
+        message: errorMessage,
         success: false,
-        errors: [e.toString()],
+        errors: [errorMessage],
       );
     }
   }
@@ -158,20 +167,24 @@ class AddressBookRepositoryImpl implements AddressBookRepository {
         if (kDebugMode) {
           print('🔴 Update Address Book Error: ${response.message}');
         }
+        String errorMessage = ErrorMessageSanitizer.sanitizeApiError(
+          response.origin,
+        );
         return AddressBookResponse(
-          message: response.message ?? 'Failed to update address book entry',
+          message: errorMessage,
           success: false,
-          errors: [response.message ?? 'Unknown error'],
+          errors: [errorMessage],
         );
       }
     } catch (e) {
       if (kDebugMode) {
         print('🔴 Update Address Book Exception: $e');
       }
+      String errorMessage = ErrorMessageSanitizer.sanitize(e.toString());
       return AddressBookResponse(
-        message: 'An error occurred while updating address book entry',
+        message: errorMessage,
         success: false,
-        errors: [e.toString()],
+        errors: [errorMessage],
       );
     }
   }

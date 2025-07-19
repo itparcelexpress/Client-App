@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:client_app/core/utilities/validators.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -69,13 +70,18 @@ class _LoginPageState extends State<LoginPage> {
                     MaterialPageRoute(builder: (context) => const HomePage()),
                   );
                 } else if (state is AuthFailure) {
-                  Fluttertoast.showToast(
-                    msg: state.message,
-                    toastLength: Toast.LENGTH_LONG,
-                    gravity: ToastGravity.TOP,
-                    backgroundColor: const Color(0xFFef4444),
-                    textColor: Colors.white,
-                    fontSize: 16.0,
+                  // Show a generic, user-friendly error message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text(
+                        'Invalid email or password. Please try again.',
+                      ),
+                      backgroundColor: Colors.red,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
                   );
                 }
               },
@@ -208,6 +214,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         child: Form(
           key: _formKey,
+          autovalidateMode: AutovalidateMode.always,
           child: Column(
             children: [
               _buildEmailField(),
@@ -244,15 +251,7 @@ class _LoginPageState extends State<LoginPage> {
         filled: true,
         fillColor: Colors.grey.shade50,
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter your email';
-        }
-        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-          return 'Please enter a valid email';
-        }
-        return null;
-      },
+      validator: Validators.email,
     );
   }
 
@@ -260,6 +259,7 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       controller: _passwordController,
       obscureText: !_isPasswordVisible,
+      keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
         labelText: 'Password',
         prefixIcon: Icon(Icons.lock_outline, color: Colors.blue.shade400),
@@ -289,15 +289,8 @@ class _LoginPageState extends State<LoginPage> {
         filled: true,
         fillColor: Colors.grey.shade50,
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter your password';
-        }
-        if (value.length < 6) {
-          return 'Password must be at least 6 characters';
-        }
-        return null;
-      },
+      validator:
+          (value) => Validators.minLength(value, 6, fieldName: 'Password'),
     );
   }
 
