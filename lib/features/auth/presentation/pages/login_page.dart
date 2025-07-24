@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:client_app/core/utilities/validators.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -73,9 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                   // Show a generic, user-friendly error message
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: const Text(
-                        'Invalid email or password. Please try again.',
-                      ),
+                      content: Text(AppLocalizations.of(context)!.error),
                       backgroundColor: Colors.red,
                       behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(
@@ -167,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 24)),
           Text(
-            'Parcel Express',
+            AppLocalizations.of(context)!.appTitle,
             style: _systemFont(
               fontSize: ResponsiveUtils.getResponsiveFontSize(context, 32),
               fontWeight: FontWeight.bold,
@@ -180,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
               horizontal: ResponsiveUtils.getResponsivePadding(context, 16),
             ),
             child: Text(
-              'Welcome back! Please sign in to continue.',
+              AppLocalizations.of(context)!.welcomeMessage,
               style: _systemFont(
                 fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
                 color: Colors.grey.shade600,
@@ -234,7 +233,7 @@ class _LoginPageState extends State<LoginPage> {
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-        labelText: 'Email',
+        labelText: AppLocalizations.of(context)!.email,
         prefixIcon: Icon(Icons.email_outlined, color: Colors.blue.shade400),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -251,7 +250,7 @@ class _LoginPageState extends State<LoginPage> {
         filled: true,
         fillColor: Colors.grey.shade50,
       ),
-      validator: Validators.email,
+      validator: (value) => Validators.email(value, context: context),
     );
   }
 
@@ -261,7 +260,7 @@ class _LoginPageState extends State<LoginPage> {
       obscureText: !_isPasswordVisible,
       keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
-        labelText: 'Password',
+        labelText: AppLocalizations.of(context)!.password,
         prefixIcon: Icon(Icons.lock_outline, color: Colors.blue.shade400),
         suffixIcon: IconButton(
           icon: Icon(
@@ -290,7 +289,12 @@ class _LoginPageState extends State<LoginPage> {
         fillColor: Colors.grey.shade50,
       ),
       validator:
-          (value) => Validators.minLength(value, 6, fieldName: 'Password'),
+          (value) => Validators.minLength(
+            context: context,
+            value,
+            6,
+            fieldName: AppLocalizations.of(context)!.password,
+          ),
     );
   }
 
@@ -323,7 +327,7 @@ class _LoginPageState extends State<LoginPage> {
               state is AuthLoading
                   ? SpinKitThreeBounce(color: Colors.white, size: 20)
                   : Text(
-                    'Sign In',
+                    AppLocalizations.of(context)!.login,
                     style: _systemFont(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -341,7 +345,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: [
           Text(
-            'or',
+            '/', // You may want to localize this or use a divider
             style: _systemFont(
               fontSize: ResponsiveUtils.getResponsiveFontSize(context, 14),
               color: Colors.grey.shade600,
@@ -364,7 +368,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
             ),
             child: Text(
-              'Continue as Guest',
+              AppLocalizations.of(context)!.continueAsGuest,
               style: _systemFont(
                 fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
                 fontWeight: FontWeight.w600,

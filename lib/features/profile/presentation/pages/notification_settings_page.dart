@@ -2,6 +2,7 @@ import 'package:client_app/core/models/client_settings_models.dart';
 import 'package:client_app/features/profile/cubit/client_settings_cubit.dart';
 import 'package:client_app/features/profile/cubit/client_settings_state.dart';
 import 'package:client_app/injections.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -44,9 +45,9 @@ class NotificationSettingsView extends StatelessWidget {
         backgroundColor: Colors.white,
         foregroundColor: const Color(0xFF1a1a1a),
         centerTitle: true,
-        title: const Text(
-          'Notification Settings',
-          style: TextStyle(
+        title: Text(
+          AppLocalizations.of(context)!.notificationSettings,
+          style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w600,
             color: Color(0xFF1a1a1a),
@@ -135,7 +136,7 @@ class NotificationSettingsView extends StatelessWidget {
       return _buildErrorState(context, state.message);
     }
 
-    return _buildEmptyState();
+    return _buildEmptyState(context);
   }
 
   Widget _buildSettingsList(BuildContext context, ClientSettingsData settings) {
@@ -148,7 +149,7 @@ class NotificationSettingsView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHeader(),
+          _buildHeader(context),
           const SizedBox(height: 24),
           _buildSettingsCard(context, notifications),
           const SizedBox(height: 24),
@@ -158,17 +159,17 @@ class NotificationSettingsView extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Manage your notification preferences',
+          AppLocalizations.of(context)!.manageNotificationPreferences,
           style: TextStyle(fontSize: 16, color: Colors.grey[600], height: 1.4),
         ),
         const SizedBox(height: 8),
         Text(
-          'Choose how you want to receive notifications about your orders and account updates.',
+          AppLocalizations.of(context)!.chooseNotificationMethod,
           style: TextStyle(fontSize: 14, color: Colors.grey[500], height: 1.4),
         ),
       ],
@@ -195,8 +196,9 @@ class NotificationSettingsView extends StatelessWidget {
         children: [
           _buildSettingTile(
             context: context,
-            title: 'WhatsApp Notifications',
-            subtitle: 'Receive order updates via WhatsApp',
+            title: AppLocalizations.of(context)!.whatsappNotifications,
+            subtitle:
+                AppLocalizations.of(context)!.receiveOrderUpdatesViaWhatsapp,
             icon: Icons.chat_rounded,
             iconColor: const Color(0xFF25D366),
             value: notifications.whatsapp,
@@ -210,8 +212,8 @@ class NotificationSettingsView extends StatelessWidget {
           Divider(height: 1, color: Colors.grey[200]),
           _buildSettingTile(
             context: context,
-            title: 'Email Notifications',
-            subtitle: 'Receive order updates via email',
+            title: AppLocalizations.of(context)!.emailNotificationsTitle,
+            subtitle: AppLocalizations.of(context)!.receiveOrderUpdatesViaEmail,
             icon: Icons.email_rounded,
             iconColor: const Color(0xFF1976D2),
             value: notifications.email,
@@ -375,16 +377,20 @@ class NotificationSettingsView extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState() {
-    return const Center(
+  Widget _buildEmptyState(BuildContext context) {
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.settings_rounded, size: 80, color: Color(0xFF667eea)),
-          SizedBox(height: 16),
+          const Icon(
+            Icons.settings_rounded,
+            size: 80,
+            color: Color(0xFF667eea),
+          ),
+          const SizedBox(height: 16),
           Text(
-            'Loading settings...',
-            style: TextStyle(
+            AppLocalizations.of(context)!.loadingSettings,
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
               color: Color(0xFF1a1a1a),

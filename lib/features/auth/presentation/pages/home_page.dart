@@ -15,6 +15,7 @@ import 'package:client_app/injections.dart';
 import 'package:client_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,28 +30,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late AnimationController _fabAnimationController;
   late List<AnimationController> _iconControllers;
 
-  final List<NavItem> _navItems = [
-    NavItem(
-      icon: Icons.dashboard_rounded,
-      label: 'Dashboard',
-      color: const Color(0xFF667eea),
-    ),
-    NavItem(
-      icon: Icons.receipt_long_rounded,
-      label: 'Orders',
-      color: const Color(0xFF10b981),
-    ),
-    NavItem(
-      icon: Icons.receipt_rounded,
-      label: 'Invoices',
-      color: const Color(0xFFf59e0b),
-    ),
-    NavItem(
-      icon: Icons.person_rounded,
-      label: 'Profile',
-      color: const Color(0xFF8b5cf6),
-    ),
-  ];
+  late List<NavItem> _navItems;
 
   @override
   void initState() {
@@ -62,7 +42,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
 
     _iconControllers = List.generate(
-      _navItems.length,
+      4,
       (index) => AnimationController(
         duration: const Duration(milliseconds: 300),
         vsync: this,
@@ -85,6 +65,28 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    _navItems = [
+      NavItem(
+        icon: Icons.dashboard_rounded,
+        label: AppLocalizations.of(context)!.dashboard,
+        color: const Color(0xFF667eea),
+      ),
+      NavItem(
+        icon: Icons.receipt_long_rounded,
+        label: AppLocalizations.of(context)!.orders,
+        color: const Color(0xFF10b981),
+      ),
+      NavItem(
+        icon: Icons.receipt_rounded,
+        label: AppLocalizations.of(context)!.invoices,
+        color: const Color(0xFFf59e0b),
+      ),
+      NavItem(
+        icon: Icons.person_rounded,
+        label: AppLocalizations.of(context)!.profile,
+        color: const Color(0xFF8b5cf6),
+      ),
+    ];
     return Scaffold(
       backgroundColor: Colors.grey[50],
       body: PageView(
@@ -133,9 +135,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 color: Colors.white,
                 size: 24,
               ),
-              label: const Text(
-                'Create Order',
-                style: TextStyle(
+              label: Text(
+                AppLocalizations.of(context)!.createOrder,
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
@@ -378,7 +380,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Profile',
+                  AppLocalizations.of(context)!.profile,
                   style: TextStyle(
                     fontSize: ResponsiveUtils.getResponsiveFontSize(
                       context,
@@ -389,7 +391,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ),
                 Text(
-                  'Manage your account settings',
+                  AppLocalizations.of(
+                    context,
+                  )!.manageNotificationPreferences, // Closest available
                   style: TextStyle(
                     fontSize: ResponsiveUtils.getResponsiveFontSize(
                       context,
@@ -473,7 +477,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
             SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 20)),
             Text(
-              user?.name ?? 'User',
+              user?.name ?? AppLocalizations.of(context)!.user,
               style: TextStyle(
                 fontSize: ResponsiveUtils.getResponsiveFontSize(context, 22),
                 fontWeight: FontWeight.w700,
@@ -482,7 +486,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
             SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 8)),
             Text(
-              user?.email ?? 'N/A',
+              user?.email ?? AppLocalizations.of(context)!.notAvailable,
               style: TextStyle(
                 fontSize: ResponsiveUtils.getResponsiveFontSize(context, 14),
                 color: Colors.grey[600],
@@ -495,8 +499,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 Expanded(
                   child: _buildInfoItem(
                     icon: Icons.badge_rounded,
-                    title: 'Role',
-                    value: user?.role?.name ?? 'N/A',
+                    title: AppLocalizations.of(context)!.role,
+                    value:
+                        user?.role?.name ??
+                        AppLocalizations.of(context)!.notAvailable,
                     color: const Color(0xFF10b981),
                   ),
                 ),
@@ -507,7 +513,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   Expanded(
                     child: _buildInfoItem(
                       icon: Icons.location_on_rounded,
-                      title: 'Location',
+                      title: AppLocalizations.of(context)!.location,
                       value: 'Oman',
                       color: const Color(0xFFf59e0b),
                     ),
@@ -540,8 +546,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Settings',
+            Text(
+              AppLocalizations.of(context)!.settings,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -551,8 +557,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             const SizedBox(height: 20),
             _buildSettingItem(
               icon: Icons.settings_rounded,
-              title: 'Notification Settings',
-              subtitle: 'Manage notification preferences',
+              title: AppLocalizations.of(context)!.notificationSettings,
+              subtitle:
+                  AppLocalizations.of(context)!.manageNotificationPreferences,
               color: const Color(0xFF667eea),
               onTap: () {
                 final user = LocalData.user;
@@ -586,9 +593,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   );
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(
-                        'User information not available - User ID: $userId, Client ID: $clientId',
-                      ),
+                      content: Text(AppLocalizations.of(context)!.notAvailable),
                       backgroundColor: Colors.orange,
                       behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(
@@ -602,8 +607,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             const SizedBox(height: 16),
             _buildSettingItem(
               icon: Icons.notifications_rounded,
-              title: 'View Notifications',
-              subtitle: 'View all notifications',
+              title: AppLocalizations.of(context)!.viewNotifications,
+              subtitle: AppLocalizations.of(context)!.viewAllNotifications,
               color: const Color(0xFF8b5cf6),
               onTap:
                   () => Navigator.push(
@@ -616,8 +621,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             const SizedBox(height: 16),
             _buildSettingItem(
               icon: Icons.price_check_rounded,
-              title: 'View Pricing',
-              subtitle: 'View delivery pricing per state',
+              title: AppLocalizations.of(context)!.viewPricing,
+              subtitle: AppLocalizations.of(context)!.viewDeliveryPricing,
               color: const Color(0xFF10b981),
               onTap:
                   () => Navigator.push(
@@ -630,8 +635,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             const SizedBox(height: 16),
             _buildSettingItem(
               icon: Icons.logout_rounded,
-              title: 'Logout',
-              subtitle: 'Sign out of your account',
+              title: AppLocalizations.of(context)!.logout,
+              subtitle: AppLocalizations.of(context)!.signOutAccount,
               color: const Color(0xFFef4444),
               onTap: () => _showLogoutDialog(context),
               isDestructive: true,
@@ -767,15 +772,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: const Text(
-            'Logout',
+          title: Text(
+            AppLocalizations.of(context)!.logout,
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
-          content: const Text('Are you sure you want to logout?'),
+          content: Text(AppLocalizations.of(context)!.logoutConfirmation),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(dialogContext),
-              child: Text('Cancel', style: TextStyle(color: Colors.grey[600])),
+              child: Text(
+                AppLocalizations.of(context)!.cancel,
+                style: TextStyle(color: Colors.grey[600]),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -783,9 +791,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 // Call logout using a callback approach to ensure we use the right instance
                 _performLogout();
               },
-              child: const Text(
-                'Logout',
-                style: TextStyle(color: Color(0xFFef4444)),
+              child: Text(
+                AppLocalizations.of(context)!.logout,
+                style: const TextStyle(color: Color(0xFFef4444)),
               ),
             ),
           ],
@@ -805,6 +813,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('Logout Successful'),
+            // TODO: Add to ARB if missing
             backgroundColor: Colors.green,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
@@ -822,6 +831,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('Logout Successful'),
+            // TODO: Add to ARB if missing
             backgroundColor: Colors.green,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(

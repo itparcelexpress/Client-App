@@ -7,6 +7,7 @@ import 'package:client_app/features/notifications/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -80,7 +81,7 @@ class _DashboardPageState extends State<DashboardPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Hello, $userName! 👋',
+                  AppLocalizations.of(context)!.helloUser(userName),
                   style: TextStyle(
                     fontSize: ResponsiveUtils.getResponsiveFontSize(
                       context,
@@ -94,7 +95,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   height: ResponsiveUtils.getResponsivePadding(context, 8),
                 ),
                 Text(
-                  'Here\'s your business overview',
+                  AppLocalizations.of(context)!.businessOverview,
                   style: TextStyle(
                     fontSize: ResponsiveUtils.getResponsiveFontSize(
                       context,
@@ -173,7 +174,7 @@ class _DashboardPageState extends State<DashboardPage> {
           children: [
             Expanded(
               child: StatCardWidget(
-                title: 'Total Orders',
+                title: AppLocalizations.of(context)!.totalOrders,
                 value: data.totalOrders.toString(),
                 icon: Icons.receipt_long,
                 color: const Color(0xFF667eea),
@@ -182,7 +183,7 @@ class _DashboardPageState extends State<DashboardPage> {
             SizedBox(width: ResponsiveUtils.getResponsivePadding(context, 16)),
             Expanded(
               child: StatCardWidget(
-                title: 'Today Orders',
+                title: AppLocalizations.of(context)!.todayOrders,
                 value: data.todayOrders.toString(),
                 icon: Icons.today,
                 color: const Color(0xFF10b981),
@@ -195,7 +196,7 @@ class _DashboardPageState extends State<DashboardPage> {
           children: [
             Expanded(
               child: StatCardWidget(
-                title: 'Pending Pickup',
+                title: AppLocalizations.of(context)!.pendingPickup,
                 value: data.pendingPickup.toString(),
                 icon: Icons.pending_actions,
                 color: const Color(0xFFf59e0b),
@@ -204,7 +205,7 @@ class _DashboardPageState extends State<DashboardPage> {
             SizedBox(width: ResponsiveUtils.getResponsivePadding(context, 16)),
             Expanded(
               child: StatCardWidget(
-                title: 'Picked Orders',
+                title: AppLocalizations.of(context)!.pickedOrders,
                 value: data.pickedOrders.toString(),
                 icon: Icons.check_circle,
                 color: const Color(0xFF8b5cf6),
@@ -232,14 +233,14 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           ],
         ),
-        child: const Center(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SpinKitThreeBounce(color: Color(0xFF667eea), size: 30),
               SizedBox(height: 20),
               Text(
-                'Loading your dashboard...',
+                AppLocalizations.of(context)!.loadingDashboard,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -287,7 +288,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   height: ResponsiveUtils.getResponsivePadding(context, 16),
                 ),
                 Text(
-                  'Oops! Something went wrong',
+                  AppLocalizations.of(context)!.error,
                   style: TextStyle(
                     fontSize: ResponsiveUtils.getResponsiveFontSize(
                       context,
@@ -336,7 +337,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ),
                   child: Text(
-                    'Try Again',
+                    AppLocalizations.of(context)!.tryAgain,
                     style: TextStyle(
                       fontSize: ResponsiveUtils.getResponsiveFontSize(
                         context,
@@ -377,7 +378,7 @@ class _DashboardPageState extends State<DashboardPage> {
               Icon(Icons.dashboard_outlined, size: 64, color: Colors.grey[400]),
               const SizedBox(height: 20),
               Text(
-                'Welcome to Dashboard',
+                AppLocalizations.of(context)!.welcomeDashboard,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -386,7 +387,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Tap to load your statistics',
+                AppLocalizations.of(context)!.tapToLoadStats,
                 style: TextStyle(fontSize: 14, color: Colors.grey[500]),
               ),
               const SizedBox(height: 24),
@@ -405,10 +406,10 @@ class _DashboardPageState extends State<DashboardPage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
-                  'Load Dashboard',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
+                              child: Text(
+                AppLocalizations.of(context)!.loadDashboard,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
               ),
             ],
           ),

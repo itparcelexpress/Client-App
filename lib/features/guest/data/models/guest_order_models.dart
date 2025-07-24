@@ -18,7 +18,7 @@ class GuestOrderRequest {
   final int city_id;
   final String? identify;
   final String? taxNumber;
-  final String location_url;
+  final String? location_url;
 
   GuestOrderRequest({
     required this.name,
@@ -40,7 +40,7 @@ class GuestOrderRequest {
     required this.city_id,
     this.identify,
     this.taxNumber,
-    required this.location_url,
+    this.location_url,
   });
 
   Map<String, dynamic> toJson() {
@@ -64,7 +64,7 @@ class GuestOrderRequest {
       'city_id': city_id,
       'identify': identify ?? '',
       'taxNumber': taxNumber ?? '',
-      'location_url': location_url,
+      'location_url': location_url ?? '',
     };
   }
 }

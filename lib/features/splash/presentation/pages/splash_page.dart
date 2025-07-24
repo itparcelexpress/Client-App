@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -72,7 +73,7 @@ class SplashPage extends StatelessWidget {
                   duration: const Duration(milliseconds: 1000),
                   delay: const Duration(milliseconds: 500),
                   child: Text(
-                    'Parcel Express',
+                    AppLocalizations.of(context)!.appTitle,
                     style: TextStyle(
                       fontSize: ResponsiveUtils.getResponsiveFontSize(
                         context,
@@ -90,7 +91,7 @@ class SplashPage extends StatelessWidget {
                   duration: const Duration(milliseconds: 800),
                   delay: const Duration(milliseconds: 1000),
                   child: Text(
-                    'Fast & Reliable Delivery Service',
+                    AppLocalizations.of(context)!.tagline,
                     style: TextStyle(
                       fontSize: ResponsiveUtils.getResponsiveFontSize(
                         context,
@@ -109,7 +110,7 @@ class SplashPage extends StatelessWidget {
 
                 // Loading Text
                 Text(
-                  'Loading...',
+                  AppLocalizations.of(context)!.loading,
                   style: _systemFont(
                     fontSize: 16,
                     color: Colors.white.withValues(alpha: 0.8),

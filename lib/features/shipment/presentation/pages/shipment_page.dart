@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/presentation/pages/create_order_page.dart';
 import 'package:client_app/injections.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -83,10 +84,10 @@ class _ShipmentPageState extends State<ShipmentPage> {
                 child: const Icon(Icons.arrow_back, size: 20),
               ),
             ),
-            const Expanded(
+            Expanded(
               child: Text(
-                'Create Shipment',
-                style: TextStyle(
+                AppLocalizations.of(context)!.createShipment,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF1a1a1a),
@@ -124,9 +125,9 @@ class _ShipmentPageState extends State<ShipmentPage> {
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
-            'Scan or Enter',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context)!.scanOrEnterTitle,
+            style: const TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.w700,
               color: Color(0xFF1a1a1a),
@@ -134,7 +135,7 @@ class _ShipmentPageState extends State<ShipmentPage> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Add your sticker number to get started',
+            AppLocalizations.of(context)!.addStickerNumberToStart,
             style: TextStyle(
               fontSize: 16,
               color: Colors.grey[600],
@@ -174,9 +175,9 @@ class _ShipmentPageState extends State<ShipmentPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Enter manually',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context)!.enterManually,
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Color(0xFF1a1a1a),
@@ -186,7 +187,7 @@ class _ShipmentPageState extends State<ShipmentPage> {
           TextField(
             controller: _stickerController,
             decoration: InputDecoration(
-              hintText: 'Type sticker number...',
+              hintText: AppLocalizations.of(context)!.typeStickerNumber,
               hintStyle: TextStyle(color: Colors.grey[400]),
               prefixIcon: Icon(Icons.tag, color: Colors.grey[400], size: 20),
               border: OutlineInputBorder(
@@ -247,9 +248,9 @@ class _ShipmentPageState extends State<ShipmentPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Scan barcode',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context)!.scanBarcode,
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Color(0xFF1a1a1a),
@@ -276,13 +277,13 @@ class _ShipmentPageState extends State<ShipmentPage> {
           ),
           borderRadius: BorderRadius.circular(16),
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.qr_code_scanner, color: Colors.white, size: 20),
             SizedBox(width: 8),
             Text(
-              'Start Scanning',
+              AppLocalizations.of(context)!.startScanning,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -539,7 +540,7 @@ class _ShipmentPageState extends State<ShipmentPage> {
           Padding(
             padding: const EdgeInsets.all(20),
             child: Text(
-              'Position the barcode within the frame to scan',
+              AppLocalizations.of(context)!.positionBarcodeInFrame,
               style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),
@@ -582,9 +583,11 @@ class _ShipmentPageState extends State<ShipmentPage> {
   }
 
   String _getResultTitle(ShipmentState state) {
-    if (state is ShipmentScanError) return 'Scan Failed';
-    if (state is ShipmentScanSuccess) return 'Successfully Scanned';
-    return 'Number Entered';
+    if (state is ShipmentScanError)
+      return AppLocalizations.of(context)!.scanFailed;
+    if (state is ShipmentScanSuccess)
+      return AppLocalizations.of(context)!.successfullyScanned;
+    return AppLocalizations.of(context)!.numberEntered;
   }
 
   String _getResultText(ShipmentState state) {

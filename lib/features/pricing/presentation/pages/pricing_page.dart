@@ -5,6 +5,7 @@ import 'package:client_app/features/pricing/cubit/pricing_state.dart';
 import 'package:client_app/features/pricing/data/models/pricing_models.dart';
 import 'package:client_app/features/pricing/presentation/widgets/pricing_card_widget.dart';
 import 'package:client_app/injections.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -95,9 +96,9 @@ class _PricingViewState extends State<PricingView> {
       backgroundColor: Colors.white,
       foregroundColor: const Color(0xFF1a1a1a),
       centerTitle: true,
-      title: const Text(
-        'Pricing List',
-        style: TextStyle(
+      title: Text(
+        AppLocalizations.of(context)!.pricingList,
+        style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: Color(0xFF1a1a1a),
@@ -125,14 +126,14 @@ class _PricingViewState extends State<PricingView> {
   }
 
   Widget _buildLoadingState() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SpinKitThreeBounce(color: Color(0xFF667eea), size: 30),
           SizedBox(height: 16),
           Text(
-            'Loading pricing data...',
+            AppLocalizations.of(context)!.loadingPricingData,
             style: TextStyle(fontSize: 16, color: Color(0xFF666666)),
           ),
         ],
@@ -164,7 +165,7 @@ class _PricingViewState extends State<PricingView> {
               ),
               const SizedBox(height: 24),
               Text(
-                'Error Loading Pricing',
+                AppLocalizations.of(context)!.errorLoadingPricing,
                 style: TextStyle(
                   fontSize: ResponsiveUtils.getResponsiveFontSize(context, 18),
                   fontWeight: FontWeight.w600,
@@ -224,7 +225,7 @@ class _PricingViewState extends State<PricingView> {
               ),
               const SizedBox(height: 24),
               Text(
-                'No Pricing Data',
+                AppLocalizations.of(context)!.noPricingData,
                 style: TextStyle(
                   fontSize: ResponsiveUtils.getResponsiveFontSize(context, 18),
                   fontWeight: FontWeight.w600,
@@ -277,7 +278,7 @@ class _PricingViewState extends State<PricingView> {
           controller: _searchController,
           onChanged: _filterPricingData,
           decoration: InputDecoration(
-            hintText: 'Search by state name...',
+            hintText: AppLocalizations.of(context)!.searchByStateName,
             hintStyle: TextStyle(color: Colors.grey[400]),
             prefixIcon: Icon(Icons.search, color: Colors.grey[400], size: 20),
             border: OutlineInputBorder(
@@ -335,7 +336,7 @@ class _PricingViewState extends State<PricingView> {
           children: [
             Expanded(
               child: _buildSummaryItem(
-                'Total States',
+                AppLocalizations.of(context)!.totalStates,
                 '$totalStates',
                 Icons.location_on_rounded,
               ),
@@ -347,7 +348,7 @@ class _PricingViewState extends State<PricingView> {
             ),
             Expanded(
               child: _buildSummaryItem(
-                'Avg. Delivery',
+                AppLocalizations.of(context)!.avgDelivery,
                 '${avgDeliveryFee.toStringAsFixed(2)} OMR',
                 Icons.local_shipping_rounded,
               ),
@@ -359,7 +360,7 @@ class _PricingViewState extends State<PricingView> {
             ),
             Expanded(
               child: _buildSummaryItem(
-                'Avg. Return',
+                AppLocalizations.of(context)!.avgReturn,
                 '${avgReturnFee.toStringAsFixed(2)} OMR',
                 Icons.keyboard_return_rounded,
               ),

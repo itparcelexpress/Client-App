@@ -1,0 +1,296 @@
+{
+  "@@locale": "ar",
+  "appTitle": "باسيل إكسبريس",
+  "welcomeMessage": "مرحباً بعودتك! يرجى تسجيل الدخول للمتابعة.",
+  "tagline": "خدمة توصيل سريعة وموثوقة",
+  "loading": "جاري التحميل...",
+  "login": "تسجيل الدخول",
+  "logout": "تسجيل الخروج",
+  "email": "البريد الإلكتروني",
+  "emailAddress": "عنوان البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "phoneNumber": "رقم الهاتف",
+  "alternatePhone": "رقم هاتف بديل",
+  "fullName": "الاسم الكامل",
+  "customerName": "اسم العميل",
+  "customerPhone": "هاتف العميل",
+  "personalInformation": "المعلومات الشخصية",
+  "customerInformation": "معلومات العميل",
+  "locationDetails": "تفاصيل الموقع",
+  "additionalInformation": "معلومات إضافية",
+  "newOrder": "طلب جديد",
+  "createOrder": "إنشاء طلب",
+  "fillDetailsToCreateOrder": "املأ التفاصيل لإنشاء طلبك",
+  "addressBook": "دليل العناوين",
+  "scanOrEnter": "امسح أو أدخل",
+  "addStickerNumber": "أضف رقم الملصق للبدء",
+  "stickerNumber": "رقم الملصق",
+  "amount": "المبلغ",
+  "notes": "ملاحظات",
+  "deliveryFee": "رسوم التوصيل",
+  "paymentType": "نوع الدفع",
+  "streetAddress": "عنوان الشارع",
+  "zipcode": "الرمز البريدي",
+  "governorate": "المحافظة",
+  "state": "الولاية",
+  "place": "المكان",
+  "required": "مطلوب",
+  "nameRequired": "الاسم مطلوب",
+  "emailRequired": "البريد الإلكتروني مطلوب",
+  "phoneRequired": "رقم الهاتف مطلوب",
+  "validEmailRequired": "أدخل بريد إلكتروني صحيح",
+  "helloUser": "مرحباً، {userName}! 👋",
+  "businessOverview": "إليك نظرة عامة على أعمالك",
+  "dashboard": "لوحة التحكم",
+  "notifications": "الإشعارات",
+  "viewNotifications": "عرض الإشعارات",
+  "viewAllNotifications": "عرض جميع الإشعارات",
+  "pricing": "التسعير",
+  "viewPricing": "عرض التسعير",
+  "viewDeliveryPricing": "عرض تسعير التوصيل لكل ولاية",
+  "signOutAccount": "تسجيل الخروج من حسابك",
+  "notificationSettings": "إعدادات الإشعارات",
+  "manageNotificationPreferences": "إدارة تفضيلات الإشعارات الخاصة بك",
+  "chooseNotificationMethod": "اختر كيفية تلقي الإشعارات حول طلباتك وتحديثات الحساب.",
+  "aboutNotifications": "حول الإشعارات",
+  "receiveNotificationsFor": "ستتلقى إشعارات لـ:",
+  "orderConfirmations": "تأكيدات الطلبات والتحديثات",
+  "pickupDeliveryNotifications": "إشعارات الاستلام والتوصيل",
+  "paymentConfirmations": "تأكيدات الدفع",
+  "accountUpdates": "تحديثات مهمة للحساب",
+  "whatsapp": "واتساب",
+  "emailNotifications": "البريد الإلكتروني",
+  "save": "حفظ",
+  "cancel": "إلغاء",
+  "done": "تم",
+  "submit": "إرسال",
+  "confirm": "تأكيد",
+  "delete": "حذف",
+  "edit": "تعديل",
+  "back": "رجوع",
+  "next": "التالي",
+  "search": "بحث",
+  "filter": "تصفية",
+  "refresh": "تحديث",
+  "retry": "إعادة المحاولة",
+  "error": "خطأ",
+  "success": "نجح",
+  "warning": "تحذير",
+  "information": "معلومات",
+  "noDataAvailable": "لا توجد بيانات متاحة",
+  "pleaseWait": "يرجى الانتظار...",
+  "tryAgain": "حاول مرة أخرى",
+  "connectionError": "خطأ في الاتصال",
+  "invalidData": "بيانات غير صحيحة",
+  "orders": "الطلبات",
+  "invoices": "الفواتير",
+  "profile": "الملف الشخصي",
+  "createOrder": "إنشاء طلب",
+  "createGuestOrder": "إنشاء طلب ضيف",
+  "continueAsGuest": "متابعة كضيف",
+  "totalOrders": "إجمالي الطلبات",
+  "todayOrders": "طلبات اليوم",
+  "pendingPickup": "في انتظار الاستلام",
+  "pickedOrders": "الطلبات المستلمة",
+  "loadingDashboard": "جاري تحميل لوحة التحكم...",
+  "welcomeDashboard": "مرحباً بك في لوحة التحكم",
+  "tapToLoadStats": "اضغط لتحميل الإحصائيات",
+  "loadDashboard": "تحميل لوحة التحكم",
+  "addressDetails": "تفاصيل العنوان",
+  "district": "المنطقة",
+  "identification": "رقم الهوية",
+  "taxNumber": "الرقم الضريبي",
+  "locationUrl": "رابط الموقع",
+  "pleaseSelectGovernorate": "يرجى اختيار المحافظة",
+  "pleaseSelectState": "يرجى اختيار الولاية",
+  "pleaseSelectPlace": "يرجى اختيار المكان",
+  "orderCreatedSuccessfully": "تم إنشاء الطلب بنجاح!",
+  "trackingNumberIs": "رقم التتبع الخاص بك هو:",
+  "optional": "اختياري",
+  "requiredField": "هذا الحقل مطلوب",
+  "districtRequired": "المنطقة مطلوبة",
+  "zipcodeRequired": "الرمز البريدي مطلوب",
+  "streetAddressRequired": "عنوان الشارع مطلوب",
+  "customerNameRequired": "اسم العميل مطلوب",
+  "customerPhoneRequired": "هاتف العميل مطلوب",
+  "validLocationUrlRequired": "أدخل رابط موقع صحيح",
+  "validAmountRequired": "أدخل مبلغاً صحيحاً",
+  "user": "المستخدم",
+  "notAvailable": "غير متوفر",
+  "role": "الدور",
+  "location": "الموقع",
+  "settings": "الإعدادات",
+  "logoutConfirmation": "هل أنت متأكد من تسجيل الخروج؟",
+  "invoicesAndPayments": "الفواتير والمدفوعات",
+  "searchByInvoiceNumber": "البحث برقم الفاتورة...",
+  "loadingInvoices": "جاري تحميل الفواتير...",
+  "noInvoices": "لا توجد فواتير",
+  "noInvoicesYet": "لا توجد لديك فواتير حتى الآن.",
+  "noResults": "لا توجد نتائج",
+  "noInvoicesFound": "لم يتم العثور على فواتير لـ \"{query}\"",
+  "clearSearch": "مسح البحث",
+  "recentTransactions": "المعاملات الأخيرة",
+  "noTransactionsFound": "لم يتم العثور على معاملات",
+  "adjustFilters": "حاول تعديل الفلاتر أو تحقق لاحقاً.",
+  "filterPayments": "تصفية المدفوعات",
+  "filterByType": "تصفية حسب النوع",
+  "filterByStatus": "تصفية حسب الحالة",
+  "transactionDetails": "تفاصيل المعاملة",
+  "trackingNo": "رقم التتبع",
+  "notificationMarkedAsRead": "تم تحديد الإشعار كمقروء",
+  "notificationDeleted": "تم حذف الإشعار",
+  "markAllAsRead": "تحديد الكل كمقروء",
+  "markAllNotificationsAsRead": "تحديد جميع الإشعارات كمقروءة",
+  "reload": "إعادة تحميل",
+  "reloadNotifications": "إعادة تحميل الإشعارات",
+  "markAsRead": "تحديد كمقروء",
+  "markThisNotificationAsRead": "تحديد هذا الإشعار كمقروء",
+  "removeThisNotification": "إزالة هذا الإشعار",
+  "deleteNotification": "حذف الإشعار",
+  "deleteNotificationConfirmation": "هل أنت متأكد من حذف هذا الإشعار؟ لا يمكن التراجع عن هذا الإجراء.",
+  "justNow": "الآن",
+  "minutesAgo": "منذ {minutes} دقيقة",
+  "hoursAgo": "منذ {hours} ساعة",
+  "daysAgo": "منذ {days} يوم",
+  "noNotificationsYet": "لا توجد إشعارات حتى الآن",
+  "notificationsWillAppearHere": "عندما تتلقى إشعارات جديدة،\\nستظهر هنا",
+  "somethingWentWrong": "حدث خطأ ما",
+  "pricingList": "قائمة الأسعار",
+  "loadingPricingData": "جاري تحميل بيانات الأسعار...",
+  "errorLoadingPricing": "خطأ في تحميل الأسعار",
+  "noPricingData": "لا توجد بيانات أسعار",
+  "searchByStateName": "البحث باسم الولاية...",
+  "totalStates": "إجمالي الولايات",
+  "avgDelivery": "متوسط التوصيل",
+  "avgReturn": "متوسط الإرجاع",
+  "manageNotificationPreferences": "إدارة تفضيلات الإشعارات الخاصة بك",
+  "whatsappNotifications": "إشعارات الواتساب",
+  "receiveOrderUpdatesViaWhatsapp": "استلام تحديثات الطلبات عبر الواتساب",
+  "emailNotificationsTitle": "إشعارات البريد الإلكتروني",
+  "receiveOrderUpdatesViaEmail": "استلام تحديثات الطلبات عبر البريد الإلكتروني",
+  "loadingSettings": "جاري تحميل الإعدادات...",
+  "createShipment": "إنشاء شحنة",
+  "scanOrEnterTitle": "مسح أو إدخال",
+  "addStickerNumberToStart": "أضف رقم الملصق للبدء",
+  "enterManually": "إدخال يدوي",
+  "typeStickerNumber": "اكتب رقم الملصق...",
+  "scanBarcode": "مسح الباركود",
+  "startScanning": "بدء المسح",
+  "scanFailed": "فشل المسح",
+  "successfullyScanned": "تم المسح بنجاح",
+  "numberEntered": "تم إدخال الرقم",
+  "creatingOrder": "جاري إنشاء الطلب...",
+  "savedAddresses": "العناوين المحفوظة",
+  "selectFromSavedAddresses": "اختر من العناوين المحفوظة للملء التلقائي",
+  "formAutoFilled": "تم ملء النموذج بالعنوان المحدد",
+  "clear": "مسح",
+  "saveForLater": "حفظ للاستخدام لاحقاً",
+  "addToAddressBook": "أضف هذا العنوان إلى دفتر العناوين",
+  "saveAddressHint": "احفظ هذا العنوان لجعل الطلبات المستقبلية أسرع وأسهل!",
+  "saveAddress": "حفظ العنوان",
+  "notNow": "ليس الآن",
+  "addressSaved": "تم حفظ العنوان في دفتر العناوين بنجاح!",
+  "addressSaveFailed": "فشل حفظ العنوان. يرجى المحاولة مرة أخرى.",
+  "orderCreated": "تم إنشاء الطلب بنجاح!",
+  "trackingLabel": "التتبع: {trackingNo}",
+  "orderIdLabel": "رقم الطلب: {orderId}",
+  "forRecipient": "للمستلم: {recipientName}",
+  "positionBarcodeInFrame": "ضع الباركود داخل الإطار للمسح",
+  "pleaseEnterField": "يرجى إدخال {field}",
+  "@pleaseEnterField": {
+    "description": "Generic required field validation message",
+    "placeholders": {
+      "field": {
+        "type": "String",
+        "example": "name"
+      }
+    }
+  },
+
+  "fieldMinLength": "يجب أن يحتوي {field} على {length} أحرف على الأقل",
+  "@fieldMinLength": {
+    "description": "Minimum length validation message",
+    "placeholders": {
+      "field": {
+        "type": "String",
+        "example": "name"
+      },
+      "length": {
+        "type": "int",
+        "example": "6"
+      }
+    }
+  },
+
+  "pleaseEnterEmail": "يرجى إدخال بريدك الإلكتروني",
+  "@pleaseEnterEmail": {
+    "description": "Email required validation message"
+  },
+
+  "pleaseEnterValidEmail": "يرجى إدخال بريد إلكتروني صحيح",
+  "@pleaseEnterValidEmail": {
+    "description": "Invalid email validation message"
+  },
+
+  "pleaseEnterValidPhone": "يرجى إدخال رقم {field} صحيح (8-15 رقم)",
+  "@pleaseEnterValidPhone": {
+    "description": "Invalid phone validation message",
+    "placeholders": {
+      "field": {
+        "type": "String",
+        "example": "phone"
+      }
+    }
+  },
+
+  "pleaseEnterLocationUrl": "يرجى إدخال رابط الموقع",
+  "@pleaseEnterLocationUrl": {
+    "description": "Location URL required validation message"
+  },
+
+  "pleaseEnterValidLocationUrl": "يرجى إدخال رابط خرائط جوجل صحيح",
+  "@pleaseEnterValidLocationUrl": {
+    "description": "Invalid location URL validation message"
+  },
+
+  "pleaseEnterAmount": "يرجى إدخال المبلغ",
+  "@pleaseEnterAmount": {
+    "description": "Amount required validation message"
+  },
+
+  "pleaseEnterValidAmount": "يرجى إدخال مبلغ صحيح",
+  "@pleaseEnterValidAmount": {
+    "description": "Invalid amount validation message"
+  },
+
+  "amountMustBeGreaterThan": "يجب أن يكون المبلغ أكبر من {amount}",
+  "@amountMustBeGreaterThan": {
+    "description": "Minimum amount validation message",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "5.00"
+      }
+    }
+  },
+
+  "pleaseEnterZipcode": "يرجى إدخال الرمز البريدي",
+  "@pleaseEnterZipcode": {
+    "description": "Zipcode required validation message"
+  },
+
+  "pleaseEnterValidZipcode": "يرجى إدخال رمز بريدي صحيح (4-10 أرقام)",
+  "@pleaseEnterValidZipcode": {
+    "description": "Invalid zipcode validation message"
+  },
+
+  "taxNumberValidation": "يجب أن يكون الرقم الضريبي من 5-20 رقم",
+  "@taxNumberValidation": {
+    "description": "Tax number validation message"
+  },
+
+  "identificationValidation": "يجب أن يكون رقم الهوية من 5-20 حرف أو رقم",
+  "@identificationValidation": {
+    "description": "Identification validation message"
+  }
+}

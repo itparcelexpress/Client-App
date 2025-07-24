@@ -8,6 +8,7 @@ import 'package:client_app/core/utilities/validators.dart';
 import 'package:client_app/features/guest/cubit/guest_cubit.dart';
 import 'package:client_app/features/guest/cubit/guest_state.dart';
 import 'package:client_app/features/guest/data/models/guest_order_models.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -21,6 +22,8 @@ class CreateGuestOrderPage extends StatefulWidget {
 
 class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
   final _formKey = GlobalKey<FormState>();
+  final Map<String, bool> _touchedFields = {};
+  bool _formSubmitted = false;
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
@@ -52,6 +55,8 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
   void initState() {
     super.initState();
     _loadLocations();
+    // Set initial amount
+    _amountController.text = '5.0';
   }
 
   Future<void> _loadLocations() async {
@@ -69,29 +74,56 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
     setState(() {});
   }
 
+  void _markFieldAsTouched(String fieldName) {
+    if (!_touchedFields.containsKey(fieldName)) {
+      setState(() {
+        _touchedFields[fieldName] = true;
+      });
+    }
+  }
+
+  bool _shouldShowError(String fieldName) {
+    return _formSubmitted || _touchedFields[fieldName] == true;
+  }
+
+  String? _validateField(
+    String? value,
+    String fieldName,
+    String? Function(String?) validator,
+  ) {
+    if (!_shouldShowError(fieldName)) {
+      return null;
+    }
+    return validator(value);
+  }
+
   void _onSubmit() {
+    setState(() {
+      _formSubmitted = true;
+    });
+
     if (_formKey.currentState?.validate() ?? false) {
       final request = GuestOrderRequest(
-        name: _nameController.text,
-        email: _emailController.text,
-        cellphone: _phoneController.text,
-        alternatePhone: _alternatePhoneController.text,
-        district: _districtController.text,
-        zipcode: _zipcodeController.text,
-        streetAddress: _streetAddressController.text,
-        notes: _notesController.text,
+        name: _nameController.text.trim(),
+        email: _emailController.text.trim(),
+        cellphone: _phoneController.text.trim(),
+        alternatePhone: _alternatePhoneController.text.trim(),
+        district: _districtController.text.trim(),
+        zipcode: _zipcodeController.text.trim(),
+        streetAddress: _streetAddressController.text.trim(),
+        notes: _notesController.text.trim(),
         payment_type: 'COD',
-        amount: double.tryParse(_amountController.text) ?? 5.0,
-        customer_name: _customerNameController.text,
-        customer_phone: _customerPhoneController.text,
+        amount: double.tryParse(_amountController.text.trim()) ?? 5.0,
+        customer_name: _customerNameController.text.trim(),
+        customer_phone: _customerPhoneController.text.trim(),
         country_id: 165,
         governorate_id: selectedGovernorate?.id ?? 0,
         state_id: selectedState?.id ?? 0,
         place_id: selectedPlace?.id ?? 0,
         city_id: 1,
-        identify: _identifyController.text,
-        taxNumber: _taxNumberController.text,
-        location_url: _locationUrlController.text,
+        identify: _identifyController.text.trim(),
+        taxNumber: _taxNumberController.text.trim(),
+        location_url: _locationUrlController.text.trim(),
       );
 
       context.read<GuestCubit>().createGuestOrder(request);
@@ -103,8 +135,8 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
     return Scaffold(
       backgroundColor: AppColor.surfaceColor,
       appBar: AppBar(
-        title: const Text(
-          'Create Guest Order',
+        title: Text(
+          AppLocalizations.of(context)!.createGuestOrder,
           style: TextStyle(
             color: AppColor.titleTextColor,
             fontWeight: FontWeight.w600,
@@ -147,7 +179,7 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
                   duration: const Duration(milliseconds: 500),
                   child: Form(
                     key: _formKey,
-                    autovalidateMode: AutovalidateMode.always,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -175,8 +207,8 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
                                     color: Colors.white,
                                     size: 24,
                                   )
-                                  : const Text(
-                                    'Create Order',
+                                  : Text(
+                                    AppLocalizations.of(context)!.createOrder,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -205,6 +237,45 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
     );
   }
 
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required String? Function(String?) validator,
+    TextInputType? keyboardType,
+    int? maxLines,
+    bool isRequired = true,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: isRequired ? '$label *' : label,
+        errorStyle:
+            !_shouldShowError(label)
+                ? const TextStyle(fontSize: 0, height: 0)
+                : null,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey[300]!),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey[300]!),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColor.primaryColor, width: 2),
+        ),
+        filled: true,
+        fillColor: Colors.grey[50],
+      ),
+      keyboardType: keyboardType,
+      maxLines: maxLines,
+      onTap: () => _markFieldAsTouched(label),
+      onChanged: (_) => _markFieldAsTouched(label),
+      validator: (value) => _validateField(value, label, validator),
+    );
+  }
+
   Widget _buildPersonalInfoSection() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -223,7 +294,7 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Personal Information',
+            AppLocalizations.of(context)!.personalInformation,
             style: TextStyle(
               fontSize: ResponsiveUtils.getResponsiveFontSize(context, 18),
               fontWeight: FontWeight.w600,
@@ -231,57 +302,63 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
             ),
           ),
           const SizedBox(height: 16),
-          TextFormField(
+          _buildTextField(
             controller: _nameController,
-            decoration: _inputDecoration('Full Name *'),
+            label: AppLocalizations.of(context)!.fullName,
             validator:
-                (value) =>
-                    Validators.requiredField(value, fieldName: 'Full Name'),
+                (value) => Validators.requiredField(
+                  value,
+                  context: context,
+                  fieldName: AppLocalizations.of(context)!.fullName,
+                ),
           ),
           const SizedBox(height: 16),
-          TextFormField(
+          _buildTextField(
             controller: _emailController,
-            decoration: _inputDecoration('Email *'),
-            validator: Validators.email,
+            label: AppLocalizations.of(context)!.email,
+            validator: (value) => Validators.email(value, context: context),
+            keyboardType: TextInputType.emailAddress,
           ),
           const SizedBox(height: 16),
-          TextFormField(
+          _buildTextField(
             controller: _phoneController,
-            decoration: _inputDecoration('Phone Number *'),
+            label: AppLocalizations.of(context)!.phoneNumber,
             validator:
-                (value) => Validators.phone(value, fieldName: 'Phone Number'),
+                (value) => Validators.phone(
+                  value,
+                  context: context,
+                  fieldName: AppLocalizations.of(context)!.phoneNumber,
+                ),
+            keyboardType: TextInputType.phone,
           ),
           const SizedBox(height: 16),
-          TextFormField(
+          _buildTextField(
             controller: _alternatePhoneController,
-            decoration: _inputDecoration('Alternate Phone'),
+            label: AppLocalizations.of(context)!.alternatePhone,
             validator:
                 (value) => Validators.optionalPhone(
                   value,
-                  fieldName: 'Alternate Phone',
+                  context: context,
+                  fieldName: AppLocalizations.of(context)!.alternatePhone,
                 ),
+            keyboardType: TextInputType.phone,
+            isRequired: false,
           ),
           const SizedBox(height: 16),
-          TextFormField(
+          _buildTextField(
             controller: _identifyController,
-            decoration: _inputDecoration('Identification'),
+            label: AppLocalizations.of(context)!.identification,
             validator:
-                (value) => Validators.optionalMinLength(
-                  value,
-                  6,
-                  fieldName: 'Identification',
-                ),
+                (value) =>
+                    Validators.identificationNumber(value, context: context),
+            isRequired: false,
           ),
           const SizedBox(height: 16),
-          TextFormField(
+          _buildTextField(
             controller: _taxNumberController,
-            decoration: _inputDecoration('Tax Number'),
-            validator:
-                (value) => Validators.optionalMinLength(
-                  value,
-                  6,
-                  fieldName: 'Tax Number',
-                ),
+            label: AppLocalizations.of(context)!.taxNumber,
+            validator: (value) => Validators.taxNumber(value, context: context),
+            isRequired: false,
           ),
         ],
       ),
@@ -306,7 +383,7 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Address Details',
+            AppLocalizations.of(context)!.addressDetails,
             style: TextStyle(
               fontSize: ResponsiveUtils.getResponsiveFontSize(context, 18),
               fontWeight: FontWeight.w600,
@@ -316,7 +393,27 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
           const SizedBox(height: 16),
           DropdownButtonFormField<Governorate>(
             value: selectedGovernorate,
-            decoration: _inputDecoration('Governorate'),
+            decoration: InputDecoration(
+              labelText: '${AppLocalizations.of(context)!.governorate} *',
+              errorStyle:
+                  !_shouldShowError(AppLocalizations.of(context)!.governorate)
+                      ? const TextStyle(fontSize: 0, height: 0)
+                      : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey[300]!),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey[300]!),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: AppColor.primaryColor, width: 2),
+              ),
+              filled: true,
+              fillColor: Colors.grey[50],
+            ),
             items:
                 governorates
                     .map(
@@ -331,18 +428,48 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
                 selectedPlace = null;
                 states.clear();
                 places.clear();
+                _markFieldAsTouched(AppLocalizations.of(context)!.governorate);
               });
               if (gov != null) {
                 _loadStates(gov.id);
               }
             },
             validator:
-                (value) => value == null ? 'Please select a governorate' : null,
+                (value) => _validateField(
+                  value?.toString(),
+                  AppLocalizations.of(context)!.governorate,
+                  (v) =>
+                      value == null
+                          ? AppLocalizations.of(
+                            context,
+                          )!.pleaseSelectGovernorate
+                          : null,
+                ),
           ),
           const SizedBox(height: 16),
           DropdownButtonFormField<StateModel>(
             value: selectedState,
-            decoration: _inputDecoration('State'),
+            decoration: InputDecoration(
+              labelText: '${AppLocalizations.of(context)!.state} *',
+              errorStyle:
+                  !_shouldShowError(AppLocalizations.of(context)!.state)
+                      ? const TextStyle(fontSize: 0, height: 0)
+                      : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey[300]!),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey[300]!),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: AppColor.primaryColor, width: 2),
+              ),
+              filled: true,
+              fillColor: Colors.grey[50],
+            ),
             items:
                 states
                     .map(
@@ -357,18 +484,46 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
                 selectedState = state;
                 selectedPlace = null;
                 places.clear();
+                _markFieldAsTouched(AppLocalizations.of(context)!.state);
               });
               if (state != null) {
                 _loadPlaces(state.id);
               }
             },
             validator:
-                (value) => value == null ? 'Please select a state' : null,
+                (value) => _validateField(
+                  value?.toString(),
+                  AppLocalizations.of(context)!.state,
+                  (v) =>
+                      value == null
+                          ? AppLocalizations.of(context)!.pleaseSelectState
+                          : null,
+                ),
           ),
           const SizedBox(height: 16),
           DropdownButtonFormField<Place>(
             value: selectedPlace,
-            decoration: _inputDecoration('Place'),
+            decoration: InputDecoration(
+              labelText: '${AppLocalizations.of(context)!.place} *',
+              errorStyle:
+                  !_shouldShowError(AppLocalizations.of(context)!.place)
+                      ? const TextStyle(fontSize: 0, height: 0)
+                      : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey[300]!),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey[300]!),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: AppColor.primaryColor, width: 2),
+              ),
+              filled: true,
+              fillColor: Colors.grey[50],
+            ),
             items:
                 places
                     .map(
@@ -381,42 +536,57 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
             onChanged: (place) {
               setState(() {
                 selectedPlace = place;
+                _markFieldAsTouched(AppLocalizations.of(context)!.place);
               });
             },
             validator:
-                (value) => value == null ? 'Please select a place' : null,
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _districtController,
-            decoration: _inputDecoration('District'),
-            validator:
-                (value) =>
-                    Validators.requiredField(value, fieldName: 'District'),
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _zipcodeController,
-            decoration: _inputDecoration('Zipcode'),
-            validator:
-                (value) =>
-                    Validators.requiredField(value, fieldName: 'Zipcode'),
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _streetAddressController,
-            decoration: _inputDecoration('Street Address'),
-            validator:
-                (value) => Validators.requiredField(
-                  value,
-                  fieldName: 'Street Address',
+                (value) => _validateField(
+                  value?.toString(),
+                  AppLocalizations.of(context)!.place,
+                  (v) =>
+                      value == null
+                          ? AppLocalizations.of(context)!.pleaseSelectPlace
+                          : null,
                 ),
           ),
           const SizedBox(height: 16),
-          TextFormField(
+          _buildTextField(
+            controller: _districtController,
+            label: AppLocalizations.of(context)!.district,
+            validator:
+                (value) => Validators.requiredField(
+                  value,
+                  context: context,
+                  fieldName: AppLocalizations.of(context)!.district,
+                ),
+          ),
+          const SizedBox(height: 16),
+          _buildTextField(
+            controller: _zipcodeController,
+            label: AppLocalizations.of(context)!.zipcode,
+            validator: (value) => Validators.zipcode(value, context: context),
+            keyboardType: TextInputType.number,
+          ),
+          const SizedBox(height: 16),
+          _buildTextField(
+            controller: _streetAddressController,
+            label: AppLocalizations.of(context)!.streetAddress,
+            validator:
+                (value) => Validators.requiredField(
+                  value,
+                  context: context,
+                  fieldName: AppLocalizations.of(context)!.streetAddress,
+                ),
+          ),
+          const SizedBox(height: 16),
+          _buildTextField(
             controller: _locationUrlController,
-            decoration: _inputDecoration('Location URL *'),
-            validator: Validators.locationUrl,
+            label: AppLocalizations.of(context)!.locationUrl,
+            validator:
+                (value) =>
+                    Validators.optionalLocationUrl(value, context: context),
+            keyboardType: TextInputType.url,
+            isRequired: false,
           ),
         ],
       ),
@@ -441,7 +611,7 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Customer Information',
+            AppLocalizations.of(context)!.customerInformation,
             style: TextStyle(
               fontSize: ResponsiveUtils.getResponsiveFontSize(context, 18),
               fontWeight: FontWeight.w600,
@@ -449,55 +619,47 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
             ),
           ),
           const SizedBox(height: 16),
-          TextFormField(
+          _buildTextField(
             controller: _customerNameController,
-            decoration: _inputDecoration('Customer Name *'),
+            label: AppLocalizations.of(context)!.customerName,
+            validator:
+                (value) => Validators.requiredField(
+                  value,
+                  context: context,
+                  fieldName: AppLocalizations.of(context)!.customerName,
+                ),
+          ),
+          const SizedBox(height: 16),
+          _buildTextField(
+            controller: _customerPhoneController,
+            label: AppLocalizations.of(context)!.customerPhone,
+            validator:
+                (value) => Validators.phone(
+                  value,
+                  context: context,
+                  fieldName: AppLocalizations.of(context)!.customerPhone,
+                ),
+            keyboardType: TextInputType.phone,
+          ),
+          const SizedBox(height: 16),
+          _buildTextField(
+            controller: _amountController,
+            label: AppLocalizations.of(context)!.amount,
             validator:
                 (value) =>
-                    Validators.requiredField(value, fieldName: 'Customer Name'),
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _customerPhoneController,
-            decoration: _inputDecoration('Customer Phone *'),
-            validator:
-                (value) => Validators.phone(value, fieldName: 'Customer Phone'),
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _amountController,
-            decoration: _inputDecoration('Amount *'),
+                    Validators.amount(value, context: context, minAmount: 5.0),
             keyboardType: TextInputType.numberWithOptions(decimal: true),
-            validator: Validators.amount,
           ),
           const SizedBox(height: 16),
-          TextFormField(
+          _buildTextField(
             controller: _notesController,
-            decoration: _inputDecoration('Notes'),
+            label: AppLocalizations.of(context)!.notes,
+            validator: (_) => null,
             maxLines: 3,
+            isRequired: false,
           ),
         ],
       ),
-    );
-  }
-
-  InputDecoration _inputDecoration(String label) {
-    return InputDecoration(
-      labelText: label,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: Colors.grey[300]!),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: Colors.grey[300]!),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: AppColor.primaryColor, width: 2),
-      ),
-      filled: true,
-      fillColor: Colors.grey[50],
     );
   }
 
@@ -519,13 +681,13 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
                 children: [
                   const Icon(Icons.check_circle, color: Colors.green, size: 64),
                   const SizedBox(height: 20),
-                  const Text(
-                    'Order Created Successfully!',
+                  Text(
+                    AppLocalizations.of(context)!.orderCreatedSuccessfully,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Your tracking number is:',
+                    AppLocalizations.of(context)!.trackingNumberIs,
                     style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 8),
@@ -569,8 +731,8 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
                             vertical: 12,
                           ),
                         ),
-                        child: const Text(
-                          'Done',
+                        child: Text(
+                          AppLocalizations.of(context)!.done,
                           style: TextStyle(fontSize: 16),
                         ),
                       ),

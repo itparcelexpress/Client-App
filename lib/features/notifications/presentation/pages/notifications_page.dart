@@ -2,6 +2,7 @@ import 'package:client_app/core/models/notification_models.dart';
 import 'package:client_app/features/notifications/cubit/notification_cubit.dart';
 import 'package:client_app/features/notifications/cubit/notification_state.dart';
 import 'package:client_app/injections.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -55,9 +56,9 @@ class _NotificationsViewState extends State<NotificationsView> {
         backgroundColor: Colors.white,
         foregroundColor: const Color(0xFF1a1a1a),
         centerTitle: true,
-        title: const Text(
-          'Notifications',
-          style: TextStyle(
+        title: Text(
+          AppLocalizations.of(context)!.notifications,
+          style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w600,
             color: Color(0xFF1a1a1a),
@@ -116,12 +117,14 @@ class _NotificationsViewState extends State<NotificationsView> {
                                 ),
                               ),
                               const SizedBox(width: 12),
-                              const Expanded(
+                              Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Mark all as read',
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.markAllAsRead,
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
@@ -129,7 +132,9 @@ class _NotificationsViewState extends State<NotificationsView> {
                                       ),
                                     ),
                                     Text(
-                                      'Mark all notifications as read',
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.markAllNotificationsAsRead,
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.grey,
@@ -163,12 +168,12 @@ class _NotificationsViewState extends State<NotificationsView> {
                                 ),
                               ),
                               const SizedBox(width: 12),
-                              const Expanded(
+                              Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Refresh',
+                                      AppLocalizations.of(context)!.reload,
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
@@ -176,7 +181,9 @@ class _NotificationsViewState extends State<NotificationsView> {
                                       ),
                                     ),
                                     Text(
-                                      'Reload notifications',
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.reloadNotifications,
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.grey,
@@ -199,15 +206,19 @@ class _NotificationsViewState extends State<NotificationsView> {
         listener: (context, state) {
           if (state is NotificationMarkAsReadSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Notification marked as read'),
+              SnackBar(
+                content: Text(
+                  AppLocalizations.of(context)!.notificationMarkedAsRead,
+                ),
                 backgroundColor: Colors.green,
               ),
             );
           } else if (state is NotificationDeleteSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Notification deleted'),
+              SnackBar(
+                content: Text(
+                  AppLocalizations.of(context)!.notificationDeleted,
+                ),
                 backgroundColor: Colors.orange,
               ),
             );
@@ -420,13 +431,15 @@ class _NotificationsViewState extends State<NotificationsView> {
                                         ),
                                       ),
                                       const SizedBox(width: 10),
-                                      const Expanded(
+                                      Expanded(
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'Mark as read',
+                                              AppLocalizations.of(
+                                                context,
+                                              )!.markAsRead,
                                               style: TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600,
@@ -434,7 +447,9 @@ class _NotificationsViewState extends State<NotificationsView> {
                                               ),
                                             ),
                                             Text(
-                                              'Mark this notification as read',
+                                              AppLocalizations.of(
+                                                context,
+                                              )!.markThisNotificationAsRead,
                                               style: TextStyle(
                                                 fontSize: 11,
                                                 color: Colors.grey,
@@ -470,13 +485,15 @@ class _NotificationsViewState extends State<NotificationsView> {
                                       ),
                                     ),
                                     const SizedBox(width: 10),
-                                    const Expanded(
+                                    Expanded(
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Delete',
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.delete,
                                             style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w600,
@@ -484,7 +501,9 @@ class _NotificationsViewState extends State<NotificationsView> {
                                             ),
                                           ),
                                           Text(
-                                            'Remove this notification',
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.removeThisNotification,
                                             style: TextStyle(
                                               fontSize: 11,
                                               color: Colors.grey,
@@ -605,7 +624,7 @@ class _NotificationsViewState extends State<NotificationsView> {
   }
 
   Widget _buildEmptyState() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -616,7 +635,7 @@ class _NotificationsViewState extends State<NotificationsView> {
           ),
           SizedBox(height: 16),
           Text(
-            'No notifications yet',
+            AppLocalizations.of(context)!.noNotificationsYet,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -625,7 +644,7 @@ class _NotificationsViewState extends State<NotificationsView> {
           ),
           SizedBox(height: 8),
           Text(
-            'When you have new notifications,\nthey\'ll appear here',
+            AppLocalizations.of(context)!.notificationsWillAppearHere,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 14, color: Colors.grey),
           ),
@@ -641,9 +660,9 @@ class _NotificationsViewState extends State<NotificationsView> {
         children: [
           const Icon(Icons.error_outline_rounded, size: 80, color: Colors.red),
           const SizedBox(height: 16),
-          const Text(
-            'Something went wrong',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context)!.somethingWentWrong,
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
               color: Color(0xFF1a1a1a),
@@ -726,10 +745,10 @@ class _NotificationsViewState extends State<NotificationsView> {
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Expanded(
+                Expanded(
                   child: Text(
-                    'Delete Notification',
-                    style: TextStyle(
+                    AppLocalizations.of(context)!.deleteNotification,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF1a1a1a),
@@ -742,9 +761,9 @@ class _NotificationsViewState extends State<NotificationsView> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Are you sure you want to delete this notification? This action cannot be undone.',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context)!.deleteNotificationConfirmation,
+                  style: const TextStyle(
                     fontSize: 14,
                     color: Colors.grey,
                     height: 1.4,
@@ -806,9 +825,9 @@ class _NotificationsViewState extends State<NotificationsView> {
                           side: BorderSide(color: Colors.grey[300]!),
                         ),
                       ),
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(
+                      child: Text(
+                        AppLocalizations.of(context)!.cancel,
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: Color(0xFF1a1a1a),
@@ -834,9 +853,9 @@ class _NotificationsViewState extends State<NotificationsView> {
                         ),
                         elevation: 0,
                       ),
-                      child: const Text(
-                        'Delete',
-                        style: TextStyle(
+                      child: Text(
+                        AppLocalizations.of(context)!.delete,
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                         ),
@@ -855,13 +874,13 @@ class _NotificationsViewState extends State<NotificationsView> {
     final difference = now.difference(dateTime);
 
     if (difference.inMinutes < 1) {
-      return 'Just now';
+      return AppLocalizations.of(context)!.justNow;
     } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes}m ago';
+      return AppLocalizations.of(context)!.minutesAgo(difference.inMinutes);
     } else if (difference.inHours < 24) {
-      return '${difference.inHours}h ago';
+      return AppLocalizations.of(context)!.hoursAgo(difference.inHours);
     } else if (difference.inDays < 7) {
-      return '${difference.inDays}d ago';
+      return AppLocalizations.of(context)!.daysAgo(difference.inDays);
     } else {
       return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
     }

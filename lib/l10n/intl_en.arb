@@ -1,0 +1,932 @@
+{
+  "@@locale": "en",
+  "appTitle": "Parcel Express",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "welcomeMessage": "Welcome back! Please sign in to continue.",
+  "@welcomeMessage": {
+    "description": "Welcome message on login page"
+  },
+  "tagline": "Fast & Reliable Delivery Service",
+  "@tagline": {
+    "description": "App tagline"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading indicator text"
+  },
+  "login": "Login",
+  "@login": {
+    "description": "Login button text"
+  },
+  "logout": "Logout",
+  "@logout": {
+    "description": "Logout button text"
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Email field label"
+  },
+  "emailAddress": "Email Address",
+  "@emailAddress": {
+    "description": "Email address field label"
+  },
+  "password": "Password",
+  "@password": {
+    "description": "Password field label"
+  },
+  "phoneNumber": "Phone Number",
+  "@phoneNumber": {
+    "description": "Phone number field label"
+  },
+  "alternatePhone": "Alternate Phone",
+  "@alternatePhone": {
+    "description": "Alternate phone field label"
+  },
+  "fullName": "Full Name",
+  "@fullName": {
+    "description": "Full name field label"
+  },
+  "customerName": "Customer Name",
+  "@customerName": {
+    "description": "Customer name field label"
+  },
+  "customerPhone": "Customer Phone",
+  "@customerPhone": {
+    "description": "Customer phone field label"
+  },
+  "personalInformation": "Personal Information",
+  "@personalInformation": {
+    "description": "Personal information section title"
+  },
+  "customerInformation": "Customer Information",
+  "@customerInformation": {
+    "description": "Customer information section title"
+  },
+  "locationDetails": "Location Details",
+  "@locationDetails": {
+    "description": "Location details section title"
+  },
+  "additionalInformation": "Additional Information",
+  "@additionalInformation": {
+    "description": "Additional information section title"
+  },
+  "newOrder": "New Order",
+  "@newOrder": {
+    "description": "New order page title"
+  },
+  "createOrder": "Create Order",
+  "@createOrder": {
+    "description": "Create order button text"
+  },
+  "fillDetailsToCreateOrder": "Fill in the details to create your order",
+  "@fillDetailsToCreateOrder": {
+    "description": "Create order page subtitle"
+  },
+  "addressBook": "Address Book",
+  "@addressBook": {
+    "description": "Address book page title"
+  },
+  "scanOrEnter": "Scan or Enter",
+  "@scanOrEnter": {
+    "description": "Shipment page title"
+  },
+  "addStickerNumber": "Add your sticker number to get started",
+  "@addStickerNumber": {
+    "description": "Shipment page subtitle"
+  },
+  "stickerNumber": "Sticker Number",
+  "@stickerNumber": {
+    "description": "Sticker number field label"
+  },
+  "amount": "Amount",
+  "@amount": {
+    "description": "Amount field label"
+  },
+  "notes": "Notes",
+  "@notes": {
+    "description": "Notes field label"
+  },
+  "deliveryFee": "Delivery Fee",
+  "@deliveryFee": {
+    "description": "Delivery fee field label"
+  },
+  "paymentType": "Payment Type",
+  "@paymentType": {
+    "description": "Payment type field label"
+  },
+  "streetAddress": "Street Address",
+  "@streetAddress": {
+    "description": "Street address field label"
+  },
+  "zipcode": "Zipcode",
+  "@zipcode": {
+    "description": "Zipcode field label"
+  },
+  "governorate": "Governorate",
+  "@governorate": {
+    "description": "Governorate field label"
+  },
+  "state": "State",
+  "@state": {
+    "description": "State field label"
+  },
+  "place": "Place",
+  "@place": {
+    "description": "Place field label"
+  },
+  "required": "Required",
+  "@required": {
+    "description": "Required field indicator"
+  },
+  "nameRequired": "Name is required",
+  "@nameRequired": {
+    "description": "Name required validation message"
+  },
+  "emailRequired": "Email is required",
+  "@emailRequired": {
+    "description": "Email required validation message"
+  },
+  "phoneRequired": "Phone number is required",
+  "@phoneRequired": {
+    "description": "Phone required validation message"
+  },
+  "validEmailRequired": "Enter a valid email",
+  "@validEmailRequired": {
+    "description": "Valid email validation message"
+  },
+  "helloUser": "Hello, {userName}! 👋",
+  "@helloUser": {
+    "description": "Greeting message with username",
+    "placeholders": {
+      "userName": {
+        "type": "String",
+        "example": "John"
+      }
+    }
+  },
+  "businessOverview": "Here's your business overview",
+  "@businessOverview": {
+    "description": "Dashboard subtitle"
+  },
+  "dashboard": "Dashboard",
+  "@dashboard": {
+    "description": "Dashboard page title"
+  },
+  "notifications": "Notifications",
+  "@notifications": {
+    "description": "Notifications page title"
+  },
+  "viewNotifications": "View Notifications",
+  "@viewNotifications": {
+    "description": "View notifications menu item"
+  },
+  "viewAllNotifications": "View all notifications",
+  "@viewAllNotifications": {
+    "description": "View all notifications subtitle"
+  },
+  "pricing": "Pricing",
+  "@pricing": {
+    "description": "Pricing page title"
+  },
+  "viewPricing": "View Pricing",
+  "@viewPricing": {
+    "description": "View pricing menu item"
+  },
+  "viewDeliveryPricing": "View delivery pricing per state",
+  "@viewDeliveryPricing": {
+    "description": "View pricing subtitle"
+  },
+  "signOutAccount": "Sign out of your account",
+  "@signOutAccount": {
+    "description": "Logout subtitle"
+  },
+  "notificationSettings": "Notification Settings",
+  "@notificationSettings": {
+    "description": "Notification settings page title"
+  },
+  "manageNotificationPreferences": "Manage your notification preferences",
+  "@manageNotificationPreferences": {
+    "description": "Notification settings description"
+  },
+  "chooseNotificationMethod": "Choose how you want to receive notifications about your orders and account updates.",
+  "@chooseNotificationMethod": {
+    "description": "Notification settings detailed description"
+  },
+  "aboutNotifications": "About Notifications",
+  "@aboutNotifications": {
+    "description": "About notifications section title"
+  },
+  "receiveNotificationsFor": "You will receive notifications for:",
+  "@receiveNotificationsFor": {
+    "description": "Notifications description"
+  },
+  "orderConfirmations": "Order confirmations and updates",
+  "@orderConfirmations": {
+    "description": "Order confirmations notification type"
+  },
+  "pickupDeliveryNotifications": "Pickup and delivery notifications",
+  "@pickupDeliveryNotifications": {
+    "description": "Pickup and delivery notification type"
+  },
+  "paymentConfirmations": "Payment confirmations",
+  "@paymentConfirmations": {
+    "description": "Payment confirmations notification type"
+  },
+  "accountUpdates": "Important account updates",
+  "@accountUpdates": {
+    "description": "Account updates notification type"
+  },
+  "whatsapp": "WhatsApp",
+  "@whatsapp": {
+    "description": "WhatsApp notification method"
+  },
+  "emailNotifications": "Email",
+  "@emailNotifications": {
+    "description": "Email notification method"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Save button text"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "done": "Done",
+  "@done": {
+    "description": "Done button text"
+  },
+  "submit": "Submit",
+  "@submit": {
+    "description": "Submit button text"
+  },
+  "confirm": "Confirm",
+  "@confirm": {
+    "description": "Confirm button text"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete button text"
+  },
+  "edit": "Edit",
+  "@edit": {
+    "description": "Edit button text"
+  },
+  "back": "Back",
+  "@back": {
+    "description": "Back button text"
+  },
+  "next": "Next",
+  "@next": {
+    "description": "Next button text"
+  },
+  "search": "Search",
+  "@search": {
+    "description": "Search button text"
+  },
+  "filter": "Filter",
+  "@filter": {
+    "description": "Filter button text"
+  },
+  "refresh": "Refresh",
+  "@refresh": {
+    "description": "Refresh button text"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Error message title"
+  },
+  "success": "Success",
+  "@success": {
+    "description": "Success message title"
+  },
+  "warning": "Warning",
+  "@warning": {
+    "description": "Warning message title"
+  },
+  "information": "Information",
+  "@information": {
+    "description": "Information message title"
+  },
+  "noDataAvailable": "No data available",
+  "@noDataAvailable": {
+    "description": "No data message"
+  },
+  "pleaseWait": "Please wait...",
+  "@pleaseWait": {
+    "description": "Please wait message"
+  },
+  "tryAgain": "Try again",
+  "@tryAgain": {
+    "description": "Try again message"
+  },
+  "connectionError": "Connection error",
+  "@connectionError": {
+    "description": "Connection error message"
+  },
+  "invalidData": "Invalid data",
+  "@invalidData": {
+    "description": "Invalid data message"
+  },
+  "orders": "Orders",
+  "@orders": {
+    "description": "Orders navigation label"
+  },
+  "invoices": "Invoices",
+  "@invoices": {
+    "description": "Invoices navigation label"
+  },
+  "profile": "Profile",
+  "@profile": {
+    "description": "Profile navigation label"
+  },
+  "createOrder": "Create Order",
+  "@createOrder": {
+    "description": "Create order button text"
+  },
+  "createGuestOrder": "Create Guest Order",
+  "@createGuestOrder": {
+    "description": "Create guest order page title"
+  },
+  "continueAsGuest": "Continue as Guest",
+  "@continueAsGuest": {
+    "description": "Continue as guest button text"
+  },
+  "totalOrders": "Total Orders",
+  "@totalOrders": {
+    "description": "Total orders statistics label"
+  },
+  "todayOrders": "Today's Orders",
+  "@todayOrders": {
+    "description": "Today's orders statistics label"
+  },
+  "pendingPickup": "Pending Pickup",
+  "@pendingPickup": {
+    "description": "Pending pickup statistics label"
+  },
+  "pickedOrders": "Picked Orders",
+  "@pickedOrders": {
+    "description": "Picked orders statistics label"
+  },
+  "loadingDashboard": "Loading dashboard...",
+  "@loadingDashboard": {
+    "description": "Dashboard loading message"
+  },
+  "welcomeDashboard": "Welcome to your dashboard",
+  "@welcomeDashboard": {
+    "description": "Dashboard welcome message"
+  },
+  "tapToLoadStats": "Tap to load your statistics",
+  "@tapToLoadStats": {
+    "description": "Tap to load stats message"
+  },
+  "loadDashboard": "Load Dashboard",
+  "@loadDashboard": {
+    "description": "Load dashboard button text"
+  },
+  "addressDetails": "Address Details",
+  "@addressDetails": {
+    "description": "Address details section title"
+  },
+  "district": "District",
+  "@district": {
+    "description": "District field label"
+  },
+  "identification": "Identification",
+  "@identification": {
+    "description": "Identification field label"
+  },
+  "taxNumber": "Tax Number",
+  "@taxNumber": {
+    "description": "Tax number field label"
+  },
+  "locationUrl": "Location URL",
+  "@locationUrl": {
+    "description": "Location URL field label"
+  },
+  "pleaseSelectGovernorate": "Please select a governorate",
+  "@pleaseSelectGovernorate": {
+    "description": "Governorate selection validation message"
+  },
+  "pleaseSelectState": "Please select a state",
+  "@pleaseSelectState": {
+    "description": "State selection validation message"
+  },
+  "pleaseSelectPlace": "Please select a place",
+  "@pleaseSelectPlace": {
+    "description": "Place selection validation message"
+  },
+  "orderCreatedSuccessfully": "Order Created Successfully!",
+  "@orderCreatedSuccessfully": {
+    "description": "Order creation success message"
+  },
+  "trackingNumberIs": "Your tracking number is:",
+  "@trackingNumberIs": {
+    "description": "Tracking number label"
+  },
+  "optional": "Optional",
+  "@optional": {
+    "description": "Optional field indicator"
+  },
+  "requiredField": "This field is required",
+  "@requiredField": {
+    "description": "Required field validation message"
+  },
+  "districtRequired": "District is required",
+  "@districtRequired": {
+    "description": "District required validation message"
+  },
+  "zipcodeRequired": "Zipcode is required",
+  "@zipcodeRequired": {
+    "description": "Zipcode required validation message"
+  },
+  "streetAddressRequired": "Street address is required",
+  "@streetAddressRequired": {
+    "description": "Street address required validation message"
+  },
+  "customerNameRequired": "Customer name is required",
+  "@customerNameRequired": {
+    "description": "Customer name required validation message"
+  },
+  "customerPhoneRequired": "Customer phone is required",
+  "@customerPhoneRequired": {
+    "description": "Customer phone required validation message"
+  },
+  "validLocationUrlRequired": "Enter a valid location URL",
+  "@validLocationUrlRequired": {
+    "description": "Valid location URL validation message"
+  },
+  "validAmountRequired": "Enter a valid amount",
+  "@validAmountRequired": {
+    "description": "Valid amount validation message"
+  },
+  "user": "User",
+  "@user": {
+    "description": "User label"
+  },
+  "notAvailable": "Not Available",
+  "@notAvailable": {
+    "description": "Not available label"
+  },
+  "role": "Role",
+  "@role": {
+    "description": "Role label"
+  },
+  "location": "Location",
+  "@location": {
+    "description": "Location label"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings label"
+  },
+  "logoutConfirmation": "Are you sure you want to logout?",
+  "@logoutConfirmation": {
+    "description": "Logout confirmation message"
+  },
+  "invoicesAndPayments": "Invoices & Payments",
+  "@invoicesAndPayments": {
+    "description": "Invoices and payments page title"
+  },
+  "searchByInvoiceNumber": "Search by invoice number...",
+  "@searchByInvoiceNumber": {
+    "description": "Invoice search placeholder"
+  },
+  "loadingInvoices": "Loading invoices...",
+  "@loadingInvoices": {
+    "description": "Loading invoices message"
+  },
+  "noInvoices": "No Invoices",
+  "@noInvoices": {
+    "description": "No invoices message"
+  },
+  "noInvoicesYet": "You don't have any invoices yet.",
+  "@noInvoicesYet": {
+    "description": "No invoices yet message"
+  },
+  "noResults": "No Results",
+  "@noResults": {
+    "description": "No search results message"
+  },
+  "noInvoicesFound": "No invoices found for \"{query}\"",
+  "@noInvoicesFound": {
+    "description": "No invoices found message",
+    "placeholders": {
+      "query": {
+        "type": "String",
+        "example": "INV-123"
+      }
+    }
+  },
+  "clearSearch": "Clear Search",
+  "@clearSearch": {
+    "description": "Clear search button text"
+  },
+  "recentTransactions": "Recent Transactions",
+  "@recentTransactions": {
+    "description": "Recent transactions section title"
+  },
+  "noTransactionsFound": "No transactions found",
+  "@noTransactionsFound": {
+    "description": "No transactions found message"
+  },
+  "adjustFilters": "Try adjusting your filters or check back later.",
+  "@adjustFilters": {
+    "description": "Adjust filters message"
+  },
+  "filterPayments": "Filter Payments",
+  "@filterPayments": {
+    "description": "Filter payments title"
+  },
+  "filterByType": "Filter by Type",
+  "@filterByType": {
+    "description": "Filter by type label"
+  },
+  "filterByStatus": "Filter by Status",
+  "@filterByStatus": {
+    "description": "Filter by status label"
+  },
+  "transactionDetails": "Transaction Details",
+  "@transactionDetails": {
+    "description": "Transaction details title"
+  },
+  "trackingNo": "Tracking No",
+  "@trackingNo": {
+    "description": "Tracking number label"
+  },
+  "notificationMarkedAsRead": "Notification marked as read",
+  "@notificationMarkedAsRead": {
+    "description": "Notification marked as read message"
+  },
+  "notificationDeleted": "Notification deleted",
+  "@notificationDeleted": {
+    "description": "Notification deleted message"
+  },
+  "markAllAsRead": "Mark all as read",
+  "@markAllAsRead": {
+    "description": "Mark all as read button text"
+  },
+  "markAllNotificationsAsRead": "Mark all notifications as read",
+  "@markAllNotificationsAsRead": {
+    "description": "Mark all notifications as read description"
+  },
+  "reload": "Reload",
+  "@reload": {
+    "description": "Reload button text"
+  },
+  "reloadNotifications": "Reload notifications",
+  "@reloadNotifications": {
+    "description": "Reload notifications description"
+  },
+  "markAsRead": "Mark as read",
+  "@markAsRead": {
+    "description": "Mark as read button text"
+  },
+  "markThisNotificationAsRead": "Mark this notification as read",
+  "@markThisNotificationAsRead": {
+    "description": "Mark this notification as read description"
+  },
+  "removeThisNotification": "Remove this notification",
+  "@removeThisNotification": {
+    "description": "Remove this notification description"
+  },
+  "deleteNotification": "Delete Notification",
+  "@deleteNotification": {
+    "description": "Delete notification title"
+  },
+  "deleteNotificationConfirmation": "Are you sure you want to delete this notification? This action cannot be undone.",
+  "@deleteNotificationConfirmation": {
+    "description": "Delete notification confirmation message"
+  },
+  "justNow": "Just now",
+  "@justNow": {
+    "description": "Just now time label"
+  },
+  "minutesAgo": "{minutes}m ago",
+  "@minutesAgo": {
+    "description": "Minutes ago time label",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "hoursAgo": "{hours}h ago",
+  "@hoursAgo": {
+    "description": "Hours ago time label",
+    "placeholders": {
+      "hours": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "daysAgo": "{days}d ago",
+  "@daysAgo": {
+    "description": "Days ago time label",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "noNotificationsYet": "No notifications yet",
+  "@noNotificationsYet": {
+    "description": "No notifications yet message"
+  },
+  "notificationsWillAppearHere": "When you have new notifications,\\nthey'll appear here",
+  "@notificationsWillAppearHere": {
+    "description": "Notifications will appear here message"
+  },
+  "somethingWentWrong": "Something went wrong",
+  "@somethingWentWrong": {
+    "description": "Something went wrong message"
+  },
+  "pricingList": "Pricing List",
+  "@pricingList": {
+    "description": "Pricing list page title"
+  },
+  "loadingPricingData": "Loading pricing data...",
+  "@loadingPricingData": {
+    "description": "Loading pricing data message"
+  },
+  "errorLoadingPricing": "Error Loading Pricing",
+  "@errorLoadingPricing": {
+    "description": "Error loading pricing message"
+  },
+  "noPricingData": "No Pricing Data",
+  "@noPricingData": {
+    "description": "No pricing data message"
+  },
+  "searchByStateName": "Search by state name...",
+  "@searchByStateName": {
+    "description": "Search by state name placeholder"
+  },
+  "totalStates": "Total States",
+  "@totalStates": {
+    "description": "Total states label"
+  },
+  "avgDelivery": "Avg. Delivery",
+  "@avgDelivery": {
+    "description": "Average delivery label"
+  },
+  "avgReturn": "Avg. Return",
+  "@avgReturn": {
+    "description": "Average return label"
+  },
+  "manageNotificationPreferences": "Manage your notification preferences",
+  "@manageNotificationPreferences": {
+    "description": "Notification settings page subtitle"
+  },
+  "whatsappNotifications": "WhatsApp Notifications",
+  "@whatsappNotifications": {
+    "description": "WhatsApp notifications toggle label"
+  },
+  "receiveOrderUpdatesViaWhatsapp": "Receive order updates via WhatsApp",
+  "@receiveOrderUpdatesViaWhatsapp": {
+    "description": "WhatsApp notifications description"
+  },
+  "emailNotificationsTitle": "Email Notifications",
+  "@emailNotificationsTitle": {
+    "description": "Email notifications toggle label"
+  },
+  "receiveOrderUpdatesViaEmail": "Receive order updates via email",
+  "@receiveOrderUpdatesViaEmail": {
+    "description": "Email notifications description"
+  },
+  "loadingSettings": "Loading settings...",
+  "@loadingSettings": {
+    "description": "Loading settings message"
+  },
+  "createShipment": "Create Shipment",
+  "@createShipment": {
+    "description": "Create shipment page title"
+  },
+  "scanOrEnterTitle": "Scan or Enter",
+  "@scanOrEnterTitle": {
+    "description": "Scan or enter page title"
+  },
+  "addStickerNumberToStart": "Add your sticker number to get started",
+  "@addStickerNumberToStart": {
+    "description": "Scan or enter page subtitle"
+  },
+  "enterManually": "Enter manually",
+  "@enterManually": {
+    "description": "Enter manually label"
+  },
+  "typeStickerNumber": "Type sticker number...",
+  "@typeStickerNumber": {
+    "description": "Sticker number input placeholder"
+  },
+  "scanBarcode": "Scan barcode",
+  "@scanBarcode": {
+    "description": "Scan barcode label"
+  },
+  "startScanning": "Start Scanning",
+  "@startScanning": {
+    "description": "Start scanning button text"
+  },
+  "scanFailed": "Scan Failed",
+  "@scanFailed": {
+    "description": "Scan failed message"
+  },
+  "successfullyScanned": "Successfully Scanned",
+  "@successfullyScanned": {
+    "description": "Successfully scanned message"
+  },
+  "numberEntered": "Number Entered",
+  "@numberEntered": {
+    "description": "Number entered message"
+  },
+  "creatingOrder": "Creating Order...",
+  "@creatingOrder": {
+    "description": "Creating order message"
+  },
+  "savedAddresses": "Saved Addresses",
+  "@savedAddresses": {
+    "description": "Saved addresses section title"
+  },
+  "selectFromSavedAddresses": "Select from saved addresses to auto-fill",
+  "@selectFromSavedAddresses": {
+    "description": "Select from saved addresses description"
+  },
+  "formAutoFilled": "Form auto-filled with selected address",
+  "@formAutoFilled": {
+    "description": "Form auto-filled message"
+  },
+  "clear": "Clear",
+  "@clear": {
+    "description": "Clear button text"
+  },
+  "saveForLater": "Save for Later",
+  "@saveForLater": {
+    "description": "Save for later title"
+  },
+  "addToAddressBook": "Add this address to your address book",
+  "@addToAddressBook": {
+    "description": "Add to address book description"
+  },
+  "saveAddressHint": "Save this address to make future orders faster and easier!",
+  "@saveAddressHint": {
+    "description": "Save address hint message"
+  },
+  "saveAddress": "Save Address",
+  "@saveAddress": {
+    "description": "Save address button text"
+  },
+  "notNow": "Not Now",
+  "@notNow": {
+    "description": "Not now button text"
+  },
+  "addressSaved": "Address saved to address book successfully!",
+  "@addressSaved": {
+    "description": "Address saved success message"
+  },
+  "addressSaveFailed": "Failed to save address. Please try again.",
+  "@addressSaveFailed": {
+    "description": "Address save failed message"
+  },
+  "orderCreated": "Order Created Successfully!",
+  "@orderCreated": {
+    "description": "Order created success message"
+  },
+  "trackingLabel": "Tracking: {trackingNo}",
+  "@trackingLabel": {
+    "description": "Tracking label with number",
+    "placeholders": {
+      "trackingNo": {
+        "type": "String",
+        "example": "TRK123456"
+      }
+    }
+  },
+  "orderIdLabel": "Order ID: {orderId}",
+  "@orderIdLabel": {
+    "description": "Order ID label with number",
+    "placeholders": {
+      "orderId": {
+        "type": "String",
+        "example": "123"
+      }
+    }
+  },
+  "forRecipient": "For: {recipientName}",
+  "@forRecipient": {
+    "description": "For recipient label with name",
+    "placeholders": {
+      "recipientName": {
+        "type": "String",
+        "example": "John Doe"
+      }
+    }
+  },
+  "positionBarcodeInFrame": "Position the barcode within the frame to scan",
+  "@positionBarcodeInFrame": {
+    "description": "Barcode scanning instruction"
+  },
+  "pleaseEnterField": "Please enter {field}",
+  "@pleaseEnterField": {
+    "description": "Generic required field validation message",
+    "placeholders": {
+      "field": {
+        "type": "String",
+        "example": "name"
+      }
+    }
+  },
+
+  "fieldMinLength": "{field} must be at least {length} characters",
+  "@fieldMinLength": {
+    "description": "Minimum length validation message",
+    "placeholders": {
+      "field": {
+        "type": "String",
+        "example": "name"
+      },
+      "length": {
+        "type": "int",
+        "example": "6"
+      }
+    }
+  },
+
+  "pleaseEnterEmail": "Please enter your email",
+  "@pleaseEnterEmail": {
+    "description": "Email required validation message"
+  },
+
+  "pleaseEnterValidEmail": "Please enter a valid email address",
+  "@pleaseEnterValidEmail": {
+    "description": "Invalid email validation message"
+  },
+
+  "pleaseEnterValidPhone": "Please enter a valid {field} number (8-15 digits)",
+  "@pleaseEnterValidPhone": {
+    "description": "Invalid phone validation message",
+    "placeholders": {
+      "field": {
+        "type": "String",
+        "example": "phone"
+      }
+    }
+  },
+
+  "pleaseEnterLocationUrl": "Please enter a location URL",
+  "@pleaseEnterLocationUrl": {
+    "description": "Location URL required validation message"
+  },
+
+  "pleaseEnterValidLocationUrl": "Please enter a valid Google Maps URL",
+  "@pleaseEnterValidLocationUrl": {
+    "description": "Invalid location URL validation message"
+  },
+
+  "pleaseEnterAmount": "Please enter an amount",
+  "@pleaseEnterAmount": {
+    "description": "Amount required validation message"
+  },
+
+  "pleaseEnterValidAmount": "Please enter a valid amount",
+  "@pleaseEnterValidAmount": {
+    "description": "Invalid amount validation message"
+  },
+
+  "amountMustBeGreaterThan": "Amount must be greater than {amount}",
+  "@amountMustBeGreaterThan": {
+    "description": "Minimum amount validation message",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "5.00"
+      }
+    }
+  },
+
+  "pleaseEnterZipcode": "Please enter a zipcode",
+  "@pleaseEnterZipcode": {
+    "description": "Zipcode required validation message"
+  },
+
+  "pleaseEnterValidZipcode": "Please enter a valid zipcode (4-10 digits)",
+  "@pleaseEnterValidZipcode": {
+    "description": "Invalid zipcode validation message"
+  },
+
+  "taxNumberValidation": "Tax number should be 5-20 digits",
+  "@taxNumberValidation": {
+    "description": "Tax number validation message"
+  },
+
+  "identificationValidation": "ID should be 5-20 alphanumeric characters",
+  "@identificationValidation": {
+    "description": "Identification validation message"
+  }
+}

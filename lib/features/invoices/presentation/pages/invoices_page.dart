@@ -10,6 +10,7 @@ import 'package:client_app/features/invoices/presentation/widgets/invoice_statis
 import 'package:client_app/features/invoices/presentation/widgets/payment_summary_widget.dart';
 import 'package:client_app/features/invoices/presentation/widgets/payment_transaction_card.dart';
 import 'package:client_app/injections.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -355,7 +356,7 @@ class _InvoicesPageState extends State<InvoicesPage>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Recent Transactions',
+              AppLocalizations.of(context)!.recentTransactions,
               style: Theme.of(
                 context,
               ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
@@ -375,14 +376,14 @@ class _InvoicesPageState extends State<InvoicesPage>
                 Icon(Icons.receipt_long, size: 64, color: Colors.grey[400]),
                 const SizedBox(height: 16),
                 Text(
-                  'No transactions found',
+                  AppLocalizations.of(context)!.noTransactionsFound,
                   style: Theme.of(
                     context,
                   ).textTheme.titleMedium?.copyWith(color: Colors.grey[600]),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Try adjusting your filters or check back later.',
+                  AppLocalizations.of(context)!.adjustFilters,
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: Colors.grey[500]),
@@ -505,13 +506,13 @@ class _InvoicesPageState extends State<InvoicesPage>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Filter Payments',
+                AppLocalizations.of(context)!.filterPayments,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 20),
-              Text('Filter by Type:'),
+              Text(AppLocalizations.of(context)!.filterByType),
               const SizedBox(height: 10),
               Wrap(
                 spacing: 8,
@@ -534,7 +535,7 @@ class _InvoicesPageState extends State<InvoicesPage>
                     }).toList(),
               ),
               const SizedBox(height: 20),
-              Text('Filter by Status:'),
+              Text(AppLocalizations.of(context)!.filterByStatus),
               const SizedBox(height: 10),
               Wrap(
                 spacing: 8,
@@ -585,7 +586,7 @@ class _InvoicesPageState extends State<InvoicesPage>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Transaction Details',
+                    AppLocalizations.of(context)!.transactionDetails,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -598,8 +599,9 @@ class _InvoicesPageState extends State<InvoicesPage>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _buildDetailRow(
-                            'Tracking No',
-                            transaction.trackingNo ?? 'N/A',
+                            AppLocalizations.of(context)!.trackingNo,
+                            transaction.trackingNo ??
+                                AppLocalizations.of(context)!.notAvailable,
                           ),
                           _buildDetailRow(
                             'Amount',
@@ -687,7 +689,7 @@ class _InvoicesPageState extends State<InvoicesPage>
               controller: _searchController,
               onChanged: _onSearchChanged,
               decoration: InputDecoration(
-                hintText: 'Search by invoice number...',
+                hintText: AppLocalizations.of(context)!.searchByInvoiceNumber,
                 prefixIcon: const Icon(
                   Icons.search_rounded,
                   color: Color(0xFF667eea),
@@ -865,7 +867,7 @@ class _InvoicesPageState extends State<InvoicesPage>
             ),
             const SizedBox(height: 16),
             Text(
-              'Loading invoices...',
+              AppLocalizations.of(context)!.loadingInvoices,
               style: TextStyle(color: Colors.grey[600], fontSize: 16),
             ),
           ],
@@ -923,7 +925,7 @@ class _InvoicesPageState extends State<InvoicesPage>
             Icon(Icons.receipt_long_rounded, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
-              'No Invoices',
+              AppLocalizations.of(context)!.noInvoices,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -932,7 +934,7 @@ class _InvoicesPageState extends State<InvoicesPage>
             ),
             const SizedBox(height: 8),
             Text(
-              'You don\'t have any invoices yet.',
+              AppLocalizations.of(context)!.noInvoicesYet,
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.grey[600], fontSize: 14),
             ),
@@ -951,7 +953,7 @@ class _InvoicesPageState extends State<InvoicesPage>
             Icon(Icons.search_off_rounded, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
-              'No Results',
+              AppLocalizations.of(context)!.noResults,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -960,7 +962,7 @@ class _InvoicesPageState extends State<InvoicesPage>
             ),
             const SizedBox(height: 8),
             Text(
-              'No invoices found for "$query"',
+              AppLocalizations.of(context)!.noInvoicesFound(query),
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.grey[600], fontSize: 14),
             ),
@@ -977,7 +979,7 @@ class _InvoicesPageState extends State<InvoicesPage>
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text('Clear Search'),
+              child: Text(AppLocalizations.of(context)!.clearSearch),
             ),
           ],
         ),
