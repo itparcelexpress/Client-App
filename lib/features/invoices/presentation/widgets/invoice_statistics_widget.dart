@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:client_app/features/invoices/cubit/invoice_cubit.dart';
 import 'package:client_app/features/invoices/cubit/invoice_state.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,9 +37,9 @@ class InvoiceStatisticsWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Invoice Summary',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.invoiceSummary,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF1a1a1a),
@@ -49,7 +50,7 @@ class InvoiceStatisticsWidget extends StatelessWidget {
                     children: [
                       Expanded(
                         child: _buildStatCard(
-                          'Total Amount',
+                          AppLocalizations.of(context)!.totalAmount,
                           '${totalAmount.toStringAsFixed(2)} OMR',
                           Icons.account_balance_wallet_rounded,
                           const Color(0xFF667eea),
@@ -58,7 +59,7 @@ class InvoiceStatisticsWidget extends StatelessWidget {
                       const SizedBox(width: 12),
                       Expanded(
                         child: _buildStatCard(
-                          'Total Invoices',
+                          AppLocalizations.of(context)!.totalInvoices,
                           '${stats['total']}',
                           Icons.receipt_long_rounded,
                           Colors.grey[600]!,
@@ -71,21 +72,25 @@ class InvoiceStatisticsWidget extends StatelessWidget {
                     children: [
                       Expanded(
                         child: _buildStatCard(
-                          'Paid',
+                          AppLocalizations.of(context)!.paid,
                           '${paidAmount.toStringAsFixed(2)} OMR',
                           Icons.check_circle_rounded,
                           Colors.green,
-                          subtitle: '${stats['paid']} invoices',
+                          subtitle: AppLocalizations.of(
+                            context,
+                          )!.invoicesCount(stats['paid']!),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: _buildStatCard(
-                          'Pending',
+                          AppLocalizations.of(context)!.pending,
                           '${pendingAmount.toStringAsFixed(2)} OMR',
                           Icons.pending_rounded,
                           Colors.orange,
-                          subtitle: '${stats['pending']} invoices',
+                          subtitle: AppLocalizations.of(
+                            context,
+                          )!.invoicesCount(stats['pending']!),
                         ),
                       ),
                     ],
@@ -93,8 +98,10 @@ class InvoiceStatisticsWidget extends StatelessWidget {
                   if (stats['overdue']! > 0) ...[
                     const SizedBox(height: 12),
                     _buildStatCard(
-                      'Overdue',
-                      '${stats['overdue']} invoices',
+                      AppLocalizations.of(context)!.overdue,
+                      AppLocalizations.of(
+                        context,
+                      )!.invoicesCount(stats['overdue']!),
                       Icons.warning_rounded,
                       Colors.red,
                       isFullWidth: true,

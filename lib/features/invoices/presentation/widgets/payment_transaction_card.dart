@@ -1,5 +1,6 @@
 import 'package:client_app/core/utilities/app_color.dart';
 import 'package:client_app/features/invoices/data/models/invoice_models.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

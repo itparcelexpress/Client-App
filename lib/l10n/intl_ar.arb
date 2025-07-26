@@ -151,7 +151,7 @@
   "justNow": "الآن",
   "minutesAgo": "منذ {minutes} دقيقة",
   "hoursAgo": "منذ {hours} ساعة",
-  "daysAgo": "منذ {days} يوم",
+  "daysAgo": "{count, plural, =1{منذ يوم واحد} other{منذ {count} أيام}}",
   "noNotificationsYet": "لا توجد إشعارات حتى الآن",
   "notificationsWillAppearHere": "عندما تتلقى إشعارات جديدة،\\nستظهر هنا",
   "somethingWentWrong": "حدث خطأ ما",
@@ -292,5 +292,473 @@
   "identificationValidation": "يجب أن يكون رقم الهوية من 5-20 حرف أو رقم",
   "@identificationValidation": {
     "description": "Identification validation message"
+  },
+
+  "logoutSuccessful": "تم تسجيل الخروج بنجاح",
+  "@logoutSuccessful": {
+    "description": "Logout successful message"
+  },
+
+  "financialOverview": "نظرة عامة مالية",
+  "@financialOverview": {
+    "description": "Financial overview section title"
+  },
+
+  "totalValue": "القيمة الإجمالية",
+  "@totalValue": {
+    "description": "Total value label"
+  },
+
+  "thisMonth": "هذا الشهر",
+  "@thisMonth": {
+    "description": "This month label"
+  },
+
+  "balance": "الرصيد",
+  "@balance": {
+    "description": "Balance label"
+  },
+
+  "avgOrder": "متوسط الطلب",
+  "@avgOrder": {
+    "description": "Average order label"
+  },
+
+  "performanceMetrics": "مقاييس الأداء",
+  "@performanceMetrics": {
+    "description": "Performance metrics section title"
+  },
+
+  "deliveryRate": "معدل التوصيل",
+  "@deliveryRate": {
+    "description": "Delivery rate label"
+  },
+
+  "taskCompletion": "إنجاز المهام",
+  "@taskCompletion": {
+    "description": "Task completion label"
+  },
+
+  "delivered": "تم التوصيل",
+  "@delivered": {
+    "description": "Delivered orders label"
+  },
+
+  "activeTasks": "المهام النشطة",
+  "@activeTasks": {
+    "description": "Active tasks label"
+  },
+
+  "completedTasks": "مكتملة",
+  "@completedTasks": {
+    "description": "Completed tasks label"
+  },
+
+  "recentActivity": "النشاط الأخير",
+  "@recentActivity": {
+    "description": "Recent activity section title"
+  },
+
+  "viewAllActivities": "عرض جميع الأنشطة",
+  "@viewAllActivities": {
+    "description": "View all activities button text"
+  },
+
+  "ordersCreated": "طلبات تم إنشاؤها",
+  "@ordersCreated": {
+    "description": "Orders created text for activity"
+  },
+
+  "activityOn": "نشاط في",
+  "@activityOn": {
+    "description": "Activity on date prefix"
+  },
+
+  "noRecentActivity": "لا يوجد نشاط حديث",
+  "@noRecentActivity": {
+    "description": "No recent activity message"
+  },
+
+  "recentActivitiesWillAppearHere": "أنشطتك الحديثة ستظهر هنا",
+  "@recentActivitiesWillAppearHere": {
+    "description": "Recent activities placeholder message"
+  },
+
+  "today": "اليوم",
+  "@today": {
+    "description": "Today label"
+  },
+
+  "yesterday": "أمس",
+  "@yesterday": {
+    "description": "Yesterday label"
+  },
+
+  "daysAgo": "{count, plural, =1{منذ يوم واحد} other{منذ {count} أيام}}",
+  "@daysAgo": {
+    "description": "Days ago with count",
+    "placeholders": {
+      "count": {
+        "type": "num",
+        "example": "3"
+      }
+    }
+  },
+  "myOrders": "طلباتي",
+  "@myOrders": {
+    "description": "Orders list page title"
+  },
+
+  "searchByTrackingNumber": "البحث برقم التتبع...",
+  "@searchByTrackingNumber": {
+    "description": "Search placeholder for orders"
+  },
+
+  "status": "الحالة",
+  "@status": {
+    "description": "Status filter label"
+  },
+
+  "allStatus": "جميع الحالات",
+  "@allStatus": {
+    "description": "All status filter option"
+  },
+
+  "dateRange": "نطاق التاريخ",
+  "@dateRange": {
+    "description": "Date range filter label"
+  },
+
+  "loadingOrders": "جاري تحميل الطلبات...",
+  "@loadingOrders": {
+    "description": "Loading orders message"
+  },
+
+  "showingOrdersCount": "عرض {shown} من {total} طلب",
+  "@showingOrdersCount": {
+    "description": "Orders count message",
+    "placeholders": {
+      "shown": {
+        "type": "int",
+        "example": "10"
+      },
+      "total": {
+        "type": "int",
+        "example": "50"
+      }
+    }
+  },
+
+  "pageCount": "صفحة {current} من {total}",
+  "@pageCount": {
+    "description": "Page count message",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "example": "1"
+      },
+      "total": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+
+  "trackingNumber": "رقم التتبع",
+  "@trackingNumber": {
+    "description": "Tracking number label"
+  },
+
+  "trackingNumberCopied": "تم نسخ رقم التتبع! 📋",
+  "@trackingNumberCopied": {
+    "description": "Tracking number copied message"
+  },
+
+  "recipient": "المستلم",
+  "@recipient": {
+    "description": "Recipient label"
+  },
+
+  "deliveryAddress": "عنوان التوصيل",
+  "@deliveryAddress": {
+    "description": "Delivery address label"
+  },
+
+  "payment": "الدفع",
+  "@payment": {
+    "description": "Payment label"
+  },
+
+  "amount": "المبلغ",
+  "@amount": {
+    "description": "Amount label"
+  },
+
+  "deliveryFee": "رسوم التوصيل",
+  "@deliveryFee": {
+    "description": "Delivery fee label"
+  },
+
+  "created": "تم الإنشاء",
+  "@created": {
+    "description": "Created label"
+  },
+
+  "notes": "ملاحظات",
+  "@notes": {
+    "description": "Notes label"
+  },
+
+  "previous": "السابق",
+  "@previous": {
+    "description": "Previous page button"
+  },
+
+  "next": "التالي",
+  "@next": {
+    "description": "Next page button"
+  },
+
+  "noOrdersYet": "لا توجد طلبات حتى الآن",
+  "@noOrdersYet": {
+    "description": "No orders message"
+  },
+
+  "ordersWillAppearHere": "ستظهر طلباتك هنا عندما تبدأ في إنشائها",
+  "@ordersWillAppearHere": {
+    "description": "Orders placeholder message"
+  },
+
+  "createFirstOrder": "إنشاء أول طلب",
+  "@createFirstOrder": {
+    "description": "Create first order button"
+  },
+
+  "somethingWentWrong": "عذراً! حدث خطأ ما",
+  "@somethingWentWrong": {
+    "description": "Error message title"
+  },
+
+  "tryAgain": "حاول مرة أخرى",
+  "@tryAgain": {
+    "description": "Try again button"
+  },
+
+  "payments": "المدفوعات",
+  "@payments": {
+    "description": "Payments page title"
+  },
+
+  "invoices": "الفواتير",
+  "@invoices": {
+    "description": "Invoices tab title"
+  },
+
+  "retry": "إعادة المحاولة",
+  "@retry": {
+    "description": "Retry button text"
+  },
+
+  "refresh": "تحديث",
+  "@refresh": {
+    "description": "Refresh button text"
+  },
+
+  "filterTransactions": "تصفية المعاملات",
+  "@filterTransactions": {
+    "description": "Filter transactions dialog title"
+  },
+
+  "applyFilters": "تطبيق الفلاتر",
+  "@applyFilters": {
+    "description": "Apply filters button text"
+  },
+
+  "recentTransactions": "المعاملات الحديثة",
+  "@recentTransactions": {
+    "description": "Recent transactions section title"
+  },
+
+  "noTransactionsFound": "لم يتم العثور على معاملات",
+  "@noTransactionsFound": {
+    "description": "No transactions found message"
+  },
+
+  "tryAdjustingFilters": "حاول تعديل الفلاتر أو تحقق لاحقاً.",
+  "@tryAdjustingFilters": {
+    "description": "Try adjusting filters message"
+  },
+
+  "errorLoadingPayments": "خطأ في تحميل المدفوعات",
+  "@errorLoadingPayments": {
+    "description": "Error loading payments title"
+  },
+
+  "noPaymentData": "لا توجد بيانات مدفوعات",
+  "@noPaymentData": {
+    "description": "No payment data title"
+  },
+
+  "noPaymentTransactionsFound": "لم يتم العثور على معاملات مدفوعات.\nتحقق لاحقاً للتحديثات.",
+  "@noPaymentTransactionsFound": {
+    "description": "No payment transactions found message"
+  },
+
+  "transactionDetails": "تفاصيل المعاملة",
+  "@transactionDetails": {
+    "description": "Transaction details dialog title"
+  },
+
+  "trackingNo": "رقم التتبع:",
+  "@trackingNo": {
+    "description": "Tracking number label"
+  },
+
+  "type": "النوع:",
+  "@type": {
+    "description": "Type label"
+  },
+
+  "customer": "العميل:",
+  "@customer": {
+    "description": "Customer label"
+  },
+
+  "phone": "الهاتف:",
+  "@phone": {
+    "description": "Phone label"
+  },
+
+  "date": "التاريخ:",
+  "@date": {
+    "description": "Date label"
+  },
+
+  "paymentSummary": "ملخص المدفوعات",
+  "@paymentSummary": {
+    "description": "Payment summary section title"
+  },
+
+  "codCollected": "الدفع عند الاستلام المحصل",
+  "@codCollected": {
+    "description": "COD collected label"
+  },
+
+  "settled": "تم التسوية",
+  "@settled": {
+    "description": "Settled label"
+  },
+
+  "pending": "معلق",
+  "@pending": {
+    "description": "Pending label"
+  },
+
+  "totalBalance": "الرصيد الإجمالي",
+  "@totalBalance": {
+    "description": "Total balance label"
+  },
+
+  "invoiceSummary": "ملخص الفواتير",
+  "@invoiceSummary": {
+    "description": "Invoice summary section title"
+  },
+
+  "totalAmount": "المبلغ الإجمالي",
+  "@totalAmount": {
+    "description": "Total amount label"
+  },
+
+  "totalInvoices": "إجمالي الفواتير",
+  "@totalInvoices": {
+    "description": "Total invoices label"
+  },
+
+  "paid": "مدفوع",
+  "@paid": {
+    "description": "Paid status label"
+  },
+
+  "overdue": "متأخر",
+  "@overdue": {
+    "description": "Overdue status label"
+  },
+
+  "invoicesCount": "{count} فواتير",
+  "@invoicesCount": {
+    "description": "Invoices count with number",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+
+  "invoiceNumber": "فاتورة #{number}",
+  "@invoiceNumber": {
+    "description": "Invoice number with hash",
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "example": "INV-001"
+      }
+    }
+  },
+
+  "id": "الرقم: {id}",
+  "@id": {
+    "description": "ID with number",
+    "placeholders": {
+      "id": {
+        "type": "int",
+        "example": "123"
+      }
+    }
+  },
+
+  "delivered": "تم التوصيل",
+  "@delivered": {
+    "description": "Delivered status label"
+  },
+
+  "all": "الكل",
+  "@all": {
+    "description": "All filter option"
+  },
+
+  "cod": "الدفع عند الاستلام",
+  "@cod": {
+    "description": "COD payment type"
+  },
+
+  "card": "بطاقة",
+  "@card": {
+    "description": "Card payment type"
+  },
+
+  "bank": "بنك",
+  "@bank": {
+    "description": "Bank payment type"
+  },
+
+  "completed": "مكتمل",
+  "@completed": {
+    "description": "Completed status"
+  },
+
+  "failed": "فشل",
+  "@failed": {
+    "description": "Failed status"
+  },
+
+  "na": "غير متوفر",
+  "@na": {
+    "description": "Not available text"
+  },
+
+  "selectLanguage": "اختر اللغة",
+  "@selectLanguage": {
+    "description": "Dialog title for selecting app language"
   }
 }

@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 
 class PerformanceWidget extends StatelessWidget {
   final int deliveryRate;
@@ -53,9 +54,9 @@ class PerformanceWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 16),
-                const Text(
-                  'Performance Metrics',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context)!.performanceMetrics,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF1a1a1a),
@@ -66,7 +67,7 @@ class PerformanceWidget extends StatelessWidget {
             const SizedBox(height: 24),
             // Delivery Rate with Progress Bar
             _buildPerformanceMetric(
-              'Delivery Rate',
+              AppLocalizations.of(context)!.deliveryRate,
               '$deliveryRate%',
               deliveryRate / 100,
               const Color(0xFF10b981),
@@ -75,7 +76,7 @@ class PerformanceWidget extends StatelessWidget {
             const SizedBox(height: 20),
             // Task Completion Rate
             _buildPerformanceMetric(
-              'Task Completion',
+              AppLocalizations.of(context)!.taskCompletion,
               '${_calculateTaskCompletionRate()}%',
               _calculateTaskCompletionRate() / 100,
               const Color(0xFF8b5cf6),
@@ -87,7 +88,7 @@ class PerformanceWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: _buildMetricCard(
-                    'Delivered',
+                    AppLocalizations.of(context)!.delivered,
                     deliveredOrders.toString(),
                     const Color(0xFF10b981),
                     Icons.check_circle,
@@ -96,7 +97,7 @@ class PerformanceWidget extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildMetricCard(
-                    'Active Tasks',
+                    AppLocalizations.of(context)!.activeTasks,
                     activeTasks.toString(),
                     const Color(0xFFf59e0b),
                     Icons.pending_actions,
@@ -105,7 +106,7 @@ class PerformanceWidget extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildMetricCard(
-                    'Completed',
+                    AppLocalizations.of(context)!.completedTasks,
                     completedTasks.toString(),
                     const Color(0xFF667eea),
                     Icons.task,

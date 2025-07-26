@@ -131,10 +131,10 @@ class _InvoicesPageState extends State<InvoicesPage>
                 child: const Icon(Icons.arrow_back, size: 20),
               ),
             ),
-            const Expanded(
+            Expanded(
               child: Text(
-                'Invoices & Payments',
-                style: TextStyle(
+                AppLocalizations.of(context)!.invoicesAndPayments,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF1a1a1a),
@@ -176,10 +176,10 @@ class _InvoicesPageState extends State<InvoicesPage>
               size: 28,
             ),
             const SizedBox(width: 12),
-            const Expanded(
+            Expanded(
               child: Text(
-                'Invoices & Payments',
-                style: TextStyle(
+                AppLocalizations.of(context)!.invoicesAndPayments,
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
                   color: Color(0xFF1a1a1a),
@@ -240,7 +240,10 @@ class _InvoicesPageState extends State<InvoicesPage>
           fontWeight: FontWeight.w500,
           fontSize: 14,
         ),
-        tabs: const [Tab(text: 'Invoices'), Tab(text: 'Payments')],
+        tabs: [
+          Tab(text: AppLocalizations.of(context)!.invoices),
+          Tab(text: AppLocalizations.of(context)!.payments),
+        ],
       ),
     );
   }
@@ -443,7 +446,7 @@ class _InvoicesPageState extends State<InvoicesPage>
                 backgroundColor: AppColor.accentColor,
                 foregroundColor: Colors.white,
               ),
-              child: const Text('Retry'),
+              child: Text(AppLocalizations.of(context)!.retry),
             ),
           ],
         ),
@@ -461,7 +464,7 @@ class _InvoicesPageState extends State<InvoicesPage>
             Icon(Icons.payment, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
-              'No Payment Data',
+              AppLocalizations.of(context)!.noPaymentData,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 color: Colors.grey[600],
                 fontWeight: FontWeight.bold,
@@ -469,7 +472,7 @@ class _InvoicesPageState extends State<InvoicesPage>
             ),
             const SizedBox(height: 8),
             Text(
-              'No payment transactions found.\nCheck back later for updates.',
+              AppLocalizations.of(context)!.noPaymentTransactionsFound,
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: Colors.grey[500]),
@@ -484,7 +487,7 @@ class _InvoicesPageState extends State<InvoicesPage>
                 backgroundColor: AppColor.accentColor,
                 foregroundColor: Colors.white,
               ),
-              child: const Text('Refresh'),
+              child: Text(AppLocalizations.of(context)!.refresh),
             ),
           ],
         ),
@@ -908,7 +911,7 @@ class _InvoicesPageState extends State<InvoicesPage>
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text('Retry'),
+              child: Text(AppLocalizations.of(context)!.retry),
             ),
           ],
         ),

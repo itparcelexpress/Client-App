@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 
 class OrdersListPage extends StatefulWidget {
   final bool showAppBar;
@@ -106,10 +107,10 @@ class _OrdersListPageState extends State<OrdersListPage> {
                 child: const Icon(Icons.arrow_back, size: 20),
               ),
             ),
-            const Expanded(
+            Expanded(
               child: Text(
-                'My Orders',
-                style: TextStyle(
+                AppLocalizations.of(context)!.myOrders,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF1a1a1a),
@@ -147,10 +148,10 @@ class _OrdersListPageState extends State<OrdersListPage> {
               size: 28,
             ),
             const SizedBox(width: 12),
-            const Expanded(
+            Expanded(
               child: Text(
-                'My Orders',
-                style: TextStyle(
+                AppLocalizations.of(context)!.myOrders,
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
                   color: Color(0xFF1a1a1a),
@@ -202,11 +203,15 @@ class _OrdersListPageState extends State<OrdersListPage> {
               ),
               child: TextField(
                 controller: _searchController,
-                decoration: const InputDecoration(
-                  hintText: 'Search by tracking number...',
-                  prefixIcon: Icon(Icons.search, color: Color(0xFF666666)),
+                decoration: InputDecoration(
+                  hintText:
+                      AppLocalizations.of(context)!.searchByTrackingNumber,
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    color: Color(0xFF666666),
+                  ),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(
+                  contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 12,
                   ),
@@ -223,7 +228,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                   child: DropdownButtonFormField<String>(
                     value: _selectedStatus ?? 'All',
                     decoration: InputDecoration(
-                      labelText: 'Status',
+                      labelText: AppLocalizations.of(context)!.status,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -238,7 +243,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                             value: status,
                             child: Text(
                               status == 'All'
-                                  ? 'All Status'
+                                  ? AppLocalizations.of(context)!.allStatus
                                   : status.toUpperCase(),
                             ),
                           );
@@ -276,7 +281,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                             child: Text(
                               _fromDate != null && _toDate != null
                                   ? '${_formatDateShort(_fromDate!)} - ${_formatDateShort(_toDate!)}'
-                                  : 'Date Range',
+                                  : AppLocalizations.of(context)!.dateRange,
                               style: TextStyle(
                                 color:
                                     _fromDate != null && _toDate != null
@@ -302,15 +307,15 @@ class _OrdersListPageState extends State<OrdersListPage> {
   Widget _buildLoadingState() {
     return FadeInUp(
       duration: const Duration(milliseconds: 500),
-      child: const Center(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SpinKitThreeBounce(color: Color(0xFF667eea), size: 30),
-            SizedBox(height: 16),
+            const SpinKitThreeBounce(color: Color(0xFF667eea), size: 30),
+            const SizedBox(height: 16),
             Text(
-              'Loading orders...',
-              style: TextStyle(
+              AppLocalizations.of(context)!.loadingOrders,
+              style: const TextStyle(
                 fontSize: 16,
                 color: Color(0xFF666666),
                 fontWeight: FontWeight.w500,
@@ -338,7 +343,9 @@ class _OrdersListPageState extends State<OrdersListPage> {
             child: Row(
               children: [
                 Text(
-                  'Showing ${state.orders.length} of ${state.totalOrders} orders',
+                  AppLocalizations.of(
+                    context,
+                  )!.showingOrdersCount(state.orders.length, state.totalOrders),
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.grey[600],
@@ -347,11 +354,13 @@ class _OrdersListPageState extends State<OrdersListPage> {
                 ),
                 const Spacer(),
                 Text(
-                  'Page ${state.currentPage} of ${state.totalPages}',
-                  style: TextStyle(
+                  AppLocalizations.of(
+                    context,
+                  )!.pageCount(state.currentPage, state.totalPages),
+                  style: const TextStyle(
                     fontSize: 14,
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1a1a1a),
                   ),
                 ),
               ],
@@ -409,7 +418,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Tracking Number',
+                      AppLocalizations.of(context)!.trackingNumber,
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey[600],
@@ -509,7 +518,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Recipient',
+                      AppLocalizations.of(context)!.recipient,
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey[600],
@@ -560,7 +569,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Delivery Address',
+                        AppLocalizations.of(context)!.deliveryAddress,
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey[600],
@@ -592,7 +601,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
               Expanded(
                 child: _buildInfoItem(
                   icon: Icons.payment_rounded,
-                  label: 'Payment',
+                  label: AppLocalizations.of(context)!.payment,
                   value: order.paymentType,
                   color: const Color(0xFFf59e0b),
                 ),
@@ -601,7 +610,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
               Expanded(
                 child: _buildInfoItem(
                   icon: Icons.attach_money_rounded,
-                  label: 'Amount',
+                  label: AppLocalizations.of(context)!.amount,
                   value: '\$${order.amount}',
                   color: const Color(0xFF10b981),
                 ),
@@ -615,7 +624,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
               Expanded(
                 child: _buildInfoItem(
                   icon: Icons.local_shipping_outlined,
-                  label: 'Delivery Fee',
+                  label: AppLocalizations.of(context)!.deliveryFee,
                   value: '\$${order.deliveryFee}',
                   color: const Color(0xFF667eea),
                 ),
@@ -624,7 +633,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
               Expanded(
                 child: _buildInfoItem(
                   icon: Icons.access_time_rounded,
-                  label: 'Created',
+                  label: AppLocalizations.of(context)!.created,
                   value: _formatDate(order.createdAt),
                   color: const Color(0xFF8b5cf6),
                 ),
@@ -647,7 +656,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Notes',
+                    AppLocalizations.of(context)!.notes,
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey[600],
@@ -695,7 +704,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                     }
                     : null,
             icon: const Icon(Icons.arrow_back),
-            label: const Text('Previous'),
+            label: Text(AppLocalizations.of(context)!.previous),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF667eea),
               foregroundColor: Colors.white,
@@ -704,7 +713,9 @@ class _OrdersListPageState extends State<OrdersListPage> {
             ),
           ),
           Text(
-            'Page ${state.currentPage} of ${state.totalPages}',
+            AppLocalizations.of(
+              context,
+            )!.pageCount(state.currentPage, state.totalPages),
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -728,7 +739,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                     }
                     : null,
             icon: const Icon(Icons.arrow_forward),
-            label: const Text('Next'),
+            label: Text(AppLocalizations.of(context)!.next),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF667eea),
               foregroundColor: Colors.white,
@@ -815,7 +826,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                 height: ResponsiveUtils.getResponsivePadding(context, 24),
               ),
               Text(
-                'No Orders Yet',
+                AppLocalizations.of(context)!.noOrdersYet,
                 style: TextStyle(
                   fontSize: ResponsiveUtils.getResponsiveFontSize(context, 20),
                   fontWeight: FontWeight.w700,
@@ -826,7 +837,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                 height: ResponsiveUtils.getResponsivePadding(context, 12),
               ),
               Text(
-                'Your orders will appear here once you start creating them.',
+                AppLocalizations.of(context)!.ordersWillAppearHere,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
@@ -840,7 +851,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
               ElevatedButton.icon(
                 onPressed: () => Navigator.pop(context),
                 icon: const Icon(Icons.add_circle_outline),
-                label: const Text('Create Your First Order'),
+                label: Text(AppLocalizations.of(context)!.createFirstOrder),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF667eea),
                   foregroundColor: Colors.white,
@@ -899,7 +910,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                 height: ResponsiveUtils.getResponsivePadding(context, 24),
               ),
               Text(
-                'Oops! Something went wrong',
+                AppLocalizations.of(context)!.somethingWentWrong,
                 style: TextStyle(
                   fontSize: ResponsiveUtils.getResponsiveFontSize(context, 20),
                   fontWeight: FontWeight.w700,
@@ -924,7 +935,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
               ElevatedButton.icon(
                 onPressed: _loadOrders,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Try Again'),
+                label: Text(AppLocalizations.of(context)!.tryAgain),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF667eea),
                   foregroundColor: Colors.white,
@@ -1015,7 +1026,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
   void _copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
     Fluttertoast.showToast(
-      msg: 'Tracking number copied! 📋',
+      msg: AppLocalizations.of(context)!.trackingNumberCopied,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       backgroundColor: const Color(0xFF10b981),

@@ -248,19 +248,19 @@ abstract class AppLocalizations {
   /// **'Sticker Number'**
   String get stickerNumber;
 
-  /// Amount field label
+  /// Amount label
   ///
   /// In en, this message translates to:
   /// **'Amount'**
   String get amount;
 
-  /// Notes field label
+  /// Notes label
   ///
   /// In en, this message translates to:
   /// **'Notes'**
   String get notes;
 
-  /// Delivery fee field label
+  /// Delivery fee label
   ///
   /// In en, this message translates to:
   /// **'Delivery Fee'**
@@ -506,7 +506,7 @@ abstract class AppLocalizations {
   /// **'Back'**
   String get back;
 
-  /// Next button text
+  /// Next page button
   ///
   /// In en, this message translates to:
   /// **'Next'**
@@ -572,10 +572,10 @@ abstract class AppLocalizations {
   /// **'Please wait...'**
   String get pleaseWait;
 
-  /// Try again message
+  /// Try again button text
   ///
   /// In en, this message translates to:
-  /// **'Try again'**
+  /// **'Try Again'**
   String get tryAgain;
 
   /// Connection error message
@@ -596,7 +596,7 @@ abstract class AppLocalizations {
   /// **'Orders'**
   String get orders;
 
-  /// Invoices navigation label
+  /// Invoices tab title
   ///
   /// In en, this message translates to:
   /// **'Invoices'**
@@ -902,7 +902,7 @@ abstract class AppLocalizations {
   /// **'Filter by Status'**
   String get filterByStatus;
 
-  /// Transaction details title
+  /// Transaction details dialog title
   ///
   /// In en, this message translates to:
   /// **'Transaction Details'**
@@ -911,7 +911,7 @@ abstract class AppLocalizations {
   /// Tracking number label
   ///
   /// In en, this message translates to:
-  /// **'Tracking No'**
+  /// **'Tracking No:'**
   String get trackingNo;
 
   /// Notification marked as read message
@@ -998,11 +998,11 @@ abstract class AppLocalizations {
   /// **'{hours}h ago'**
   String hoursAgo(int hours);
 
-  /// Days ago time label
+  /// Days ago with count
   ///
   /// In en, this message translates to:
-  /// **'{days}d ago'**
-  String daysAgo(int days);
+  /// **'{count, plural, =1{1 day ago} other{{count} days ago}}'**
+  String daysAgo(num count);
 
   /// No notifications yet message
   ///
@@ -1016,10 +1016,10 @@ abstract class AppLocalizations {
   /// **'When you have new notifications,\\nthey\'ll appear here'**
   String get notificationsWillAppearHere;
 
-  /// Something went wrong message
+  /// Error message title
   ///
   /// In en, this message translates to:
-  /// **'Something went wrong'**
+  /// **'Oops! Something went wrong'**
   String get somethingWentWrong;
 
   /// Pricing list page title
@@ -1345,6 +1345,426 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ID should be 5-20 alphanumeric characters'**
   String get identificationValidation;
+
+  /// Logout successful message
+  ///
+  /// In en, this message translates to:
+  /// **'Logout Successful'**
+  String get logoutSuccessful;
+
+  /// Financial overview section title
+  ///
+  /// In en, this message translates to:
+  /// **'Financial Overview'**
+  String get financialOverview;
+
+  /// Total value label
+  ///
+  /// In en, this message translates to:
+  /// **'Total Value'**
+  String get totalValue;
+
+  /// This month label
+  ///
+  /// In en, this message translates to:
+  /// **'This Month'**
+  String get thisMonth;
+
+  /// Balance label
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get balance;
+
+  /// Average order label
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Order'**
+  String get avgOrder;
+
+  /// Performance metrics section title
+  ///
+  /// In en, this message translates to:
+  /// **'Performance Metrics'**
+  String get performanceMetrics;
+
+  /// Delivery rate label
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery Rate'**
+  String get deliveryRate;
+
+  /// Task completion label
+  ///
+  /// In en, this message translates to:
+  /// **'Task Completion'**
+  String get taskCompletion;
+
+  /// Delivered status label
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get delivered;
+
+  /// Active tasks label
+  ///
+  /// In en, this message translates to:
+  /// **'Active Tasks'**
+  String get activeTasks;
+
+  /// Completed tasks label
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completedTasks;
+
+  /// Recent activity section title
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Activity'**
+  String get recentActivity;
+
+  /// View all activities button text
+  ///
+  /// In en, this message translates to:
+  /// **'View All Activities'**
+  String get viewAllActivities;
+
+  /// Orders created text for activity
+  ///
+  /// In en, this message translates to:
+  /// **'orders created'**
+  String get ordersCreated;
+
+  /// Activity on date prefix
+  ///
+  /// In en, this message translates to:
+  /// **'Activity on'**
+  String get activityOn;
+
+  /// No recent activity message
+  ///
+  /// In en, this message translates to:
+  /// **'No Recent Activity'**
+  String get noRecentActivity;
+
+  /// Recent activities placeholder message
+  ///
+  /// In en, this message translates to:
+  /// **'Your recent activities will appear here'**
+  String get recentActivitiesWillAppearHere;
+
+  /// Today label
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// Yesterday label
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get yesterday;
+
+  /// Orders list page title
+  ///
+  /// In en, this message translates to:
+  /// **'My Orders'**
+  String get myOrders;
+
+  /// Search placeholder for orders
+  ///
+  /// In en, this message translates to:
+  /// **'Search by tracking number...'**
+  String get searchByTrackingNumber;
+
+  /// Status filter label
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get status;
+
+  /// All status filter option
+  ///
+  /// In en, this message translates to:
+  /// **'All Status'**
+  String get allStatus;
+
+  /// Date range filter label
+  ///
+  /// In en, this message translates to:
+  /// **'Date Range'**
+  String get dateRange;
+
+  /// Loading orders message
+  ///
+  /// In en, this message translates to:
+  /// **'Loading orders...'**
+  String get loadingOrders;
+
+  /// Orders count message
+  ///
+  /// In en, this message translates to:
+  /// **'Showing {shown} of {total} orders'**
+  String showingOrdersCount(int shown, int total);
+
+  /// Page count message
+  ///
+  /// In en, this message translates to:
+  /// **'Page {current} of {total}'**
+  String pageCount(int current, int total);
+
+  /// Tracking number label
+  ///
+  /// In en, this message translates to:
+  /// **'Tracking Number'**
+  String get trackingNumber;
+
+  /// Tracking number copied message
+  ///
+  /// In en, this message translates to:
+  /// **'Tracking number copied! 📋'**
+  String get trackingNumberCopied;
+
+  /// Recipient label
+  ///
+  /// In en, this message translates to:
+  /// **'Recipient'**
+  String get recipient;
+
+  /// Delivery address label
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery Address'**
+  String get deliveryAddress;
+
+  /// Payment label
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get payment;
+
+  /// Created label
+  ///
+  /// In en, this message translates to:
+  /// **'Created'**
+  String get created;
+
+  /// Previous page button
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get previous;
+
+  /// No orders message
+  ///
+  /// In en, this message translates to:
+  /// **'No Orders Yet'**
+  String get noOrdersYet;
+
+  /// Orders placeholder message
+  ///
+  /// In en, this message translates to:
+  /// **'Your orders will appear here once you start creating them.'**
+  String get ordersWillAppearHere;
+
+  /// Create first order button
+  ///
+  /// In en, this message translates to:
+  /// **'Create Your First Order'**
+  String get createFirstOrder;
+
+  /// Payments page title
+  ///
+  /// In en, this message translates to:
+  /// **'Payments'**
+  String get payments;
+
+  /// Filter transactions dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Filter Transactions'**
+  String get filterTransactions;
+
+  /// Apply filters button text
+  ///
+  /// In en, this message translates to:
+  /// **'Apply Filters'**
+  String get applyFilters;
+
+  /// Try adjusting filters message
+  ///
+  /// In en, this message translates to:
+  /// **'Try adjusting your filters or check back later.'**
+  String get tryAdjustingFilters;
+
+  /// Error loading payments title
+  ///
+  /// In en, this message translates to:
+  /// **'Error Loading Payments'**
+  String get errorLoadingPayments;
+
+  /// No payment data title
+  ///
+  /// In en, this message translates to:
+  /// **'No Payment Data'**
+  String get noPaymentData;
+
+  /// No payment transactions found message
+  ///
+  /// In en, this message translates to:
+  /// **'No payment transactions found.\nCheck back later for updates.'**
+  String get noPaymentTransactionsFound;
+
+  /// Type label
+  ///
+  /// In en, this message translates to:
+  /// **'Type:'**
+  String get type;
+
+  /// Customer label
+  ///
+  /// In en, this message translates to:
+  /// **'Customer:'**
+  String get customer;
+
+  /// Phone label
+  ///
+  /// In en, this message translates to:
+  /// **'Phone:'**
+  String get phone;
+
+  /// Date label
+  ///
+  /// In en, this message translates to:
+  /// **'Date:'**
+  String get date;
+
+  /// Payment summary section title
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Summary'**
+  String get paymentSummary;
+
+  /// COD collected label
+  ///
+  /// In en, this message translates to:
+  /// **'COD Collected'**
+  String get codCollected;
+
+  /// Settled label
+  ///
+  /// In en, this message translates to:
+  /// **'Settled'**
+  String get settled;
+
+  /// Pending label
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pending;
+
+  /// Total balance label
+  ///
+  /// In en, this message translates to:
+  /// **'Total Balance'**
+  String get totalBalance;
+
+  /// Invoice summary section title
+  ///
+  /// In en, this message translates to:
+  /// **'Invoice Summary'**
+  String get invoiceSummary;
+
+  /// Total amount label
+  ///
+  /// In en, this message translates to:
+  /// **'Total Amount'**
+  String get totalAmount;
+
+  /// Total invoices label
+  ///
+  /// In en, this message translates to:
+  /// **'Total Invoices'**
+  String get totalInvoices;
+
+  /// Paid status label
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get paid;
+
+  /// Overdue status label
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get overdue;
+
+  /// Invoices count with number
+  ///
+  /// In en, this message translates to:
+  /// **'{count} invoices'**
+  String invoicesCount(int count);
+
+  /// Invoice number with hash
+  ///
+  /// In en, this message translates to:
+  /// **'Invoice #{number}'**
+  String invoiceNumber(String number);
+
+  /// ID with number
+  ///
+  /// In en, this message translates to:
+  /// **'ID: {id}'**
+  String id(int id);
+
+  /// All filter option
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
+
+  /// COD payment type
+  ///
+  /// In en, this message translates to:
+  /// **'COD'**
+  String get cod;
+
+  /// Card payment type
+  ///
+  /// In en, this message translates to:
+  /// **'Card'**
+  String get card;
+
+  /// Bank payment type
+  ///
+  /// In en, this message translates to:
+  /// **'Bank'**
+  String get bank;
+
+  /// Completed status
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completed;
+
+  /// Failed status
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get failed;
+
+  /// Not available text
+  ///
+  /// In en, this message translates to:
+  /// **'N/A'**
+  String get na;
+
+  /// Dialog title for selecting app language
+  ///
+  /// In en, this message translates to:
+  /// **'Select Language'**
+  String get selectLanguage;
 }
 
 class _AppLocalizationsDelegate

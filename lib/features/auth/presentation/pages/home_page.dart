@@ -605,6 +605,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               },
             ),
             const SizedBox(height: 16),
+            // Language toggle button
+            _buildLanguageToggleItem(),
+            const SizedBox(height: 16),
             _buildSettingItem(
               icon: Icons.notifications_rounded,
               title: AppLocalizations.of(context)!.viewNotifications,
@@ -640,6 +643,106 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               color: const Color(0xFFef4444),
               onTap: () => _showLogoutDialog(context),
               isDestructive: true,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLanguageToggleItem() {
+    // Get current locale from context
+    final currentLocale = Localizations.localeOf(context);
+    final isEnglish = currentLocale.languageCode == 'en';
+
+    return GestureDetector(
+      onTap: () {
+        // Toggle between Arabic and English
+        final newLocale =
+            isEnglish ? const Locale('ar', 'SA') : const Locale('en', 'US');
+
+        // Use the existing MyApp.setLocale mechanism
+        MyApp.of(context)?.setLocale(newLocale);
+
+        // Show feedback to user
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              isEnglish
+                  ? 'تم تغيير اللغة إلى العربية'
+                  : 'Language changed to English',
+            ),
+            backgroundColor: const Color(0xFF667eea),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color(0xFF667eea).withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: const Color(0xFF667eea).withValues(alpha: 0.1),
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: const Color(0xFF667eea).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const Icon(
+                Icons.language,
+                color: Color(0xFF667eea),
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Language',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF1a1a1a),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    isEnglish ? 'English' : 'العربية',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF667eea),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xFF667eea),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                isEnglish ? 'EN' : 'AR',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ],
         ),
@@ -812,8 +915,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Logout Successful'),
-            // TODO: Add to ARB if missing
+            content: Text(AppLocalizations.of(context)!.logoutSuccessful),
             backgroundColor: Colors.green,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
@@ -830,8 +932,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Logout Successful'),
-            // TODO: Add to ARB if missing
+            content: Text(AppLocalizations.of(context)!.logoutSuccessful),
             backgroundColor: Colors.green,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(

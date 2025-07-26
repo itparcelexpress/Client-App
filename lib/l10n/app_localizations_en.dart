@@ -251,7 +251,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pleaseWait => 'Please wait...';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'Try Again';
 
   @override
   String get connectionError => 'Connection error';
@@ -421,7 +421,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get transactionDetails => 'Transaction Details';
 
   @override
-  String get trackingNo => 'Tracking No';
+  String get trackingNo => 'Tracking No:';
 
   @override
   String get notificationMarkedAsRead => 'Notification marked as read';
@@ -471,8 +471,14 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String daysAgo(int days) {
-    return '${days}d ago';
+  String daysAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days ago',
+      one: '1 day ago',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -483,7 +489,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'When you have new notifications,\\nthey\'ll appear here';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'Oops! Something went wrong';
 
   @override
   String get pricingList => 'Pricing List';
@@ -668,4 +674,228 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get identificationValidation =>
       'ID should be 5-20 alphanumeric characters';
+
+  @override
+  String get logoutSuccessful => 'Logout Successful';
+
+  @override
+  String get financialOverview => 'Financial Overview';
+
+  @override
+  String get totalValue => 'Total Value';
+
+  @override
+  String get thisMonth => 'This Month';
+
+  @override
+  String get balance => 'Balance';
+
+  @override
+  String get avgOrder => 'Avg Order';
+
+  @override
+  String get performanceMetrics => 'Performance Metrics';
+
+  @override
+  String get deliveryRate => 'Delivery Rate';
+
+  @override
+  String get taskCompletion => 'Task Completion';
+
+  @override
+  String get delivered => 'Delivered';
+
+  @override
+  String get activeTasks => 'Active Tasks';
+
+  @override
+  String get completedTasks => 'Completed';
+
+  @override
+  String get recentActivity => 'Recent Activity';
+
+  @override
+  String get viewAllActivities => 'View All Activities';
+
+  @override
+  String get ordersCreated => 'orders created';
+
+  @override
+  String get activityOn => 'Activity on';
+
+  @override
+  String get noRecentActivity => 'No Recent Activity';
+
+  @override
+  String get recentActivitiesWillAppearHere =>
+      'Your recent activities will appear here';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String get yesterday => 'Yesterday';
+
+  @override
+  String get myOrders => 'My Orders';
+
+  @override
+  String get searchByTrackingNumber => 'Search by tracking number...';
+
+  @override
+  String get status => 'Status';
+
+  @override
+  String get allStatus => 'All Status';
+
+  @override
+  String get dateRange => 'Date Range';
+
+  @override
+  String get loadingOrders => 'Loading orders...';
+
+  @override
+  String showingOrdersCount(int shown, int total) {
+    return 'Showing $shown of $total orders';
+  }
+
+  @override
+  String pageCount(int current, int total) {
+    return 'Page $current of $total';
+  }
+
+  @override
+  String get trackingNumber => 'Tracking Number';
+
+  @override
+  String get trackingNumberCopied => 'Tracking number copied! 📋';
+
+  @override
+  String get recipient => 'Recipient';
+
+  @override
+  String get deliveryAddress => 'Delivery Address';
+
+  @override
+  String get payment => 'Payment';
+
+  @override
+  String get created => 'Created';
+
+  @override
+  String get previous => 'Previous';
+
+  @override
+  String get noOrdersYet => 'No Orders Yet';
+
+  @override
+  String get ordersWillAppearHere =>
+      'Your orders will appear here once you start creating them.';
+
+  @override
+  String get createFirstOrder => 'Create Your First Order';
+
+  @override
+  String get payments => 'Payments';
+
+  @override
+  String get filterTransactions => 'Filter Transactions';
+
+  @override
+  String get applyFilters => 'Apply Filters';
+
+  @override
+  String get tryAdjustingFilters =>
+      'Try adjusting your filters or check back later.';
+
+  @override
+  String get errorLoadingPayments => 'Error Loading Payments';
+
+  @override
+  String get noPaymentData => 'No Payment Data';
+
+  @override
+  String get noPaymentTransactionsFound =>
+      'No payment transactions found.\nCheck back later for updates.';
+
+  @override
+  String get type => 'Type:';
+
+  @override
+  String get customer => 'Customer:';
+
+  @override
+  String get phone => 'Phone:';
+
+  @override
+  String get date => 'Date:';
+
+  @override
+  String get paymentSummary => 'Payment Summary';
+
+  @override
+  String get codCollected => 'COD Collected';
+
+  @override
+  String get settled => 'Settled';
+
+  @override
+  String get pending => 'Pending';
+
+  @override
+  String get totalBalance => 'Total Balance';
+
+  @override
+  String get invoiceSummary => 'Invoice Summary';
+
+  @override
+  String get totalAmount => 'Total Amount';
+
+  @override
+  String get totalInvoices => 'Total Invoices';
+
+  @override
+  String get paid => 'Paid';
+
+  @override
+  String get overdue => 'Overdue';
+
+  @override
+  String invoicesCount(int count) {
+    return '$count invoices';
+  }
+
+  @override
+  String invoiceNumber(String number) {
+    return 'Invoice #$number';
+  }
+
+  @override
+  String id(int id) {
+    return 'ID: $id';
+  }
+
+  @override
+  String get all => 'All';
+
+  @override
+  String get cod => 'COD';
+
+  @override
+  String get card => 'Card';
+
+  @override
+  String get bank => 'Bank';
+
+  @override
+  String get completed => 'Completed';
+
+  @override
+  String get failed => 'Failed';
+
+  @override
+  String get na => 'N/A';
+
+  @override
+  String get selectLanguage => 'Select Language';
 }

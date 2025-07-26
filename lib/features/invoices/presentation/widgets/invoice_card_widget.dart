@@ -1,4 +1,5 @@
 import 'package:client_app/features/invoices/data/models/invoice_models.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -32,11 +33,11 @@ class InvoiceCardWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeader(),
+              _buildHeader(context),
               const SizedBox(height: 12),
-              _buildAmountAndDate(),
+              _buildAmountAndDate(context),
               const SizedBox(height: 12),
-              _buildOrdersInfo(),
+              _buildOrdersInfo(context),
               if (invoice.invoiceable != null) ...[
                 const SizedBox(height: 12),
                 _buildClientInfo(),
@@ -52,7 +53,7 @@ class InvoiceCardWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -60,7 +61,7 @@ class InvoiceCardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Invoice #${invoice.invoiceNo}',
+              AppLocalizations.of(context)!.invoiceNumber(invoice.invoiceNo),
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -69,7 +70,7 @@ class InvoiceCardWidget extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'ID: ${invoice.id}',
+              AppLocalizations.of(context)!.id(invoice.id),
               style: TextStyle(fontSize: 12, color: Colors.grey[600]),
             ),
           ],
@@ -98,7 +99,7 @@ class InvoiceCardWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildAmountAndDate() {
+  Widget _buildAmountAndDate(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -106,7 +107,7 @@ class InvoiceCardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Amount',
+              AppLocalizations.of(context)!.amount,
               style: TextStyle(fontSize: 12, color: Colors.grey[600]),
             ),
             const SizedBox(height: 2),
@@ -124,7 +125,7 @@ class InvoiceCardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              'Created',
+              AppLocalizations.of(context)!.created,
               style: TextStyle(fontSize: 12, color: Colors.grey[600]),
             ),
             const SizedBox(height: 2),
@@ -142,7 +143,7 @@ class InvoiceCardWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildOrdersInfo() {
+  Widget _buildOrdersInfo(BuildContext context) {
     final totalOrders = invoice.invoiceOrders.length;
     final deliveredOrders =
         invoice.invoiceOrders
@@ -173,11 +174,19 @@ class InvoiceCardWidget extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           if (deliveredOrders > 0) ...[
-            _buildOrderStatusChip('Delivered', deliveredOrders, Colors.green),
+            _buildOrderStatusChip(
+              AppLocalizations.of(context)!.delivered,
+              deliveredOrders,
+              Colors.green,
+            ),
             const SizedBox(width: 8),
           ],
           if (pendingOrders > 0) ...[
-            _buildOrderStatusChip('Pending', pendingOrders, Colors.orange),
+            _buildOrderStatusChip(
+              AppLocalizations.of(context)!.pending,
+              pendingOrders,
+              Colors.orange,
+            ),
           ],
         ],
       ),

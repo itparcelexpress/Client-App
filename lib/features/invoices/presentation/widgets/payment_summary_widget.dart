@@ -1,5 +1,6 @@
 import 'package:client_app/core/utilities/app_color.dart';
 import 'package:client_app/features/invoices/data/models/invoice_models.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class PaymentSummaryWidget extends StatelessWidget {
@@ -18,7 +19,7 @@ class PaymentSummaryWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Payment Summary',
+              AppLocalizations.of(context)!.paymentSummary,
               style: Theme.of(
                 context,
               ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
@@ -29,7 +30,7 @@ class PaymentSummaryWidget extends StatelessWidget {
                 Expanded(
                   child: _buildSummaryCard(
                     context,
-                    'COD Collected',
+                    AppLocalizations.of(context)!.codCollected,
                     summary.formattedCodCollected,
                     AppColor.primaryColor,
                     Icons.money,
@@ -39,7 +40,7 @@ class PaymentSummaryWidget extends StatelessWidget {
                 Expanded(
                   child: _buildSummaryCard(
                     context,
-                    'Settled',
+                    AppLocalizations.of(context)!.settled,
                     summary.formattedSettled,
                     Colors.green,
                     Icons.check_circle,
@@ -49,7 +50,7 @@ class PaymentSummaryWidget extends StatelessWidget {
                 Expanded(
                   child: _buildSummaryCard(
                     context,
-                    'Pending',
+                    AppLocalizations.of(context)!.pending,
                     summary.formattedPending,
                     summary.pending >= 0 ? Colors.orange : Colors.red,
                     Icons.pending,
@@ -69,7 +70,7 @@ class PaymentSummaryWidget extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    'Total Balance',
+                    AppLocalizations.of(context)!.totalBalance,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColor.primaryColor,

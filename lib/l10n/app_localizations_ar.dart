@@ -399,7 +399,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clearSearch => 'مسح البحث';
 
   @override
-  String get recentTransactions => 'المعاملات الأخيرة';
+  String get recentTransactions => 'المعاملات الحديثة';
 
   @override
   String get noTransactionsFound => 'لم يتم العثور على معاملات';
@@ -420,7 +420,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get transactionDetails => 'تفاصيل المعاملة';
 
   @override
-  String get trackingNo => 'رقم التتبع';
+  String get trackingNo => 'رقم التتبع:';
 
   @override
   String get notificationMarkedAsRead => 'تم تحديد الإشعار كمقروء';
@@ -470,8 +470,14 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String daysAgo(int days) {
-    return 'منذ $days يوم';
+  String daysAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منذ $count أيام',
+      one: 'منذ يوم واحد',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -482,7 +488,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'عندما تتلقى إشعارات جديدة،\\nستظهر هنا';
 
   @override
-  String get somethingWentWrong => 'حدث خطأ ما';
+  String get somethingWentWrong => 'عذراً! حدث خطأ ما';
 
   @override
   String get pricingList => 'قائمة الأسعار';
@@ -665,4 +671,225 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get identificationValidation =>
       'يجب أن يكون رقم الهوية من 5-20 حرف أو رقم';
+
+  @override
+  String get logoutSuccessful => 'تم تسجيل الخروج بنجاح';
+
+  @override
+  String get financialOverview => 'نظرة عامة مالية';
+
+  @override
+  String get totalValue => 'القيمة الإجمالية';
+
+  @override
+  String get thisMonth => 'هذا الشهر';
+
+  @override
+  String get balance => 'الرصيد';
+
+  @override
+  String get avgOrder => 'متوسط الطلب';
+
+  @override
+  String get performanceMetrics => 'مقاييس الأداء';
+
+  @override
+  String get deliveryRate => 'معدل التوصيل';
+
+  @override
+  String get taskCompletion => 'إنجاز المهام';
+
+  @override
+  String get delivered => 'تم التوصيل';
+
+  @override
+  String get activeTasks => 'المهام النشطة';
+
+  @override
+  String get completedTasks => 'مكتملة';
+
+  @override
+  String get recentActivity => 'النشاط الأخير';
+
+  @override
+  String get viewAllActivities => 'عرض جميع الأنشطة';
+
+  @override
+  String get ordersCreated => 'طلبات تم إنشاؤها';
+
+  @override
+  String get activityOn => 'نشاط في';
+
+  @override
+  String get noRecentActivity => 'لا يوجد نشاط حديث';
+
+  @override
+  String get recentActivitiesWillAppearHere => 'أنشطتك الحديثة ستظهر هنا';
+
+  @override
+  String get today => 'اليوم';
+
+  @override
+  String get yesterday => 'أمس';
+
+  @override
+  String get myOrders => 'طلباتي';
+
+  @override
+  String get searchByTrackingNumber => 'البحث برقم التتبع...';
+
+  @override
+  String get status => 'الحالة';
+
+  @override
+  String get allStatus => 'جميع الحالات';
+
+  @override
+  String get dateRange => 'نطاق التاريخ';
+
+  @override
+  String get loadingOrders => 'جاري تحميل الطلبات...';
+
+  @override
+  String showingOrdersCount(int shown, int total) {
+    return 'عرض $shown من $total طلب';
+  }
+
+  @override
+  String pageCount(int current, int total) {
+    return 'صفحة $current من $total';
+  }
+
+  @override
+  String get trackingNumber => 'رقم التتبع';
+
+  @override
+  String get trackingNumberCopied => 'تم نسخ رقم التتبع! 📋';
+
+  @override
+  String get recipient => 'المستلم';
+
+  @override
+  String get deliveryAddress => 'عنوان التوصيل';
+
+  @override
+  String get payment => 'الدفع';
+
+  @override
+  String get created => 'تم الإنشاء';
+
+  @override
+  String get previous => 'السابق';
+
+  @override
+  String get noOrdersYet => 'لا توجد طلبات حتى الآن';
+
+  @override
+  String get ordersWillAppearHere => 'ستظهر طلباتك هنا عندما تبدأ في إنشائها';
+
+  @override
+  String get createFirstOrder => 'إنشاء أول طلب';
+
+  @override
+  String get payments => 'المدفوعات';
+
+  @override
+  String get filterTransactions => 'تصفية المعاملات';
+
+  @override
+  String get applyFilters => 'تطبيق الفلاتر';
+
+  @override
+  String get tryAdjustingFilters => 'حاول تعديل الفلاتر أو تحقق لاحقاً.';
+
+  @override
+  String get errorLoadingPayments => 'خطأ في تحميل المدفوعات';
+
+  @override
+  String get noPaymentData => 'لا توجد بيانات مدفوعات';
+
+  @override
+  String get noPaymentTransactionsFound =>
+      'لم يتم العثور على معاملات مدفوعات.\nتحقق لاحقاً للتحديثات.';
+
+  @override
+  String get type => 'النوع:';
+
+  @override
+  String get customer => 'العميل:';
+
+  @override
+  String get phone => 'الهاتف:';
+
+  @override
+  String get date => 'التاريخ:';
+
+  @override
+  String get paymentSummary => 'ملخص المدفوعات';
+
+  @override
+  String get codCollected => 'الدفع عند الاستلام المحصل';
+
+  @override
+  String get settled => 'تم التسوية';
+
+  @override
+  String get pending => 'معلق';
+
+  @override
+  String get totalBalance => 'الرصيد الإجمالي';
+
+  @override
+  String get invoiceSummary => 'ملخص الفواتير';
+
+  @override
+  String get totalAmount => 'المبلغ الإجمالي';
+
+  @override
+  String get totalInvoices => 'إجمالي الفواتير';
+
+  @override
+  String get paid => 'مدفوع';
+
+  @override
+  String get overdue => 'متأخر';
+
+  @override
+  String invoicesCount(int count) {
+    return '$count فواتير';
+  }
+
+  @override
+  String invoiceNumber(String number) {
+    return 'فاتورة #$number';
+  }
+
+  @override
+  String id(int id) {
+    return 'الرقم: $id';
+  }
+
+  @override
+  String get all => 'الكل';
+
+  @override
+  String get cod => 'الدفع عند الاستلام';
+
+  @override
+  String get card => 'بطاقة';
+
+  @override
+  String get bank => 'بنك';
+
+  @override
+  String get completed => 'مكتمل';
+
+  @override
+  String get failed => 'فشل';
+
+  @override
+  String get na => 'غير متوفر';
+
+  @override
+  String get selectLanguage => 'اختر اللغة';
 }

@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 
 class FinancialSummaryWidget extends StatelessWidget {
   final String totalOrderValue;
@@ -57,9 +58,9 @@ class FinancialSummaryWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 16),
-                const Text(
-                  'Financial Overview',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context)!.financialOverview,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
@@ -72,7 +73,7 @@ class FinancialSummaryWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: _buildFinancialItem(
-                    'Total Value',
+                    AppLocalizations.of(context)!.totalValue,
                     '$totalOrderValue OMR',
                     Icons.monetization_on,
                   ),
@@ -80,7 +81,7 @@ class FinancialSummaryWidget extends StatelessWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: _buildFinancialItem(
-                    'This Month',
+                    AppLocalizations.of(context)!.thisMonth,
                     '$thisMonthValue OMR',
                     Icons.calendar_today,
                   ),
@@ -92,7 +93,7 @@ class FinancialSummaryWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: _buildFinancialItem(
-                    'Balance',
+                    AppLocalizations.of(context)!.balance,
                     '$accountBalance OMR',
                     Icons.account_balance,
                   ),
@@ -100,7 +101,7 @@ class FinancialSummaryWidget extends StatelessWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: _buildFinancialItem(
-                    'Avg Order',
+                    AppLocalizations.of(context)!.avgOrder,
                     '$avgOrderValue OMR',
                     Icons.trending_up,
                   ),

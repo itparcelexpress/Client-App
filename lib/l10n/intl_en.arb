@@ -628,12 +628,12 @@
       }
     }
   },
-  "daysAgo": "{days}d ago",
+  "daysAgo": "{count, plural, =1{1 day ago} other{{count} days ago}}",
   "@daysAgo": {
-    "description": "Days ago time label",
+    "description": "Days ago with count",
     "placeholders": {
-      "days": {
-        "type": "int",
+      "count": {
+        "type": "num",
         "example": "3"
       }
     }
@@ -928,5 +928,473 @@
   "identificationValidation": "ID should be 5-20 alphanumeric characters",
   "@identificationValidation": {
     "description": "Identification validation message"
+  },
+
+  "logoutSuccessful": "Logout Successful",
+  "@logoutSuccessful": {
+    "description": "Logout successful message"
+  },
+
+  "financialOverview": "Financial Overview",
+  "@financialOverview": {
+    "description": "Financial overview section title"
+  },
+
+  "totalValue": "Total Value",
+  "@totalValue": {
+    "description": "Total value label"
+  },
+
+  "thisMonth": "This Month",
+  "@thisMonth": {
+    "description": "This month label"
+  },
+
+  "balance": "Balance",
+  "@balance": {
+    "description": "Balance label"
+  },
+
+  "avgOrder": "Avg Order",
+  "@avgOrder": {
+    "description": "Average order label"
+  },
+
+  "performanceMetrics": "Performance Metrics",
+  "@performanceMetrics": {
+    "description": "Performance metrics section title"
+  },
+
+  "deliveryRate": "Delivery Rate",
+  "@deliveryRate": {
+    "description": "Delivery rate label"
+  },
+
+  "taskCompletion": "Task Completion",
+  "@taskCompletion": {
+    "description": "Task completion label"
+  },
+
+  "delivered": "Delivered",
+  "@delivered": {
+    "description": "Delivered orders label"
+  },
+
+  "activeTasks": "Active Tasks",
+  "@activeTasks": {
+    "description": "Active tasks label"
+  },
+
+  "completedTasks": "Completed",
+  "@completedTasks": {
+    "description": "Completed tasks label"
+  },
+
+  "recentActivity": "Recent Activity",
+  "@recentActivity": {
+    "description": "Recent activity section title"
+  },
+
+  "viewAllActivities": "View All Activities",
+  "@viewAllActivities": {
+    "description": "View all activities button text"
+  },
+
+  "ordersCreated": "orders created",
+  "@ordersCreated": {
+    "description": "Orders created text for activity"
+  },
+
+  "activityOn": "Activity on",
+  "@activityOn": {
+    "description": "Activity on date prefix"
+  },
+
+  "noRecentActivity": "No Recent Activity",
+  "@noRecentActivity": {
+    "description": "No recent activity message"
+  },
+
+  "recentActivitiesWillAppearHere": "Your recent activities will appear here",
+  "@recentActivitiesWillAppearHere": {
+    "description": "Recent activities placeholder message"
+  },
+
+  "today": "Today",
+  "@today": {
+    "description": "Today label"
+  },
+
+  "yesterday": "Yesterday",
+  "@yesterday": {
+    "description": "Yesterday label"
+  },
+
+  "daysAgo": "{count, plural, =1{1 day ago} other{{count} days ago}}",
+  "@daysAgo": {
+    "description": "Days ago with count",
+    "placeholders": {
+      "count": {
+        "type": "num",
+        "example": "3"
+      }
+    }
+  },
+  "myOrders": "My Orders",
+  "@myOrders": {
+    "description": "Orders list page title"
+  },
+
+  "searchByTrackingNumber": "Search by tracking number...",
+  "@searchByTrackingNumber": {
+    "description": "Search placeholder for orders"
+  },
+
+  "status": "Status",
+  "@status": {
+    "description": "Status filter label"
+  },
+
+  "allStatus": "All Status",
+  "@allStatus": {
+    "description": "All status filter option"
+  },
+
+  "dateRange": "Date Range",
+  "@dateRange": {
+    "description": "Date range filter label"
+  },
+
+  "loadingOrders": "Loading orders...",
+  "@loadingOrders": {
+    "description": "Loading orders message"
+  },
+
+  "showingOrdersCount": "Showing {shown} of {total} orders",
+  "@showingOrdersCount": {
+    "description": "Orders count message",
+    "placeholders": {
+      "shown": {
+        "type": "int",
+        "example": "10"
+      },
+      "total": {
+        "type": "int",
+        "example": "50"
+      }
+    }
+  },
+
+  "pageCount": "Page {current} of {total}",
+  "@pageCount": {
+    "description": "Page count message",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "example": "1"
+      },
+      "total": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+
+  "trackingNumber": "Tracking Number",
+  "@trackingNumber": {
+    "description": "Tracking number label"
+  },
+
+  "trackingNumberCopied": "Tracking number copied! 📋",
+  "@trackingNumberCopied": {
+    "description": "Tracking number copied message"
+  },
+
+  "recipient": "Recipient",
+  "@recipient": {
+    "description": "Recipient label"
+  },
+
+  "deliveryAddress": "Delivery Address",
+  "@deliveryAddress": {
+    "description": "Delivery address label"
+  },
+
+  "payment": "Payment",
+  "@payment": {
+    "description": "Payment label"
+  },
+
+  "amount": "Amount",
+  "@amount": {
+    "description": "Amount label"
+  },
+
+  "deliveryFee": "Delivery Fee",
+  "@deliveryFee": {
+    "description": "Delivery fee label"
+  },
+
+  "created": "Created",
+  "@created": {
+    "description": "Created label"
+  },
+
+  "notes": "Notes",
+  "@notes": {
+    "description": "Notes label"
+  },
+
+  "previous": "Previous",
+  "@previous": {
+    "description": "Previous page button"
+  },
+
+  "next": "Next",
+  "@next": {
+    "description": "Next page button"
+  },
+
+  "noOrdersYet": "No Orders Yet",
+  "@noOrdersYet": {
+    "description": "No orders message"
+  },
+
+  "ordersWillAppearHere": "Your orders will appear here once you start creating them.",
+  "@ordersWillAppearHere": {
+    "description": "Orders placeholder message"
+  },
+
+  "createFirstOrder": "Create Your First Order",
+  "@createFirstOrder": {
+    "description": "Create first order button"
+  },
+
+  "somethingWentWrong": "Oops! Something went wrong",
+  "@somethingWentWrong": {
+    "description": "Error message title"
+  },
+
+  "tryAgain": "Try Again",
+  "@tryAgain": {
+    "description": "Try again button text"
+  },
+
+  "payments": "Payments",
+  "@payments": {
+    "description": "Payments page title"
+  },
+
+  "invoices": "Invoices",
+  "@invoices": {
+    "description": "Invoices tab title"
+  },
+
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+
+  "refresh": "Refresh",
+  "@refresh": {
+    "description": "Refresh button text"
+  },
+
+  "filterTransactions": "Filter Transactions",
+  "@filterTransactions": {
+    "description": "Filter transactions dialog title"
+  },
+
+  "applyFilters": "Apply Filters",
+  "@applyFilters": {
+    "description": "Apply filters button text"
+  },
+
+  "recentTransactions": "Recent Transactions",
+  "@recentTransactions": {
+    "description": "Recent transactions section title"
+  },
+
+  "noTransactionsFound": "No transactions found",
+  "@noTransactionsFound": {
+    "description": "No transactions found message"
+  },
+
+  "tryAdjustingFilters": "Try adjusting your filters or check back later.",
+  "@tryAdjustingFilters": {
+    "description": "Try adjusting filters message"
+  },
+
+  "errorLoadingPayments": "Error Loading Payments",
+  "@errorLoadingPayments": {
+    "description": "Error loading payments title"
+  },
+
+  "noPaymentData": "No Payment Data",
+  "@noPaymentData": {
+    "description": "No payment data title"
+  },
+
+  "noPaymentTransactionsFound": "No payment transactions found.\nCheck back later for updates.",
+  "@noPaymentTransactionsFound": {
+    "description": "No payment transactions found message"
+  },
+
+  "transactionDetails": "Transaction Details",
+  "@transactionDetails": {
+    "description": "Transaction details dialog title"
+  },
+
+  "trackingNo": "Tracking No:",
+  "@trackingNo": {
+    "description": "Tracking number label"
+  },
+
+  "type": "Type:",
+  "@type": {
+    "description": "Type label"
+  },
+
+  "customer": "Customer:",
+  "@customer": {
+    "description": "Customer label"
+  },
+
+  "phone": "Phone:",
+  "@phone": {
+    "description": "Phone label"
+  },
+
+  "date": "Date:",
+  "@date": {
+    "description": "Date label"
+  },
+
+  "paymentSummary": "Payment Summary",
+  "@paymentSummary": {
+    "description": "Payment summary section title"
+  },
+
+  "codCollected": "COD Collected",
+  "@codCollected": {
+    "description": "COD collected label"
+  },
+
+  "settled": "Settled",
+  "@settled": {
+    "description": "Settled label"
+  },
+
+  "pending": "Pending",
+  "@pending": {
+    "description": "Pending label"
+  },
+
+  "totalBalance": "Total Balance",
+  "@totalBalance": {
+    "description": "Total balance label"
+  },
+
+  "invoiceSummary": "Invoice Summary",
+  "@invoiceSummary": {
+    "description": "Invoice summary section title"
+  },
+
+  "totalAmount": "Total Amount",
+  "@totalAmount": {
+    "description": "Total amount label"
+  },
+
+  "totalInvoices": "Total Invoices",
+  "@totalInvoices": {
+    "description": "Total invoices label"
+  },
+
+  "paid": "Paid",
+  "@paid": {
+    "description": "Paid status label"
+  },
+
+  "overdue": "Overdue",
+  "@overdue": {
+    "description": "Overdue status label"
+  },
+
+  "invoicesCount": "{count} invoices",
+  "@invoicesCount": {
+    "description": "Invoices count with number",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+
+  "invoiceNumber": "Invoice #{number}",
+  "@invoiceNumber": {
+    "description": "Invoice number with hash",
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "example": "INV-001"
+      }
+    }
+  },
+
+  "id": "ID: {id}",
+  "@id": {
+    "description": "ID with number",
+    "placeholders": {
+      "id": {
+        "type": "int",
+        "example": "123"
+      }
+    }
+  },
+
+  "delivered": "Delivered",
+  "@delivered": {
+    "description": "Delivered status label"
+  },
+
+  "all": "All",
+  "@all": {
+    "description": "All filter option"
+  },
+
+  "cod": "COD",
+  "@cod": {
+    "description": "COD payment type"
+  },
+
+  "card": "Card",
+  "@card": {
+    "description": "Card payment type"
+  },
+
+  "bank": "Bank",
+  "@bank": {
+    "description": "Bank payment type"
+  },
+
+  "completed": "Completed",
+  "@completed": {
+    "description": "Completed status"
+  },
+
+  "failed": "Failed",
+  "@failed": {
+    "description": "Failed status"
+  },
+
+  "na": "N/A",
+  "@na": {
+    "description": "Not available text"
+  },
+
+  "selectLanguage": "Select Language",
+  "@selectLanguage": {
+    "description": "Dialog title for selecting app language"
   }
 }

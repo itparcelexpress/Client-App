@@ -3,6 +3,7 @@ import 'package:client_app/features/invoices/cubit/invoice_cubit.dart';
 import 'package:client_app/features/invoices/cubit/invoice_state.dart';
 import 'package:client_app/features/invoices/presentation/widgets/payment_summary_widget.dart';
 import 'package:client_app/features/invoices/presentation/widgets/payment_transaction_card.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,7 +28,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Payments'),
+        title: Text(AppLocalizations.of(context)!.payments),
         backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
         actions: [
@@ -105,7 +106,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Recent Transactions',
+            AppLocalizations.of(context)!.recentTransactions,
             style: Theme.of(
               context,
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
@@ -119,14 +120,14 @@ class _PaymentsPageState extends State<PaymentsPage> {
                   Icon(Icons.receipt_long, size: 64, color: Colors.grey[400]),
                   const SizedBox(height: 16),
                   Text(
-                    'No transactions found',
+                    AppLocalizations.of(context)!.noTransactionsFound,
                     style: Theme.of(
                       context,
                     ).textTheme.titleMedium?.copyWith(color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Try adjusting your filters or check back later.',
+                    AppLocalizations.of(context)!.tryAdjustingFilters,
                     style: Theme.of(
                       context,
                     ).textTheme.bodyMedium?.copyWith(color: Colors.grey[500]),
@@ -164,7 +165,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
             Icon(Icons.error_outline, size: 64, color: Colors.red[400]),
             const SizedBox(height: 16),
             Text(
-              'Error Loading Payments',
+              AppLocalizations.of(context)!.errorLoadingPayments,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 color: Colors.red[700],
                 fontWeight: FontWeight.bold,
@@ -187,7 +188,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                 backgroundColor: AppColor.primaryColor,
                 foregroundColor: Colors.white,
               ),
-              child: const Text('Retry'),
+              child: Text(AppLocalizations.of(context)!.retry),
             ),
           ],
         ),
@@ -205,7 +206,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
             Icon(Icons.payment, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
-              'No Payment Data',
+              AppLocalizations.of(context)!.noPaymentData,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 color: Colors.grey[600],
                 fontWeight: FontWeight.bold,
@@ -213,7 +214,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
             ),
             const SizedBox(height: 8),
             Text(
-              'No payment transactions found.\nCheck back later for updates.',
+              AppLocalizations.of(context)!.noPaymentTransactionsFound,
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: Colors.grey[500]),
@@ -228,7 +229,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                 backgroundColor: AppColor.primaryColor,
                 foregroundColor: Colors.white,
               ),
-              child: const Text('Refresh'),
+              child: Text(AppLocalizations.of(context)!.refresh),
             ),
           ],
         ),
@@ -245,9 +246,9 @@ class _PaymentsPageState extends State<PaymentsPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text('Filter Transactions'),
+                Text(AppLocalizations.of(context)!.filterTransactions),
                 const SizedBox(height: 16),
-                const Text('Payment Type'),
+                Text(AppLocalizations.of(context)!.paymentType),
                 Wrap(
                   children:
                       ['cod', 'card', 'bank'].map((type) {
@@ -268,7 +269,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                     Navigator.pop(context);
                     _applyFilters();
                   },
-                  child: const Text('Apply Filters'),
+                  child: Text(AppLocalizations.of(context)!.applyFilters),
                 ),
               ],
             ),
@@ -299,7 +300,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Transaction Details',
+                      AppLocalizations.of(context)!.transactionDetails,
                       style: Theme.of(context).textTheme.headlineSmall
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
@@ -310,13 +311,34 @@ class _PaymentsPageState extends State<PaymentsPage> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                _buildDetailRow('Tracking No:', transaction.trackingNo),
-                _buildDetailRow('Amount:', transaction.formattedAmount),
-                _buildDetailRow('Type:', transaction.typeLabel),
-                _buildDetailRow('Status:', transaction.status.toUpperCase()),
-                _buildDetailRow('Customer:', transaction.customerName),
-                _buildDetailRow('Phone:', transaction.customerPhone),
-                _buildDetailRow('Date:', transaction.createdAt.toString()),
+                _buildDetailRow(
+                  AppLocalizations.of(context)!.trackingNo,
+                  transaction.trackingNo,
+                ),
+                _buildDetailRow(
+                  AppLocalizations.of(context)!.amount,
+                  transaction.formattedAmount,
+                ),
+                _buildDetailRow(
+                  AppLocalizations.of(context)!.type,
+                  transaction.typeLabel,
+                ),
+                _buildDetailRow(
+                  AppLocalizations.of(context)!.status,
+                  transaction.status.toUpperCase(),
+                ),
+                _buildDetailRow(
+                  AppLocalizations.of(context)!.customer,
+                  transaction.customerName,
+                ),
+                _buildDetailRow(
+                  AppLocalizations.of(context)!.phone,
+                  transaction.customerPhone,
+                ),
+                _buildDetailRow(
+                  AppLocalizations.of(context)!.date,
+                  transaction.createdAt.toString(),
+                ),
                 const SizedBox(height: 16),
               ],
             ),
