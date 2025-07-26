@@ -344,13 +344,6 @@ class _LoginPageState extends State<LoginPage> {
       duration: const Duration(milliseconds: 1000),
       child: Column(
         children: [
-          Text(
-            '/', // You may want to localize this or use a divider
-            style: _systemFont(
-              fontSize: ResponsiveUtils.getResponsiveFontSize(context, 14),
-              color: Colors.grey.shade600,
-            ),
-          ),
           SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 16)),
           TextButton(
             onPressed: () {
