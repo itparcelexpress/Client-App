@@ -2,11 +2,13 @@ import 'package:animate_do/animate_do.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/data/models/order_models.dart';
+import 'package:client_app/features/shipment/presentation/pages/create_order_page.dart';
+import 'package:client_app/injections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:client_app/core/utilities/taost_service.dart';
 import 'package:intl/intl.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 
@@ -849,7 +851,15 @@ class _OrdersListPageState extends State<OrdersListPage> {
                 height: ResponsiveUtils.getResponsivePadding(context, 32),
               ),
               ElevatedButton.icon(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                      create: (context) => getIt<ShipmentCubit>(),
+                      child: const CreateOrderPage(),
+                    ),
+                  ),
+                ),
                 icon: const Icon(Icons.add_circle_outline),
                 label: Text(AppLocalizations.of(context)!.createFirstOrder),
                 style: ElevatedButton.styleFrom(
@@ -1025,13 +1035,6 @@ class _OrdersListPageState extends State<OrdersListPage> {
 
   void _copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
-    Fluttertoast.showToast(
-      msg: AppLocalizations.of(context)!.trackingNumberCopied,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: const Color(0xFF10b981),
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
+    ToastService.showSuccess(context, 'copyToClipboardSuccess');
   }
 }

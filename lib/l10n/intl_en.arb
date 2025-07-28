@@ -1396,5 +1396,431 @@
   "selectLanguage": "Select Language",
   "@selectLanguage": {
     "description": "Dialog title for selecting app language"
+  },
+
+  "languageChangedToArabic": "تم تغيير اللغة إلى العربية",
+  "@languageChangedToArabic": {
+    "description": "Language changed to Arabic message"
+  },
+
+  "languageChangedToEnglish": "Language changed to English",
+  "@languageChangedToEnglish": {
+    "description": "Language changed to English message"
+  },
+
+  "orderCreatedSuccessfully": "Order created successfully!",
+  "@orderCreatedSuccessfully": {
+    "description": "Order creation success message"
+  },
+
+  "orderCreationFailed": "Failed to create order. Please try again.",
+  "@orderCreationFailed": {
+    "description": "Order creation failure message"
+  },
+
+  "addressSavedSuccessfully": "Address saved successfully!",
+  "@addressSavedSuccessfully": {
+    "description": "Address save success message"
+  },
+
+  "addressSaveFailed": "Failed to save address. Please try again.",
+  "@addressSaveFailed": {
+    "description": "Address save failure message"
+  },
+
+  "addressDeletedSuccessfully": "Address deleted successfully!",
+  "@addressDeletedSuccessfully": {
+    "description": "Address deletion success message"
+  },
+
+  "addressDeleteFailed": "Failed to delete address. Please try again.",
+  "@addressDeleteFailed": {
+    "description": "Address deletion failure message"
+  },
+
+  "addressUpdatedSuccessfully": "Address updated successfully!",
+  "@addressUpdatedSuccessfully": {
+    "description": "Address update success message"
+  },
+
+  "addressUpdateFailed": "Failed to update address. Please try again.",
+  "@addressUpdateFailed": {
+    "description": "Address update failure message"
+  },
+
+  "settingsSavedSuccessfully": "Settings saved successfully!",
+  "@settingsSavedSuccessfully": {
+    "description": "Settings save success message"
+  },
+
+  "settingsSaveFailed": "Failed to save settings. Please try again.",
+  "@settingsSaveFailed": {
+    "description": "Settings save failure message"
+  },
+
+  "logoutSuccessfully": "Logged out successfully!",
+  "@logoutSuccessfully": {
+    "description": "Logout success message"
+  },
+
+  "logoutFailed": "Failed to logout. Please try again.",
+  "@logoutFailed": {
+    "description": "Logout failure message"
+  },
+
+  "loginSuccessfully": "Logged in successfully!",
+  "@loginSuccessfully": {
+    "description": "Login success message"
+  },
+
+  "loginFailed": "Login failed. Please check your credentials.",
+  "@loginFailed": {
+    "description": "Login failure message"
+  },
+
+  "networkError": "Network error. Please check your connection.",
+  "@networkError": {
+    "description": "Network error message"
+  },
+
+  "serverError": "Server error. Please try again later.",
+  "@serverError": {
+    "description": "Server error message"
+  },
+
+  "validationError": "Please check your input and try again.",
+  "@validationError": {
+    "description": "Validation error message"
+  },
+
+  "operationSuccess": "Operation completed successfully!",
+  "@operationSuccess": {
+    "description": "Generic success message"
+  },
+
+  "operationFailed": "Operation failed. Please try again.",
+  "@operationFailed": {
+    "description": "Generic failure message"
+  },
+
+  "dataLoadedSuccessfully": "Data loaded successfully!",
+  "@dataLoadedSuccessfully": {
+    "description": "Data load success message"
+  },
+
+  "dataLoadFailed": "Failed to load data. Please try again.",
+  "@dataLoadFailed": {
+    "description": "Data load failure message"
+  },
+
+  "fileDownloadedSuccessfully": "File downloaded successfully!",
+  "@fileDownloadedSuccessfully": {
+    "description": "File download success message"
+  },
+
+  "fileDownloadFailed": "Failed to download file. Please try again.",
+  "@fileDownloadFailed": {
+    "description": "File download failure message"
+  },
+
+  "copyToClipboardSuccess": "Copied to clipboard!",
+  "@copyToClipboardSuccess": {
+    "description": "Copy to clipboard success message"
+  },
+
+  "copyToClipboardFailed": "Failed to copy to clipboard.",
+  "@copyToClipboardFailed": {
+    "description": "Copy to clipboard failure message"
+  },
+
+  "saveForLater": "Save for Later",
+  "@saveForLater": {
+    "description": "Save for later title"
+  },
+
+  "addToAddressBook": "Add this address to your address book",
+  "@addToAddressBook": {
+    "description": "Add to address book description"
+  },
+
+  "saveAddressHint": "Save this address to make future orders faster and easier!",
+  "@saveAddressHint": {
+    "description": "Save address hint message"
+  },
+
+  "saveAddress": "Save Address",
+  "@saveAddress": {
+    "description": "Save address button text"
+  },
+
+  "notNow": "Not Now",
+  "@notNow": {
+    "description": "Not now button text"
+  },
+
+  "confirmLogout": "Are you sure you want to logout?",
+  "@confirmLogout": {
+    "description": "Logout confirmation message"
+  },
+
+  "confirmDelete": "Are you sure you want to delete this item?",
+  "@confirmDelete": {
+    "description": "Delete confirmation message"
+  },
+
+  "yes": "Yes",
+  "@yes": {
+    "description": "Yes button text"
+  },
+
+  "no": "No",
+  "@no": {
+    "description": "No button text"
+  },
+
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+
+  "confirm": "Confirm",
+  "@confirm": {
+    "description": "Confirm button text"
+  },
+
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+
+  "tryAgain": "Try Again",
+  "@tryAgain": {
+    "description": "Try again button text"
+  },
+
+  "pleaseWait": "Please wait...",
+  "@pleaseWait": {
+    "description": "Please wait message"
+  },
+
+  "processing": "Processing...",
+  "@processing": {
+    "description": "Processing message"
+  },
+
+  "uploading": "Uploading...",
+  "@uploading": {
+    "description": "Uploading message"
+  },
+
+  "downloading": "Downloading...",
+  "@downloading": {
+    "description": "Downloading message"
+  },
+
+  "saving": "Saving...",
+  "@saving": {
+    "description": "Saving message"
+  },
+
+  "deleting": "Deleting...",
+  "@deleting": {
+    "description": "Deleting message"
+  },
+
+  "updating": "Updating...",
+  "@updating": {
+    "description": "Updating message"
+  },
+
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading message"
+  },
+
+  "refreshing": "Refreshing...",
+  "@refreshing": {
+    "description": "Refreshing message"
+  },
+
+  "searching": "Searching...",
+  "@searching": {
+    "description": "Searching message"
+  },
+
+  "filtering": "Filtering...",
+  "@filtering": {
+    "description": "Filtering message"
+  },
+
+  "sorting": "Sorting...",
+  "@sorting": {
+    "description": "Sorting message"
+  },
+
+  "connecting": "Connecting...",
+  "@connecting": {
+    "description": "Connecting message"
+  },
+
+  "disconnecting": "Disconnecting...",
+  "@disconnecting": {
+    "description": "Disconnecting message"
+  },
+
+  "syncing": "Syncing...",
+  "@syncing": {
+    "description": "Syncing message"
+  },
+
+  "backingUp": "Backing up...",
+  "@backingUp": {
+    "description": "Backing up message"
+  },
+
+  "restoring": "Restoring...",
+  "@restoring": {
+    "description": "Restoring message"
+  },
+
+  "installing": "Installing...",
+  "@installing": {
+    "description": "Installing message"
+  },
+
+  "uninstalling": "Uninstalling...",
+  "@uninstalling": {
+    "description": "Uninstalling message"
+  },
+
+  "updatingApp": "Updating app...",
+  "@updatingApp": {
+    "description": "Updating app message"
+  },
+
+  "checkingForUpdates": "Checking for updates...",
+  "@checkingForUpdates": {
+    "description": "Checking for updates message"
+  },
+
+  "noUpdatesAvailable": "No updates available",
+  "@noUpdatesAvailable": {
+    "description": "No updates available message"
+  },
+
+  "updateAvailable": "Update available",
+  "@updateAvailable": {
+    "description": "Update available message"
+  },
+
+  "updateDownloaded": "Update downloaded",
+  "@updateDownloaded": {
+    "description": "Update downloaded message"
+  },
+
+  "updateInstalled": "Update installed",
+  "@updateInstalled": {
+    "description": "Update installed message"
+  },
+
+  "updateFailed": "Update failed",
+  "@updateFailed": {
+    "description": "Update failed message"
+  },
+
+  "restartRequired": "Restart required",
+  "@restartRequired": {
+    "description": "Restart required message"
+  },
+
+  "restartNow": "Restart Now",
+  "@restartNow": {
+    "description": "Restart now button text"
+  },
+
+  "restartLater": "Restart Later",
+  "@restartLater": {
+    "description": "Restart later button text"
+  },
+
+  "creatingOrder": "Creating Order...",
+  "@creatingOrder": {
+    "description": "Creating order loading message"
+  },
+
+  "orderCreatedViaMobileApp": "Order created via mobile app",
+  "@orderCreatedViaMobileApp": {
+    "description": "Default note for orders created via mobile app"
+  },
+
+  "clear": "Clear",
+  "@clear": {
+    "description": "Clear button text"
+  },
+
+  "locationUrl": "Location URL",
+  "@locationUrl": {
+    "description": "Location URL field label"
+  },
+
+  "forRecipient": "For: {recipientName}",
+  "@forRecipient": {
+    "description": "For recipient label",
+    "placeholders": {
+      "recipientName": {
+        "type": "String",
+        "example": "John Doe"
+      }
+    }
+  },
+
+  "addAddress": "Add Address",
+  "@addAddress": {
+    "description": "Add address button text"
+  },
+
+  "updateAddress": "Update Address",
+  "@updateAddress": {
+    "description": "Update address button text"
+  },
+
+  "addYourFirstAddress": "Add your first address to get started",
+  "@addYourFirstAddress": {
+    "description": "Add first address message"
+  },
+
+  "errorLoadingAddresses": "Error Loading Addresses",
+  "@errorLoadingAddresses": {
+    "description": "Error loading addresses title"
+  },
+
+  "pleaseSelectAllLocationFields": "Please select all location fields",
+  "@pleaseSelectAllLocationFields": {
+    "description": "Location fields validation message"
+  },
+
+  "cod": "COD",
+  "@cod": {
+    "description": "Cash on delivery payment type"
+  },
+
+  "prepaid": "PREPAID",
+  "@prepaid": {
+    "description": "Prepaid payment type"
+  },
+
+  "somethingWentWrong": "Something went wrong",
+  "@somethingWentWrong": {
+    "description": "Generic error message"
+  },
+
+  "tapToSelectAddress": "Tap to select address",
+  "@tapToSelectAddress": {
+    "description": "Tap to select address hint text"
+  },
+
+  "clearSelection": "Clear Selection",
+  "@clearSelection": {
+    "description": "Clear selection button text"
   }
 }

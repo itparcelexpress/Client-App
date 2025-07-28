@@ -1,6 +1,7 @@
 // toast_service.dart
 
 import 'package:client_app/data/local/local_data.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -82,5 +83,117 @@ class ToastService {
       fontSize: 16.0,
       // Optionally, you can add padding and other customization
     );
+  }
+
+  /// Displays a localized toast with an icon based on the [type].
+  ///
+  /// [context] is used to get the current locale and localizations.
+  /// [messageKey] is the key for the localized message.
+  /// [type] determines the icon and background color.
+  static void showLocalizedToast({
+    required BuildContext context,
+    required String messageKey,
+    ToastType type = ToastType.info,
+  }) {
+    final localizations = AppLocalizations.of(context);
+    if (localizations == null) {
+      // Fallback to non-localized toast if localizations are not available
+      showCustomToast(message: messageKey, type: type);
+      return;
+    }
+
+    String message;
+    try {
+      // Use reflection to get the localized message
+      message = _getLocalizedMessage(localizations, messageKey);
+    } catch (e) {
+      // Fallback to the key itself if the message is not found
+      message = messageKey;
+    }
+
+    showCustomToast(message: message, type: type);
+  }
+
+  /// Helper method to get localized message using reflection
+  static String _getLocalizedMessage(AppLocalizations localizations, String messageKey) {
+    // Convert messageKey to getter method name
+    final getterName = messageKey;
+    
+    // Use switch statement to handle all possible message keys
+    switch (getterName) {
+      case 'orderCreatedSuccessfully':
+        return localizations.orderCreatedSuccessfully;
+      case 'orderCreationFailed':
+        return localizations.orderCreationFailed;
+      case 'addressSavedSuccessfully':
+        return localizations.addressSavedSuccessfully;
+      case 'addressSaveFailed':
+        return localizations.addressSaveFailed;
+      case 'addressDeletedSuccessfully':
+        return localizations.addressDeletedSuccessfully;
+      case 'addressDeleteFailed':
+        return localizations.addressDeleteFailed;
+      case 'addressUpdatedSuccessfully':
+        return localizations.addressUpdatedSuccessfully;
+      case 'addressUpdateFailed':
+        return localizations.addressUpdateFailed;
+      case 'settingsSavedSuccessfully':
+        return localizations.settingsSavedSuccessfully;
+      case 'settingsSaveFailed':
+        return localizations.settingsSaveFailed;
+      case 'logoutSuccessfully':
+        return localizations.logoutSuccessfully;
+      case 'logoutFailed':
+        return localizations.logoutFailed;
+      case 'loginSuccessfully':
+        return localizations.loginSuccessfully;
+      case 'loginFailed':
+        return localizations.loginFailed;
+      case 'networkError':
+        return localizations.networkError;
+      case 'serverError':
+        return localizations.serverError;
+      case 'validationError':
+        return localizations.validationError;
+      case 'operationSuccess':
+        return localizations.operationSuccess;
+      case 'operationFailed':
+        return localizations.operationFailed;
+      case 'dataLoadedSuccessfully':
+        return localizations.dataLoadedSuccessfully;
+      case 'dataLoadFailed':
+        return localizations.dataLoadFailed;
+      case 'fileDownloadedSuccessfully':
+        return localizations.fileDownloadedSuccessfully;
+      case 'fileDownloadFailed':
+        return localizations.fileDownloadFailed;
+      case 'copyToClipboardSuccess':
+        return localizations.copyToClipboardSuccess;
+      case 'copyToClipboardFailed':
+        return localizations.copyToClipboardFailed;
+      case 'languageChangedToArabic':
+        return localizations.languageChangedToArabic;
+      case 'languageChangedToEnglish':
+        return localizations.languageChangedToEnglish;
+      default:
+        return messageKey; // Return the key itself as fallback
+    }
+  }
+
+  /// Convenience methods for common toast types
+  static void showSuccess(BuildContext context, String messageKey) {
+    showLocalizedToast(context: context, messageKey: messageKey, type: ToastType.success);
+  }
+
+  static void showError(BuildContext context, String messageKey) {
+    showLocalizedToast(context: context, messageKey: messageKey, type: ToastType.error);
+  }
+
+  static void showInfo(BuildContext context, String messageKey) {
+    showLocalizedToast(context: context, messageKey: messageKey, type: ToastType.info);
+  }
+
+  static void showWarning(BuildContext context, String messageKey) {
+    showLocalizedToast(context: context, messageKey: messageKey, type: ToastType.warning);
   }
 }

@@ -8,7 +8,7 @@ import 'package:client_app/injections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:client_app/core/utilities/taost_service.dart';
 import 'package:client_app/core/utilities/validators.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 
@@ -71,17 +71,8 @@ class _LoginPageState extends State<LoginPage> {
                     MaterialPageRoute(builder: (context) => const HomePage()),
                   );
                 } else if (state is AuthFailure) {
-                  // Show a generic, user-friendly error message
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(AppLocalizations.of(context)!.error),
-                      backgroundColor: Colors.red,
-                      behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  );
+                  // Show a localized error message
+                  ToastService.showError(context, 'loginFailed');
                 }
               },
               builder: (context, state) {

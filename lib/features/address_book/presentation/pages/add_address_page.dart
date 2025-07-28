@@ -2,7 +2,10 @@ import 'package:animate_do/animate_do.dart';
 import 'package:client_app/core/models/location_models.dart';
 import 'package:client_app/core/services/location_service.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
+import 'package:client_app/core/utilities/taost_service.dart';
+import 'package:client_app/core/utilities/unified_phone_input.dart';
 import 'package:client_app/features/address_book/cubit/address_book_cubit.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:client_app/features/address_book/cubit/address_book_state.dart';
 import 'package:client_app/features/address_book/data/models/address_book_models.dart';
 import 'package:flutter/foundation.dart';
@@ -145,45 +148,14 @@ class _AddAddressPageState extends State<AddAddressPage> {
           }
 
           if (state is AddressBookEntryCreated) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Address created successfully'),
-                backgroundColor: Colors.green,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            );
+            ToastService.showSuccess(context, 'addressSavedSuccessfully');
             Navigator.pop(context);
           } else if (state is AddressBookEntryUpdated) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Address updated successfully'),
-                backgroundColor: Colors.green,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            );
+            ToastService.showSuccess(context, 'addressUpdatedSuccessfully');
             Navigator.pop(context);
           } else if (state is AddressBookCreateError ||
               state is AddressBookUpdateError) {
-            String message = 'An error occurred';
-            if (state is AddressBookCreateError) message = state.message;
-            if (state is AddressBookUpdateError) message = state.message;
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(message),
-                backgroundColor: Colors.red,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            );
+            ToastService.showError(context, 'addressSaveFailed');
           }
         },
         child: Form(
@@ -324,29 +296,21 @@ class _AddAddressPageState extends State<AddAddressPage> {
               },
             ),
             const SizedBox(height: 16),
-            _buildTextField(
+            UnifiedPhoneInput(
               controller: _cellphoneController,
               label: 'Phone Number',
-              icon: Icons.phone_rounded,
-              keyboardType: TextInputType.phone,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your phone number';
-                }
-                return null;
+              isRequired: true,
+              onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
+                // Handle phone number change if needed
               },
             ),
             const SizedBox(height: 16),
-            _buildTextField(
+            UnifiedPhoneInput(
               controller: _alternatePhoneController,
               label: 'Alternate Phone Number',
-              icon: Icons.phone_outlined,
-              keyboardType: TextInputType.phone,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter alternate phone number';
-                }
-                return null;
+              isRequired: true,
+              onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
+                // Handle alternate phone number change if needed
               },
             ),
           ],
@@ -591,7 +555,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
                     ),
                   )
                   : Text(
-                    _isEditMode ? 'Update Address' : 'Add Address',
+                    _isEditMode
+                        ? AppLocalizations.of(context)!.updateAddress
+                        : AppLocalizations.of(context)!.addAddress,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -617,16 +583,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       if (_selectedGovernorate == null ||
           _selectedState == null ||
           _selectedPlace == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Please select all location fields'),
-            backgroundColor: Colors.orange,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        );
+        ToastService.showError(context, 'pleaseSelectAllLocationFields');
         return;
       }
 

@@ -403,7 +403,7 @@ class _ShipmentPageState extends State<ShipmentPage> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Create Order',
+                    AppLocalizations.of(context)!.createOrder,
                     style: TextStyle(
                       color: hasValidInput ? Colors.white : Colors.grey[500],
                       fontSize: 16,

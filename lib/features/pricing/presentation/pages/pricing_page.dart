@@ -185,7 +185,7 @@ class _PricingViewState extends State<PricingView> {
               ElevatedButton.icon(
                 onPressed: () => context.read<PricingCubit>().refreshPricing(),
                 icon: const Icon(Icons.refresh_rounded),
-                label: const Text('Try Again'),
+                label: Text(AppLocalizations.of(context)!.retry),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF667eea),
                   foregroundColor: Colors.white,

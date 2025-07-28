@@ -683,7 +683,7 @@ class _NotificationsViewState extends State<NotificationsView> {
               backgroundColor: const Color(0xFF667eea),
               foregroundColor: Colors.white,
             ),
-            child: const Text('Try Again'),
+            child: Text(AppLocalizations.of(context)!.retry),
           ),
         ],
       ),

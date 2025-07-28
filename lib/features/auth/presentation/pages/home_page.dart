@@ -669,8 +669,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           SnackBar(
             content: Text(
               isEnglish
-                  ? 'تم تغيير اللغة إلى العربية'
-                  : 'Language changed to English',
+                  ? AppLocalizations.of(context)!.languageChangedToArabic
+                  : AppLocalizations.of(context)!.languageChangedToEnglish,
             ),
             backgroundColor: const Color(0xFF667eea),
             behavior: SnackBarBehavior.floating,

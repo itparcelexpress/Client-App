@@ -323,7 +323,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pleaseSelectPlace => 'Please select a place';
 
   @override
-  String get orderCreatedSuccessfully => 'Order Created Successfully!';
+  String get orderCreatedSuccessfully => 'Order created successfully!';
 
   @override
   String get trackingNumberIs => 'Your tracking number is:';
@@ -489,7 +489,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'When you have new notifications,\\nthey\'ll appear here';
 
   @override
-  String get somethingWentWrong => 'Oops! Something went wrong';
+  String get somethingWentWrong => 'Something went wrong';
 
   @override
   String get pricingList => 'Pricing List';
@@ -898,4 +898,202 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectLanguage => 'Select Language';
+
+  @override
+  String get languageChangedToArabic => 'تم تغيير اللغة إلى العربية';
+
+  @override
+  String get languageChangedToEnglish => 'Language changed to English';
+
+  @override
+  String get orderCreationFailed => 'Failed to create order. Please try again.';
+
+  @override
+  String get addressSavedSuccessfully => 'Address saved successfully!';
+
+  @override
+  String get addressDeletedSuccessfully => 'Address deleted successfully!';
+
+  @override
+  String get addressDeleteFailed =>
+      'Failed to delete address. Please try again.';
+
+  @override
+  String get addressUpdatedSuccessfully => 'Address updated successfully!';
+
+  @override
+  String get addressUpdateFailed =>
+      'Failed to update address. Please try again.';
+
+  @override
+  String get settingsSavedSuccessfully => 'Settings saved successfully!';
+
+  @override
+  String get settingsSaveFailed => 'Failed to save settings. Please try again.';
+
+  @override
+  String get logoutSuccessfully => 'Logged out successfully!';
+
+  @override
+  String get logoutFailed => 'Failed to logout. Please try again.';
+
+  @override
+  String get loginSuccessfully => 'Logged in successfully!';
+
+  @override
+  String get loginFailed => 'Login failed. Please check your credentials.';
+
+  @override
+  String get networkError => 'Network error. Please check your connection.';
+
+  @override
+  String get serverError => 'Server error. Please try again later.';
+
+  @override
+  String get validationError => 'Please check your input and try again.';
+
+  @override
+  String get operationSuccess => 'Operation completed successfully!';
+
+  @override
+  String get operationFailed => 'Operation failed. Please try again.';
+
+  @override
+  String get dataLoadedSuccessfully => 'Data loaded successfully!';
+
+  @override
+  String get dataLoadFailed => 'Failed to load data. Please try again.';
+
+  @override
+  String get fileDownloadedSuccessfully => 'File downloaded successfully!';
+
+  @override
+  String get fileDownloadFailed => 'Failed to download file. Please try again.';
+
+  @override
+  String get copyToClipboardSuccess => 'Copied to clipboard!';
+
+  @override
+  String get copyToClipboardFailed => 'Failed to copy to clipboard.';
+
+  @override
+  String get confirmLogout => 'Are you sure you want to logout?';
+
+  @override
+  String get confirmDelete => 'Are you sure you want to delete this item?';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get processing => 'Processing...';
+
+  @override
+  String get uploading => 'Uploading...';
+
+  @override
+  String get downloading => 'Downloading...';
+
+  @override
+  String get saving => 'Saving...';
+
+  @override
+  String get deleting => 'Deleting...';
+
+  @override
+  String get updating => 'Updating...';
+
+  @override
+  String get refreshing => 'Refreshing...';
+
+  @override
+  String get searching => 'Searching...';
+
+  @override
+  String get filtering => 'Filtering...';
+
+  @override
+  String get sorting => 'Sorting...';
+
+  @override
+  String get connecting => 'Connecting...';
+
+  @override
+  String get disconnecting => 'Disconnecting...';
+
+  @override
+  String get syncing => 'Syncing...';
+
+  @override
+  String get backingUp => 'Backing up...';
+
+  @override
+  String get restoring => 'Restoring...';
+
+  @override
+  String get installing => 'Installing...';
+
+  @override
+  String get uninstalling => 'Uninstalling...';
+
+  @override
+  String get updatingApp => 'Updating app...';
+
+  @override
+  String get checkingForUpdates => 'Checking for updates...';
+
+  @override
+  String get noUpdatesAvailable => 'No updates available';
+
+  @override
+  String get updateAvailable => 'Update available';
+
+  @override
+  String get updateDownloaded => 'Update downloaded';
+
+  @override
+  String get updateInstalled => 'Update installed';
+
+  @override
+  String get updateFailed => 'Update failed';
+
+  @override
+  String get restartRequired => 'Restart required';
+
+  @override
+  String get restartNow => 'Restart Now';
+
+  @override
+  String get restartLater => 'Restart Later';
+
+  @override
+  String get orderCreatedViaMobileApp => 'Order created via mobile app';
+
+  @override
+  String get addAddress => 'Add Address';
+
+  @override
+  String get updateAddress => 'Update Address';
+
+  @override
+  String get addYourFirstAddress => 'Add your first address to get started';
+
+  @override
+  String get errorLoadingAddresses => 'Error Loading Addresses';
+
+  @override
+  String get pleaseSelectAllLocationFields =>
+      'Please select all location fields';
+
+  @override
+  String get prepaid => 'PREPAID';
+
+  @override
+  String get tapToSelectAddress => 'Tap to select address';
+
+  @override
+  String get clearSelection => 'Clear Selection';
 }

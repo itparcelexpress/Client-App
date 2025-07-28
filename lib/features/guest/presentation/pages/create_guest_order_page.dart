@@ -4,6 +4,7 @@ import 'package:client_app/core/services/location_service.dart';
 import 'package:client_app/core/utilities/app_color.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/core/utilities/taost_service.dart';
+import 'package:client_app/core/utilities/unified_phone_input.dart';
 import 'package:client_app/core/utilities/validators.dart';
 import 'package:client_app/features/guest/cubit/guest_cubit.dart';
 import 'package:client_app/features/guest/cubit/guest_state.dart';
@@ -320,29 +321,22 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
             keyboardType: TextInputType.emailAddress,
           ),
           const SizedBox(height: 16),
-          _buildTextField(
+          UnifiedPhoneInput(
             controller: _phoneController,
             label: AppLocalizations.of(context)!.phoneNumber,
-            validator:
-                (value) => Validators.phone(
-                  value,
-                  context: context,
-                  fieldName: AppLocalizations.of(context)!.phoneNumber,
-                ),
-            keyboardType: TextInputType.phone,
+            isRequired: true,
+            onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
+              // Handle phone number change if needed
+            },
           ),
           const SizedBox(height: 16),
-          _buildTextField(
+          UnifiedPhoneInput(
             controller: _alternatePhoneController,
             label: AppLocalizations.of(context)!.alternatePhone,
-            validator:
-                (value) => Validators.optionalPhone(
-                  value,
-                  context: context,
-                  fieldName: AppLocalizations.of(context)!.alternatePhone,
-                ),
-            keyboardType: TextInputType.phone,
             isRequired: false,
+            onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
+              // Handle alternate phone number change if needed
+            },
           ),
           const SizedBox(height: 16),
           _buildTextField(
@@ -630,16 +624,13 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
                 ),
           ),
           const SizedBox(height: 16),
-          _buildTextField(
+          UnifiedPhoneInput(
             controller: _customerPhoneController,
             label: AppLocalizations.of(context)!.customerPhone,
-            validator:
-                (value) => Validators.phone(
-                  value,
-                  context: context,
-                  fieldName: AppLocalizations.of(context)!.customerPhone,
-                ),
-            keyboardType: TextInputType.phone,
+            isRequired: true,
+            onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
+              // Handle customer phone number change if needed
+            },
           ),
           const SizedBox(height: 16),
           _buildTextField(

@@ -116,7 +116,7 @@ abstract class AppLocalizations {
   /// **'Fast & Reliable Delivery Service'**
   String get tagline;
 
-  /// Loading indicator text
+  /// Loading message
   ///
   /// In en, this message translates to:
   /// **'Loading...'**
@@ -719,7 +719,7 @@ abstract class AppLocalizations {
   /// Order creation success message
   ///
   /// In en, this message translates to:
-  /// **'Order Created Successfully!'**
+  /// **'Order created successfully!'**
   String get orderCreatedSuccessfully;
 
   /// Tracking number label
@@ -1016,10 +1016,10 @@ abstract class AppLocalizations {
   /// **'When you have new notifications,\\nthey\'ll appear here'**
   String get notificationsWillAppearHere;
 
-  /// Error message title
+  /// Generic error message
   ///
   /// In en, this message translates to:
-  /// **'Oops! Something went wrong'**
+  /// **'Something went wrong'**
   String get somethingWentWrong;
 
   /// Pricing list page title
@@ -1160,7 +1160,7 @@ abstract class AppLocalizations {
   /// **'Number Entered'**
   String get numberEntered;
 
-  /// Creating order message
+  /// Creating order loading message
   ///
   /// In en, this message translates to:
   /// **'Creating Order...'**
@@ -1226,7 +1226,7 @@ abstract class AppLocalizations {
   /// **'Address saved to address book successfully!'**
   String get addressSaved;
 
-  /// Address save failed message
+  /// Address save failure message
   ///
   /// In en, this message translates to:
   /// **'Failed to save address. Please try again.'**
@@ -1250,7 +1250,7 @@ abstract class AppLocalizations {
   /// **'Order ID: {orderId}'**
   String orderIdLabel(String orderId);
 
-  /// For recipient label with name
+  /// For recipient label
   ///
   /// In en, this message translates to:
   /// **'For: {recipientName}'**
@@ -1724,7 +1724,7 @@ abstract class AppLocalizations {
   /// **'All'**
   String get all;
 
-  /// COD payment type
+  /// Cash on delivery payment type
   ///
   /// In en, this message translates to:
   /// **'COD'**
@@ -1765,6 +1765,396 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select Language'**
   String get selectLanguage;
+
+  /// Language changed to Arabic message
+  ///
+  /// In en, this message translates to:
+  /// **'تم تغيير اللغة إلى العربية'**
+  String get languageChangedToArabic;
+
+  /// Language changed to English message
+  ///
+  /// In en, this message translates to:
+  /// **'Language changed to English'**
+  String get languageChangedToEnglish;
+
+  /// Order creation failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to create order. Please try again.'**
+  String get orderCreationFailed;
+
+  /// Address save success message
+  ///
+  /// In en, this message translates to:
+  /// **'Address saved successfully!'**
+  String get addressSavedSuccessfully;
+
+  /// Address deletion success message
+  ///
+  /// In en, this message translates to:
+  /// **'Address deleted successfully!'**
+  String get addressDeletedSuccessfully;
+
+  /// Address deletion failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete address. Please try again.'**
+  String get addressDeleteFailed;
+
+  /// Address update success message
+  ///
+  /// In en, this message translates to:
+  /// **'Address updated successfully!'**
+  String get addressUpdatedSuccessfully;
+
+  /// Address update failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update address. Please try again.'**
+  String get addressUpdateFailed;
+
+  /// Settings save success message
+  ///
+  /// In en, this message translates to:
+  /// **'Settings saved successfully!'**
+  String get settingsSavedSuccessfully;
+
+  /// Settings save failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save settings. Please try again.'**
+  String get settingsSaveFailed;
+
+  /// Logout success message
+  ///
+  /// In en, this message translates to:
+  /// **'Logged out successfully!'**
+  String get logoutSuccessfully;
+
+  /// Logout failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to logout. Please try again.'**
+  String get logoutFailed;
+
+  /// Login success message
+  ///
+  /// In en, this message translates to:
+  /// **'Logged in successfully!'**
+  String get loginSuccessfully;
+
+  /// Login failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Login failed. Please check your credentials.'**
+  String get loginFailed;
+
+  /// Network error message
+  ///
+  /// In en, this message translates to:
+  /// **'Network error. Please check your connection.'**
+  String get networkError;
+
+  /// Server error message
+  ///
+  /// In en, this message translates to:
+  /// **'Server error. Please try again later.'**
+  String get serverError;
+
+  /// Validation error message
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your input and try again.'**
+  String get validationError;
+
+  /// Generic success message
+  ///
+  /// In en, this message translates to:
+  /// **'Operation completed successfully!'**
+  String get operationSuccess;
+
+  /// Generic failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Operation failed. Please try again.'**
+  String get operationFailed;
+
+  /// Data load success message
+  ///
+  /// In en, this message translates to:
+  /// **'Data loaded successfully!'**
+  String get dataLoadedSuccessfully;
+
+  /// Data load failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load data. Please try again.'**
+  String get dataLoadFailed;
+
+  /// File download success message
+  ///
+  /// In en, this message translates to:
+  /// **'File downloaded successfully!'**
+  String get fileDownloadedSuccessfully;
+
+  /// File download failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to download file. Please try again.'**
+  String get fileDownloadFailed;
+
+  /// Copy to clipboard success message
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard!'**
+  String get copyToClipboardSuccess;
+
+  /// Copy to clipboard failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to copy to clipboard.'**
+  String get copyToClipboardFailed;
+
+  /// Logout confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to logout?'**
+  String get confirmLogout;
+
+  /// Delete confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this item?'**
+  String get confirmDelete;
+
+  /// Yes button text
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No button text
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// Processing message
+  ///
+  /// In en, this message translates to:
+  /// **'Processing...'**
+  String get processing;
+
+  /// Uploading message
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading...'**
+  String get uploading;
+
+  /// Downloading message
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading...'**
+  String get downloading;
+
+  /// Saving message
+  ///
+  /// In en, this message translates to:
+  /// **'Saving...'**
+  String get saving;
+
+  /// Deleting message
+  ///
+  /// In en, this message translates to:
+  /// **'Deleting...'**
+  String get deleting;
+
+  /// Updating message
+  ///
+  /// In en, this message translates to:
+  /// **'Updating...'**
+  String get updating;
+
+  /// Refreshing message
+  ///
+  /// In en, this message translates to:
+  /// **'Refreshing...'**
+  String get refreshing;
+
+  /// Searching message
+  ///
+  /// In en, this message translates to:
+  /// **'Searching...'**
+  String get searching;
+
+  /// Filtering message
+  ///
+  /// In en, this message translates to:
+  /// **'Filtering...'**
+  String get filtering;
+
+  /// Sorting message
+  ///
+  /// In en, this message translates to:
+  /// **'Sorting...'**
+  String get sorting;
+
+  /// Connecting message
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting...'**
+  String get connecting;
+
+  /// Disconnecting message
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnecting...'**
+  String get disconnecting;
+
+  /// Syncing message
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing...'**
+  String get syncing;
+
+  /// Backing up message
+  ///
+  /// In en, this message translates to:
+  /// **'Backing up...'**
+  String get backingUp;
+
+  /// Restoring message
+  ///
+  /// In en, this message translates to:
+  /// **'Restoring...'**
+  String get restoring;
+
+  /// Installing message
+  ///
+  /// In en, this message translates to:
+  /// **'Installing...'**
+  String get installing;
+
+  /// Uninstalling message
+  ///
+  /// In en, this message translates to:
+  /// **'Uninstalling...'**
+  String get uninstalling;
+
+  /// Updating app message
+  ///
+  /// In en, this message translates to:
+  /// **'Updating app...'**
+  String get updatingApp;
+
+  /// Checking for updates message
+  ///
+  /// In en, this message translates to:
+  /// **'Checking for updates...'**
+  String get checkingForUpdates;
+
+  /// No updates available message
+  ///
+  /// In en, this message translates to:
+  /// **'No updates available'**
+  String get noUpdatesAvailable;
+
+  /// Update available message
+  ///
+  /// In en, this message translates to:
+  /// **'Update available'**
+  String get updateAvailable;
+
+  /// Update downloaded message
+  ///
+  /// In en, this message translates to:
+  /// **'Update downloaded'**
+  String get updateDownloaded;
+
+  /// Update installed message
+  ///
+  /// In en, this message translates to:
+  /// **'Update installed'**
+  String get updateInstalled;
+
+  /// Update failed message
+  ///
+  /// In en, this message translates to:
+  /// **'Update failed'**
+  String get updateFailed;
+
+  /// Restart required message
+  ///
+  /// In en, this message translates to:
+  /// **'Restart required'**
+  String get restartRequired;
+
+  /// Restart now button text
+  ///
+  /// In en, this message translates to:
+  /// **'Restart Now'**
+  String get restartNow;
+
+  /// Restart later button text
+  ///
+  /// In en, this message translates to:
+  /// **'Restart Later'**
+  String get restartLater;
+
+  /// Default note for orders created via mobile app
+  ///
+  /// In en, this message translates to:
+  /// **'Order created via mobile app'**
+  String get orderCreatedViaMobileApp;
+
+  /// Add address button text
+  ///
+  /// In en, this message translates to:
+  /// **'Add Address'**
+  String get addAddress;
+
+  /// Update address button text
+  ///
+  /// In en, this message translates to:
+  /// **'Update Address'**
+  String get updateAddress;
+
+  /// Add first address message
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first address to get started'**
+  String get addYourFirstAddress;
+
+  /// Error loading addresses title
+  ///
+  /// In en, this message translates to:
+  /// **'Error Loading Addresses'**
+  String get errorLoadingAddresses;
+
+  /// Location fields validation message
+  ///
+  /// In en, this message translates to:
+  /// **'Please select all location fields'**
+  String get pleaseSelectAllLocationFields;
+
+  /// Prepaid payment type
+  ///
+  /// In en, this message translates to:
+  /// **'PREPAID'**
+  String get prepaid;
+
+  /// Tap to select address hint text
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to select address'**
+  String get tapToSelectAddress;
+
+  /// Clear selection button text
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Selection'**
+  String get clearSelection;
 }
 
 class _AppLocalizationsDelegate

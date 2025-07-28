@@ -4,6 +4,7 @@ import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/features/invoices/cubit/invoice_cubit.dart';
 import 'package:client_app/features/invoices/cubit/invoice_state.dart';
 import 'package:client_app/features/invoices/data/models/invoice_models.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -127,7 +128,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                         backgroundColor: const Color(0xFF667eea),
                         foregroundColor: Colors.white,
                       ),
-                      child: const Text('Retry'),
+                      child: Text(AppLocalizations.of(context)!.retry),
                     ),
                   ],
                 ),

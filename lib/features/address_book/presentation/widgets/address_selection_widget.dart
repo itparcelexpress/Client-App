@@ -3,6 +3,7 @@ import 'package:client_app/features/address_book/cubit/address_book_state.dart';
 import 'package:client_app/features/address_book/data/models/address_book_models.dart';
 import 'package:client_app/features/address_book/presentation/pages/address_book_page.dart';
 import 'package:client_app/injections.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -100,7 +101,7 @@ class _AddressSelectionWidgetState extends State<AddressSelectionWidget> {
                             ],
                           )
                           : Text(
-                            'Tap to select address',
+                            AppLocalizations.of(context)!.tapToSelectAddress,
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.grey[600],
@@ -129,8 +130,8 @@ class _AddressSelectionWidgetState extends State<AddressSelectionWidget> {
                   size: 16,
                   color: Colors.red,
                 ),
-                label: const Text(
-                  'Clear Selection',
+                label: Text(
+                  AppLocalizations.of(context)!.clearSelection,
                   style: TextStyle(
                     color: Colors.red,
                     fontSize: 14,
@@ -395,7 +396,7 @@ class _AddressSelectionBottomSheetState
             ),
             const SizedBox(height: 8),
             Text(
-              'Add your first address to get started',
+              AppLocalizations.of(context)!.addYourFirstAddress,
               style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),
@@ -414,7 +415,7 @@ class _AddressSelectionBottomSheetState
                 ),
               ),
               icon: const Icon(Icons.add_rounded),
-              label: const Text('Add Address'),
+              label: Text(AppLocalizations.of(context)!.addAddress),
             ),
           ],
         ),
@@ -435,8 +436,8 @@ class _AddressSelectionBottomSheetState
               size: 60,
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Error Loading Addresses',
+            Text(
+              AppLocalizations.of(context)!.errorLoadingAddresses,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -468,7 +469,7 @@ class _AddressSelectionBottomSheetState
                 ),
               ),
               icon: const Icon(Icons.refresh_rounded),
-              label: const Text('Try Again'),
+              label: Text(AppLocalizations.of(context)!.retry),
             ),
           ],
         ),

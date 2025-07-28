@@ -324,8 +324,8 @@ class NotificationSettingsView extends StatelessWidget {
         children: [
           const Icon(Icons.error_outline_rounded, size: 80, color: Colors.red),
           const SizedBox(height: 16),
-          const Text(
-            'Something went wrong',
+          Text(
+            AppLocalizations.of(context)!.somethingWentWrong,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -350,7 +350,7 @@ class NotificationSettingsView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text('Try Again'),
+            child: Text(AppLocalizations.of(context)!.retry),
           ),
         ],
       ),

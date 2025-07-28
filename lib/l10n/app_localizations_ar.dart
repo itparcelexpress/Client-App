@@ -9,7 +9,7 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get appTitle => 'باسيل إكسبريس';
+  String get appTitle => 'Parcel Express';
 
   @override
   String get welcomeMessage => 'مرحباً بعودتك! يرجى تسجيل الدخول للمتابعة.';
@@ -488,7 +488,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'عندما تتلقى إشعارات جديدة،\\nستظهر هنا';
 
   @override
-  String get somethingWentWrong => 'عذراً! حدث خطأ ما';
+  String get somethingWentWrong => 'حدث خطأ ما';
 
   @override
   String get pricingList => 'قائمة الأسعار';
@@ -597,7 +597,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addressSaved => 'تم حفظ العنوان في دفتر العناوين بنجاح!';
 
   @override
-  String get addressSaveFailed => 'فشل حفظ العنوان. يرجى المحاولة مرة أخرى.';
+  String get addressSaveFailed => 'فشل في حفظ العنوان. يرجى المحاولة مرة أخرى.';
 
   @override
   String get orderCreated => 'تم إنشاء الطلب بنجاح!';
@@ -892,4 +892,204 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get selectLanguage => 'اختر اللغة';
+
+  @override
+  String get languageChangedToArabic => 'تم تغيير اللغة إلى العربية';
+
+  @override
+  String get languageChangedToEnglish => 'Language changed to English';
+
+  @override
+  String get orderCreationFailed =>
+      'فشل في إنشاء الطلب. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get addressSavedSuccessfully => 'تم حفظ العنوان بنجاح!';
+
+  @override
+  String get addressDeletedSuccessfully => 'تم حذف العنوان بنجاح!';
+
+  @override
+  String get addressDeleteFailed =>
+      'فشل في حذف العنوان. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get addressUpdatedSuccessfully => 'تم تحديث العنوان بنجاح!';
+
+  @override
+  String get addressUpdateFailed =>
+      'فشل في تحديث العنوان. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get settingsSavedSuccessfully => 'تم حفظ الإعدادات بنجاح!';
+
+  @override
+  String get settingsSaveFailed =>
+      'فشل في حفظ الإعدادات. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get logoutSuccessfully => 'تم تسجيل الخروج بنجاح!';
+
+  @override
+  String get logoutFailed => 'فشل في تسجيل الخروج. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get loginSuccessfully => 'تم تسجيل الدخول بنجاح!';
+
+  @override
+  String get loginFailed => 'فشل تسجيل الدخول. يرجى التحقق من البيانات.';
+
+  @override
+  String get networkError => 'خطأ في الشبكة. يرجى التحقق من الاتصال.';
+
+  @override
+  String get serverError => 'خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقاً.';
+
+  @override
+  String get validationError => 'يرجى التحقق من المدخلات والمحاولة مرة أخرى.';
+
+  @override
+  String get operationSuccess => 'تم إكمال العملية بنجاح!';
+
+  @override
+  String get operationFailed => 'فشلت العملية. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get dataLoadedSuccessfully => 'تم تحميل البيانات بنجاح!';
+
+  @override
+  String get dataLoadFailed => 'فشل في تحميل البيانات. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get fileDownloadedSuccessfully => 'تم تحميل الملف بنجاح!';
+
+  @override
+  String get fileDownloadFailed =>
+      'فشل في تحميل الملف. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get copyToClipboardSuccess => 'تم النسخ إلى الحافظة!';
+
+  @override
+  String get copyToClipboardFailed => 'فشل في النسخ إلى الحافظة.';
+
+  @override
+  String get confirmLogout => 'هل أنت متأكد من تسجيل الخروج؟';
+
+  @override
+  String get confirmDelete => 'هل أنت متأكد من حذف هذا العنصر؟';
+
+  @override
+  String get yes => 'نعم';
+
+  @override
+  String get no => 'لا';
+
+  @override
+  String get processing => 'جاري المعالجة...';
+
+  @override
+  String get uploading => 'جاري الرفع...';
+
+  @override
+  String get downloading => 'جاري التحميل...';
+
+  @override
+  String get saving => 'جاري الحفظ...';
+
+  @override
+  String get deleting => 'جاري الحذف...';
+
+  @override
+  String get updating => 'جاري التحديث...';
+
+  @override
+  String get refreshing => 'جاري التحديث...';
+
+  @override
+  String get searching => 'جاري البحث...';
+
+  @override
+  String get filtering => 'جاري التصفية...';
+
+  @override
+  String get sorting => 'جاري الترتيب...';
+
+  @override
+  String get connecting => 'جاري الاتصال...';
+
+  @override
+  String get disconnecting => 'جاري قطع الاتصال...';
+
+  @override
+  String get syncing => 'جاري المزامنة...';
+
+  @override
+  String get backingUp => 'جاري النسخ الاحتياطي...';
+
+  @override
+  String get restoring => 'جاري الاستعادة...';
+
+  @override
+  String get installing => 'جاري التثبيت...';
+
+  @override
+  String get uninstalling => 'جاري إلغاء التثبيت...';
+
+  @override
+  String get updatingApp => 'جاري تحديث التطبيق...';
+
+  @override
+  String get checkingForUpdates => 'جاري التحقق من التحديثات...';
+
+  @override
+  String get noUpdatesAvailable => 'لا توجد تحديثات متاحة';
+
+  @override
+  String get updateAvailable => 'تحديث متاح';
+
+  @override
+  String get updateDownloaded => 'تم تحميل التحديث';
+
+  @override
+  String get updateInstalled => 'تم تثبيت التحديث';
+
+  @override
+  String get updateFailed => 'فشل التحديث';
+
+  @override
+  String get restartRequired => 'إعادة تشغيل مطلوبة';
+
+  @override
+  String get restartNow => 'إعادة التشغيل الآن';
+
+  @override
+  String get restartLater => 'إعادة التشغيل لاحقاً';
+
+  @override
+  String get orderCreatedViaMobileApp => 'تم إنشاء الطلب عبر التطبيق المحمول';
+
+  @override
+  String get addAddress => 'إضافة عنوان';
+
+  @override
+  String get updateAddress => 'تحديث العنوان';
+
+  @override
+  String get addYourFirstAddress => 'أضف عنوانك الأول للبدء';
+
+  @override
+  String get errorLoadingAddresses => 'خطأ في تحميل العناوين';
+
+  @override
+  String get pleaseSelectAllLocationFields => 'يرجى اختيار جميع حقول الموقع';
+
+  @override
+  String get prepaid => 'مدفوع مسبقاً';
+
+  @override
+  String get tapToSelectAddress => 'انقر لاختيار العنوان';
+
+  @override
+  String get clearSelection => 'مسح الاختيار';
 }

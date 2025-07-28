@@ -3,15 +3,17 @@ import 'package:client_app/core/models/location_models.dart';
 import 'package:client_app/core/services/location_service.dart';
 import 'package:client_app/core/utilities/error_message_sanitizer.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
+import 'package:client_app/core/utilities/taost_service.dart';
+import 'package:client_app/core/utilities/unified_phone_input.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/address_book/address_book.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/data/models/order_models.dart';
 import 'package:client_app/injections.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class CreateOrderPage extends StatefulWidget {
   final String? stickerNumber;
@@ -38,7 +40,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   final _locationUrlController = TextEditingController();
 
   // Dropdown values
-  String _paymentType = 'COD';
+  String _paymentType = 'cod'; // Use key instead of display value
   final int _countryId = 165; // Default Oman
 
   // Location dropdowns
@@ -222,29 +224,11 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       });
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Address saved to address book successfully!'),
-            backgroundColor: Colors.green,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        );
+        ToastService.showSuccess(context, 'addressSavedSuccessfully');
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Failed to save address. Please try again.'),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        );
+        ToastService.showError(context, 'addressSaveFailed');
       }
     }
   }
@@ -398,7 +382,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             ),
             Expanded(
               child: Text(
-                'Create Order',
+                AppLocalizations.of(context)!.createOrder,
                 style: TextStyle(
                   fontSize: ResponsiveUtils.getResponsiveFontSize(context, 18),
                   fontWeight: FontWeight.w600,
@@ -438,7 +422,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           ),
           SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 20)),
           Text(
-            'New Order',
+            AppLocalizations.of(context)!.newOrder,
             style: TextStyle(
               fontSize: ResponsiveUtils.getResponsiveFontSize(context, 28),
               fontWeight: FontWeight.w700,
@@ -451,7 +435,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               horizontal: ResponsiveUtils.getResponsivePadding(context, 16),
             ),
             child: Text(
-              'Fill in the details to create your order',
+              AppLocalizations.of(context)!.fillDetailsToCreateOrder,
               style: TextStyle(
                 fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
                 color: Colors.grey[600],
@@ -488,8 +472,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Sticker Number',
+                  Text(
+                    AppLocalizations.of(context)!.stickerNumber,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,
@@ -553,11 +537,11 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Text(
-                  'Saved Addresses',
+                Text(
+                  AppLocalizations.of(context)!.addressBook,
                   style: TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: Color(0xFF1a1a1a),
                   ),
                 ),
@@ -569,7 +553,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               child: AddressSelectionWidget(
                 selectedAddress: _selectedAddress,
                 onAddressSelected: _onAddressSelected,
-                label: 'Select from saved addresses to auto-fill',
+                label: AppLocalizations.of(context)!.selectFromSavedAddresses,
                 isRequired: false,
               ),
             ),
@@ -592,8 +576,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       size: 16,
                     ),
                     const SizedBox(width: 8),
-                    const Text(
-                      'Form auto-filled with selected address',
+                    Text(
+                      AppLocalizations.of(context)!.formAutoFilled,
                       style: TextStyle(
                         color: Color(0xFF10b981),
                         fontSize: 12,
@@ -611,8 +595,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                      child: const Text(
-                        'Clear',
+                      child: Text(
+                        AppLocalizations.of(context)!.clear,
                         style: TextStyle(
                           color: Color(0xFF10b981),
                           fontSize: 12,
@@ -632,50 +616,56 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
   Widget _buildPersonalInfoSection() {
     return _buildSection(
-      title: 'Personal Information',
+      title: AppLocalizations.of(context)!.personalInformation,
       icon: Icons.person_rounded,
       children: [
         _buildTextField(
           controller: _nameController,
-          label: 'Full Name',
-          hint: 'Enter recipient full name',
+          label: AppLocalizations.of(context)!.fullName,
+          hint: AppLocalizations.of(
+            context,
+          )!.pleaseEnterField('recipient full name'),
           icon: Icons.person_outline,
           validator:
-              (value) => value?.isEmpty == true ? 'Name is required' : null,
+              (value) =>
+                  value?.isEmpty == true
+                      ? AppLocalizations.of(context)!.nameRequired
+                      : null,
         ),
         const SizedBox(height: 16),
-        _buildTextField(
+        UnifiedPhoneInput(
           controller: _phoneController,
-          label: 'Phone Number',
-          hint: '+968 XXXX XXXX',
-          icon: Icons.phone_outlined,
-          keyboardType: TextInputType.phone,
-          validator:
-              (value) =>
-                  value?.isEmpty == true ? 'Phone number is required' : null,
+          label: AppLocalizations.of(context)!.phoneNumber,
+          hint: AppLocalizations.of(context)!.pleaseEnterField('phone number'),
+          isRequired: true,
+          onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
+            // Handle phone number change if needed
+          },
         ),
         const SizedBox(height: 16),
-        _buildTextField(
+        UnifiedPhoneInput(
           controller: _alternatePhoneController,
-          label: 'Alternate Phone',
-          hint: '+968 XXXX XXXX',
-          icon: Icons.phone_outlined,
-          keyboardType: TextInputType.phone,
-          validator:
-              (value) =>
-                  value?.isEmpty == true ? 'Alternate phone is required' : null,
+          label: AppLocalizations.of(context)!.alternatePhone,
+          hint: AppLocalizations.of(
+            context,
+          )!.pleaseEnterField('alternate phone number'),
+          isRequired: true,
+          onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
+            // Handle alternate phone number change if needed
+          },
         ),
         const SizedBox(height: 16),
         _buildTextField(
           controller: _emailController,
-          label: 'Email Address',
+          label: AppLocalizations.of(context)!.emailAddress,
           hint: 'example@email.com',
           icon: Icons.email_outlined,
           keyboardType: TextInputType.emailAddress,
           validator: (value) {
-            if (value?.isEmpty == true) return 'Email is required';
+            if (value?.isEmpty == true)
+              return AppLocalizations.of(context)!.emailRequired;
             if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value!)) {
-              return 'Enter a valid email';
+              return AppLocalizations.of(context)!.pleaseEnterValidEmail;
             }
             return null;
           },
@@ -686,12 +676,12 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
   Widget _buildAddressSection() {
     return _buildSection(
-      title: 'Address Information',
+      title: AppLocalizations.of(context)!.locationDetails,
       icon: Icons.location_on_rounded,
       children: [
         // Governorate Dropdown
         _buildLocationDropdown<Governorate>(
-          label: 'Governorate',
+          label: AppLocalizations.of(context)!.governorate,
           value: _selectedGovernorate,
           items: _governorates,
           onChanged: (governorate) {
@@ -708,7 +698,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         const SizedBox(height: 16),
         // State Dropdown
         _buildLocationDropdown<StateModel>(
-          label: 'State',
+          label: AppLocalizations.of(context)!.state,
           value: _selectedState,
           items: _states,
           onChanged: (state) {
@@ -725,7 +715,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         const SizedBox(height: 16),
         // Place Dropdown
         _buildLocationDropdown<Place>(
-          label: 'Place',
+          label: AppLocalizations.of(context)!.place,
           value: _selectedPlace,
           items: _places,
           onChanged: (place) {
@@ -739,22 +729,28 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         const SizedBox(height: 16),
         _buildTextField(
           controller: _streetAddressController,
-          label: 'Street Address',
+          label: AppLocalizations.of(context)!.streetAddress,
           hint: 'Building, street, area',
           icon: Icons.home_outlined,
           maxLines: 2,
           validator:
-              (value) => value?.isEmpty == true ? 'Address is required' : null,
+              (value) =>
+                  value?.isEmpty == true
+                      ? AppLocalizations.of(context)!.streetAddressRequired
+                      : null,
         ),
         const SizedBox(height: 16),
         _buildTextField(
           controller: _zipcodeController,
-          label: 'Zip Code',
-          hint: 'Enter zip code',
+          label: AppLocalizations.of(context)!.zipcode,
+          hint: AppLocalizations.of(context)!.pleaseEnterField('zip code'),
           icon: Icons.mail_outlined,
           keyboardType: TextInputType.number,
           validator:
-              (value) => value?.isEmpty == true ? 'Zip code is required' : null,
+              (value) =>
+                  value?.isEmpty == true
+                      ? AppLocalizations.of(context)!.zipcodeRequired
+                      : null,
         ),
       ],
     );
@@ -783,7 +779,11 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         DropdownButtonFormField<T>(
           value: value,
           onChanged: onChanged,
-          validator: (value) => value == null ? '$label is required' : null,
+          validator:
+              (value) =>
+                  value == null
+                      ? AppLocalizations.of(context)!.pleaseEnterField(label)
+                      : null,
           decoration: InputDecoration(
             prefixIcon: Icon(icon, color: Colors.grey[400], size: 20),
             border: OutlineInputBorder(
@@ -822,14 +822,14 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
   Widget _buildOrderDetailsSection() {
     return _buildSection(
-      title: 'Order Details',
+      title: AppLocalizations.of(context)!.additionalInformation,
       icon: Icons.receipt_long_rounded,
       children: [
         _buildDropdownField(
-          label: 'Payment Type',
+          label: AppLocalizations.of(context)!.paymentType,
           value: _paymentType,
           icon: Icons.payment_rounded,
-          items: const ['COD', 'PREPAID'],
+          items: const ['cod', 'prepaid'],
           onChanged: (value) => setState(() => _paymentType = value!),
         ),
         const SizedBox(height: 16),
@@ -838,14 +838,16 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             Expanded(
               child: _buildTextField(
                 controller: _deliveryFeeController,
-                label: 'Delivery Fee',
+                label: AppLocalizations.of(context)!.deliveryFee,
                 hint: '0.00',
                 icon: Icons.local_shipping_outlined,
                 keyboardType: TextInputType.number,
                 validator:
                     (value) =>
                         value?.isEmpty == true
-                            ? 'Delivery fee is required'
+                            ? AppLocalizations.of(
+                              context,
+                            )!.pleaseEnterField('delivery fee')
                             : null,
               ),
             ),
@@ -853,13 +855,17 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             Expanded(
               child: _buildTextField(
                 controller: _amountController,
-                label: 'Amount',
+                label: AppLocalizations.of(context)!.amount,
                 hint: '0.00',
                 icon: Icons.attach_money_rounded,
                 keyboardType: TextInputType.number,
                 validator:
                     (value) =>
-                        value?.isEmpty == true ? 'Amount is required' : null,
+                        value?.isEmpty == true
+                            ? AppLocalizations.of(
+                              context,
+                            )!.pleaseEnterField('amount')
+                            : null,
               ),
             ),
           ],
@@ -867,7 +873,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         const SizedBox(height: 16),
         _buildTextField(
           controller: _locationUrlController,
-          label: 'Location URL (Optional)',
+          label:
+              '${AppLocalizations.of(context)!.locationUrl} (${AppLocalizations.of(context)!.optional})',
           hint: 'https://maps.app.goo.gl/...',
           icon: Icons.location_on_outlined,
           keyboardType: TextInputType.url,
@@ -876,7 +883,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               // Only validate if the field is not empty
               final uri = Uri.tryParse(value);
               if (uri == null || !uri.hasAbsolutePath) {
-                return 'Please enter a valid URL';
+                return AppLocalizations.of(
+                  context,
+                )!.pleaseEnterValidLocationUrl;
               }
             }
             return null;
@@ -1041,11 +1050,15 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             ),
           ),
           items:
-              items
-                  .map(
-                    (item) => DropdownMenuItem(value: item, child: Text(item)),
-                  )
-                  .toList(),
+              items.map((item) {
+                String displayText = item;
+                if (item == 'cod') {
+                  displayText = AppLocalizations.of(context)!.cod;
+                } else if (item == 'prepaid') {
+                  displayText = AppLocalizations.of(context)!.prepaid;
+                }
+                return DropdownMenuItem(value: item, child: Text(displayText));
+              }).toList(),
         ),
       ],
     );
@@ -1102,7 +1115,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                     const SizedBox(width: 8),
                   ],
                   Text(
-                    isLoading ? 'Creating Order...' : 'Create Order',
+                    isLoading
+                        ? AppLocalizations.of(context)!.creatingOrder
+                        : AppLocalizations.of(context)!.createOrder,
                     style: TextStyle(
                       color: isLoading ? Colors.grey[500] : Colors.white,
                       fontSize: 16,
@@ -1124,7 +1139,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       if (_selectedGovernorate == null ||
           _selectedState == null ||
           _selectedPlace == null) {
-        _showErrorToast('Please select governorate, state, and place');
+        _showErrorToast(AppLocalizations.of(context)!.pleaseSelectGovernorate);
         return;
       }
 
@@ -1153,8 +1168,11 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         longitude: "", // Default empty as per API spec
         latitude: "", // Default empty as per API spec
         shipperId: "", // Default empty as per API spec
-        notes: "Order created via mobile app", // Default note
-        paymentType: _paymentType,
+        notes:
+            AppLocalizations.of(
+              context,
+            )!.orderCreatedViaMobileApp, // Default note
+        paymentType: _paymentType == 'cod' ? 'COD' : 'PREPAID',
         amount: double.parse(_amountController.text),
         deliveryFee: double.parse(_deliveryFeeController.text),
         clientId: clientId,
@@ -1193,8 +1211,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   size: 60,
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Order Created Successfully!',
+                Text(
+                  AppLocalizations.of(context)!.orderCreatedSuccessfully,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
@@ -1214,7 +1232,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                     children: [
                       if (orderData.trackingNo.isNotEmpty) ...[
                         Text(
-                          'Tracking: ${orderData.trackingNo}',
+                          '${AppLocalizations.of(context)!.trackingNumber}: ${orderData.trackingNo}',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -1223,7 +1241,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                         ),
                       ] else ...[
                         Text(
-                          'Order ID: ${orderData.id}',
+                          '${AppLocalizations.of(context)!.id(orderData.id)}',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -1233,7 +1251,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       ],
                       const SizedBox(height: 8),
                       Text(
-                        'For: ${orderData.consignee.name}',
+                        '${AppLocalizations.of(context)!.forRecipient(orderData.consignee.name)}',
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -1251,8 +1269,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   Navigator.pop(context); // Close dialog
                   Navigator.pop(context); // Go back to previous screen
                 },
-                child: const Text(
-                  'Done',
+                child: Text(
+                  AppLocalizations.of(context)!.done,
                   style: TextStyle(
                     color: Color(0xFF667eea),
                     fontWeight: FontWeight.w600,
@@ -1268,17 +1286,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     // Don't show empty error messages
     if (message.trim().isEmpty) return;
 
-    // Sanitize the error message to make it user-friendly
-    String sanitizedMessage = ErrorMessageSanitizer.sanitize(message);
-
-    Fluttertoast.showToast(
-      msg: sanitizedMessage,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.TOP,
-      backgroundColor: const Color(0xFFef4444),
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
+    // Use localized toast service
+    ToastService.showError(context, 'orderCreationFailed');
   }
 
   Widget _buildSaveAddressSuggestion() {
@@ -1342,8 +1351,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Save for Later',
+                      Text(
+                        AppLocalizations.of(context)!.saveForLater,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
@@ -1352,7 +1361,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Add this address to your address book',
+                        AppLocalizations.of(context)!.addToAddressBook,
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.grey[600],
@@ -1381,7 +1390,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Save this address to make future orders faster and easier!',
+                      AppLocalizations.of(context)!.saveAddressHint,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[700],
@@ -1408,8 +1417,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       elevation: 0,
                     ),
                     icon: const Icon(Icons.save_rounded, size: 18),
-                    label: const Text(
-                      'Save Address',
+                    label: Text(
+                      AppLocalizations.of(context)!.saveAddress,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -1430,7 +1439,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                     ),
                   ),
                   child: Text(
-                    'Not Now',
+                    AppLocalizations.of(context)!.notNow,
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 14,
