@@ -1822,5 +1822,36 @@
   "clearSelection": "Clear Selection",
   "@clearSelection": {
     "description": "Clear selection button text"
+  },
+
+  "phoneNumberHint": "Enter phone number",
+  "@phoneNumberHint": {
+    "description": "Phone number input hint text"
+  },
+
+  "alternatePhoneHint": "Enter alternate phone number",
+  "@alternatePhoneHint": {
+    "description": "Alternate phone number input hint text"
+  },
+
+  "fullPhoneNumberPreview": "Full Phone Number: {fullNumber}",
+  "@fullPhoneNumberPreview": {
+    "description": "Full phone number preview text",
+    "placeholders": {
+      "fullNumber": {
+        "type": "String",
+        "example": "+968 12345678"
+      }
+    }
+  },
+
+  "phoneNumberInfo": "Enter your phone number without country code",
+  "@phoneNumberInfo": {
+    "description": "Phone number input information text"
+  },
+
+  "alternatePhoneInfo": "Enter an alternate phone number (optional)",
+  "@alternatePhoneInfo": {
+    "description": "Alternate phone number input information text"
   }
 }

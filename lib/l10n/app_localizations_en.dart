@@ -1096,4 +1096,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get clearSelection => 'Clear Selection';
+
+  @override
+  String get phoneNumberHint => 'Enter phone number';
+
+  @override
+  String get alternatePhoneHint => 'Enter alternate phone number';
+
+  @override
+  String fullPhoneNumberPreview(String fullNumber) {
+    return 'Full Phone Number: $fullNumber';
+  }
+
+  @override
+  String get phoneNumberInfo => 'Enter your phone number without country code';
+
+  @override
+  String get alternatePhoneInfo => 'Enter an alternate phone number (optional)';
 }

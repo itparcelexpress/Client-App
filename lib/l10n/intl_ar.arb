@@ -840,5 +840,11 @@
   "somethingWentWrong": "حدث خطأ ما",
 
   "tapToSelectAddress": "انقر لاختيار العنوان",
-  "clearSelection": "مسح الاختيار"
+  "clearSelection": "مسح الاختيار",
+
+  "phoneNumberHint": "أدخل رقم الهاتف",
+  "alternatePhoneHint": "أدخل رقم هاتف بديل",
+  "fullPhoneNumberPreview": "رقم الهاتف الكامل: {fullNumber}",
+  "phoneNumberInfo": "أدخل رقم هاتفك بدون رمز الدولة",
+  "alternatePhoneInfo": "أدخل رقم هاتف بديل (اختياري)"
 }

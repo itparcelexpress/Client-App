@@ -1092,4 +1092,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get clearSelection => 'مسح الاختيار';
+
+  @override
+  String get phoneNumberHint => 'أدخل رقم الهاتف';
+
+  @override
+  String get alternatePhoneHint => 'أدخل رقم هاتف بديل';
+
+  @override
+  String fullPhoneNumberPreview(String fullNumber) {
+    return 'رقم الهاتف الكامل: $fullNumber';
+  }
+
+  @override
+  String get phoneNumberInfo => 'أدخل رقم هاتفك بدون رمز الدولة';
+
+  @override
+  String get alternatePhoneInfo => 'أدخل رقم هاتف بديل (اختياري)';
 }

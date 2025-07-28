@@ -2155,6 +2155,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Clear Selection'**
   String get clearSelection;
+
+  /// Phone number input hint text
+  ///
+  /// In en, this message translates to:
+  /// **'Enter phone number'**
+  String get phoneNumberHint;
+
+  /// Alternate phone number input hint text
+  ///
+  /// In en, this message translates to:
+  /// **'Enter alternate phone number'**
+  String get alternatePhoneHint;
+
+  /// Full phone number preview text
+  ///
+  /// In en, this message translates to:
+  /// **'Full Phone Number: {fullNumber}'**
+  String fullPhoneNumberPreview(String fullNumber);
+
+  /// Phone number input information text
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your phone number without country code'**
+  String get phoneNumberInfo;
+
+  /// Alternate phone number input information text
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an alternate phone number (optional)'**
+  String get alternatePhoneInfo;
 }
 
 class _AppLocalizationsDelegate

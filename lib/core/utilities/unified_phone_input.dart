@@ -240,7 +240,7 @@ class _UnifiedPhoneInputState extends State<UnifiedPhoneInput> {
                   decoration: InputDecoration(
                     hintText:
                         widget.hint ??
-                        AppLocalizations.of(context)!.phoneNumber,
+                        AppLocalizations.of(context)!.phoneNumberHint,
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16,
@@ -275,7 +275,9 @@ class _UnifiedPhoneInputState extends State<UnifiedPhoneInput> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Full Phone Number: $selectedPhoneCode${widget.controller.text}',
+                    AppLocalizations.of(context)!.fullPhoneNumberPreview(
+                      '$selectedPhoneCode${widget.controller.text}',
+                    ),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Colors.grey.shade700,
                     ),

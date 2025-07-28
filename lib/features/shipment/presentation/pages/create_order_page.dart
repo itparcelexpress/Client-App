@@ -636,7 +636,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         UnifiedPhoneInput(
           controller: _phoneController,
           label: AppLocalizations.of(context)!.phoneNumber,
-          hint: AppLocalizations.of(context)!.pleaseEnterField('phone number'),
+          hint: AppLocalizations.of(context)!.phoneNumberInfo,
           isRequired: true,
           onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
             // Handle phone number change if needed
@@ -646,10 +646,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         UnifiedPhoneInput(
           controller: _alternatePhoneController,
           label: AppLocalizations.of(context)!.alternatePhone,
-          hint: AppLocalizations.of(
-            context,
-          )!.pleaseEnterField('alternate phone number'),
-          isRequired: true,
+          hint: AppLocalizations.of(context)!.alternatePhoneInfo,
+          isRequired: false,
           onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
             // Handle alternate phone number change if needed
           },
