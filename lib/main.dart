@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:client_app/core/services/location_service.dart';
 import 'package:client_app/core/utilities/app_themes.dart';
+import 'package:client_app/core/widgets/environment_banner.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/auth/presentation/pages/home_page.dart';
@@ -85,7 +86,12 @@ class AuthWrapper extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
-            body: _buildBody(state),
+            body: Column(
+              children: [
+                const EnvironmentBanner(),
+                Expanded(child: _buildBody(state)),
+              ],
+            ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 // Toggle between Arabic and English

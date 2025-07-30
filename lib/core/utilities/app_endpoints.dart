@@ -1,11 +1,27 @@
 class AppEndPoints {
   AppEndPoints._();
 
-  static const String site =
-      'https://admin.parcelexpress.om'; // Change this to your actual site URL
-  // 'https://api.parcelexpress.om';
-  static const String baseUrl = '$site/api/';
-  static const String filePath = '$site/files';
+  // Environment detection
+  static const bool _isTestEnvironment = bool.fromEnvironment(
+    'TEST_ENV',
+    defaultValue: false,
+  );
+
+  // Environment-specific URLs
+  static const String _productionSite = 'https://admin.parcelexpress.om';
+  static const String _testSite = 'https://test.parcelexpress.om';
+
+  // Dynamic site URL based on environment
+  static String get site => _isTestEnvironment ? _testSite : _productionSite;
+
+  // API endpoints
+  static String get baseUrl => '$site/api/';
+  static String get filePath => '$site/files';
+
+  // Environment info for debugging
+  static String get environmentName =>
+      _isTestEnvironment ? 'TEST' : 'PRODUCTION';
+  static bool get isTestEnvironment => _isTestEnvironment;
 
   // Client Authentication
   static const String clientLogin = 'client/login';
