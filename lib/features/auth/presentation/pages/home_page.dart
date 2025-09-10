@@ -11,6 +11,9 @@ import 'package:client_app/features/profile/presentation/pages/notification_sett
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/presentation/pages/orders_list_page.dart';
 import 'package:client_app/features/shipment/presentation/pages/shipment_page.dart';
+import 'package:client_app/features/wallet/cubit/wallet_cubit.dart';
+import 'package:client_app/features/wallet/data/repositories/wallet_repository.dart';
+import 'package:client_app/features/wallet/presentation/pages/wallet_page.dart';
 import 'package:client_app/injections.dart';
 import 'package:client_app/main.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +33,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late AnimationController _fabAnimationController;
   late List<AnimationController> _iconControllers;
 
-  late List<NavItem> _navItems;
+  // Removed _navItems usage with the new NavigationBar
 
   @override
   void initState() {
@@ -65,28 +68,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    _navItems = [
-      NavItem(
-        icon: Icons.dashboard_rounded,
-        label: AppLocalizations.of(context)!.dashboard,
-        color: const Color(0xFF667eea),
-      ),
-      NavItem(
-        icon: Icons.receipt_long_rounded,
-        label: AppLocalizations.of(context)!.orders,
-        color: const Color(0xFF10b981),
-      ),
-      NavItem(
-        icon: Icons.receipt_rounded,
-        label: AppLocalizations.of(context)!.invoices,
-        color: const Color(0xFFf59e0b),
-      ),
-      NavItem(
-        icon: Icons.person_rounded,
-        label: AppLocalizations.of(context)!.profile,
-        color: const Color(0xFF8b5cf6),
-      ),
-    ];
+    // Bottom navigation destinations are now built directly in _buildNavigationBar()
     return Scaffold(
       backgroundColor: Colors.grey[50],
       body: PageView(
@@ -102,162 +84,62 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           _buildProfilePage(),
         ],
       ),
-      floatingActionButton: ScaleTransition(
-        scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: _fabAnimationController,
-            curve: Curves.elasticOut,
-          ),
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF667eea).withValues(alpha: 0.4),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
-              context,
-              const EdgeInsets.only(bottom: 16),
-            ),
-            child: FloatingActionButton.extended(
-              onPressed: _navigateToCreateOrder,
-
-              backgroundColor: const Color(0xFF667eea),
-              elevation: 0,
-              icon: const Icon(
-                Icons.add_rounded,
-                color: Colors.white,
-                size: 24,
-              ),
-              label: Text(
-                AppLocalizations.of(context)!.createOrder,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: _buildModernBottomNav(),
+      bottomNavigationBar: _buildNavigationBar(),
     );
   }
 
-  Widget _buildModernBottomNav() {
-    return Container(
-      height: 80,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(25),
-          topRight: Radius.circular(25),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 20,
-            offset: const Offset(0, -5),
-          ),
-        ],
+  Widget _buildNavigationBar() {
+    final destinations = <NavigationDestination>[
+      NavigationDestination(
+        icon: const Icon(Icons.dashboard_outlined),
+        selectedIcon: const Icon(Icons.dashboard_rounded),
+        label: AppLocalizations.of(context)!.dashboard,
       ),
-      child: Stack(
-        children: [
-          // Animated background indicator
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            left: _getIndicatorPosition(),
-            top: 8,
-            child: Container(
-              width: 60,
-              height: 64,
-              decoration: BoxDecoration(
-                color: _navItems[_selectedIndex].color.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-          ),
-          // Navigation items
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(_navItems.length, (index) {
-              return _buildNavItem(index);
-            }),
-          ),
-        ],
+      NavigationDestination(
+        icon: const Icon(Icons.receipt_long_outlined),
+        selectedIcon: const Icon(Icons.receipt_long_rounded),
+        label: AppLocalizations.of(context)!.orders,
       ),
+      NavigationDestination(
+        icon: const Icon(Icons.add_circle_outline),
+        selectedIcon: const Icon(Icons.add_circle),
+        label: AppLocalizations.of(context)!.createOrder,
+      ),
+      NavigationDestination(
+        icon: const Icon(Icons.receipt_outlined),
+        selectedIcon: const Icon(Icons.receipt_rounded),
+        label: AppLocalizations.of(context)!.invoices,
+      ),
+      NavigationDestination(
+        icon: const Icon(Icons.person_outline),
+        selectedIcon: const Icon(Icons.person_rounded),
+        label: AppLocalizations.of(context)!.profile,
+      ),
+    ];
+
+    int barIndex = _selectedIndex >= 2 ? _selectedIndex + 1 : _selectedIndex;
+
+    return NavigationBar(
+      selectedIndex: barIndex,
+      onDestinationSelected: (int index) {
+        if (index == 2) {
+          _navigateToCreateOrder();
+          return;
+        }
+        final pageIndex = index > 2 ? index - 1 : index;
+        if (pageIndex != _selectedIndex) {
+          _onNavItemTapped(pageIndex);
+        }
+      },
+      destinations: destinations,
+      height: 72,
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
     );
   }
 
-  Widget _buildNavItem(int index) {
-    final item = _navItems[index];
-    final isSelected = index == _selectedIndex;
+  // Legacy bottom nav item builder removed (replaced by Material NavigationBar)
 
-    return GestureDetector(
-      onTap: () => _onNavItemTapped(index),
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        width: 80,
-        height: 80,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Animated icon
-            AnimatedBuilder(
-              animation: _iconControllers[index],
-              builder: (context, child) {
-                return Transform.scale(
-                  scale:
-                      isSelected
-                          ? 1.0 + (_iconControllers[index].value * 0.2)
-                          : 1.0,
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: isSelected ? item.color : Colors.transparent,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(
-                      item.icon,
-                      color: isSelected ? Colors.white : Colors.grey[400],
-                      size: 24,
-                    ),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 4),
-            // Animated label
-            AnimatedDefaultTextStyle(
-              duration: const Duration(milliseconds: 200),
-              style: TextStyle(
-                fontSize: isSelected ? 12 : 11,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                color: isSelected ? item.color : Colors.grey[500],
-              ),
-              child: Text(item.label),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  double _getIndicatorPosition() {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final itemWidth = screenWidth / _navItems.length;
-    return (itemWidth * _selectedIndex) + (itemWidth - 60) / 2;
-  }
+  // Legacy indicator position method removed
 
   void _onNavItemTapped(int index) {
     if (index == _selectedIndex) return;
@@ -623,6 +505,28 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
             const SizedBox(height: 16),
             _buildSettingItem(
+              icon: Icons.account_balance_wallet_rounded,
+              title: AppLocalizations.of(context)!.viewWallet,
+              subtitle: AppLocalizations.of(context)!.viewWalletSubtitle,
+              color: const Color(0xFF0ea5e9),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => BlocProvider(
+                          create:
+                              (_) =>
+                                  WalletCubit(const WalletRepository())
+                                    ..loadWallet(),
+                          child: const WalletPage(),
+                        ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+            _buildSettingItem(
               icon: Icons.price_check_rounded,
               title: AppLocalizations.of(context)!.viewPricing,
               subtitle: AppLocalizations.of(context)!.viewDeliveryPricing,
@@ -710,7 +614,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Language',
+                    AppLocalizations.of(context)!.selectLanguage,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,

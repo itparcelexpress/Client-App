@@ -124,6 +124,24 @@ class ErrorMessageSanitizer {
       }
     }
 
+    // If still no message, check validation errors map structure
+    if (message == null || message.isEmpty) {
+      final errors = apiResponse['errors'];
+      if (errors is Map<String, dynamic>) {
+        // Take the first error message from the map
+        for (final entry in errors.entries) {
+          final value = entry.value;
+          if (value is List && value.isNotEmpty) {
+            message = value.first.toString();
+            break;
+          } else if (value is String) {
+            message = value;
+            break;
+          }
+        }
+      }
+    }
+
     // If still no message, provide a generic one
     if (message == null || message.isEmpty) {
       return 'An unexpected error occurred. Please try again.';

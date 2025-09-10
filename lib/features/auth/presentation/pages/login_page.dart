@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:client_app/core/utilities/taost_service.dart';
+import 'package:client_app/features/auth/util/login_error_mapper.dart';
 import 'package:client_app/core/utilities/validators.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 
@@ -22,7 +23,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController(text: 'hormuz@gmail.com');
-  final _passwordController = TextEditingController(text: '12345678');
+  final _passwordController = TextEditingController(text: 'Aa@123456');
 
   bool _isPasswordVisible = false;
 
@@ -71,8 +72,11 @@ class _LoginPageState extends State<LoginPage> {
                     MaterialPageRoute(builder: (context) => const HomePage()),
                   );
                 } else if (state is AuthFailure) {
-                  // Show a localized error message
-                  ToastService.showError(context, 'loginFailed');
+                  final key = mapLoginErrorToKey(
+                    message: state.message,
+                    errors: state.errors,
+                  );
+                  ToastService.showError(context, key);
                 }
               },
               builder: (context, state) {

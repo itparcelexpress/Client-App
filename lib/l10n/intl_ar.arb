@@ -473,6 +473,14 @@
   "@trackingNumberCopied": {
     "description": "Tracking number copied message"
   },
+  "scan": "مسح",
+  "@scan": {"description": "زر مسح"},
+  "trackingAlreadyTaken": "رقم التتبع مستخدم بالفعل. يرجى مسح ملصقًا آخر.",
+  "@trackingAlreadyTaken": {
+    "description": "عند تكرار tracking_no (422)"
+  },
+  "invalidDimensions": "يرجى إدخال أبعاد الطرد بشكل صحيح.",
+  "@invalidDimensions": {"description": "خطأ تحقق خاص بالأبعاد"},
 
   "recipient": "المستلم",
   "@recipient": {
@@ -778,6 +786,12 @@
   "logoutFailed": "فشل في تسجيل الخروج. يرجى المحاولة مرة أخرى.",
   "loginSuccessfully": "تم تسجيل الدخول بنجاح!",
   "loginFailed": "فشل تسجيل الدخول. يرجى التحقق من البيانات.",
+  "loginErrorIncorrectPassword": "كلمة المرور غير صحيحة. حاول مرة أخرى.",
+  "loginErrorNoAccount": "لا يوجد حساب مرتبط بهذا البريد الإلكتروني.",
+  "loginErrorAccountDisabled": "تم تعطيل حسابك. يرجى التواصل مع الدعم.",
+  "loginErrorTooManyAttempts": "محاولات تسجيل دخول كثيرة. حاول لاحقاً.",
+  "loginErrorValidation": "يرجى التحقق من المدخلات والمحاولة مرة أخرى.",
+  "loginErrorUnknown": "تعذر تسجيل الدخول. يرجى المحاولة مرة أخرى.",
   "networkError": "خطأ في الشبكة. يرجى التحقق من الاتصال.",
   "serverError": "خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقاً.",
   "validationError": "يرجى التحقق من المدخلات والمحاولة مرة أخرى.",
@@ -846,5 +860,18 @@
   "alternatePhoneHint": "أدخل رقم هاتف بديل",
   "fullPhoneNumberPreview": "رقم الهاتف الكامل: {fullNumber}",
   "phoneNumberInfo": "أدخل رقم هاتفك بدون رمز الدولة",
-  "alternatePhoneInfo": "أدخل رقم هاتف بديل (اختياري)"
+  "alternatePhoneInfo": "أدخل رقم هاتف بديل (اختياري)",
+  "emailPlaceholder": "example@email.com",
+  "streetAddressHint": "المبنى، الشارع، المنطقة",
+  "locationUrlPlaceholder": "https://maps.app.goo.gl/...",
+  "noAddressesYet": "لا توجد عناوين بعد",
+  "addYourFirstAddressHint": "أضف عنوانك الأول لتسهيل إنشاء الطلب",
+  "deleteAddress": "حذف العنوان",
+  "deleteAddressConfirmation": "هل أنت متأكد من حذف العنوان \"{name}\"؟",
+  "wallet": "المحفظة",
+  "@wallet": {"description": "عنوان صفحة المحفظة"},
+  "viewWallet": "المحفظة",
+  "@viewWallet": {"description": "عنصر قائمة المحفظة"},
+  "viewWalletSubtitle": "عرض الرصيد والمعاملات",
+  "@viewWalletSubtitle": {"description": "وصف عنصر قائمة المحفظة"}
 }

@@ -397,3 +397,115 @@ class PaymentSummaryResponse {
 
   Map<String, dynamic> toJson() => _$PaymentSummaryResponseToJson(this);
 }
+
+// Wallet Models
+@JsonSerializable()
+class WalletTransactionsPage {
+  @JsonKey(name: 'current_page')
+  final int currentPage;
+  final List<WalletTransaction> data;
+  @JsonKey(name: 'first_page_url')
+  final String firstPageUrl;
+  final int? from;
+  @JsonKey(name: 'last_page')
+  final int lastPage;
+  @JsonKey(name: 'last_page_url')
+  final String lastPageUrl;
+  final List<PaginationLink> links;
+  @JsonKey(name: 'next_page_url')
+  final String? nextPageUrl;
+  final String path;
+  @JsonKey(name: 'per_page')
+  final int perPage;
+  @JsonKey(name: 'prev_page_url')
+  final String? prevPageUrl;
+  final int? to;
+  final int total;
+
+  WalletTransactionsPage({
+    required this.currentPage,
+    required this.data,
+    required this.firstPageUrl,
+    this.from,
+    required this.lastPage,
+    required this.lastPageUrl,
+    required this.links,
+    this.nextPageUrl,
+    required this.path,
+    required this.perPage,
+    this.prevPageUrl,
+    this.to,
+    required this.total,
+  });
+
+  factory WalletTransactionsPage.fromJson(Map<String, dynamic> json) =>
+      _$WalletTransactionsPageFromJson(json);
+
+  Map<String, dynamic> toJson() => _$WalletTransactionsPageToJson(this);
+}
+
+@JsonSerializable()
+class WalletTransaction {
+  final int id;
+  final String amount;
+  final String type;
+  final String status;
+  @JsonKey(name: 'created_at')
+  final DateTime createdAt;
+  @JsonKey(name: 'description')
+  final String? description;
+
+  WalletTransaction({
+    required this.id,
+    required this.amount,
+    required this.type,
+    required this.status,
+    required this.createdAt,
+    this.description,
+  });
+
+  factory WalletTransaction.fromJson(Map<String, dynamic> json) =>
+      _$WalletTransactionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$WalletTransactionToJson(this);
+
+  String get formattedAmount {
+    return '${double.tryParse(amount)?.toStringAsFixed(2) ?? amount} OMR';
+  }
+}
+
+@JsonSerializable()
+class WalletDataPayload {
+  final String balance;
+  final WalletTransactionsPage transactions;
+
+  WalletDataPayload({required this.balance, required this.transactions});
+
+  factory WalletDataPayload.fromJson(Map<String, dynamic> json) =>
+      _$WalletDataPayloadFromJson(json);
+
+  Map<String, dynamic> toJson() => _$WalletDataPayloadToJson(this);
+
+  String get formattedBalance =>
+      '${double.tryParse(balance)?.toStringAsFixed(2) ?? balance} OMR';
+}
+
+@JsonSerializable()
+class WalletResponse {
+  final String message;
+  final bool success;
+  final WalletDataPayload data;
+  final List<dynamic> errors;
+
+  WalletResponse({
+    required this.message,
+    required this.success,
+    required this.data,
+    required this.errors,
+  });
+
+  factory WalletResponse.fromJson(Map<String, dynamic> json) =>
+      _$WalletResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$WalletResponseToJson(this);
+}

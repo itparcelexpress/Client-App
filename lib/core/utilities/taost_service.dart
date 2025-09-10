@@ -115,10 +115,13 @@ class ToastService {
   }
 
   /// Helper method to get localized message using reflection
-  static String _getLocalizedMessage(AppLocalizations localizations, String messageKey) {
+  static String _getLocalizedMessage(
+    AppLocalizations localizations,
+    String messageKey,
+  ) {
     // Convert messageKey to getter method name
     final getterName = messageKey;
-    
+
     // Use switch statement to handle all possible message keys
     switch (getterName) {
       case 'orderCreatedSuccessfully':
@@ -149,6 +152,18 @@ class ToastService {
         return localizations.loginSuccessfully;
       case 'loginFailed':
         return localizations.loginFailed;
+      case 'loginErrorIncorrectPassword':
+        return localizations.loginErrorIncorrectPassword;
+      case 'loginErrorNoAccount':
+        return localizations.loginErrorNoAccount;
+      case 'loginErrorAccountDisabled':
+        return localizations.loginErrorAccountDisabled;
+      case 'loginErrorTooManyAttempts':
+        return localizations.loginErrorTooManyAttempts;
+      case 'loginErrorValidation':
+        return localizations.loginErrorValidation;
+      case 'loginErrorUnknown':
+        return localizations.loginErrorUnknown;
       case 'networkError':
         return localizations.networkError;
       case 'serverError':
@@ -182,18 +197,34 @@ class ToastService {
 
   /// Convenience methods for common toast types
   static void showSuccess(BuildContext context, String messageKey) {
-    showLocalizedToast(context: context, messageKey: messageKey, type: ToastType.success);
+    showLocalizedToast(
+      context: context,
+      messageKey: messageKey,
+      type: ToastType.success,
+    );
   }
 
   static void showError(BuildContext context, String messageKey) {
-    showLocalizedToast(context: context, messageKey: messageKey, type: ToastType.error);
+    showLocalizedToast(
+      context: context,
+      messageKey: messageKey,
+      type: ToastType.error,
+    );
   }
 
   static void showInfo(BuildContext context, String messageKey) {
-    showLocalizedToast(context: context, messageKey: messageKey, type: ToastType.info);
+    showLocalizedToast(
+      context: context,
+      messageKey: messageKey,
+      type: ToastType.info,
+    );
   }
 
   static void showWarning(BuildContext context, String messageKey) {
-    showLocalizedToast(context: context, messageKey: messageKey, type: ToastType.warning);
+    showLocalizedToast(
+      context: context,
+      messageKey: messageKey,
+      type: ToastType.warning,
+    );
   }
 }

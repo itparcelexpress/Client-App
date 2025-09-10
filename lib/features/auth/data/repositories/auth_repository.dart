@@ -36,13 +36,28 @@ class AuthRepositoryImpl implements AuthRepository {
 
         return loginResponse;
       } else {
+        // Normalize errors to a list of strings
+        List<String> normalizedErrors = [];
+        final rawErrors = response.origin?['errors'];
+        if (rawErrors != null) {
+          if (rawErrors is List) {
+            normalizedErrors = rawErrors.map((e) => e.toString()).toList();
+          } else if (rawErrors is Map) {
+            normalizedErrors =
+                rawErrors.values
+                    .expand((v) => v is List ? v : [v])
+                    .map((e) => e.toString())
+                    .toList();
+          } else {
+            normalizedErrors = [rawErrors.toString()];
+          }
+        }
+
         return LoginResponse(
           message: response.message ?? 'Login failed',
           success: false,
           errors:
-              response.origin?['errors'] != null
-                  ? List<String>.from(response.origin!['errors'])
-                  : ['Login failed'],
+              normalizedErrors.isNotEmpty ? normalizedErrors : ['Login failed'],
         );
       }
     } catch (e) {

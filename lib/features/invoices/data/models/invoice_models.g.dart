@@ -268,3 +268,92 @@ Map<String, dynamic> _$PaymentSummaryResponseToJson(
       'data': instance.data,
       'errors': instance.errors,
     };
+
+WalletTransactionsPage _$WalletTransactionsPageFromJson(
+        Map<String, dynamic> json) =>
+    WalletTransactionsPage(
+      currentPage: (json['current_page'] as num).toInt(),
+      data: (json['data'] as List<dynamic>)
+          .map((e) => WalletTransaction.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      firstPageUrl: json['first_page_url'] as String,
+      from: (json['from'] as num?)?.toInt(),
+      lastPage: (json['last_page'] as num).toInt(),
+      lastPageUrl: json['last_page_url'] as String,
+      links: (json['links'] as List<dynamic>)
+          .map((e) => PaginationLink.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      nextPageUrl: json['next_page_url'] as String?,
+      path: json['path'] as String,
+      perPage: (json['per_page'] as num).toInt(),
+      prevPageUrl: json['prev_page_url'] as String?,
+      to: (json['to'] as num?)?.toInt(),
+      total: (json['total'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$WalletTransactionsPageToJson(
+        WalletTransactionsPage instance) =>
+    <String, dynamic>{
+      'current_page': instance.currentPage,
+      'data': instance.data,
+      'first_page_url': instance.firstPageUrl,
+      'from': instance.from,
+      'last_page': instance.lastPage,
+      'last_page_url': instance.lastPageUrl,
+      'links': instance.links,
+      'next_page_url': instance.nextPageUrl,
+      'path': instance.path,
+      'per_page': instance.perPage,
+      'prev_page_url': instance.prevPageUrl,
+      'to': instance.to,
+      'total': instance.total,
+    };
+
+WalletTransaction _$WalletTransactionFromJson(Map<String, dynamic> json) =>
+    WalletTransaction(
+      id: (json['id'] as num).toInt(),
+      amount: json['amount'] as String,
+      type: json['type'] as String,
+      status: json['status'] as String,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      description: json['description'] as String?,
+    );
+
+Map<String, dynamic> _$WalletTransactionToJson(WalletTransaction instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'amount': instance.amount,
+      'type': instance.type,
+      'status': instance.status,
+      'created_at': instance.createdAt.toIso8601String(),
+      'description': instance.description,
+    };
+
+WalletDataPayload _$WalletDataPayloadFromJson(Map<String, dynamic> json) =>
+    WalletDataPayload(
+      balance: json['balance'] as String,
+      transactions: WalletTransactionsPage.fromJson(
+          json['transactions'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$WalletDataPayloadToJson(WalletDataPayload instance) =>
+    <String, dynamic>{
+      'balance': instance.balance,
+      'transactions': instance.transactions,
+    };
+
+WalletResponse _$WalletResponseFromJson(Map<String, dynamic> json) =>
+    WalletResponse(
+      message: json['message'] as String,
+      success: json['success'] as bool,
+      data: WalletDataPayload.fromJson(json['data'] as Map<String, dynamic>),
+      errors: json['errors'] as List<dynamic>,
+    );
+
+Map<String, dynamic> _$WalletResponseToJson(WalletResponse instance) =>
+    <String, dynamic>{
+      'message': instance.message,
+      'success': instance.success,
+      'data': instance.data,
+      'errors': instance.errors,
+    };

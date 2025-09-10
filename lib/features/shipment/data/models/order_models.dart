@@ -26,6 +26,17 @@ class CreateOrderRequest extends Equatable {
   final double deliveryFee;
   final int clientId;
   final String? locationUrl;
+  // Optional dimensions and unit
+  final String? feePayer;
+  final double? width;
+  final double? height;
+  final double? length;
+  final double? weight;
+  final int? unitId;
+  // Optional order items arrays
+  final List<String>? itemNames;
+  final List<String>? categories;
+  final List<int>? quantities;
 
   const CreateOrderRequest({
     this.stickerNumber,
@@ -52,6 +63,15 @@ class CreateOrderRequest extends Equatable {
     required this.deliveryFee,
     required this.clientId,
     this.locationUrl,
+    this.feePayer,
+    this.width,
+    this.height,
+    this.length,
+    this.weight,
+    this.unitId,
+    this.itemNames,
+    this.categories,
+    this.quantities,
   });
 
   Map<String, dynamic> toJson() {
@@ -79,6 +99,19 @@ class CreateOrderRequest extends Equatable {
       'delivery_fee': deliveryFee,
       'client_id': clientId,
       if (locationUrl != null) 'location_url': locationUrl,
+      if (stickerNumber != null && stickerNumber!.isNotEmpty)
+        'tracking_no': stickerNumber,
+      if (feePayer != null && feePayer!.isNotEmpty) 'fee_payer': feePayer,
+      if (width != null) 'width': width,
+      if (height != null) 'height': height,
+      if (length != null) 'length': length,
+      if (weight != null) 'weight': weight,
+      if (unitId != null) 'unit_id': unitId,
+      if (itemNames != null && itemNames!.isNotEmpty) 'item_name[]': itemNames,
+      if (categories != null && categories!.isNotEmpty)
+        'category[]': categories,
+      if (quantities != null && quantities!.isNotEmpty)
+        'quantity[]': quantities,
     };
   }
 
@@ -108,6 +141,15 @@ class CreateOrderRequest extends Equatable {
     deliveryFee,
     clientId,
     locationUrl,
+    feePayer,
+    width,
+    height,
+    length,
+    weight,
+    unitId,
+    itemNames,
+    categories,
+    quantities,
   ];
 }
 

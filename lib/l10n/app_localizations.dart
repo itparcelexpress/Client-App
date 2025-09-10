@@ -1526,6 +1526,24 @@ abstract class AppLocalizations {
   /// **'Tracking number copied! 📋'**
   String get trackingNumberCopied;
 
+  /// Scan action label
+  ///
+  /// In en, this message translates to:
+  /// **'Scan'**
+  String get scan;
+
+  /// Shown when tracking_no is duplicated (422)
+  ///
+  /// In en, this message translates to:
+  /// **'This tracking number is already used. Please scan a different sticker.'**
+  String get trackingAlreadyTaken;
+
+  /// Generic dimensions validation error
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter valid package dimensions.'**
+  String get invalidDimensions;
+
   /// Recipient label
   ///
   /// In en, this message translates to:
@@ -1849,6 +1867,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Login failed. Please check your credentials.'**
   String get loginFailed;
+
+  /// Login error: incorrect password
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect password. Please try again.'**
+  String get loginErrorIncorrectPassword;
+
+  /// Login error: no account
+  ///
+  /// In en, this message translates to:
+  /// **'No account found with this email.'**
+  String get loginErrorNoAccount;
+
+  /// Login error: account disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is disabled. Please contact support.'**
+  String get loginErrorAccountDisabled;
+
+  /// Login error: too many attempts
+  ///
+  /// In en, this message translates to:
+  /// **'Too many login attempts. Please try again later.'**
+  String get loginErrorTooManyAttempts;
+
+  /// Login error: validation
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your input and try again.'**
+  String get loginErrorValidation;
+
+  /// Login error: unknown
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to login. Please try again.'**
+  String get loginErrorUnknown;
 
   /// Network error message
   ///
@@ -2185,6 +2239,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter an alternate phone number (optional)'**
   String get alternatePhoneInfo;
+
+  /// Email input placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'example@email.com'**
+  String get emailPlaceholder;
+
+  /// Street address input hint
+  ///
+  /// In en, this message translates to:
+  /// **'Building, street, area'**
+  String get streetAddressHint;
+
+  /// Location URL placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'https://maps.app.goo.gl/...'**
+  String get locationUrlPlaceholder;
+
+  /// Address book empty state title
+  ///
+  /// In en, this message translates to:
+  /// **'No Addresses Yet'**
+  String get noAddressesYet;
+
+  /// Address book empty state subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first address to make\norder creation easier'**
+  String get addYourFirstAddressHint;
+
+  /// Delete address dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Address'**
+  String get deleteAddress;
+
+  /// Delete address confirmation with name
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete \"{name}\" address?'**
+  String deleteAddressConfirmation(String name);
+
+  /// Wallet page title
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet'**
+  String get wallet;
+
+  /// Wallet menu item title
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet'**
+  String get viewWallet;
+
+  /// Wallet menu item subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'View balance and transactions'**
+  String get viewWalletSubtitle;
 }
 
 class _AppLocalizationsDelegate

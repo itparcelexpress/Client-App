@@ -1,19 +1,21 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:client_app/core/models/location_models.dart';
 import 'package:client_app/core/services/location_service.dart';
-import 'package:client_app/core/utilities/error_message_sanitizer.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/core/utilities/taost_service.dart';
 import 'package:client_app/core/utilities/unified_phone_input.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/address_book/address_book.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
+import 'package:client_app/features/auth/presentation/pages/home_page.dart';
 import 'package:client_app/features/shipment/data/models/order_models.dart';
 import 'package:client_app/injections.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 class CreateOrderPage extends StatefulWidget {
   final String? stickerNumber;
@@ -38,6 +40,25 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   final _deliveryFeeController = TextEditingController();
   final _amountController = TextEditingController();
   final _locationUrlController = TextEditingController();
+  // Sticker entry
+  final _stickerController = TextEditingController();
+  // Holds latest scanned/entered value via controller; kept for clarity if needed later
+  // ignore: unused_field
+  String? _stickerNumber;
+  // New: Dimensions & items
+  final _widthController = TextEditingController();
+  final _heightController = TextEditingController();
+  final _lengthController = TextEditingController();
+  final _weightController = TextEditingController();
+  String _unit = 'Kg';
+  String _feePayer = 'customer';
+  final List<TextEditingController> _itemNameCtrls = [TextEditingController()];
+  final List<TextEditingController> _itemCategoryCtrls = [
+    TextEditingController(),
+  ];
+  final List<TextEditingController> _itemQuantityCtrls = [
+    TextEditingController(),
+  ];
 
   // Dropdown values
   String _paymentType = 'cod'; // Use key instead of display value
@@ -76,6 +97,12 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     _deliveryFeeController.text = '5.00';
     _amountController.text = '0';
     _loadLocationData();
+
+    // Initialize from incoming sticker (if navigated with it)
+    if (widget.stickerNumber != null && widget.stickerNumber!.isNotEmpty) {
+      _stickerNumber = widget.stickerNumber;
+      _stickerController.text = widget.stickerNumber!;
+    }
 
     // Add listeners to form fields to detect when user has filled form
     _nameController.addListener(_onFormDataChanged);
@@ -250,6 +277,14 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     _deliveryFeeController.dispose();
     _amountController.dispose();
     _locationUrlController.dispose();
+    _stickerController.dispose();
+    _widthController.dispose();
+    _heightController.dispose();
+    _lengthController.dispose();
+    _weightController.dispose();
+    for (final c in _itemNameCtrls) c.dispose();
+    for (final c in _itemCategoryCtrls) c.dispose();
+    for (final c in _itemQuantityCtrls) c.dispose();
 
     _scrollController.dispose();
     super.dispose();
@@ -291,7 +326,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                             24,
                           ),
                         ),
-                        _buildStickerInfo(),
+                        _buildStickerSection(),
                         SizedBox(
                           height: ResponsiveUtils.getResponsivePadding(
                             context,
@@ -449,52 +484,153 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     );
   }
 
-  Widget _buildStickerInfo() {
-    if (widget.stickerNumber == null) return const SizedBox.shrink();
-
+  Widget _buildStickerSection() {
     return FadeInUp(
       duration: const Duration(milliseconds: 600),
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF10b981), Color(0xFF059669)],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
-          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
         ),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(Icons.check_circle, color: Colors.white, size: 24),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    AppLocalizations.of(context)!.stickerNumber,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
+            Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF10b981), Color(0xFF059669)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    widget.stickerNumber!,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
+                  child: const Icon(
+                    Icons.qr_code_scanner,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  AppLocalizations.of(context)!.stickerNumber,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF1a1a1a),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildTextField(
+                    controller: _stickerController,
+                    label: AppLocalizations.of(context)!.stickerNumber,
+                    hint: 'e.g. 33223322',
+                    icon: Icons.confirmation_number_outlined,
+                    keyboardType: TextInputType.text,
+                    validator:
+                        (value) =>
+                            (value == null || value.trim().isEmpty)
+                                ? AppLocalizations.of(
+                                  context,
+                                )!.pleaseEnterField(
+                                  AppLocalizations.of(context)!.stickerNumber,
+                                )
+                                : null,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                ElevatedButton.icon(
+                  onPressed: _openStickerScanner,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF10b981),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 14,
                     ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 0,
                   ),
-                ],
-              ),
+                  icon: const Icon(Icons.qr_code_scanner, size: 18),
+                  label: Text(
+                    Localizations.localeOf(context).languageCode == 'ar'
+                        ? 'مسح'
+                        : 'Scan',
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
+    );
+  }
+
+  void _openStickerScanner() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return SizedBox(
+          height: ResponsiveUtils.getScreenHeight(context) * 0.6,
+          child: Column(
+            children: [
+              const SizedBox(height: 12),
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Expanded(
+                child: MobileScanner(
+                  onDetect: (capture) {
+                    final code = capture.barcodes.first.rawValue;
+                    if (code != null && code.isNotEmpty) {
+                      Navigator.pop(context);
+                      setState(() {
+                        _stickerNumber = code;
+                        _stickerController.text = code;
+                      });
+                      ToastService.showCustomToast(
+                        message: AppLocalizations.of(
+                          context,
+                        )!.trackingLabel(code),
+                        type: ToastType.success,
+                      );
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -624,7 +760,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           label: AppLocalizations.of(context)!.fullName,
           hint: AppLocalizations.of(
             context,
-          )!.pleaseEnterField('recipient full name'),
+          )!.pleaseEnterField(AppLocalizations.of(context)!.fullName),
           icon: Icons.person_outline,
           validator:
               (value) =>
@@ -656,7 +792,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         _buildTextField(
           controller: _emailController,
           label: AppLocalizations.of(context)!.emailAddress,
-          hint: 'example@email.com',
+          hint: AppLocalizations.of(context)!.emailPlaceholder,
           icon: Icons.email_outlined,
           keyboardType: TextInputType.emailAddress,
           validator: (value) {
@@ -728,7 +864,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         _buildTextField(
           controller: _streetAddressController,
           label: AppLocalizations.of(context)!.streetAddress,
-          hint: 'Building, street, area',
+          hint: AppLocalizations.of(context)!.streetAddressHint,
           icon: Icons.home_outlined,
           maxLines: 2,
           validator:
@@ -741,7 +877,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         _buildTextField(
           controller: _zipcodeController,
           label: AppLocalizations.of(context)!.zipcode,
-          hint: AppLocalizations.of(context)!.pleaseEnterField('zip code'),
+          hint: AppLocalizations.of(
+            context,
+          )!.pleaseEnterField(AppLocalizations.of(context)!.zipcode),
           icon: Icons.mail_outlined,
           keyboardType: TextInputType.number,
           validator:
@@ -831,6 +969,14 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           onChanged: (value) => setState(() => _paymentType = value!),
         ),
         const SizedBox(height: 16),
+        _buildDropdownField(
+          label: 'Fee payer',
+          value: _feePayer,
+          icon: Icons.account_balance_wallet_outlined,
+          items: const ['customer', 'shipper'],
+          onChanged: (value) => setState(() => _feePayer = value!),
+        ),
+        const SizedBox(height: 16),
         Row(
           children: [
             Expanded(
@@ -869,16 +1015,167 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           ],
         ),
         const SizedBox(height: 16),
+        // Unit dropdown first for clarity
+        _buildDropdownField(
+          label: 'Unit',
+          value: _unit,
+          icon: Icons.unfold_more,
+          items: const ['Kg', 'length'],
+          onChanged: (v) => setState(() => _unit = v!),
+        ),
+        const SizedBox(height: 12),
+        // Two-by-two layout for better small-screen ergonomics
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            SizedBox(
+              width: (ResponsiveUtils.getScreenWidth(context) - 20 - 12) / 2,
+              child: _buildTextField(
+                controller: _widthController,
+                label: 'Width',
+                hint: 'e.g. 2',
+                icon: Icons.straighten,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: (ResponsiveUtils.getScreenWidth(context) - 20 - 12) / 2,
+              child: _buildTextField(
+                controller: _heightController,
+                label: 'Height',
+                hint: 'e.g. 3',
+                icon: Icons.straighten,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: (ResponsiveUtils.getScreenWidth(context) - 20 - 12) / 2,
+              child: _buildTextField(
+                controller: _lengthController,
+                label: 'Length',
+                hint: 'e.g. 1',
+                icon: Icons.straighten,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: (ResponsiveUtils.getScreenWidth(context) - 20 - 12) / 2,
+              child: _buildTextField(
+                controller: _weightController,
+                label: 'Weight',
+                hint: 'e.g. 2',
+                icon: Icons.monitor_weight_outlined,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'Items',
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF1a1a1a),
+          ),
+        ),
+        const SizedBox(height: 12),
+        ...List.generate(_itemNameCtrls.length, (index) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _buildTextField(
+                    controller: _itemNameCtrls[index],
+                    label: 'Name',
+                    hint: 'Enter item name...',
+                    icon: Icons.inventory_2_outlined,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildTextField(
+                    controller: _itemCategoryCtrls[index],
+                    label: 'Category',
+                    hint: 'Type category...',
+                    icon: Icons.category_outlined,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildTextField(
+                    controller: _itemQuantityCtrls[index],
+                    label: 'Quantity',
+                    hint: 'e.g. 1, 5, 10...',
+                    icon: Icons.format_list_numbered,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _itemNameCtrls.removeAt(index).dispose();
+                      _itemCategoryCtrls.removeAt(index).dispose();
+                      _itemQuantityCtrls.removeAt(index).dispose();
+                    });
+                  },
+                  icon: const Icon(
+                    Icons.delete_outline,
+                    color: Color(0xFFef4444),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
+        Align(
+          alignment: Alignment.centerRight,
+          child: OutlinedButton.icon(
+            onPressed: () {
+              setState(() {
+                _itemNameCtrls.add(TextEditingController());
+                _itemCategoryCtrls.add(TextEditingController());
+                _itemQuantityCtrls.add(TextEditingController());
+              });
+            },
+            icon: const Icon(Icons.add),
+            label: const Text('Add item'),
+          ),
+        ),
+        const SizedBox(height: 16),
         _buildTextField(
           controller: _locationUrlController,
           label:
               '${AppLocalizations.of(context)!.locationUrl} (${AppLocalizations.of(context)!.optional})',
-          hint: 'https://maps.app.goo.gl/...',
+          hint: AppLocalizations.of(context)!.locationUrlPlaceholder,
           icon: Icons.location_on_outlined,
           keyboardType: TextInputType.url,
           validator: (value) {
             if (value != null && value.isNotEmpty) {
-              // Only validate if the field is not empty
               final uri = Uri.tryParse(value);
               if (uri == null || !uri.hasAbsolutePath) {
                 return AppLocalizations.of(
@@ -954,6 +1251,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     TextInputType? keyboardType,
     String? Function(String?)? validator,
     int maxLines = 1,
+    List<TextInputFormatter>? inputFormatters,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -972,6 +1270,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           keyboardType: keyboardType,
           validator: validator,
           maxLines: maxLines,
+          inputFormatters: inputFormatters,
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(color: Colors.grey[400]),
@@ -1148,7 +1447,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
       final request = CreateOrderRequest(
         stickerNumber:
-            widget.stickerNumber, // Use the sticker number from widget
+            _stickerController.text.trim().isNotEmpty
+                ? _stickerController.text.trim()
+                : null,
         name: _nameController.text.trim(),
         cellphone: _phoneController.text.trim(),
         alternatePhone: _alternatePhoneController.text.trim(),
@@ -1178,6 +1479,38 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             _locationUrlController.text.trim().isEmpty
                 ? "https://maps.app.goo.gl/q9CvYn3SKy9DVxBAA" // Default location URL if none provided
                 : _locationUrlController.text.trim(),
+        feePayer: _feePayer,
+        width:
+            _widthController.text.trim().isEmpty
+                ? null
+                : double.tryParse(_widthController.text.trim()),
+        height:
+            _heightController.text.trim().isEmpty
+                ? null
+                : double.tryParse(_heightController.text.trim()),
+        length:
+            _lengthController.text.trim().isEmpty
+                ? null
+                : double.tryParse(_lengthController.text.trim()),
+        weight:
+            _weightController.text.trim().isEmpty
+                ? null
+                : double.tryParse(_weightController.text.trim()),
+        unitId: _unit.toLowerCase() == 'kg' ? 1 : 0,
+        itemNames:
+            _itemNameCtrls
+                .map((c) => c.text.trim())
+                .where((e) => e.isNotEmpty)
+                .toList(),
+        categories:
+            _itemCategoryCtrls
+                .map((c) => c.text.trim())
+                .where((e) => e.isNotEmpty)
+                .toList(),
+        quantities:
+            _itemQuantityCtrls
+                .map((c) => int.tryParse(c.text.trim()) ?? 0)
+                .toList(),
       );
 
       context.read<ShipmentCubit>().createOrder(request);
@@ -1264,8 +1597,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context); // Close dialog
-                  Navigator.pop(context); // Go back to previous screen
+                  Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (_) => const HomePage()),
+                    (route) => false,
+                  );
                 },
                 child: Text(
                   AppLocalizations.of(context)!.done,
@@ -1284,8 +1619,25 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     // Don't show empty error messages
     if (message.trim().isEmpty) return;
 
-    // Use localized toast service
-    ToastService.showError(context, 'orderCreationFailed');
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    final lc = message.toLowerCase();
+
+    String display = message;
+
+    // Friendly, localized mappings for common server messages
+    if (lc.contains('tracking') && lc.contains('taken')) {
+      display =
+          isArabic
+              ? 'رقم التتبع مستخدم بالفعل. يرجى مسح ملصقًا آخر.'
+              : 'This tracking number is already used. Please scan a different sticker.';
+    } else if (lc.contains('validation') || lc.contains('unprocessable')) {
+      display =
+          isArabic
+              ? 'يرجى التحقق من المدخلات والمحاولة مرة أخرى.'
+              : 'Please check your input and try again.';
+    }
+
+    ToastService.showCustomToast(message: display, type: ToastType.error);
   }
 
   Widget _buildSaveAddressSuggestion() {

@@ -8,6 +8,7 @@ import 'package:client_app/features/address_book/presentation/pages/address_deta
 import 'package:client_app/injections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 
 class AddressBookPage extends StatefulWidget {
   const AddressBookPage({super.key});
@@ -118,9 +119,9 @@ class _AddressBookPageState extends State<AddressBookPage> {
       elevation: 0,
       title: FadeInDown(
         duration: const Duration(milliseconds: 400),
-        child: const Text(
-          'Address Book',
-          style: TextStyle(
+        child: Text(
+          AppLocalizations.of(context)!.addressBook,
+          style: const TextStyle(
             color: Color(0xFF1a1a1a),
             fontWeight: FontWeight.w700,
             fontSize: 20,
@@ -205,7 +206,7 @@ class _AddressBookPageState extends State<AddressBookPage> {
                 height: ResponsiveUtils.getResponsivePadding(context, 24),
               ),
               Text(
-                'No Addresses Yet',
+                AppLocalizations.of(context)!.noAddressesYet,
                 style: TextStyle(
                   fontSize: ResponsiveUtils.getResponsiveFontSize(context, 24),
                   fontWeight: FontWeight.w700,
@@ -217,7 +218,7 @@ class _AddressBookPageState extends State<AddressBookPage> {
                 height: ResponsiveUtils.getResponsivePadding(context, 12),
               ),
               Text(
-                'Add your first address to make\norder creation easier',
+                AppLocalizations.of(context)!.addYourFirstAddressHint,
                 style: TextStyle(
                   fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
                   color: Colors.grey[600],
@@ -243,9 +244,12 @@ class _AddressBookPageState extends State<AddressBookPage> {
                   elevation: 0,
                 ),
                 icon: const Icon(Icons.add_rounded),
-                label: const Text(
-                  'Add Address',
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                label: Text(
+                  AppLocalizations.of(context)!.addAddress,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ],
@@ -284,7 +288,7 @@ class _AddressBookPageState extends State<AddressBookPage> {
                 height: ResponsiveUtils.getResponsivePadding(context, 24),
               ),
               Text(
-                'Error Loading Addresses',
+                AppLocalizations.of(context)!.errorLoadingAddresses,
                 style: TextStyle(
                   fontSize: ResponsiveUtils.getResponsiveFontSize(context, 24),
                   fontWeight: FontWeight.w700,
@@ -326,9 +330,12 @@ class _AddressBookPageState extends State<AddressBookPage> {
                   elevation: 0,
                 ),
                 icon: const Icon(Icons.refresh_rounded),
-                label: const Text(
-                  'Try Again',
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                label: Text(
+                  AppLocalizations.of(context)!.tryAgain,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ],
@@ -581,17 +588,20 @@ class _AddressBookPageState extends State<AddressBookPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: const Text(
-            'Delete Address',
-            style: TextStyle(fontWeight: FontWeight.w600),
+          title: Text(
+            AppLocalizations.of(context)!.deleteAddress,
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
           content: Text(
-            'Are you sure you want to delete "${entry.name}" address?',
+            AppLocalizations.of(context)!.deleteAddressConfirmation(entry.name),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(dialogContext),
-              child: Text('Cancel', style: TextStyle(color: Colors.grey[600])),
+              child: Text(
+                AppLocalizations.of(context)!.cancel,
+                style: TextStyle(color: Colors.grey[600]),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -602,9 +612,9 @@ class _AddressBookPageState extends State<AddressBookPage> {
                   );
                 }
               },
-              child: const Text(
-                'Delete',
-                style: TextStyle(color: Color(0xFFef4444)),
+              child: Text(
+                AppLocalizations.of(context)!.delete,
+                style: const TextStyle(color: Color(0xFFef4444)),
               ),
             ),
           ],

@@ -767,6 +767,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trackingNumberCopied => 'تم نسخ رقم التتبع! 📋';
 
   @override
+  String get scan => 'مسح';
+
+  @override
+  String get trackingAlreadyTaken =>
+      'رقم التتبع مستخدم بالفعل. يرجى مسح ملصقًا آخر.';
+
+  @override
+  String get invalidDimensions => 'يرجى إدخال أبعاد الطرد بشكل صحيح.';
+
+  @override
   String get recipient => 'المستلم';
 
   @override
@@ -940,6 +950,29 @@ class AppLocalizationsAr extends AppLocalizations {
   String get loginFailed => 'فشل تسجيل الدخول. يرجى التحقق من البيانات.';
 
   @override
+  String get loginErrorIncorrectPassword =>
+      'كلمة المرور غير صحيحة. حاول مرة أخرى.';
+
+  @override
+  String get loginErrorNoAccount =>
+      'لا يوجد حساب مرتبط بهذا البريد الإلكتروني.';
+
+  @override
+  String get loginErrorAccountDisabled =>
+      'تم تعطيل حسابك. يرجى التواصل مع الدعم.';
+
+  @override
+  String get loginErrorTooManyAttempts =>
+      'محاولات تسجيل دخول كثيرة. حاول لاحقاً.';
+
+  @override
+  String get loginErrorValidation =>
+      'يرجى التحقق من المدخلات والمحاولة مرة أخرى.';
+
+  @override
+  String get loginErrorUnknown => 'تعذر تسجيل الدخول. يرجى المحاولة مرة أخرى.';
+
+  @override
   String get networkError => 'خطأ في الشبكة. يرجى التحقق من الاتصال.';
 
   @override
@@ -1109,4 +1142,36 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get alternatePhoneInfo => 'أدخل رقم هاتف بديل (اختياري)';
+
+  @override
+  String get emailPlaceholder => 'example@email.com';
+
+  @override
+  String get streetAddressHint => 'المبنى، الشارع، المنطقة';
+
+  @override
+  String get locationUrlPlaceholder => 'https://maps.app.goo.gl/...';
+
+  @override
+  String get noAddressesYet => 'لا توجد عناوين بعد';
+
+  @override
+  String get addYourFirstAddressHint => 'أضف عنوانك الأول لتسهيل إنشاء الطلب';
+
+  @override
+  String get deleteAddress => 'حذف العنوان';
+
+  @override
+  String deleteAddressConfirmation(String name) {
+    return 'هل أنت متأكد من حذف العنوان \"$name\"؟';
+  }
+
+  @override
+  String get wallet => 'المحفظة';
+
+  @override
+  String get viewWallet => 'المحفظة';
+
+  @override
+  String get viewWalletSubtitle => 'عرض الرصيد والمعاملات';
 }

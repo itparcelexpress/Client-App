@@ -771,6 +771,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trackingNumberCopied => 'Tracking number copied! 📋';
 
   @override
+  String get scan => 'Scan';
+
+  @override
+  String get trackingAlreadyTaken =>
+      'This tracking number is already used. Please scan a different sticker.';
+
+  @override
+  String get invalidDimensions => 'Please enter valid package dimensions.';
+
+  @override
   String get recipient => 'Recipient';
 
   @override
@@ -944,6 +954,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginFailed => 'Login failed. Please check your credentials.';
 
   @override
+  String get loginErrorIncorrectPassword =>
+      'Incorrect password. Please try again.';
+
+  @override
+  String get loginErrorNoAccount => 'No account found with this email.';
+
+  @override
+  String get loginErrorAccountDisabled =>
+      'Your account is disabled. Please contact support.';
+
+  @override
+  String get loginErrorTooManyAttempts =>
+      'Too many login attempts. Please try again later.';
+
+  @override
+  String get loginErrorValidation => 'Please check your input and try again.';
+
+  @override
+  String get loginErrorUnknown => 'Unable to login. Please try again.';
+
+  @override
   String get networkError => 'Network error. Please check your connection.';
 
   @override
@@ -1113,4 +1144,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get alternatePhoneInfo => 'Enter an alternate phone number (optional)';
+
+  @override
+  String get emailPlaceholder => 'example@email.com';
+
+  @override
+  String get streetAddressHint => 'Building, street, area';
+
+  @override
+  String get locationUrlPlaceholder => 'https://maps.app.goo.gl/...';
+
+  @override
+  String get noAddressesYet => 'No Addresses Yet';
+
+  @override
+  String get addYourFirstAddressHint =>
+      'Add your first address to make\norder creation easier';
+
+  @override
+  String get deleteAddress => 'Delete Address';
+
+  @override
+  String deleteAddressConfirmation(String name) {
+    return 'Are you sure you want to delete \"$name\" address?';
+  }
+
+  @override
+  String get wallet => 'Wallet';
+
+  @override
+  String get viewWallet => 'Wallet';
+
+  @override
+  String get viewWalletSubtitle => 'View balance and transactions';
 }

@@ -8,7 +8,7 @@ class AppEndPoints {
   );
 
   // Environment-specific URLs
-  static const String _productionSite = 'https://admin.parcelexpress.om';
+  static const String _productionSite = 'https://dashboard.parcelexpress.om';
   static const String _testSite = 'https://test.parcelexpress.om';
 
   // Dynamic site URL based on environment
@@ -66,6 +66,9 @@ class AppEndPoints {
   static const String clientPaymentTransactions =
       'client/payments/transactions';
   static const String clientPaymentSummary = 'client/payments/summary';
+
+  // Client Wallet
+  static const String clientWallet = 'client/wallet';
 
   // Customer Orders
   static const String customerOrders = '/customer-orders/store';

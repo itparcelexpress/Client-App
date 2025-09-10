@@ -1109,6 +1109,14 @@
   "@trackingNumberCopied": {
     "description": "Tracking number copied message"
   },
+  "scan": "Scan",
+  "@scan": {"description": "Scan action label"},
+  "trackingAlreadyTaken": "This tracking number is already used. Please scan a different sticker.",
+  "@trackingAlreadyTaken": {
+    "description": "Shown when tracking_no is duplicated (422)"
+  },
+  "invalidDimensions": "Please enter valid package dimensions.",
+  "@invalidDimensions": {"description": "Generic dimensions validation error"},
 
   "recipient": "Recipient",
   "@recipient": {
@@ -1477,6 +1485,18 @@
   "@loginFailed": {
     "description": "Login failure message"
   },
+  "loginErrorIncorrectPassword": "Incorrect password. Please try again.",
+  "@loginErrorIncorrectPassword": {"description": "Login error: incorrect password"},
+  "loginErrorNoAccount": "No account found with this email.",
+  "@loginErrorNoAccount": {"description": "Login error: no account"},
+  "loginErrorAccountDisabled": "Your account is disabled. Please contact support.",
+  "@loginErrorAccountDisabled": {"description": "Login error: account disabled"},
+  "loginErrorTooManyAttempts": "Too many login attempts. Please try again later.",
+  "@loginErrorTooManyAttempts": {"description": "Login error: too many attempts"},
+  "loginErrorValidation": "Please check your input and try again.",
+  "@loginErrorValidation": {"description": "Login error: validation"},
+  "loginErrorUnknown": "Unable to login. Please try again.",
+  "@loginErrorUnknown": {"description": "Login error: unknown"},
 
   "networkError": "Network error. Please check your connection.",
   "@networkError": {
@@ -1851,7 +1871,31 @@
   },
 
   "alternatePhoneInfo": "Enter an alternate phone number (optional)",
+  "emailPlaceholder": "example@email.com",
+  "@emailPlaceholder": {"description": "Email input placeholder"},
+  "streetAddressHint": "Building, street, area",
+  "@streetAddressHint": {"description": "Street address input hint"},
+  "locationUrlPlaceholder": "https://maps.app.goo.gl/...",
+  "@locationUrlPlaceholder": {"description": "Location URL placeholder"},
+  "noAddressesYet": "No Addresses Yet",
+  "@noAddressesYet": {"description": "Address book empty state title"},
+  "addYourFirstAddressHint": "Add your first address to make\norder creation easier",
+  "@addYourFirstAddressHint": {"description": "Address book empty state subtitle"},
+  "deleteAddress": "Delete Address",
+  "@deleteAddress": {"description": "Delete address dialog title"},
+  "deleteAddressConfirmation": "Are you sure you want to delete \"{name}\" address?",
+  "@deleteAddressConfirmation": {
+    "description": "Delete address confirmation with name",
+    "placeholders": {"name": {"type": "String", "example": "Home"}}
+  },
   "@alternatePhoneInfo": {
     "description": "Alternate phone number input information text"
   }
+  ,
+  "wallet": "Wallet",
+  "@wallet": {"description": "Wallet page title"},
+  "viewWallet": "Wallet",
+  "@viewWallet": {"description": "Wallet menu item title"},
+  "viewWalletSubtitle": "View balance and transactions",
+  "@viewWalletSubtitle": {"description": "Wallet menu item subtitle"}
 }
