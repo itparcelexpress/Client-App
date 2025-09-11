@@ -449,7 +449,7 @@ class WalletTransaction {
   final int id;
   final String amount;
   final String type;
-  final String status;
+  final String? status;
   @JsonKey(name: 'created_at')
   final DateTime createdAt;
   @JsonKey(name: 'description')
@@ -459,7 +459,7 @@ class WalletTransaction {
     required this.id,
     required this.amount,
     required this.type,
-    required this.status,
+    this.status,
     required this.createdAt,
     this.description,
   });

@@ -74,7 +74,9 @@ class NotificationCubit extends Cubit<NotificationState> {
         emit(const NotificationError('Failed to load notifications'));
       }
     } catch (e) {
-      emit(NotificationError('Error loading notifications: $e'));
+      if (!isClosed) {
+        emit(NotificationError('Error loading notifications: $e'));
+      }
     }
   }
 

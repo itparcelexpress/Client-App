@@ -485,6 +485,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   }
 
   Widget _buildStickerSection() {
+    final isRTL = Localizations.localeOf(context).languageCode == 'ar';
+
     return FadeInUp(
       duration: const Duration(milliseconds: 600),
       child: Container(
@@ -504,79 +506,160 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF10b981), Color(0xFF059669)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(
-                    Icons.qr_code_scanner,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  AppLocalizations.of(context)!.stickerNumber,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF1a1a1a),
-                  ),
-                ),
-              ],
+              mainAxisAlignment:
+                  isRTL ? MainAxisAlignment.end : MainAxisAlignment.start,
+              children:
+                  isRTL
+                      ? [
+                        Text(
+                          AppLocalizations.of(context)!.stickerNumber,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF1a1a1a),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF10b981), Color(0xFF059669)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.qr_code_scanner,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ]
+                      : [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF10b981), Color(0xFF059669)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.qr_code_scanner,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          AppLocalizations.of(context)!.stickerNumber,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF1a1a1a),
+                          ),
+                        ),
+                      ],
             ),
             const SizedBox(height: 16),
             Row(
-              children: [
-                Expanded(
-                  child: _buildTextField(
-                    controller: _stickerController,
-                    label: AppLocalizations.of(context)!.stickerNumber,
-                    hint: 'e.g. 33223322',
-                    icon: Icons.confirmation_number_outlined,
-                    keyboardType: TextInputType.text,
-                    validator:
-                        (value) =>
-                            (value == null || value.trim().isEmpty)
-                                ? AppLocalizations.of(
-                                  context,
-                                )!.pleaseEnterField(
-                                  AppLocalizations.of(context)!.stickerNumber,
-                                )
-                                : null,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                ElevatedButton.icon(
-                  onPressed: _openStickerScanner,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF10b981),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 14,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 0,
-                  ),
-                  icon: const Icon(Icons.qr_code_scanner, size: 18),
-                  label: Text(
-                    Localizations.localeOf(context).languageCode == 'ar'
-                        ? 'مسح'
-                        : 'Scan',
-                  ),
-                ),
-              ],
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children:
+                  isRTL
+                      ? [
+                        ElevatedButton.icon(
+                          onPressed: _openStickerScanner,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF10b981),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 14,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 0,
+                          ),
+                          icon: const Icon(Icons.qr_code_scanner, size: 18),
+                          label: Text(
+                            Localizations.localeOf(context).languageCode == 'ar'
+                                ? 'مسح'
+                                : 'Scan',
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _buildTextField(
+                            controller: _stickerController,
+                            label: AppLocalizations.of(context)!.stickerNumber,
+                            hint: 'e.g. 33223322',
+                            icon: Icons.confirmation_number_outlined,
+                            keyboardType: TextInputType.text,
+                            validator:
+                                (value) =>
+                                    (value == null || value.trim().isEmpty)
+                                        ? AppLocalizations.of(
+                                          context,
+                                        )!.pleaseEnterField(
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.stickerNumber,
+                                        )
+                                        : null,
+                          ),
+                        ),
+                      ]
+                      : [
+                        Expanded(
+                          child: _buildTextField(
+                            controller: _stickerController,
+                            label: AppLocalizations.of(context)!.stickerNumber,
+                            hint: 'e.g. 33223322',
+                            icon: Icons.confirmation_number_outlined,
+                            keyboardType: TextInputType.text,
+                            validator:
+                                (value) =>
+                                    (value == null || value.trim().isEmpty)
+                                        ? AppLocalizations.of(
+                                          context,
+                                        )!.pleaseEnterField(
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.stickerNumber,
+                                        )
+                                        : null,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        ElevatedButton.icon(
+                          onPressed: _openStickerScanner,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF10b981),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 14,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 0,
+                          ),
+                          icon: const Icon(Icons.qr_code_scanner, size: 18),
+                          label: Text(
+                            Localizations.localeOf(context).languageCode == 'ar'
+                                ? 'مسح'
+                                : 'Scan',
+                          ),
+                        ),
+                      ],
             ),
           ],
         ),
@@ -1253,6 +1336,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     int maxLines = 1,
     List<TextInputFormatter>? inputFormatters,
   }) {
+    final isRTL = Localizations.localeOf(context).languageCode == 'ar';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1263,39 +1348,53 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             fontWeight: FontWeight.w600,
             color: Color(0xFF1a1a1a),
           ),
+          textAlign: isRTL ? TextAlign.right : TextAlign.left,
         ),
         const SizedBox(height: 8),
-        TextFormField(
-          controller: controller,
-          keyboardType: keyboardType,
-          validator: validator,
-          maxLines: maxLines,
-          inputFormatters: inputFormatters,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: TextStyle(color: Colors.grey[400]),
-            prefixIcon: Icon(icon, color: Colors.grey[400], size: 20),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[200]!),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[200]!),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF667eea), width: 2),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFFef4444), width: 1),
-            ),
-            filled: true,
-            fillColor: Colors.grey[50],
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 16,
+        Directionality(
+          textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
+          child: TextFormField(
+            controller: controller,
+            keyboardType: keyboardType,
+            validator: validator,
+            maxLines: maxLines,
+            inputFormatters: inputFormatters,
+            textAlign: isRTL ? TextAlign.right : TextAlign.left,
+            decoration: InputDecoration(
+              hintText: hint,
+              hintStyle: TextStyle(color: Colors.grey[400]),
+              prefixIcon:
+                  isRTL ? null : Icon(icon, color: Colors.grey[400], size: 20),
+              suffixIcon:
+                  isRTL ? Icon(icon, color: Colors.grey[400], size: 20) : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey[200]!),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey[200]!),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  color: Color(0xFF667eea),
+                  width: 2,
+                ),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  color: Color(0xFFef4444),
+                  width: 1,
+                ),
+              ),
+              filled: true,
+              fillColor: Colors.grey[50],
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 16,
+              ),
             ),
           ),
         ),

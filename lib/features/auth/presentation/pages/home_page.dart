@@ -10,7 +10,7 @@ import 'package:client_app/features/pricing/pricing.dart';
 import 'package:client_app/features/profile/presentation/pages/notification_settings_page.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/presentation/pages/orders_list_page.dart';
-import 'package:client_app/features/shipment/presentation/pages/shipment_page.dart';
+import 'package:client_app/features/shipment/presentation/pages/create_order_page.dart';
 import 'package:client_app/features/wallet/cubit/wallet_cubit.dart';
 import 'package:client_app/features/wallet/data/repositories/wallet_repository.dart';
 import 'package:client_app/features/wallet/presentation/pages/wallet_page.dart';
@@ -765,7 +765,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         builder:
             (context) => BlocProvider(
               create: (context) => getIt<ShipmentCubit>(),
-              child: const ShipmentPage(),
+              child: const CreateOrderPage(),
             ),
       ),
     );
