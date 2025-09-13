@@ -11,31 +11,78 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit(this._authRepository) : super(AuthInitial());
 
-  Future<void> login({required String email, required String password}) async {
+  Future<void> login({
+    required String email,
+    required String password,
+    String? pleaseEnterBothMessage,
+    String? emailAndPasswordRequiredMessage,
+    String? loginFailedMessage,
+    String? networkErrorMessage,
+    String? internetCheckMessage,
+    String? timeoutMessage,
+    String? timeoutDetailMessage,
+    String? unexpectedErrorMessage,
+    String? tryAgainLaterMessage,
+  }) async {
+    // Validate input before proceeding
+    if (email.trim().isEmpty || password.isEmpty) {
+      emit(
+        AuthFailure(
+          message:
+              pleaseEnterBothMessage ?? 'Please enter both email and password',
+          errors: [
+            emailAndPasswordRequiredMessage ??
+                'Email and password are required',
+          ],
+        ),
+      );
+      return;
+    }
+
     emit(AuthLoading());
 
     try {
-      final loginRequest = LoginRequest(email: email, password: password);
+      final loginRequest = LoginRequest(
+        email: email.trim(),
+        password: password,
+      );
 
       final response = await _authRepository.login(loginRequest);
 
       if (response.success && response.data != null) {
         emit(AuthSuccess(user: response.data!));
       } else {
-        emit(
-          AuthFailure(
-            message: response.message ?? 'Login failed',
-            errors: response.errors ?? ['Login failed'],
-          ),
-        );
+        // Provide more specific error messages
+        final errorMessage =
+            response.message ?? (loginFailedMessage ?? 'Login failed');
+        final errors =
+            response.errors ?? [loginFailedMessage ?? 'Login failed'];
+
+        emit(AuthFailure(message: errorMessage, errors: errors));
       }
     } catch (e) {
-      emit(
-        AuthFailure(
-          message: 'An unexpected error occurred',
-          errors: [e.toString()],
-        ),
-      );
+      // Handle different types of exceptions
+      String errorMessage;
+      List<String> errors;
+
+      if (e.toString().contains('SocketException') ||
+          e.toString().contains('NetworkException')) {
+        errorMessage = networkErrorMessage ?? 'Network connection error';
+        errors = [
+          internetCheckMessage ??
+              'Please check your internet connection and try again',
+        ];
+      } else if (e.toString().contains('TimeoutException')) {
+        errorMessage = timeoutMessage ?? 'Request timeout';
+        errors = [
+          timeoutDetailMessage ?? 'The request took too long. Please try again',
+        ];
+      } else {
+        errorMessage = unexpectedErrorMessage ?? 'An unexpected error occurred';
+        errors = [tryAgainLaterMessage ?? 'Please try again later'];
+      }
+
+      emit(AuthFailure(message: errorMessage, errors: errors));
     }
   }
 
@@ -43,17 +90,23 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
 
     try {
-      final success = await _authRepository.logout();
-      if (success) {
-        emit(AuthInitial());
-      } else {
-        // Still clear the state even if API call failed, but user data is cleared
-        emit(AuthInitial());
-      }
+      await _authRepository.logout();
+
+      // Always emit AuthInitial regardless of API response
+      // because local data is cleared in the repository
+      emit(AuthInitial());
+
+      // Optional: You could emit a logout success state if needed
+      // emit(AuthLogoutSuccess());
     } catch (e) {
       // Even if logout fails, clear the state since local data is cleared
       emit(AuthInitial());
     }
+  }
+
+  // Add a method to clear state without API call (for app termination, etc.)
+  void clearAuthState() {
+    emit(AuthInitial());
   }
 
   Future<void> checkAuthStatus() async {

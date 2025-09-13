@@ -27,7 +27,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logout => 'Logout';
 
   @override
-  String get email => 'Email';
+  String get email => 'Email Address';
 
   @override
   String get emailAddress => 'Email Address';
@@ -548,7 +548,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get typeStickerNumber => 'Type sticker number...';
 
   @override
-  String get scanBarcode => 'Scan barcode';
+  String get scanBarcode => 'Scan Barcode';
 
   @override
   String get startScanning => 'Start Scanning';
@@ -832,7 +832,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get type => 'Type:';
 
   @override
-  String get customer => 'Customer:';
+  String get customer => 'Customer';
 
   @override
   String get phone => 'Phone:';
@@ -1020,7 +1020,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get no => 'No';
 
   @override
-  String get processing => 'Processing...';
+  String get processing => 'Processing';
 
   @override
   String get uploading => 'Uploading...';
@@ -1177,4 +1177,320 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get viewWalletSubtitle => 'View balance and transactions';
+
+  @override
+  String get feePayer => 'Fee Payer';
+
+  @override
+  String get dimensionsAndWeight => 'Dimensions & Weight';
+
+  @override
+  String get measurementUnit => 'Measurement Unit';
+
+  @override
+  String get packageDimensions => 'Package Dimensions';
+
+  @override
+  String get width => 'Width';
+
+  @override
+  String get height => 'Height';
+
+  @override
+  String get length => 'Length';
+
+  @override
+  String get weight => 'Weight';
+
+  @override
+  String get items => 'Items';
+
+  @override
+  String get itemName => 'Item Name';
+
+  @override
+  String get itemNameHint => 'Enter item name...';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get categoryHint => 'Category...';
+
+  @override
+  String get quantity => 'Quantity';
+
+  @override
+  String get quantityHint => '1';
+
+  @override
+  String get addAnotherItem => 'Add Another Item';
+
+  @override
+  String get shipper => 'Shipper';
+
+  @override
+  String get kg => 'Kg';
+
+  @override
+  String get lengthUnit => 'Length';
+
+  @override
+  String get deliveryFeeHint => '0.00';
+
+  @override
+  String get amountHint => '0.00';
+
+  @override
+  String get dimensionHint => '0.0';
+
+  @override
+  String get pleaseEnterDeliveryFee => 'Please enter delivery fee';
+
+  @override
+  String get pleaseEnterAmountField => 'Please enter amount';
+
+  @override
+  String get pleaseEnterBothEmailAndPassword =>
+      'Please enter both email and password';
+
+  @override
+  String get emailAndPasswordRequired => 'Email and password are required';
+
+  @override
+  String get loginFailedGeneric => 'Login failed';
+
+  @override
+  String get networkConnectionError => 'Network connection error';
+
+  @override
+  String get pleaseCheckInternetConnection =>
+      'Please check your internet connection and try again';
+
+  @override
+  String get requestTimeout => 'Request timeout';
+
+  @override
+  String get requestTookTooLong =>
+      'The request took too long. Please try again';
+
+  @override
+  String get unexpectedErrorOccurred => 'An unexpected error occurred';
+
+  @override
+  String get pleaseTryAgainLater => 'Please try again later';
+
+  @override
+  String get loginSuccess => 'Login successful';
+
+  @override
+  String get or => 'OR';
+
+  @override
+  String get cameraPermissionDenied => 'Camera permission denied';
+
+  @override
+  String get clientApp => 'Client App';
+
+  @override
+  String get egypt => 'Egypt';
+
+  @override
+  String get saudiArabia => 'Saudi Arabia';
+
+  @override
+  String get unitedArabEmirates => 'United Arab Emirates';
+
+  @override
+  String get kuwait => 'Kuwait';
+
+  @override
+  String get qatar => 'Qatar';
+
+  @override
+  String get bahrain => 'Bahrain';
+
+  @override
+  String get oman => 'Oman';
+
+  @override
+  String get jordan => 'Jordan';
+
+  @override
+  String get lebanon => 'Lebanon';
+
+  @override
+  String get unitedStates => 'United States';
+
+  @override
+  String get unitedKingdom => 'United Kingdom';
+
+  @override
+  String get canada => 'Canada';
+
+  @override
+  String get searchCountry => 'Search Country';
+
+  @override
+  String get startTypingToSearch => 'Start typing to search';
+
+  @override
+  String get failedToLoadNotifications => 'Failed to load notifications';
+
+  @override
+  String get errorLoadingNotifications => 'Error loading notifications';
+
+  @override
+  String get failedToLoadMoreNotifications =>
+      'Failed to load more notifications';
+
+  @override
+  String get errorLoadingMoreNotifications =>
+      'Error loading more notifications';
+
+  @override
+  String get examplePhoneNumber => '123xxxx';
+
+  @override
+  String itemNumber(Object number) {
+    return 'Item $number';
+  }
+
+  @override
+  String get thisTrackingNumberIsAlreadyUsed =>
+      'This tracking number is already used. Please scan a different sticker.';
+
+  @override
+  String get pleaseCheckYourInputAndTryAgain =>
+      'Please check your input and try again.';
+
+  @override
+  String get anErrorOccurred => 'An error occurred';
+
+  @override
+  String get selectAddress => 'Select Address';
+
+  @override
+  String get addNew => 'Add New';
+
+  @override
+  String get noAddressesFound => 'No Addresses Found';
+
+  @override
+  String get editAddress => 'Edit Address';
+
+  @override
+  String get addNewAddress => 'Add New Address';
+
+  @override
+  String get pleaseEnterYourFullName => 'Please enter your full name';
+
+  @override
+  String get pleaseEnterYourEmailAddress => 'Please enter your email address';
+
+  @override
+  String get pleaseEnterAValidEmailAddress =>
+      'Please enter a valid email address';
+
+  @override
+  String get alternatePhoneNumber => 'Alternate Phone Number';
+
+  @override
+  String get pleaseEnterYourStreetAddress => 'Please enter your street address';
+
+  @override
+  String get zipCodeOptional => 'Zip Code (Optional)';
+
+  @override
+  String get locationUrlOptional => 'Location URL (Optional)';
+
+  @override
+  String pleaseSelect(Object label) {
+    return 'Please select $label';
+  }
+
+  @override
+  String get contactInformation => 'Contact Information';
+
+  @override
+  String get primaryPhone => 'Primary Phone';
+
+  @override
+  String get country => 'Country';
+
+  @override
+  String get zipCode => 'Zip Code';
+
+  @override
+  String get failedToLoadClientSettings => 'Failed to load client settings';
+
+  @override
+  String get errorLoadingClientSettings => 'Error loading client settings';
+
+  @override
+  String get noCurrentSettingsAvailable => 'No current settings available';
+
+  @override
+  String get failedToUpdateNotificationSettings =>
+      'Failed to update notification settings';
+
+  @override
+  String get errorUpdatingNotificationSettings =>
+      'Error updating notification settings';
+
+  @override
+  String get noNotificationSettingsAvailable =>
+      'No notification settings available';
+
+  @override
+  String get whatsappNotificationsEnabled => 'WhatsApp notifications enabled';
+
+  @override
+  String get whatsappNotificationsDisabled => 'WhatsApp notifications disabled';
+
+  @override
+  String get failedToToggleWhatsappNotifications =>
+      'Failed to toggle WhatsApp notifications';
+
+  @override
+  String get errorTogglingWhatsappNotifications =>
+      'Error toggling WhatsApp notifications';
+
+  @override
+  String get emailNotificationsEnabled => 'Email notifications enabled';
+
+  @override
+  String get emailNotificationsDisabled => 'Email notifications disabled';
+
+  @override
+  String get failedToToggleEmailNotifications =>
+      'Failed to toggle email notifications';
+
+  @override
+  String get errorTogglingEmailNotifications =>
+      'Error toggling email notifications';
+
+  @override
+  String get unableToReadBarcode => 'Unable to read barcode';
+
+  @override
+  String get shipped => 'Shipped';
+
+  @override
+  String get cancelled => 'Cancelled';
+
+  @override
+  String get couldNotAccessDeviceStorage => 'Could not access device storage';
+
+  @override
+  String get pdfSavedSuccessfully => 'PDF saved successfully';
+
+  @override
+  String get failedToOpenPdf => 'Failed to open PDF';
+
+  @override
+  String get errorSavingPdf => 'Error saving PDF';
+
+  @override
+  String get invoice => 'Invoice';
 }

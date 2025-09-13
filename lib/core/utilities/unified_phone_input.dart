@@ -92,8 +92,8 @@ class _UnifiedPhoneInputState extends State<UnifiedPhoneInput> {
           topRight: Radius.circular(20.0),
         ),
         inputDecoration: InputDecoration(
-          labelText: 'Search Country',
-          hintText: 'Start typing to search',
+          labelText: AppLocalizations.of(context)!.searchCountry,
+          hintText: AppLocalizations.of(context)!.startTypingToSearch,
           prefixIcon: const Icon(Icons.search),
           border: OutlineInputBorder(
             borderSide: BorderSide(

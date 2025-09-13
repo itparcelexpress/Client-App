@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:client_app/core/services/location_service.dart';
 import 'package:client_app/core/utilities/app_themes.dart';
 import 'package:client_app/core/widgets/environment_banner.dart';
-import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/auth/presentation/pages/home_page.dart';
 import 'package:client_app/features/auth/presentation/pages/login_page.dart';
@@ -20,8 +19,8 @@ Future<void> main() async {
   await initInj();
   await LocationService.initialize();
 
-  // Clear authentication data on app start to force fresh login
-  await LocalData.logout();
+  // Note: Removed automatic logout on app start for better UX
+  // Authentication state will be checked in AuthWrapper
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   HttpOverrides.global = MyHttpOverrides();
@@ -51,26 +50,38 @@ class MyAppState extends State<MyApp> {
     });
   }
 
+  String _getAppTitle() {
+    // Always return Arabic title as default
+    return 'تطبيق العميل';
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      title: 'Client App',
+      title: _getAppTitle(),
       theme: AppThemes.theme,
       locale: _locale,
       localeResolutionCallback: (locale, supportedLocales) {
-        // Return the app's current locale
-        return _locale;
+        // Always default to Arabic regardless of system locale
+        return const Locale('ar');
       },
       home: const AuthWrapper(),
     );
   }
 }
 
-class AuthWrapper extends StatelessWidget {
+class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});
+
+  @override
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  bool _hasCheckedAuth = false;
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +96,14 @@ class AuthWrapper extends StatelessWidget {
           }
         },
         builder: (context, state) {
+          // Check authentication status when the app starts (only once)
+          if (state is AuthInitial && !_hasCheckedAuth) {
+            _hasCheckedAuth = true;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              context.read<AuthCubit>().checkAuthStatus();
+            });
+          }
+
           return Scaffold(
             body: Column(
               children: [
@@ -92,21 +111,6 @@ class AuthWrapper extends StatelessWidget {
                 Expanded(child: _buildBody(state)),
               ],
             ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                // Toggle between Arabic and English
-                final currentLocale = Localizations.localeOf(context);
-                final newLocale =
-                    currentLocale.languageCode == 'ar'
-                        ? const Locale('en')
-                        : const Locale('ar');
-                MyApp.of(context)?.setLocale(newLocale);
-              },
-              backgroundColor: Colors.blue.shade400,
-              child: Icon(Icons.language, color: Colors.white),
-              mini: true,
-            ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
           );
         },
       ),
@@ -118,6 +122,14 @@ class AuthWrapper extends StatelessWidget {
       return const SplashPage();
     } else if (state is AuthSuccess) {
       return const HomePage();
+    } else if (state is AuthCheckSuccess) {
+      // If user is authenticated, show home page
+      if (state.isAuthenticated) {
+        return const HomePage();
+      } else {
+        // If not authenticated, show login page
+        return const LoginPage();
+      }
     } else {
       // Always show login page for initial state or any other state
       return const LoginPage();

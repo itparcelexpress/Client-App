@@ -251,11 +251,17 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       });
 
       if (mounted) {
-        ToastService.showSuccess(context, 'addressSavedSuccessfully');
+        ToastService.showSuccess(
+          context,
+          AppLocalizations.of(context)!.addressSavedSuccessfully,
+        );
       }
     } catch (e) {
       if (mounted) {
-        ToastService.showError(context, 'addressSaveFailed');
+        ToastService.showError(
+          context,
+          AppLocalizations.of(context)!.addressSaveFailed,
+        );
       }
     }
   }
@@ -313,7 +319,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   controller: _scrollController,
                   padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
                     context,
-                    const EdgeInsets.all(20),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                   ),
                   child: Form(
                     key: _formKey,
@@ -323,35 +329,35 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                         SizedBox(
                           height: ResponsiveUtils.getResponsivePadding(
                             context,
-                            24,
+                            32,
                           ),
                         ),
                         _buildStickerSection(),
                         SizedBox(
                           height: ResponsiveUtils.getResponsivePadding(
                             context,
-                            24,
+                            32,
                           ),
                         ),
                         _buildAddressBookSection(),
                         SizedBox(
                           height: ResponsiveUtils.getResponsivePadding(
                             context,
-                            24,
+                            32,
                           ),
                         ),
                         _buildPersonalInfoSection(),
                         SizedBox(
                           height: ResponsiveUtils.getResponsivePadding(
                             context,
-                            24,
+                            32,
                           ),
                         ),
                         _buildAddressSection(),
                         SizedBox(
                           height: ResponsiveUtils.getResponsivePadding(
                             context,
-                            24,
+                            32,
                           ),
                         ),
                         if (_hasFormData &&
@@ -567,7 +573,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                         ),
                       ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children:
@@ -588,18 +594,17 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                             elevation: 0,
                           ),
                           icon: const Icon(Icons.qr_code_scanner, size: 18),
-                          label: Text(
-                            Localizations.localeOf(context).languageCode == 'ar'
-                                ? 'مسح'
-                                : 'Scan',
-                          ),
+                          label: Text(AppLocalizations.of(context)!.scan),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: _buildTextField(
                             controller: _stickerController,
                             label: AppLocalizations.of(context)!.stickerNumber,
-                            hint: 'e.g. 33223322',
+                            hint:
+                                AppLocalizations.of(
+                                  context,
+                                )!.examplePhoneNumber,
                             icon: Icons.confirmation_number_outlined,
                             keyboardType: TextInputType.text,
                             validator:
@@ -621,7 +626,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                           child: _buildTextField(
                             controller: _stickerController,
                             label: AppLocalizations.of(context)!.stickerNumber,
-                            hint: 'e.g. 33223322',
+                            hint:
+                                AppLocalizations.of(
+                                  context,
+                                )!.examplePhoneNumber,
                             icon: Icons.confirmation_number_outlined,
                             keyboardType: TextInputType.text,
                             validator:
@@ -653,11 +661,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                             elevation: 0,
                           ),
                           icon: const Icon(Icons.qr_code_scanner, size: 18),
-                          label: Text(
-                            Localizations.localeOf(context).languageCode == 'ar'
-                                ? 'مسح'
-                                : 'Scan',
-                          ),
+                          label: Text(AppLocalizations.of(context)!.scan),
                         ),
                       ],
             ),
@@ -766,7 +770,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             BlocProvider(
               create: (context) => getIt<AddressBookCubit>(),
               child: AddressSelectionWidget(
@@ -851,7 +855,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       ? AppLocalizations.of(context)!.nameRequired
                       : null,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         UnifiedPhoneInput(
           controller: _phoneController,
           label: AppLocalizations.of(context)!.phoneNumber,
@@ -861,7 +865,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             // Handle phone number change if needed
           },
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         UnifiedPhoneInput(
           controller: _alternatePhoneController,
           label: AppLocalizations.of(context)!.alternatePhone,
@@ -871,7 +875,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             // Handle alternate phone number change if needed
           },
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         _buildTextField(
           controller: _emailController,
           label: AppLocalizations.of(context)!.emailAddress,
@@ -912,7 +916,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           displayText: (governorate) => governorate.enName,
           icon: Icons.location_city_outlined,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         // State Dropdown
         _buildLocationDropdown<StateModel>(
           label: AppLocalizations.of(context)!.state,
@@ -929,7 +933,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           displayText: (state) => state.enName,
           icon: Icons.location_searching_outlined,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         // Place Dropdown
         _buildLocationDropdown<Place>(
           label: AppLocalizations.of(context)!.place,
@@ -943,7 +947,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           displayText: (place) => place.enName,
           icon: Icons.place_outlined,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         _buildTextField(
           controller: _streetAddressController,
           label: AppLocalizations.of(context)!.streetAddress,
@@ -956,7 +960,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       ? AppLocalizations.of(context)!.streetAddressRequired
                       : null,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         _buildTextField(
           controller: _zipcodeController,
           label: AppLocalizations.of(context)!.zipcode,
@@ -1051,22 +1055,22 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           items: const ['cod', 'prepaid'],
           onChanged: (value) => setState(() => _paymentType = value!),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         _buildDropdownField(
-          label: 'Fee payer',
+          label: AppLocalizations.of(context)!.feePayer,
           value: _feePayer,
           icon: Icons.account_balance_wallet_outlined,
           items: const ['customer', 'shipper'],
           onChanged: (value) => setState(() => _feePayer = value!),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         Row(
           children: [
             Expanded(
               child: _buildTextField(
                 controller: _deliveryFeeController,
                 label: AppLocalizations.of(context)!.deliveryFee,
-                hint: '0.00',
+                hint: AppLocalizations.of(context)!.deliveryFeeHint,
                 icon: Icons.local_shipping_outlined,
                 keyboardType: TextInputType.number,
                 validator:
@@ -1074,16 +1078,16 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                         value?.isEmpty == true
                             ? AppLocalizations.of(
                               context,
-                            )!.pleaseEnterField('delivery fee')
+                            )!.pleaseEnterDeliveryFee
                             : null,
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 20),
             Expanded(
               child: _buildTextField(
                 controller: _amountController,
                 label: AppLocalizations.of(context)!.amount,
-                hint: '0.00',
+                hint: AppLocalizations.of(context)!.amountHint,
                 icon: Icons.attach_money_rounded,
                 keyboardType: TextInputType.number,
                 validator:
@@ -1091,153 +1095,324 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                         value?.isEmpty == true
                             ? AppLocalizations.of(
                               context,
-                            )!.pleaseEnterField('amount')
+                            )!.pleaseEnterAmountField
                             : null,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 16),
-        // Unit dropdown first for clarity
-        _buildDropdownField(
-          label: 'Unit',
-          value: _unit,
-          icon: Icons.unfold_more,
-          items: const ['Kg', 'length'],
-          onChanged: (v) => setState(() => _unit = v!),
-        ),
-        const SizedBox(height: 12),
-        // Two-by-two layout for better small-screen ergonomics
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
+        const SizedBox(height: 24),
+
+        // Dimensions & Weight Section Header
+        Row(
           children: [
-            SizedBox(
-              width: (ResponsiveUtils.getScreenWidth(context) - 20 - 12) / 2,
-              child: _buildTextField(
-                controller: _widthController,
-                label: 'Width',
-                hint: 'e.g. 2',
-                icon: Icons.straighten,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
-                ],
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                Icons.straighten,
+                color: Colors.blue.shade600,
+                size: 18,
               ),
             ),
-            SizedBox(
-              width: (ResponsiveUtils.getScreenWidth(context) - 20 - 12) / 2,
-              child: _buildTextField(
-                controller: _heightController,
-                label: 'Height',
-                hint: 'e.g. 3',
-                icon: Icons.straighten,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: (ResponsiveUtils.getScreenWidth(context) - 20 - 12) / 2,
-              child: _buildTextField(
-                controller: _lengthController,
-                label: 'Length',
-                hint: 'e.g. 1',
-                icon: Icons.straighten,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: (ResponsiveUtils.getScreenWidth(context) - 20 - 12) / 2,
-              child: _buildTextField(
-                controller: _weightController,
-                label: 'Weight',
-                hint: 'e.g. 2',
-                icon: Icons.monitor_weight_outlined,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
-                ],
+            const SizedBox(width: 12),
+            Text(
+              AppLocalizations.of(context)!.dimensionsAndWeight,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey.shade900,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 16),
-        Text(
-          'Items',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: Color(0xFF1a1a1a),
+        const SizedBox(height: 20),
+
+        // Unit Selection
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade50,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade200),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.measurementUnit,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey.shade800,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildDropdownField(
+                      label: '',
+                      value: _unit,
+                      icon: Icons.straighten,
+                      items: const ['Kg', 'length'],
+                      onChanged: (v) => setState(() => _unit = v!),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 20),
+
+        // Dimensions Grid
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade50,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade200),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.packageDimensions,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey.shade800,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildTextField(
+                      controller: _widthController,
+                      label: AppLocalizations.of(context)!.width,
+                      hint: AppLocalizations.of(context)!.dimensionHint,
+                      icon: Icons.straighten,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _buildTextField(
+                      controller: _heightController,
+                      label: AppLocalizations.of(context)!.height,
+                      hint: AppLocalizations.of(context)!.dimensionHint,
+                      icon: Icons.height,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildTextField(
+                      controller: _lengthController,
+                      label: AppLocalizations.of(context)!.length,
+                      hint: AppLocalizations.of(context)!.dimensionHint,
+                      icon: Icons.straighten,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _buildTextField(
+                      controller: _weightController,
+                      label: AppLocalizations.of(context)!.weight,
+                      hint: AppLocalizations.of(context)!.dimensionHint,
+                      icon: Icons.monitor_weight_outlined,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 24),
+        // Items Section Header
+        Row(
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                Icons.inventory_2_outlined,
+                color: Colors.blue.shade600,
+                size: 18,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              AppLocalizations.of(context)!.items,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey.shade900,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+
+        // Items List
         ...List.generate(_itemNameCtrls.length, (index) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: Row(
+          return Container(
+            margin: const EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade200),
+            ),
+            child: Column(
               children: [
-                Expanded(
-                  child: _buildTextField(
-                    controller: _itemNameCtrls[index],
-                    label: 'Name',
-                    hint: 'Enter item name...',
-                    icon: Icons.inventory_2_outlined,
-                  ),
+                // Item Header with Delete Button
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: Colors.blue.shade50,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${index + 1}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.blue.shade600,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${AppLocalizations.of(context)!.itemName} ${index + 1}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey.shade700,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade50,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.red.shade200),
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _itemNameCtrls.removeAt(index).dispose();
+                            _itemCategoryCtrls.removeAt(index).dispose();
+                            _itemQuantityCtrls.removeAt(index).dispose();
+                          });
+                        },
+                        icon: Icon(
+                          Icons.delete_outline,
+                          color: Colors.red.shade600,
+                          size: 18,
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 36,
+                          minHeight: 36,
+                        ),
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildTextField(
-                    controller: _itemCategoryCtrls[index],
-                    label: 'Category',
-                    hint: 'Type category...',
-                    icon: Icons.category_outlined,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildTextField(
-                    controller: _itemQuantityCtrls[index],
-                    label: 'Quantity',
-                    hint: 'e.g. 1, 5, 10...',
-                    icon: Icons.format_list_numbered,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  ),
-                ),
-                const SizedBox(width: 12),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _itemNameCtrls.removeAt(index).dispose();
-                      _itemCategoryCtrls.removeAt(index).dispose();
-                      _itemQuantityCtrls.removeAt(index).dispose();
-                    });
-                  },
-                  icon: const Icon(
-                    Icons.delete_outline,
-                    color: Color(0xFFef4444),
-                  ),
+                const SizedBox(height: 16),
+
+                // Item Fields
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: _buildTextField(
+                        controller: _itemNameCtrls[index],
+                        label: AppLocalizations.of(context)!.itemName,
+                        hint: AppLocalizations.of(context)!.itemNameHint,
+                        icon: Icons.inventory_2_outlined,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: _buildTextField(
+                        controller: _itemCategoryCtrls[index],
+                        label: AppLocalizations.of(context)!.category,
+                        hint: AppLocalizations.of(context)!.categoryHint,
+                        icon: Icons.category_outlined,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: _buildTextField(
+                        controller: _itemQuantityCtrls[index],
+                        label: AppLocalizations.of(context)!.quantity,
+                        hint: AppLocalizations.of(context)!.quantityHint,
+                        icon: Icons.numbers,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           );
         }),
-        Align(
-          alignment: Alignment.centerRight,
-          child: OutlinedButton.icon(
+
+        // Add Item Button
+        Container(
+          width: double.infinity,
+          margin: const EdgeInsets.only(top: 8),
+          child: ElevatedButton.icon(
             onPressed: () {
               setState(() {
                 _itemNameCtrls.add(TextEditingController());
@@ -1245,11 +1420,28 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 _itemQuantityCtrls.add(TextEditingController());
               });
             },
-            icon: const Icon(Icons.add),
-            label: const Text('Add item'),
+            icon: Icon(Icons.add_circle_outline, color: Colors.white),
+            label: Text(
+              AppLocalizations.of(context)!.addAnotherItem,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue.shade600,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 2,
+            ),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
+
+        // Location URL field
         _buildTextField(
           controller: _locationUrlController,
           label:
@@ -1278,50 +1470,41 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     required IconData icon,
     required List<Widget> children,
   }) {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 600),
-      child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 20,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF667eea).withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(icon, color: const Color(0xFF667eea), size: 20),
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade50,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                const SizedBox(width: 12),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF1a1a1a),
-                  ),
+                child: Icon(icon, color: Colors.blue.shade600, size: 20),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey.shade900,
                 ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            ...children,
-          ],
-        ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          ...children,
+        ],
       ),
     );
   }
@@ -1343,14 +1526,14 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF1a1a1a),
+            color: Colors.grey.shade800,
           ),
           textAlign: isRTL ? TextAlign.right : TextAlign.left,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         Directionality(
           textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
           child: TextFormField(
@@ -1362,38 +1545,36 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             textAlign: isRTL ? TextAlign.right : TextAlign.left,
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle: TextStyle(color: Colors.grey[400]),
+              hintStyle: TextStyle(color: Colors.grey.shade500),
               prefixIcon:
-                  isRTL ? null : Icon(icon, color: Colors.grey[400], size: 20),
+                  isRTL
+                      ? null
+                      : Icon(icon, color: Colors.grey.shade600, size: 20),
               suffixIcon:
-                  isRTL ? Icon(icon, color: Colors.grey[400], size: 20) : null,
+                  isRTL
+                      ? Icon(icon, color: Colors.grey.shade600, size: 20)
+                      : null,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey[200]!),
+                borderSide: BorderSide(color: Colors.grey.shade300),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey[200]!),
+                borderSide: BorderSide(color: Colors.grey.shade300),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  color: Color(0xFF667eea),
-                  width: 2,
-                ),
+                borderSide: BorderSide(color: Colors.blue.shade600, width: 2),
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  color: Color(0xFFef4444),
-                  width: 1,
-                ),
+                borderSide: BorderSide(color: Colors.red.shade400, width: 1),
               ),
               filled: true,
-              fillColor: Colors.grey[50],
+              fillColor: Colors.grey.shade50,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
-                vertical: 16,
+                vertical: 18,
               ),
             ),
           ),
@@ -1414,35 +1595,35 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF1a1a1a),
+            color: Colors.grey.shade800,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         DropdownButtonFormField<String>(
           value: value,
           onChanged: onChanged,
           decoration: InputDecoration(
-            prefixIcon: Icon(icon, color: Colors.grey[400], size: 20),
+            prefixIcon: Icon(icon, color: Colors.grey.shade600, size: 20),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[200]!),
+              borderSide: BorderSide(color: Colors.grey.shade300),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[200]!),
+              borderSide: BorderSide(color: Colors.grey.shade300),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF667eea), width: 2),
+              borderSide: BorderSide(color: Colors.blue.shade600, width: 2),
             ),
             filled: true,
-            fillColor: Colors.grey[50],
+            fillColor: Colors.grey.shade50,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
-              vertical: 16,
+              vertical: 18,
             ),
           ),
           items:
@@ -1452,6 +1633,14 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   displayText = AppLocalizations.of(context)!.cod;
                 } else if (item == 'prepaid') {
                   displayText = AppLocalizations.of(context)!.prepaid;
+                } else if (item == 'customer') {
+                  displayText = AppLocalizations.of(context)!.customer;
+                } else if (item == 'shipper') {
+                  displayText = AppLocalizations.of(context)!.shipper;
+                } else if (item == 'Kg') {
+                  displayText = AppLocalizations.of(context)!.kg;
+                } else if (item == 'length') {
+                  displayText = AppLocalizations.of(context)!.lengthUnit;
                 }
                 return DropdownMenuItem(value: item, child: Text(displayText));
               }).toList(),
@@ -1465,63 +1654,50 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       builder: (context, state) {
         final isLoading = state is OrderCreating;
 
-        return FadeInUp(
-          duration: const Duration(milliseconds: 800),
-          child: GestureDetector(
-            onTap: isLoading ? null : _submitOrder,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 18),
-              decoration: BoxDecoration(
-                gradient:
-                    isLoading
-                        ? null
-                        : const LinearGradient(
-                          colors: [Color(0xFF667eea), Color(0xFF764ba2)],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
+        return GestureDetector(
+          onTap: isLoading ? null : _submitOrder,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 18),
+            decoration: BoxDecoration(
+              color: isLoading ? Colors.grey.shade400 : Colors.blue.shade600,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow:
+                  isLoading
+                      ? null
+                      : [
+                        BoxShadow(
+                          color: Colors.blue.shade600.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
                         ),
-                color: isLoading ? Colors.grey[300] : null,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow:
-                    isLoading
-                        ? null
-                        : [
-                          BoxShadow(
-                            color: const Color(
-                              0xFF667eea,
-                            ).withValues(alpha: 0.3),
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (isLoading) ...[
-                    const SpinKitThreeBounce(color: Colors.white, size: 20),
-                    const SizedBox(width: 16),
-                  ] else ...[
-                    const Icon(
-                      Icons.check_circle_outline,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 8),
-                  ],
-                  Text(
-                    isLoading
-                        ? AppLocalizations.of(context)!.creatingOrder
-                        : AppLocalizations.of(context)!.createOrder,
-                    style: TextStyle(
-                      color: isLoading ? Colors.grey[500] : Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                      ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (isLoading) ...[
+                  const SpinKitThreeBounce(color: Colors.white, size: 20),
+                  const SizedBox(width: 20),
+                ] else ...[
+                  const Icon(
+                    Icons.check_circle_outline,
+                    color: Colors.white,
+                    size: 20,
                   ),
+                  const SizedBox(width: 8),
                 ],
-              ),
+                Text(
+                  isLoading
+                      ? AppLocalizations.of(context)!.creatingOrder
+                      : AppLocalizations.of(context)!.createOrder,
+                  style: TextStyle(
+                    color: isLoading ? Colors.grey[500] : Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -1640,7 +1816,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   color: Color(0xFF10b981),
                   size: 60,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
                 Text(
                   AppLocalizations.of(context)!.orderCreatedSuccessfully,
                   style: TextStyle(
@@ -1728,12 +1904,12 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       display =
           isArabic
               ? 'رقم التتبع مستخدم بالفعل. يرجى مسح ملصقًا آخر.'
-              : 'This tracking number is already used. Please scan a different sticker.';
+              : AppLocalizations.of(context)!.thisTrackingNumberIsAlreadyUsed;
     } else if (lc.contains('validation') || lc.contains('unprocessable')) {
       display =
           isArabic
               ? 'يرجى التحقق من المدخلات والمحاولة مرة أخرى.'
-              : 'Please check your input and try again.';
+              : AppLocalizations.of(context)!.pleaseCheckYourInputAndTryAgain;
     }
 
     ToastService.showCustomToast(message: display, type: ToastType.error);
@@ -1795,7 +1971,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                     size: 24,
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 20),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -1822,7 +1998,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(

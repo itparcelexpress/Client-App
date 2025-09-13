@@ -228,7 +228,7 @@ class _ShipmentPageState extends State<ShipmentPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-              'OR',
+              AppLocalizations.of(context)!.or,
               style: TextStyle(
                 color: Colors.grey[500],
                 fontWeight: FontWeight.w500,
@@ -459,7 +459,9 @@ class _ShipmentPageState extends State<ShipmentPage> {
         });
       }
     } else if (mounted) {
-      context.read<ShipmentCubit>().showScanError('Camera permission denied');
+      context.read<ShipmentCubit>().showScanError(
+        AppLocalizations.of(context)!.cameraPermissionDenied,
+      );
     }
   }
 
@@ -490,9 +492,9 @@ class _ShipmentPageState extends State<ShipmentPage> {
             padding: const EdgeInsets.all(20),
             child: Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: Text(
-                    'Scan Barcode',
+                    AppLocalizations.of(context)!.scanBarcode,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,

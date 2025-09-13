@@ -27,7 +27,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get logout => 'تسجيل الخروج';
 
   @override
-  String get email => 'البريد الإلكتروني';
+  String get email => 'عنوان البريد الإلكتروني';
 
   @override
   String get emailAddress => 'عنوان البريد الإلكتروني';
@@ -39,7 +39,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get phoneNumber => 'رقم الهاتف';
 
   @override
-  String get alternatePhone => 'رقم هاتف بديل';
+  String get alternatePhone => 'الهاتف البديل';
 
   @override
   String get fullName => 'الاسم الكامل';
@@ -355,7 +355,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get validAmountRequired => 'أدخل مبلغاً صحيحاً';
 
   @override
-  String get user => 'المستخدم';
+  String get user => 'مستخدم';
 
   @override
   String get notAvailable => 'غير متوفر';
@@ -700,7 +700,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get taskCompletion => 'إنجاز المهام';
 
   @override
-  String get delivered => 'تم التوصيل';
+  String get delivered => 'تم التسليم';
 
   @override
   String get activeTasks => 'المهام النشطة';
@@ -826,7 +826,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get type => 'النوع:';
 
   @override
-  String get customer => 'العميل:';
+  String get customer => 'العميل';
 
   @override
   String get phone => 'الهاتف:';
@@ -1019,7 +1019,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get no => 'لا';
 
   @override
-  String get processing => 'جاري المعالجة...';
+  String get processing => 'قيد المعالجة';
 
   @override
   String get uploading => 'جاري الرفع...';
@@ -1174,4 +1174,321 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get viewWalletSubtitle => 'عرض الرصيد والمعاملات';
+
+  @override
+  String get feePayer => 'دافع الرسوم';
+
+  @override
+  String get dimensionsAndWeight => 'الأبعاد والوزن';
+
+  @override
+  String get measurementUnit => 'وحدة القياس';
+
+  @override
+  String get packageDimensions => 'أبعاد الطرد';
+
+  @override
+  String get width => 'العرض';
+
+  @override
+  String get height => 'الارتفاع';
+
+  @override
+  String get length => 'الطول';
+
+  @override
+  String get weight => 'الوزن';
+
+  @override
+  String get items => 'العناصر';
+
+  @override
+  String get itemName => 'اسم العنصر';
+
+  @override
+  String get itemNameHint => 'أدخل اسم العنصر...';
+
+  @override
+  String get category => 'الفئة';
+
+  @override
+  String get categoryHint => 'الفئة...';
+
+  @override
+  String get quantity => 'الكمية';
+
+  @override
+  String get quantityHint => '1';
+
+  @override
+  String get addAnotherItem => 'إضافة عنصر آخر';
+
+  @override
+  String get shipper => 'الشاحن';
+
+  @override
+  String get kg => 'كيلو';
+
+  @override
+  String get lengthUnit => 'الطول';
+
+  @override
+  String get deliveryFeeHint => '0.00';
+
+  @override
+  String get amountHint => '0.00';
+
+  @override
+  String get dimensionHint => '0.0';
+
+  @override
+  String get pleaseEnterDeliveryFee => 'يرجى إدخال رسوم التوصيل';
+
+  @override
+  String get pleaseEnterAmountField => 'يرجى إدخال المبلغ';
+
+  @override
+  String get pleaseEnterBothEmailAndPassword =>
+      'يرجى إدخال البريد الإلكتروني وكلمة المرور';
+
+  @override
+  String get emailAndPasswordRequired =>
+      'البريد الإلكتروني وكلمة المرور مطلوبان';
+
+  @override
+  String get loginFailedGeneric => 'فشل تسجيل الدخول';
+
+  @override
+  String get networkConnectionError => 'خطأ في الاتصال بالشبكة';
+
+  @override
+  String get pleaseCheckInternetConnection =>
+      'يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى';
+
+  @override
+  String get requestTimeout => 'انتهت مهلة الطلب';
+
+  @override
+  String get requestTookTooLong =>
+      'استغرق الطلب وقتاً طويلاً. يرجى المحاولة مرة أخرى';
+
+  @override
+  String get unexpectedErrorOccurred => 'حدث خطأ غير متوقع';
+
+  @override
+  String get pleaseTryAgainLater => 'يرجى المحاولة مرة أخرى لاحقاً';
+
+  @override
+  String get loginSuccess => 'تم تسجيل الدخول بنجاح';
+
+  @override
+  String get or => 'أو';
+
+  @override
+  String get cameraPermissionDenied => 'تم رفض إذن الكاميرا';
+
+  @override
+  String get clientApp => 'تطبيق العميل';
+
+  @override
+  String get egypt => 'مصر';
+
+  @override
+  String get saudiArabia => 'المملكة العربية السعودية';
+
+  @override
+  String get unitedArabEmirates => 'الإمارات العربية المتحدة';
+
+  @override
+  String get kuwait => 'الكويت';
+
+  @override
+  String get qatar => 'قطر';
+
+  @override
+  String get bahrain => 'البحرين';
+
+  @override
+  String get oman => 'عُمان';
+
+  @override
+  String get jordan => 'الأردن';
+
+  @override
+  String get lebanon => 'لبنان';
+
+  @override
+  String get unitedStates => 'الولايات المتحدة';
+
+  @override
+  String get unitedKingdom => 'المملكة المتحدة';
+
+  @override
+  String get canada => 'كندا';
+
+  @override
+  String get searchCountry => 'البحث عن دولة';
+
+  @override
+  String get startTypingToSearch => 'ابدأ الكتابة للبحث';
+
+  @override
+  String get failedToLoadNotifications => 'فشل في تحميل الإشعارات';
+
+  @override
+  String get errorLoadingNotifications => 'خطأ في تحميل الإشعارات';
+
+  @override
+  String get failedToLoadMoreNotifications =>
+      'فشل في تحميل المزيد من الإشعارات';
+
+  @override
+  String get errorLoadingMoreNotifications =>
+      'خطأ في تحميل المزيد من الإشعارات';
+
+  @override
+  String get examplePhoneNumber => 'مثال: 33223322';
+
+  @override
+  String itemNumber(Object number) {
+    return 'عنصر $number';
+  }
+
+  @override
+  String get thisTrackingNumberIsAlreadyUsed =>
+      'رقم التتبع هذا مستخدم بالفعل. يرجى مسح ملصق مختلف.';
+
+  @override
+  String get pleaseCheckYourInputAndTryAgain =>
+      'يرجى التحقق من المدخلات والمحاولة مرة أخرى.';
+
+  @override
+  String get anErrorOccurred => 'حدث خطأ';
+
+  @override
+  String get selectAddress => 'اختيار عنوان';
+
+  @override
+  String get addNew => 'إضافة جديد';
+
+  @override
+  String get noAddressesFound => 'لم يتم العثور على عناوين';
+
+  @override
+  String get editAddress => 'تعديل العنوان';
+
+  @override
+  String get addNewAddress => 'إضافة عنوان جديد';
+
+  @override
+  String get pleaseEnterYourFullName => 'يرجى إدخال اسمك الكامل';
+
+  @override
+  String get pleaseEnterYourEmailAddress => 'يرجى إدخال عنوان بريدك الإلكتروني';
+
+  @override
+  String get pleaseEnterAValidEmailAddress =>
+      'يرجى إدخال عنوان بريد إلكتروني صحيح';
+
+  @override
+  String get alternatePhoneNumber => 'رقم هاتف بديل';
+
+  @override
+  String get pleaseEnterYourStreetAddress => 'يرجى إدخال عنوان الشارع';
+
+  @override
+  String get zipCodeOptional => 'الرمز البريدي (اختياري)';
+
+  @override
+  String get locationUrlOptional => 'رابط الموقع (اختياري)';
+
+  @override
+  String pleaseSelect(Object label) {
+    return 'يرجى اختيار $label';
+  }
+
+  @override
+  String get contactInformation => 'معلومات الاتصال';
+
+  @override
+  String get primaryPhone => 'الهاتف الأساسي';
+
+  @override
+  String get country => 'البلد';
+
+  @override
+  String get zipCode => 'الرمز البريدي';
+
+  @override
+  String get failedToLoadClientSettings => 'فشل في تحميل إعدادات العميل';
+
+  @override
+  String get errorLoadingClientSettings => 'خطأ في تحميل إعدادات العميل';
+
+  @override
+  String get noCurrentSettingsAvailable => 'لا توجد إعدادات حالية متاحة';
+
+  @override
+  String get failedToUpdateNotificationSettings =>
+      'فشل في تحديث إعدادات الإشعارات';
+
+  @override
+  String get errorUpdatingNotificationSettings =>
+      'خطأ في تحديث إعدادات الإشعارات';
+
+  @override
+  String get noNotificationSettingsAvailable => 'لا توجد إعدادات إشعارات متاحة';
+
+  @override
+  String get whatsappNotificationsEnabled => 'تم تفعيل إشعارات واتساب';
+
+  @override
+  String get whatsappNotificationsDisabled => 'تم إلغاء تفعيل إشعارات واتساب';
+
+  @override
+  String get failedToToggleWhatsappNotifications =>
+      'فشل في تبديل إشعارات واتساب';
+
+  @override
+  String get errorTogglingWhatsappNotifications =>
+      'خطأ في تبديل إشعارات واتساب';
+
+  @override
+  String get emailNotificationsEnabled => 'تم تفعيل إشعارات البريد الإلكتروني';
+
+  @override
+  String get emailNotificationsDisabled =>
+      'تم إلغاء تفعيل إشعارات البريد الإلكتروني';
+
+  @override
+  String get failedToToggleEmailNotifications =>
+      'فشل في تبديل إشعارات البريد الإلكتروني';
+
+  @override
+  String get errorTogglingEmailNotifications =>
+      'خطأ في تبديل إشعارات البريد الإلكتروني';
+
+  @override
+  String get unableToReadBarcode => 'غير قادر على قراءة الباركود';
+
+  @override
+  String get shipped => 'تم الشحن';
+
+  @override
+  String get cancelled => 'ملغي';
+
+  @override
+  String get couldNotAccessDeviceStorage => 'لا يمكن الوصول إلى تخزين الجهاز';
+
+  @override
+  String get pdfSavedSuccessfully => 'تم حفظ PDF بنجاح';
+
+  @override
+  String get failedToOpenPdf => 'فشل في فتح PDF';
+
+  @override
+  String get errorSavingPdf => 'خطأ في حفظ PDF';
+
+  @override
+  String get invoice => 'فاتورة';
 }

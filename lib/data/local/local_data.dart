@@ -74,10 +74,39 @@ class LocalData {
   }
 
   static Future<bool> logout() async {
-    await remove(LocalKeys.token);
-    await remove(LocalKeys.user);
-    await setIsLoggedIn(false);
-    return true;
+    try {
+      // Clear all authentication-related data
+      await remove(LocalKeys.token);
+      await remove(LocalKeys.user);
+      await setIsLoggedIn(false);
+
+      // Optional: Clear all data for complete logout
+      // await clear();
+
+      return true;
+    } catch (e) {
+      // Even if some operations fail, try to clear what we can
+      try {
+        await remove(LocalKeys.token);
+        await remove(LocalKeys.user);
+        await setIsLoggedIn(false);
+      } catch (_) {
+        // If even the fallback fails, return false
+        return false;
+      }
+      return true;
+    }
+  }
+
+  // Method to clear all sensitive data
+  static Future<bool> clearSensitiveData() async {
+    try {
+      await remove(LocalKeys.token);
+      await remove(LocalKeys.user);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }
 

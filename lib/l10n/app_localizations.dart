@@ -134,10 +134,10 @@ abstract class AppLocalizations {
   /// **'Logout'**
   String get logout;
 
-  /// Email field label
+  /// Email label
   ///
   /// In en, this message translates to:
-  /// **'Email'**
+  /// **'Email Address'**
   String get email;
 
   /// Email address field label
@@ -158,7 +158,7 @@ abstract class AppLocalizations {
   /// **'Phone Number'**
   String get phoneNumber;
 
-  /// Alternate phone field label
+  /// Alternate phone label
   ///
   /// In en, this message translates to:
   /// **'Alternate Phone'**
@@ -668,7 +668,7 @@ abstract class AppLocalizations {
   /// **'Load Dashboard'**
   String get loadDashboard;
 
-  /// Address details section title
+  /// Address details page title
   ///
   /// In en, this message translates to:
   /// **'Address Details'**
@@ -692,7 +692,7 @@ abstract class AppLocalizations {
   /// **'Tax Number'**
   String get taxNumber;
 
-  /// Location URL field label
+  /// Location URL label
   ///
   /// In en, this message translates to:
   /// **'Location URL'**
@@ -782,7 +782,7 @@ abstract class AppLocalizations {
   /// **'Enter a valid amount'**
   String get validAmountRequired;
 
-  /// User label
+  /// User default name
   ///
   /// In en, this message translates to:
   /// **'User'**
@@ -1130,10 +1130,10 @@ abstract class AppLocalizations {
   /// **'Type sticker number...'**
   String get typeStickerNumber;
 
-  /// Scan barcode label
+  /// Scan barcode button text
   ///
   /// In en, this message translates to:
-  /// **'Scan barcode'**
+  /// **'Scan Barcode'**
   String get scanBarcode;
 
   /// Start scanning button text
@@ -1400,7 +1400,7 @@ abstract class AppLocalizations {
   /// **'Task Completion'**
   String get taskCompletion;
 
-  /// Delivered status label
+  /// Delivered status
   ///
   /// In en, this message translates to:
   /// **'Delivered'**
@@ -1526,7 +1526,7 @@ abstract class AppLocalizations {
   /// **'Tracking number copied! 📋'**
   String get trackingNumberCopied;
 
-  /// Scan action label
+  /// Scan button text
   ///
   /// In en, this message translates to:
   /// **'Scan'**
@@ -1562,7 +1562,7 @@ abstract class AppLocalizations {
   /// **'Payment'**
   String get payment;
 
-  /// Created label
+  /// Created status
   ///
   /// In en, this message translates to:
   /// **'Created'**
@@ -1640,10 +1640,10 @@ abstract class AppLocalizations {
   /// **'Type:'**
   String get type;
 
-  /// Customer label
+  /// Customer fee payer option
   ///
   /// In en, this message translates to:
-  /// **'Customer:'**
+  /// **'Customer'**
   String get customer;
 
   /// Phone label
@@ -1994,10 +1994,10 @@ abstract class AppLocalizations {
   /// **'No'**
   String get no;
 
-  /// Processing message
+  /// Processing status
   ///
   /// In en, this message translates to:
-  /// **'Processing...'**
+  /// **'Processing'**
   String get processing;
 
   /// Uploading message
@@ -2299,6 +2299,600 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View balance and transactions'**
   String get viewWalletSubtitle;
+
+  /// Fee payer field label
+  ///
+  /// In en, this message translates to:
+  /// **'Fee Payer'**
+  String get feePayer;
+
+  /// Dimensions and weight section title
+  ///
+  /// In en, this message translates to:
+  /// **'Dimensions & Weight'**
+  String get dimensionsAndWeight;
+
+  /// Measurement unit field label
+  ///
+  /// In en, this message translates to:
+  /// **'Measurement Unit'**
+  String get measurementUnit;
+
+  /// Package dimensions section title
+  ///
+  /// In en, this message translates to:
+  /// **'Package Dimensions'**
+  String get packageDimensions;
+
+  /// Width field label
+  ///
+  /// In en, this message translates to:
+  /// **'Width'**
+  String get width;
+
+  /// Height field label
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get height;
+
+  /// Length field label
+  ///
+  /// In en, this message translates to:
+  /// **'Length'**
+  String get length;
+
+  /// Weight field label
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get weight;
+
+  /// Items section title
+  ///
+  /// In en, this message translates to:
+  /// **'Items'**
+  String get items;
+
+  /// Item name field label
+  ///
+  /// In en, this message translates to:
+  /// **'Item Name'**
+  String get itemName;
+
+  /// Item name input hint
+  ///
+  /// In en, this message translates to:
+  /// **'Enter item name...'**
+  String get itemNameHint;
+
+  /// Category field label
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
+
+  /// Category input hint
+  ///
+  /// In en, this message translates to:
+  /// **'Category...'**
+  String get categoryHint;
+
+  /// Quantity field label
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity'**
+  String get quantity;
+
+  /// Quantity input hint
+  ///
+  /// In en, this message translates to:
+  /// **'1'**
+  String get quantityHint;
+
+  /// Add another item button text
+  ///
+  /// In en, this message translates to:
+  /// **'Add Another Item'**
+  String get addAnotherItem;
+
+  /// Shipper fee payer option
+  ///
+  /// In en, this message translates to:
+  /// **'Shipper'**
+  String get shipper;
+
+  /// Kilogram unit
+  ///
+  /// In en, this message translates to:
+  /// **'Kg'**
+  String get kg;
+
+  /// Length unit
+  ///
+  /// In en, this message translates to:
+  /// **'Length'**
+  String get lengthUnit;
+
+  /// Delivery fee input hint
+  ///
+  /// In en, this message translates to:
+  /// **'0.00'**
+  String get deliveryFeeHint;
+
+  /// Amount input hint
+  ///
+  /// In en, this message translates to:
+  /// **'0.00'**
+  String get amountHint;
+
+  /// Dimension input hint
+  ///
+  /// In en, this message translates to:
+  /// **'0.0'**
+  String get dimensionHint;
+
+  /// Delivery fee required validation message
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter delivery fee'**
+  String get pleaseEnterDeliveryFee;
+
+  /// Amount required validation message
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter amount'**
+  String get pleaseEnterAmountField;
+
+  /// Email and password required validation message
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter both email and password'**
+  String get pleaseEnterBothEmailAndPassword;
+
+  /// Email and password required error
+  ///
+  /// In en, this message translates to:
+  /// **'Email and password are required'**
+  String get emailAndPasswordRequired;
+
+  /// Generic login failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Login failed'**
+  String get loginFailedGeneric;
+
+  /// Network connection error message
+  ///
+  /// In en, this message translates to:
+  /// **'Network connection error'**
+  String get networkConnectionError;
+
+  /// Internet connection check message
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your internet connection and try again'**
+  String get pleaseCheckInternetConnection;
+
+  /// Request timeout message
+  ///
+  /// In en, this message translates to:
+  /// **'Request timeout'**
+  String get requestTimeout;
+
+  /// Request timeout detailed message
+  ///
+  /// In en, this message translates to:
+  /// **'The request took too long. Please try again'**
+  String get requestTookTooLong;
+
+  /// Unexpected error message
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred'**
+  String get unexpectedErrorOccurred;
+
+  /// Try again later message
+  ///
+  /// In en, this message translates to:
+  /// **'Please try again later'**
+  String get pleaseTryAgainLater;
+
+  /// Login success message
+  ///
+  /// In en, this message translates to:
+  /// **'Login successful'**
+  String get loginSuccess;
+
+  /// OR separator text
+  ///
+  /// In en, this message translates to:
+  /// **'OR'**
+  String get or;
+
+  /// Camera permission denied message
+  ///
+  /// In en, this message translates to:
+  /// **'Camera permission denied'**
+  String get cameraPermissionDenied;
+
+  /// Client app title
+  ///
+  /// In en, this message translates to:
+  /// **'Client App'**
+  String get clientApp;
+
+  /// Egypt country name
+  ///
+  /// In en, this message translates to:
+  /// **'Egypt'**
+  String get egypt;
+
+  /// Saudi Arabia country name
+  ///
+  /// In en, this message translates to:
+  /// **'Saudi Arabia'**
+  String get saudiArabia;
+
+  /// United Arab Emirates country name
+  ///
+  /// In en, this message translates to:
+  /// **'United Arab Emirates'**
+  String get unitedArabEmirates;
+
+  /// Kuwait country name
+  ///
+  /// In en, this message translates to:
+  /// **'Kuwait'**
+  String get kuwait;
+
+  /// Qatar country name
+  ///
+  /// In en, this message translates to:
+  /// **'Qatar'**
+  String get qatar;
+
+  /// Bahrain country name
+  ///
+  /// In en, this message translates to:
+  /// **'Bahrain'**
+  String get bahrain;
+
+  /// Oman country name
+  ///
+  /// In en, this message translates to:
+  /// **'Oman'**
+  String get oman;
+
+  /// Jordan country name
+  ///
+  /// In en, this message translates to:
+  /// **'Jordan'**
+  String get jordan;
+
+  /// Lebanon country name
+  ///
+  /// In en, this message translates to:
+  /// **'Lebanon'**
+  String get lebanon;
+
+  /// United States country name
+  ///
+  /// In en, this message translates to:
+  /// **'United States'**
+  String get unitedStates;
+
+  /// United Kingdom country name
+  ///
+  /// In en, this message translates to:
+  /// **'United Kingdom'**
+  String get unitedKingdom;
+
+  /// Canada country name
+  ///
+  /// In en, this message translates to:
+  /// **'Canada'**
+  String get canada;
+
+  /// Search country label
+  ///
+  /// In en, this message translates to:
+  /// **'Search Country'**
+  String get searchCountry;
+
+  /// Search hint text
+  ///
+  /// In en, this message translates to:
+  /// **'Start typing to search'**
+  String get startTypingToSearch;
+
+  /// Notification load failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load notifications'**
+  String get failedToLoadNotifications;
+
+  /// Notification load error message
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading notifications'**
+  String get errorLoadingNotifications;
+
+  /// Load more notifications failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load more notifications'**
+  String get failedToLoadMoreNotifications;
+
+  /// Load more notifications error message
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading more notifications'**
+  String get errorLoadingMoreNotifications;
+
+  /// Example phone number hint
+  ///
+  /// In en, this message translates to:
+  /// **'123xxxx'**
+  String get examplePhoneNumber;
+
+  /// Item number with index
+  ///
+  /// In en, this message translates to:
+  /// **'Item {number}'**
+  String itemNumber(Object number);
+
+  /// Tracking number already taken error
+  ///
+  /// In en, this message translates to:
+  /// **'This tracking number is already used. Please scan a different sticker.'**
+  String get thisTrackingNumberIsAlreadyUsed;
+
+  /// Generic validation error message
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your input and try again.'**
+  String get pleaseCheckYourInputAndTryAgain;
+
+  /// Generic error message
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred'**
+  String get anErrorOccurred;
+
+  /// Select address label
+  ///
+  /// In en, this message translates to:
+  /// **'Select Address'**
+  String get selectAddress;
+
+  /// Add new button text
+  ///
+  /// In en, this message translates to:
+  /// **'Add New'**
+  String get addNew;
+
+  /// No addresses found message
+  ///
+  /// In en, this message translates to:
+  /// **'No Addresses Found'**
+  String get noAddressesFound;
+
+  /// Edit address button text
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Address'**
+  String get editAddress;
+
+  /// Add new address button text
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Address'**
+  String get addNewAddress;
+
+  /// Full name validation message
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your full name'**
+  String get pleaseEnterYourFullName;
+
+  /// Email address validation message
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your email address'**
+  String get pleaseEnterYourEmailAddress;
+
+  /// Valid email validation message
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email address'**
+  String get pleaseEnterAValidEmailAddress;
+
+  /// Alternate phone number field label
+  ///
+  /// In en, this message translates to:
+  /// **'Alternate Phone Number'**
+  String get alternatePhoneNumber;
+
+  /// Street address validation message
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your street address'**
+  String get pleaseEnterYourStreetAddress;
+
+  /// Zip code optional field label
+  ///
+  /// In en, this message translates to:
+  /// **'Zip Code (Optional)'**
+  String get zipCodeOptional;
+
+  /// Location URL optional field label
+  ///
+  /// In en, this message translates to:
+  /// **'Location URL (Optional)'**
+  String get locationUrlOptional;
+
+  /// Please select validation message
+  ///
+  /// In en, this message translates to:
+  /// **'Please select {label}'**
+  String pleaseSelect(Object label);
+
+  /// Contact information section title
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Information'**
+  String get contactInformation;
+
+  /// Primary phone label
+  ///
+  /// In en, this message translates to:
+  /// **'Primary Phone'**
+  String get primaryPhone;
+
+  /// Country label
+  ///
+  /// In en, this message translates to:
+  /// **'Country'**
+  String get country;
+
+  /// Zip code label
+  ///
+  /// In en, this message translates to:
+  /// **'Zip Code'**
+  String get zipCode;
+
+  /// Client settings load failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load client settings'**
+  String get failedToLoadClientSettings;
+
+  /// Client settings load error message
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading client settings'**
+  String get errorLoadingClientSettings;
+
+  /// No current settings message
+  ///
+  /// In en, this message translates to:
+  /// **'No current settings available'**
+  String get noCurrentSettingsAvailable;
+
+  /// Notification settings update failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update notification settings'**
+  String get failedToUpdateNotificationSettings;
+
+  /// Notification settings update error message
+  ///
+  /// In en, this message translates to:
+  /// **'Error updating notification settings'**
+  String get errorUpdatingNotificationSettings;
+
+  /// No notification settings message
+  ///
+  /// In en, this message translates to:
+  /// **'No notification settings available'**
+  String get noNotificationSettingsAvailable;
+
+  /// WhatsApp notifications enabled message
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp notifications enabled'**
+  String get whatsappNotificationsEnabled;
+
+  /// WhatsApp notifications disabled message
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp notifications disabled'**
+  String get whatsappNotificationsDisabled;
+
+  /// WhatsApp toggle failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to toggle WhatsApp notifications'**
+  String get failedToToggleWhatsappNotifications;
+
+  /// WhatsApp toggle error message
+  ///
+  /// In en, this message translates to:
+  /// **'Error toggling WhatsApp notifications'**
+  String get errorTogglingWhatsappNotifications;
+
+  /// Email notifications enabled message
+  ///
+  /// In en, this message translates to:
+  /// **'Email notifications enabled'**
+  String get emailNotificationsEnabled;
+
+  /// Email notifications disabled message
+  ///
+  /// In en, this message translates to:
+  /// **'Email notifications disabled'**
+  String get emailNotificationsDisabled;
+
+  /// Email toggle failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to toggle email notifications'**
+  String get failedToToggleEmailNotifications;
+
+  /// Email toggle error message
+  ///
+  /// In en, this message translates to:
+  /// **'Error toggling email notifications'**
+  String get errorTogglingEmailNotifications;
+
+  /// Barcode read error message
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to read barcode'**
+  String get unableToReadBarcode;
+
+  /// Shipped status
+  ///
+  /// In en, this message translates to:
+  /// **'Shipped'**
+  String get shipped;
+
+  /// Cancelled status
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get cancelled;
+
+  /// Device storage access error
+  ///
+  /// In en, this message translates to:
+  /// **'Could not access device storage'**
+  String get couldNotAccessDeviceStorage;
+
+  /// PDF save success message
+  ///
+  /// In en, this message translates to:
+  /// **'PDF saved successfully'**
+  String get pdfSavedSuccessfully;
+
+  /// PDF open failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to open PDF'**
+  String get failedToOpenPdf;
+
+  /// PDF save error message
+  ///
+  /// In en, this message translates to:
+  /// **'Error saving PDF'**
+  String get errorSavingPdf;
+
+  /// Invoice file prefix
+  ///
+  /// In en, this message translates to:
+  /// **'Invoice'**
+  String get invoice;
 }
 
 class _AppLocalizationsDelegate

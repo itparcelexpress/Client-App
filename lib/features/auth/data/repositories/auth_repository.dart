@@ -3,6 +3,7 @@ import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/data/remote/app_request.dart';
 import 'package:client_app/data/remote/helper/app_response.dart';
 import 'package:client_app/features/auth/data/models/login_models.dart';
+import 'package:flutter/foundation.dart';
 
 abstract class AuthRepository {
   Future<LoginResponse> login(LoginRequest request);
@@ -72,22 +73,33 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<bool> logout() async {
     try {
-      // Call logout API
-      final AppResponse response = await AppRequest.post(
-        AppEndPoints.logout,
-        true, // Auth required for logout
-      );
+      // Call logout API if user has a token
+      if (LocalData.token.isNotEmpty) {
+        final AppResponse response = await AppRequest.post(
+          AppEndPoints.logout,
+          true, // Auth required for logout
+        );
 
-      // Clear local data regardless of API response
+        // Log the response for debugging (only in debug mode)
+        if (kDebugMode) {
+          print('Logout API response: ${response.origin}');
+        }
+      }
+
+      // Always clear local data regardless of API response
       await LocalData.logout();
 
-      // Check if the logout was successful based on the new API response format
-      // Expected response: {"message": "Logout Successfull", "success": [], "data": [], "errors": []}
-      return response.success;
+      return true; // Always return true since local data is cleared
     } catch (e) {
       // Clear local data even if API call fails
       await LocalData.logout();
-      return false;
+
+      // Log error in debug mode
+      if (kDebugMode) {
+        print('Logout error: $e');
+      }
+
+      return true; // Return true since local data is cleared
     }
   }
 

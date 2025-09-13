@@ -1,10 +1,11 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
+import 'package:client_app/core/utilities/app_endpoints.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/auth/presentation/pages/home_page.dart';
 import 'package:client_app/features/guest/cubit/guest_cubit.dart';
 import 'package:client_app/features/guest/presentation/pages/create_guest_order_page.dart';
 import 'package:client_app/injections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -22,10 +23,21 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(text: 'hormuz@gmail.com');
-  final _passwordController = TextEditingController(text: 'Aa@123456');
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   bool _isPasswordVisible = false;
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Only set debug values in debug mode or test environment
+    if (kDebugMode || AppEndPoints.isTestEnvironment) {
+      _emailController.text = 'hormuz@gmail.com';
+      _passwordController.text = 'Aa@123456';
+    }
+  }
 
   @override
   void dispose() {
@@ -47,36 +59,87 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Clear sensitive data from form fields
+  void _clearSensitiveData() {
+    // Only clear password field, keep email for user convenience
+    _passwordController.clear();
+
+    // In production, also clear email for security
+    if (!kDebugMode && !AppEndPoints.isTestEnvironment) {
+      _emailController.clear();
+    }
+  }
+
+  // Handle login attempt with better validation
+  void _handleLogin(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      // Clear any previous errors
+      _formKey.currentState!.reset();
+
+      // Perform login with localized messages
+      context.read<AuthCubit>().login(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+        pleaseEnterBothMessage:
+            AppLocalizations.of(context)!.pleaseEnterBothEmailAndPassword,
+        emailAndPasswordRequiredMessage:
+            AppLocalizations.of(context)!.emailAndPasswordRequired,
+        loginFailedMessage: AppLocalizations.of(context)!.loginFailedGeneric,
+        networkErrorMessage:
+            AppLocalizations.of(context)!.networkConnectionError,
+        internetCheckMessage:
+            AppLocalizations.of(context)!.pleaseCheckInternetConnection,
+        timeoutMessage: AppLocalizations.of(context)!.requestTimeout,
+        timeoutDetailMessage: AppLocalizations.of(context)!.requestTookTooLong,
+        unexpectedErrorMessage:
+            AppLocalizations.of(context)!.unexpectedErrorOccurred,
+        tryAgainLaterMessage: AppLocalizations.of(context)!.pleaseTryAgainLater,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<AuthCubit>(),
       child: Scaffold(
+        backgroundColor: Colors.grey.shade50,
         body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Colors.blue.shade50,
-                Colors.white,
-                Colors.purple.shade50,
-              ],
-            ),
-          ),
+          decoration: const BoxDecoration(color: Colors.white),
           child: SafeArea(
             child: BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) {
                 if (state is AuthSuccess) {
+                  // Clear sensitive data from controllers
+                  _clearSensitiveData();
+
+                  // Show success message
+                  ToastService.showSuccess(
+                    context,
+                    AppLocalizations.of(context)!.loginSuccess,
+                  );
+
+                  // Navigate to home page
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const HomePage()),
                   );
                 } else if (state is AuthFailure) {
+                  // Clear sensitive data on failure
+                  _clearSensitiveData();
+
                   final key = mapLoginErrorToKey(
                     message: state.message,
                     errors: state.errors,
                   );
                   ToastService.showError(context, key);
+                } else if (state is AuthLoading) {
+                  setState(() {
+                    _isLoading = true;
+                  });
+                } else {
+                  setState(() {
+                    _isLoading = false;
+                  });
                 }
               },
               builder: (context, state) {
@@ -133,91 +196,64 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildHeader() {
-    return FadeInDown(
-      duration: const Duration(milliseconds: 800),
-      child: Column(
-        children: [
-          Container(
-            height: ResponsiveUtils.getResponsiveHeight(context, 120),
-            width: ResponsiveUtils.getResponsiveWidth(context, 120),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                colors: [Colors.blue.shade400, Colors.purple.shade400],
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blue.withValues(alpha: 0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
-            child: Icon(
-              Icons.local_shipping,
-              size: ResponsiveUtils.getResponsiveWidth(context, 60),
-              color: Colors.white,
-            ),
+    return Column(
+      children: [
+        SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 60)),
+        Container(
+          height: ResponsiveUtils.getResponsiveHeight(context, 80),
+          width: ResponsiveUtils.getResponsiveWidth(context, 80),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.blue.shade600,
           ),
-          SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 24)),
-          Text(
-            AppLocalizations.of(context)!.appTitle,
-            style: _systemFont(
-              fontSize: ResponsiveUtils.getResponsiveFontSize(context, 32),
-              fontWeight: FontWeight.bold,
-              color: Colors.grey.shade800,
-            ),
+          child: Icon(
+            Icons.local_shipping,
+            size: ResponsiveUtils.getResponsiveWidth(context, 40),
+            color: Colors.white,
           ),
-          SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 8)),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: ResponsiveUtils.getResponsivePadding(context, 16),
-            ),
-            child: Text(
-              AppLocalizations.of(context)!.welcomeMessage,
-              style: _systemFont(
-                fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
-                color: Colors.grey.shade600,
-              ),
-              textAlign: TextAlign.center,
-            ),
+        ),
+        SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 32)),
+        Text(
+          AppLocalizations.of(context)!.appTitle,
+          style: _systemFont(
+            fontSize: ResponsiveUtils.getResponsiveFontSize(context, 28),
+            fontWeight: FontWeight.w600,
+            color: Colors.grey.shade900,
           ),
-        ],
-      ),
+        ),
+        SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 8)),
+        Text(
+          AppLocalizations.of(context)!.welcomeMessage,
+          style: _systemFont(
+            fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
+            color: Colors.grey.shade600,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 
   Widget _buildLoginForm(BuildContext context, AuthState state) {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 800),
-      child: Container(
-        padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
-          context,
-          const EdgeInsets.all(24),
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.1),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
-            ),
+    return Container(
+      padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
+        context,
+        const EdgeInsets.all(32),
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Form(
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.always,
+        child: Column(
+          children: [
+            _buildEmailField(),
+            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 24)),
+            _buildPasswordField(),
           ],
-        ),
-        child: Form(
-          key: _formKey,
-          autovalidateMode: AutovalidateMode.always,
-          child: Column(
-            children: [
-              _buildEmailField(),
-              SizedBox(
-                height: ResponsiveUtils.getResponsivePadding(context, 20),
-              ),
-              _buildPasswordField(),
-            ],
-          ),
         ),
       ),
     );
@@ -229,7 +265,7 @@ class _LoginPageState extends State<LoginPage> {
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         labelText: AppLocalizations.of(context)!.email,
-        prefixIcon: Icon(Icons.email_outlined, color: Colors.blue.shade400),
+        prefixIcon: Icon(Icons.email_outlined, color: Colors.grey.shade600),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey.shade300),
@@ -240,10 +276,14 @@ class _LoginPageState extends State<LoginPage> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.blue.shade400, width: 2),
+          borderSide: BorderSide(color: Colors.blue.shade600, width: 2),
         ),
         filled: true,
         fillColor: Colors.grey.shade50,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
       ),
       validator: (value) => Validators.email(value, context: context),
     );
@@ -256,7 +296,7 @@ class _LoginPageState extends State<LoginPage> {
       keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
         labelText: AppLocalizations.of(context)!.password,
-        prefixIcon: Icon(Icons.lock_outline, color: Colors.blue.shade400),
+        prefixIcon: Icon(Icons.lock_outline, color: Colors.grey.shade600),
         suffixIcon: IconButton(
           icon: Icon(
             _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
@@ -278,10 +318,14 @@ class _LoginPageState extends State<LoginPage> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.blue.shade400, width: 2),
+          borderSide: BorderSide(color: Colors.blue.shade600, width: 2),
         ),
         filled: true,
         fillColor: Colors.grey.shade50,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
       ),
       validator:
           (value) => Validators.minLength(
@@ -294,78 +338,79 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildLoginButton(BuildContext context, AuthState state) {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 1200),
-      child: SizedBox(
-        width: double.infinity,
-        height: 56,
-        child: ElevatedButton(
-          onPressed:
-              state is AuthLoading
-                  ? null
-                  : () {
-                    if (_formKey.currentState!.validate()) {
-                      context.read<AuthCubit>().login(
-                        email: _emailController.text.trim(),
-                        password: _passwordController.text,
-                      );
-                    }
-                  },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue.shade400,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            elevation: 0,
+    final isLoading = state is AuthLoading || _isLoading;
+
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: ElevatedButton(
+        onPressed: isLoading ? null : () => _handleLogin(context),
+        style: ElevatedButton.styleFrom(
+          backgroundColor:
+              isLoading ? Colors.grey.shade400 : Colors.blue.shade600,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-          child:
-              state is AuthLoading
-                  ? SpinKitThreeBounce(color: Colors.white, size: 20)
-                  : Text(
-                    AppLocalizations.of(context)!.login,
-                    style: _systemFont(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
+          elevation: 0,
         ),
+        child:
+            isLoading
+                ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SpinKitThreeBounce(color: Colors.white, size: 20),
+                    const SizedBox(width: 12),
+                    Text(
+                      'Logging in...',
+                      style: _systemFont(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                )
+                : Text(
+                  AppLocalizations.of(context)!.login,
+                  style: _systemFont(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
       ),
     );
   }
 
   Widget _buildGuestButton(BuildContext context) {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 1000),
-      child: Column(
-        children: [
-          SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 16)),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder:
-                      (context) => BlocProvider(
-                        create: (context) => getIt<GuestCubit>(),
-                        child: const CreateGuestOrderPage(),
-                      ),
-                ),
-              );
-            },
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            ),
-            child: Text(
-              AppLocalizations.of(context)!.continueAsGuest,
-              style: _systemFont(
-                fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
-                fontWeight: FontWeight.w600,
-                color: Colors.blue.shade700,
+    return Column(
+      children: [
+        SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 16)),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder:
+                    (context) => BlocProvider(
+                      create: (context) => getIt<GuestCubit>(),
+                      child: const CreateGuestOrderPage(),
+                    ),
               ),
+            );
+          },
+          style: TextButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          ),
+          child: Text(
+            AppLocalizations.of(context)!.continueAsGuest,
+            style: _systemFont(
+              fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
+              fontWeight: FontWeight.w500,
+              color: Colors.grey.shade700,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -25,10 +25,10 @@ class ClientSettingsCubit extends Cubit<ClientSettingsState> {
         _currentSettings = response.data;
         emit(ClientSettingsLoaded(settings: response.data));
       } else {
-        emit(const ClientSettingsError('Failed to load client settings'));
+        emit(const ClientSettingsError('failedToLoadClientSettings'));
       }
     } catch (e) {
-      emit(ClientSettingsError('Error loading client settings: $e'));
+      emit(const ClientSettingsError('errorLoadingClientSettings'));
     }
   }
 
@@ -39,7 +39,7 @@ class ClientSettingsCubit extends Cubit<ClientSettingsState> {
     NotificationSettings notifications,
   ) async {
     if (_currentSettings == null) {
-      emit(const ClientSettingsError('No current settings available'));
+      emit(const ClientSettingsError('noCurrentSettingsAvailable'));
       return;
     }
 
@@ -66,7 +66,7 @@ class ClientSettingsCubit extends Cubit<ClientSettingsState> {
       } else {
         emit(
           ClientSettingsUpdateError(
-            'Failed to update notification settings',
+            'failedToUpdateNotificationSettings',
             currentSettings: _currentSettings,
           ),
         );
@@ -74,7 +74,7 @@ class ClientSettingsCubit extends Cubit<ClientSettingsState> {
     } catch (e) {
       emit(
         ClientSettingsUpdateError(
-          'Error updating notification settings: $e',
+          'errorUpdatingNotificationSettings',
           currentSettings: _currentSettings,
         ),
       );
@@ -84,7 +84,7 @@ class ClientSettingsCubit extends Cubit<ClientSettingsState> {
   // Toggle WhatsApp notifications
   Future<void> toggleWhatsAppNotifications(int userId, int clientId) async {
     if (_currentSettings?.notifications == null) {
-      emit(const ClientSettingsError('No notification settings available'));
+      emit(const ClientSettingsError('noNotificationSettingsAvailable'));
       return;
     }
 
@@ -131,7 +131,7 @@ class ClientSettingsCubit extends Cubit<ClientSettingsState> {
   // Toggle Email notifications
   Future<void> toggleEmailNotifications(int userId, int clientId) async {
     if (_currentSettings?.notifications == null) {
-      emit(const ClientSettingsError('No notification settings available'));
+      emit(const ClientSettingsError('noNotificationSettingsAvailable'));
       return;
     }
 

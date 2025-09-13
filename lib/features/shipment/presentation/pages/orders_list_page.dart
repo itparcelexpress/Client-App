@@ -28,14 +28,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
   String? _toDate;
 
   // Filter options
-  final List<String> _statusOptions = [
-    'All',
-    'created',
-    'processing',
-    'shipped',
-    'delivered',
-    'cancelled',
-  ];
+  late List<String> _statusOptions;
 
   @override
   void initState() {
@@ -45,18 +38,54 @@ class _OrdersListPageState extends State<OrdersListPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Initialize status options after dependencies are available
+    _statusOptions = [
+      AppLocalizations.of(context)!.all,
+      AppLocalizations.of(context)!.created,
+      AppLocalizations.of(context)!.processing,
+      AppLocalizations.of(context)!.shipped,
+      AppLocalizations.of(context)!.delivered,
+      AppLocalizations.of(context)!.cancelled,
+    ];
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
 
   void _loadOrders() {
+    String? apiStatus;
+    if (_selectedStatus != null &&
+        _selectedStatus != AppLocalizations.of(context)!.all) {
+      // Convert localized status back to English for API
+      apiStatus = _getEnglishStatus(_selectedStatus!);
+    }
+
     context.read<ShipmentCubit>().loadClientOrders(
-      status: _selectedStatus == 'All' ? null : _selectedStatus,
+      status: apiStatus,
       fromDate: _fromDate,
       toDate: _toDate,
       query: _searchController.text.isEmpty ? null : _searchController.text,
     );
+  }
+
+  String _getEnglishStatus(String localizedStatus) {
+    if (localizedStatus == AppLocalizations.of(context)!.created)
+      return 'created';
+    if (localizedStatus == AppLocalizations.of(context)!.processing)
+      return 'processing';
+    if (localizedStatus == AppLocalizations.of(context)!.shipped)
+      return 'shipped';
+    if (localizedStatus == AppLocalizations.of(context)!.delivered)
+      return 'delivered';
+    if (localizedStatus == AppLocalizations.of(context)!.cancelled)
+      return 'cancelled';
+    return localizedStatus; // fallback
   }
 
   @override
@@ -228,7 +257,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: _selectedStatus ?? 'All',
+                    value: _selectedStatus ?? AppLocalizations.of(context)!.all,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.status,
                       border: OutlineInputBorder(
@@ -244,7 +273,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                           return DropdownMenuItem(
                             value: status,
                             child: Text(
-                              status == 'All'
+                              status == AppLocalizations.of(context)!.all
                                   ? AppLocalizations.of(context)!.allStatus
                                   : status.toUpperCase(),
                             ),
@@ -695,7 +724,9 @@ class _OrdersListPageState extends State<OrdersListPage> {
                     ? () {
                       context.read<ShipmentCubit>().loadPreviousPage(
                         status:
-                            _selectedStatus == 'All' ? null : _selectedStatus,
+                            _selectedStatus == AppLocalizations.of(context)!.all
+                                ? null
+                                : _getEnglishStatus(_selectedStatus!),
                         fromDate: _fromDate,
                         toDate: _toDate,
                         query:
@@ -730,7 +761,9 @@ class _OrdersListPageState extends State<OrdersListPage> {
                     ? () {
                       context.read<ShipmentCubit>().loadNextPage(
                         status:
-                            _selectedStatus == 'All' ? null : _selectedStatus,
+                            _selectedStatus == AppLocalizations.of(context)!.all
+                                ? null
+                                : _getEnglishStatus(_selectedStatus!),
                         fromDate: _fromDate,
                         toDate: _toDate,
                         query:
@@ -851,15 +884,17 @@ class _OrdersListPageState extends State<OrdersListPage> {
                 height: ResponsiveUtils.getResponsivePadding(context, 32),
               ),
               ElevatedButton.icon(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) => getIt<ShipmentCubit>(),
-                      child: const CreateOrderPage(),
+                onPressed:
+                    () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) => BlocProvider(
+                              create: (context) => getIt<ShipmentCubit>(),
+                              child: const CreateOrderPage(),
+                            ),
+                      ),
                     ),
-                  ),
-                ),
                 icon: const Icon(Icons.add_circle_outline),
                 label: Text(AppLocalizations.of(context)!.createFirstOrder),
                 style: ElevatedButton.styleFrom(

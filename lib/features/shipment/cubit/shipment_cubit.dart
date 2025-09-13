@@ -32,7 +32,7 @@ class ShipmentCubit extends Cubit<ShipmentState> {
       _currentStickerNumber = barcode;
       emit(ShipmentScanSuccess(trackingNumber: barcode));
     } else {
-      emit(const ShipmentScanError(message: 'Unable to read barcode'));
+      emit(const ShipmentScanError(message: 'unableToReadBarcode'));
     }
   }
 

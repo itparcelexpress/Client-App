@@ -27,7 +27,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     final user = LocalData.user;
-    final userName = user?.name ?? 'User';
+    final userName = user?.name ?? AppLocalizations.of(context)!.user;
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
@@ -406,10 +406,10 @@ class _DashboardPageState extends State<DashboardPage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                              child: Text(
-                AppLocalizations.of(context)!.loadDashboard,
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
+                child: Text(
+                  AppLocalizations.of(context)!.loadDashboard,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
               ),
             ],
           ),

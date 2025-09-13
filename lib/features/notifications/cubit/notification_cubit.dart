@@ -71,11 +71,11 @@ class NotificationCubit extends Cubit<NotificationState> {
           );
         }
       } else {
-        emit(const NotificationError('Failed to load notifications'));
+        emit(const NotificationError('failedToLoadNotifications'));
       }
     } catch (e) {
       if (!isClosed) {
-        emit(NotificationError('Error loading notifications: $e'));
+        emit(NotificationError('errorLoadingNotifications'));
       }
     }
   }
@@ -114,7 +114,7 @@ class NotificationCubit extends Cubit<NotificationState> {
       } else {
         emit(
           NotificationActionError(
-            'Failed to load more notifications',
+            'failedToLoadMoreNotifications',
             'load_more',
             List.from(_allNotifications),
           ),
@@ -123,7 +123,7 @@ class NotificationCubit extends Cubit<NotificationState> {
     } catch (e) {
       emit(
         NotificationActionError(
-          'Error loading more notifications: $e',
+          'errorLoadingMoreNotifications',
           'load_more',
           List.from(_allNotifications),
         ),
