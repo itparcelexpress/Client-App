@@ -1,11 +1,9 @@
 import 'package:client_app/core/utilities/responsive_utils.dart';
-import 'package:client_app/core/utilities/app_endpoints.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/auth/presentation/pages/home_page.dart';
 import 'package:client_app/features/guest/cubit/guest_cubit.dart';
 import 'package:client_app/features/guest/presentation/pages/create_guest_order_page.dart';
 import 'package:client_app/injections.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -28,15 +26,13 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isPasswordVisible = false;
   bool _isLoading = false;
+  bool _emailFieldTouched = false;
+  bool _passwordFieldTouched = false;
 
   @override
   void initState() {
     super.initState();
-    // Only set debug values in debug mode or test environment
-    if (kDebugMode || AppEndPoints.isTestEnvironment) {
-      _emailController.text = 'hormuz@gmail.com';
-      _passwordController.text = 'Aa@123456';
-    }
+    // Debug placeholders removed - no automatic field population
   }
 
   @override
@@ -61,20 +57,21 @@ class _LoginPageState extends State<LoginPage> {
 
   // Clear sensitive data from form fields
   void _clearSensitiveData() {
-    // Only clear password field, keep email for user convenience
+    // Clear password field for security
     _passwordController.clear();
-
-    // In production, also clear email for security
-    if (!kDebugMode && !AppEndPoints.isTestEnvironment) {
-      _emailController.clear();
-    }
+    // Keep email field for user convenience
   }
 
   // Handle login attempt with better validation
   void _handleLogin(BuildContext context) {
+    // Mark all fields as touched to enable validation
+    setState(() {
+      _emailFieldTouched = true;
+      _passwordFieldTouched = true;
+    });
+
     if (_formKey.currentState!.validate()) {
-      // Clear any previous errors
-      _formKey.currentState!.reset();
+      // Don't reset form fields - let user retry if login fails
 
       // Perform login with localized messages
       context.read<AuthCubit>().login(
@@ -124,9 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                     MaterialPageRoute(builder: (context) => const HomePage()),
                   );
                 } else if (state is AuthFailure) {
-                  // Clear sensitive data on failure
-                  _clearSensitiveData();
-
+                  // Don't clear fields on failure - let user retry with same credentials
                   final key = mapLoginErrorToKey(
                     message: state.message,
                     errors: state.errors,
@@ -247,7 +242,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       child: Form(
         key: _formKey,
-        autovalidateMode: AutovalidateMode.always,
+        autovalidateMode: AutovalidateMode.disabled,
         child: Column(
           children: [
             _buildEmailField(),
@@ -263,6 +258,17 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
+      autovalidateMode:
+          _emailFieldTouched
+              ? AutovalidateMode.always
+              : AutovalidateMode.disabled,
+      onChanged: (value) {
+        if (!_emailFieldTouched) {
+          setState(() {
+            _emailFieldTouched = true;
+          });
+        }
+      },
       decoration: InputDecoration(
         labelText: AppLocalizations.of(context)!.email,
         prefixIcon: Icon(Icons.email_outlined, color: Colors.grey.shade600),
@@ -294,6 +300,17 @@ class _LoginPageState extends State<LoginPage> {
       controller: _passwordController,
       obscureText: !_isPasswordVisible,
       keyboardType: TextInputType.visiblePassword,
+      autovalidateMode:
+          _passwordFieldTouched
+              ? AutovalidateMode.always
+              : AutovalidateMode.disabled,
+      onChanged: (value) {
+        if (!_passwordFieldTouched) {
+          setState(() {
+            _passwordFieldTouched = true;
+          });
+        }
+      },
       decoration: InputDecoration(
         labelText: AppLocalizations.of(context)!.password,
         prefixIcon: Icon(Icons.lock_outline, color: Colors.grey.shade600),

@@ -73,6 +73,15 @@ class LocalData {
     }
   }
 
+  // Language preference methods
+  static Future<bool> setLanguageCode(String languageCode) async {
+    return await setString(LocalKeys.languageCode, languageCode);
+  }
+
+  static String get languageCode {
+    return getIt<SharedPreferences>().getString(LocalKeys.languageCode) ?? 'ar';
+  }
+
   static Future<bool> logout() async {
     try {
       // Clear all authentication-related data
@@ -115,4 +124,5 @@ class LocalKeys {
   static String token = 'TOKEN';
   static String isLoggedIn = 'IS_LOGGED_IN';
   static String user = 'USER';
+  static String languageCode = 'LANGUAGE_CODE';
 }

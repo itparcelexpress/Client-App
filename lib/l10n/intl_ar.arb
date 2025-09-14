@@ -999,7 +999,7 @@
 
   "scan": "مسح",
   "@scan": {"description": "نص زر المسح"},
-  "examplePhoneNumber": "مثال: 33223322",
+  "examplePhoneNumber": "123xxxx",
   "@examplePhoneNumber": {"description": "تلميح رقم الهاتف المثال"},
   "itemNumber": "عنصر {number}",
   "@itemNumber": {"description": "رقم العنصر مع الفهرس"},

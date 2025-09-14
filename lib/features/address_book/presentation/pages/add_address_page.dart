@@ -4,6 +4,7 @@ import 'package:client_app/core/services/location_service.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/core/utilities/taost_service.dart';
 import 'package:client_app/core/utilities/unified_phone_input.dart';
+import 'package:client_app/core/widgets/overflow_safe_dropdown.dart';
 import 'package:client_app/features/address_book/cubit/address_book_cubit.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 import 'package:client_app/features/address_book/cubit/address_book_state.dart';
@@ -337,7 +338,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
         ),
         child: Column(
           children: [
-            _buildDropdownField<Governorate>(
+            LocationDropdown<Governorate>(
               value: _selectedGovernorate,
               label: 'Governorate',
               icon: Icons.location_city_rounded,
@@ -355,9 +356,11 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 }
               },
               itemBuilder: (governorate) => governorate.enName,
+              validator:
+                  (value) => value == null ? 'Please select Governorate' : null,
             ),
             const SizedBox(height: 16),
-            _buildDropdownField<StateModel>(
+            LocationDropdown<StateModel>(
               value: _selectedState,
               label: 'State',
               icon: Icons.location_on_rounded,
@@ -373,9 +376,11 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 }
               },
               itemBuilder: (state) => state.enName,
+              validator:
+                  (value) => value == null ? 'Please select State' : null,
             ),
             const SizedBox(height: 16),
-            _buildDropdownField<Place>(
+            LocationDropdown<Place>(
               value: _selectedPlace,
               label: 'Place',
               icon: Icons.place_rounded,
@@ -386,6 +391,8 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 });
               },
               itemBuilder: (place) => place.enName,
+              validator:
+                  (value) => value == null ? 'Please select Place' : null,
             ),
             const SizedBox(height: 16),
             _buildTextField(
@@ -478,53 +485,6 @@ class _AddAddressPageState extends State<AddAddressPage> {
         filled: true,
         fillColor: Colors.grey[50],
       ),
-    );
-  }
-
-  Widget _buildDropdownField<T>({
-    required T? value,
-    required String label,
-    required IconData icon,
-    required List<T> items,
-    required void Function(T?) onChanged,
-    required String Function(T) itemBuilder,
-  }) {
-    return DropdownButtonFormField<T>(
-      value: value,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon, color: const Color(0xFF667eea)),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: Colors.grey[300]!),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: Colors.grey[300]!),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFF667eea), width: 2),
-        ),
-        filled: true,
-        fillColor: Colors.grey[50],
-      ),
-      items:
-          items
-              .map(
-                (item) => DropdownMenuItem<T>(
-                  value: item,
-                  child: Text(itemBuilder(item)),
-                ),
-              )
-              .toList(),
-      onChanged: onChanged,
-      validator: (value) {
-        if (value == null) {
-          return 'Please select $label';
-        }
-        return null;
-      },
     );
   }
 

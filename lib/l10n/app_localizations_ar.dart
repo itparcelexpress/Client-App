@@ -1347,7 +1347,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'خطأ في تحميل المزيد من الإشعارات';
 
   @override
-  String get examplePhoneNumber => 'مثال: 33223322';
+  String get examplePhoneNumber => '123xxxx';
 
   @override
   String itemNumber(Object number) {

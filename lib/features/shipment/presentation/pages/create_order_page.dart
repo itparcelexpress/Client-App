@@ -4,6 +4,7 @@ import 'package:client_app/core/services/location_service.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/core/utilities/taost_service.dart';
 import 'package:client_app/core/utilities/unified_phone_input.dart';
+import 'package:client_app/core/widgets/overflow_safe_dropdown.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/address_book/address_book.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
@@ -901,7 +902,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       icon: Icons.location_on_rounded,
       children: [
         // Governorate Dropdown
-        _buildLocationDropdown<Governorate>(
+        LocationDropdown<Governorate>(
           label: AppLocalizations.of(context)!.governorate,
           value: _selectedGovernorate,
           items: _governorates,
@@ -913,12 +914,19 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               }
             });
           },
-          displayText: (governorate) => governorate.enName,
+          itemBuilder: (governorate) => governorate.enName,
           icon: Icons.location_city_outlined,
+          validator:
+              (value) =>
+                  value == null
+                      ? AppLocalizations.of(context)!.pleaseEnterField(
+                        AppLocalizations.of(context)!.governorate,
+                      )
+                      : null,
         ),
         const SizedBox(height: 20),
         // State Dropdown
-        _buildLocationDropdown<StateModel>(
+        LocationDropdown<StateModel>(
           label: AppLocalizations.of(context)!.state,
           value: _selectedState,
           items: _states,
@@ -930,12 +938,19 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               }
             });
           },
-          displayText: (state) => state.enName,
+          itemBuilder: (state) => state.enName,
           icon: Icons.location_searching_outlined,
+          validator:
+              (value) =>
+                  value == null
+                      ? AppLocalizations.of(
+                        context,
+                      )!.pleaseEnterField(AppLocalizations.of(context)!.state)
+                      : null,
         ),
         const SizedBox(height: 20),
         // Place Dropdown
-        _buildLocationDropdown<Place>(
+        LocationDropdown<Place>(
           label: AppLocalizations.of(context)!.place,
           value: _selectedPlace,
           items: _places,
@@ -944,8 +959,15 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               _selectedPlace = place;
             });
           },
-          displayText: (place) => place.enName,
+          itemBuilder: (place) => place.enName,
           icon: Icons.place_outlined,
+          validator:
+              (value) =>
+                  value == null
+                      ? AppLocalizations.of(
+                        context,
+                      )!.pleaseEnterField(AppLocalizations.of(context)!.place)
+                      : null,
         ),
         const SizedBox(height: 20),
         _buildTextField(
@@ -974,70 +996,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   value?.isEmpty == true
                       ? AppLocalizations.of(context)!.zipcodeRequired
                       : null,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLocationDropdown<T>({
-    required String label,
-    required T? value,
-    required List<T> items,
-    required void Function(T?) onChanged,
-    required String Function(T) displayText,
-    required IconData icon,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1a1a1a),
-          ),
-        ),
-        const SizedBox(height: 8),
-        DropdownButtonFormField<T>(
-          value: value,
-          onChanged: onChanged,
-          validator:
-              (value) =>
-                  value == null
-                      ? AppLocalizations.of(context)!.pleaseEnterField(label)
-                      : null,
-          decoration: InputDecoration(
-            prefixIcon: Icon(icon, color: Colors.grey[400], size: 20),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[200]!),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[200]!),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF667eea), width: 2),
-            ),
-            filled: true,
-            fillColor: Colors.grey[50],
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 16,
-            ),
-          ),
-          items:
-              items.map((item) {
-                return DropdownMenuItem<T>(
-                  value: item,
-                  child: Text(
-                    displayText(item),
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                );
-              }).toList(),
         ),
       ],
     );

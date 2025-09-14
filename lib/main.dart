@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:client_app/core/services/location_service.dart';
 import 'package:client_app/core/utilities/app_themes.dart';
 import 'package:client_app/core/widgets/environment_banner.dart';
+import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/auth/presentation/pages/home_page.dart';
 import 'package:client_app/features/auth/presentation/pages/login_page.dart';
@@ -44,10 +45,25 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   Locale _locale = const Locale('ar'); // Default to Arabic
 
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedLanguage();
+  }
+
+  void _loadSavedLanguage() {
+    final savedLanguageCode = LocalData.languageCode;
+    setState(() {
+      _locale = Locale(savedLanguageCode);
+    });
+  }
+
   void setLocale(Locale locale) {
     setState(() {
       _locale = locale;
     });
+    // Save the language preference
+    LocalData.setLanguageCode(locale.languageCode);
   }
 
   String _getAppTitle() {
@@ -64,10 +80,6 @@ class MyAppState extends State<MyApp> {
       title: _getAppTitle(),
       theme: AppThemes.theme,
       locale: _locale,
-      localeResolutionCallback: (locale, supportedLocales) {
-        // Always default to Arabic regardless of system locale
-        return const Locale('ar');
-      },
       home: const AuthWrapper(),
     );
   }

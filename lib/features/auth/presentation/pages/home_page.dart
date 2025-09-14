@@ -614,7 +614,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    AppLocalizations.of(context)!.selectLanguage,
+                    isEnglish ? 'التبديل إلى العربية' : 'Switch to English',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -623,7 +623,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    isEnglish ? 'English' : 'العربية',
+                    isEnglish ? 'العربية' : 'English',
                     style: const TextStyle(
                       fontSize: 14,
                       color: Color(0xFF667eea),
@@ -640,7 +640,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                isEnglish ? 'EN' : 'AR',
+                isEnglish ? 'AR' : 'EN',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,

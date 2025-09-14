@@ -6,6 +6,7 @@ import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/core/utilities/taost_service.dart';
 import 'package:client_app/core/utilities/unified_phone_input.dart';
 import 'package:client_app/core/utilities/validators.dart';
+import 'package:client_app/core/widgets/overflow_safe_dropdown.dart';
 import 'package:client_app/features/guest/cubit/guest_cubit.dart';
 import 'package:client_app/features/guest/cubit/guest_state.dart';
 import 'package:client_app/features/guest/data/models/guest_order_models.dart';
@@ -385,36 +386,11 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
             ),
           ),
           const SizedBox(height: 16),
-          DropdownButtonFormField<Governorate>(
+          LocationDropdown<Governorate>(
             value: selectedGovernorate,
-            decoration: InputDecoration(
-              labelText: '${AppLocalizations.of(context)!.governorate} *',
-              errorStyle:
-                  !_shouldShowError(AppLocalizations.of(context)!.governorate)
-                      ? const TextStyle(fontSize: 0, height: 0)
-                      : null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey[300]!),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey[300]!),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: AppColor.primaryColor, width: 2),
-              ),
-              filled: true,
-              fillColor: Colors.grey[50],
-            ),
-            items:
-                governorates
-                    .map(
-                      (gov) =>
-                          DropdownMenuItem(value: gov, child: Text(gov.enName)),
-                    )
-                    .toList(),
+            label: AppLocalizations.of(context)!.governorate,
+            icon: Icons.location_city_outlined,
+            items: governorates,
             onChanged: (gov) {
               setState(() {
                 selectedGovernorate = gov;
@@ -428,6 +404,7 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
                 _loadStates(gov.id);
               }
             },
+            itemBuilder: (gov) => gov.enName,
             validator:
                 (value) => _validateField(
                   value?.toString(),
@@ -441,38 +418,11 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
                 ),
           ),
           const SizedBox(height: 16),
-          DropdownButtonFormField<StateModel>(
+          LocationDropdown<StateModel>(
             value: selectedState,
-            decoration: InputDecoration(
-              labelText: '${AppLocalizations.of(context)!.state} *',
-              errorStyle:
-                  !_shouldShowError(AppLocalizations.of(context)!.state)
-                      ? const TextStyle(fontSize: 0, height: 0)
-                      : null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey[300]!),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey[300]!),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: AppColor.primaryColor, width: 2),
-              ),
-              filled: true,
-              fillColor: Colors.grey[50],
-            ),
-            items:
-                states
-                    .map(
-                      (state) => DropdownMenuItem(
-                        value: state,
-                        child: Text(state.enName),
-                      ),
-                    )
-                    .toList(),
+            label: AppLocalizations.of(context)!.state,
+            icon: Icons.location_searching_outlined,
+            items: states,
             onChanged: (state) {
               setState(() {
                 selectedState = state;
@@ -484,6 +434,7 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
                 _loadPlaces(state.id);
               }
             },
+            itemBuilder: (state) => state.enName,
             validator:
                 (value) => _validateField(
                   value?.toString(),
@@ -495,44 +446,18 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
                 ),
           ),
           const SizedBox(height: 16),
-          DropdownButtonFormField<Place>(
+          LocationDropdown<Place>(
             value: selectedPlace,
-            decoration: InputDecoration(
-              labelText: '${AppLocalizations.of(context)!.place} *',
-              errorStyle:
-                  !_shouldShowError(AppLocalizations.of(context)!.place)
-                      ? const TextStyle(fontSize: 0, height: 0)
-                      : null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey[300]!),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey[300]!),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: AppColor.primaryColor, width: 2),
-              ),
-              filled: true,
-              fillColor: Colors.grey[50],
-            ),
-            items:
-                places
-                    .map(
-                      (place) => DropdownMenuItem(
-                        value: place,
-                        child: Text(place.enName),
-                      ),
-                    )
-                    .toList(),
+            label: AppLocalizations.of(context)!.place,
+            icon: Icons.place_outlined,
+            items: places,
             onChanged: (place) {
               setState(() {
                 selectedPlace = place;
                 _markFieldAsTouched(AppLocalizations.of(context)!.place);
               });
             },
+            itemBuilder: (place) => place.enName,
             validator:
                 (value) => _validateField(
                   value?.toString(),
