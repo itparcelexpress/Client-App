@@ -5,6 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../models/location_models.dart';
+import '../utilities/app_endpoints.dart';
+import '../../data/remote/app_request.dart';
+import '../../data/remote/helper/app_response.dart';
 
 class LocationService {
   static const String _governoratesBoxName = 'governorates';
@@ -153,5 +156,26 @@ class LocationService {
     await _governoratesBox?.close();
     await _statesBox?.close();
     await _placesBox?.close();
+  }
+
+  // Fetch countries from API
+  static Future<List<Country>> fetchCountries() async {
+    try {
+      final AppResponse response = await AppRequest.get(
+        AppEndPoints.countries,
+        false, // No authentication required
+      );
+
+      if (response.success && response.origin != null) {
+        final countryResponse = CountryResponse.fromJson(response.origin!);
+        return countryResponse.data;
+      } else {
+        debugPrint('Failed to fetch countries: ${response.message}');
+        return [];
+      }
+    } catch (e) {
+      debugPrint('Error fetching countries: $e');
+      return [];
+    }
   }
 }

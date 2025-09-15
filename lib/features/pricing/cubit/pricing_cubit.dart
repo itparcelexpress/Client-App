@@ -88,6 +88,47 @@ class PricingCubit extends Cubit<PricingState> {
     }
   }
 
+  /// Load pricing data using client ID (for create order page)
+  Future<void> loadClientPricingByClientId() async {
+    try {
+      emit(PricingLoading());
+
+      final response =
+          await _pricingRepository.getCurrentClientPricingByClientId();
+
+      if (response.success) {
+        if (response.data.isNotEmpty) {
+          emit(
+            PricingLoaded(
+              pricingData: response.data,
+              message: response.message,
+            ),
+          );
+        } else {
+          emit(
+            const PricingEmpty(
+              message: 'No pricing data available for your location',
+            ),
+          );
+        }
+      } else {
+        emit(
+          PricingError(
+            message:
+                response.message.isNotEmpty
+                    ? response.message
+                    : 'Failed to load pricing data',
+          ),
+        );
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('🔴 PricingCubit Error: $e');
+      }
+      emit(PricingError(message: e.toString().replaceAll('Exception: ', '')));
+    }
+  }
+
   /// Refresh pricing data
   Future<void> refreshPricing() async {
     await loadClientPricing();

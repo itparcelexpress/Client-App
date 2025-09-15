@@ -45,6 +45,9 @@ class AppEndPoints {
   // Client Pricing
   static String clientPricing(int userId) => 'client/$userId/pricing';
 
+  // Countries
+  static const String countries = 'countries';
+
   // Address Book
   static const String addressBook = 'client/address_book';
   static const String createAddressBook = 'client/address_book/store';

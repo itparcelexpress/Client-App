@@ -3,6 +3,36 @@ import 'package:hive/hive.dart';
 
 part 'location_models.g.dart';
 
+// Country Model
+@HiveType(typeId: 3)
+class Country extends Equatable {
+  @HiveField(0)
+  final int id;
+
+  @HiveField(1)
+  final String name;
+
+  @HiveField(2)
+  final String? updatedAt;
+
+  const Country({required this.id, required this.name, this.updatedAt});
+
+  factory Country.fromJson(Map<String, dynamic> json) {
+    return Country(
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      updatedAt: json['updated_at'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'id': id, 'name': name, 'updated_at': updatedAt};
+  }
+
+  @override
+  List<Object?> get props => [id, name, updatedAt];
+}
+
 // Governorate Model
 @HiveType(typeId: 0)
 class Governorate extends Equatable {
@@ -214,6 +244,35 @@ class PlaceResponse extends Equatable {
       data:
           (json['data'] as List<dynamic>? ?? [])
               .map((item) => Place.fromJson(item as Map<String, dynamic>))
+              .toList(),
+      errors: json['errors'] ?? [],
+    );
+  }
+
+  @override
+  List<Object?> get props => [message, success, data, errors];
+}
+
+class CountryResponse extends Equatable {
+  final String message;
+  final bool success;
+  final List<Country> data;
+  final List<dynamic> errors;
+
+  const CountryResponse({
+    required this.message,
+    required this.success,
+    required this.data,
+    required this.errors,
+  });
+
+  factory CountryResponse.fromJson(Map<String, dynamic> json) {
+    return CountryResponse(
+      message: json['message'] ?? '',
+      success: json['success'] ?? false,
+      data:
+          (json['data'] as List<dynamic>? ?? [])
+              .map((item) => Country.fromJson(item as Map<String, dynamic>))
               .toList(),
       errors: json['errors'] ?? [],
     );

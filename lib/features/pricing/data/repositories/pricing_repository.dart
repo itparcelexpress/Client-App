@@ -105,6 +105,16 @@ class PricingRepository {
     }
     return getClientPricing(userId);
   }
+
+  /// Fetch pricing for current client using client ID
+  Future<PricingResponse> getCurrentClientPricingByClientId() async {
+    final user = LocalData.user;
+    if (user?.client?.id == null) {
+      throw Exception('No client ID found. Please log in again.');
+    }
+    // Use client ID instead of user ID for the pricing endpoint
+    return getClientPricing(user!.client!.id!);
+  }
 }
 
 // Extension to add copyWith method to PricingResponse

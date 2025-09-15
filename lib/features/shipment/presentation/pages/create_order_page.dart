@@ -1,5 +1,5 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:client_app/core/models/location_models.dart';
+import 'package:client_app/core/models/location_models.dart' as location_models;
 import 'package:client_app/core/services/location_service.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/core/utilities/taost_service.dart';
@@ -10,6 +10,9 @@ import 'package:client_app/features/address_book/address_book.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/auth/presentation/pages/home_page.dart';
 import 'package:client_app/features/shipment/data/models/order_models.dart';
+import 'package:client_app/features/pricing/cubit/pricing_cubit.dart';
+import 'package:client_app/features/pricing/cubit/pricing_state.dart';
+import 'package:client_app/features/pricing/data/models/pricing_models.dart';
 import 'package:client_app/injections.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -63,29 +66,33 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
   // Dropdown values
   String _paymentType = 'cod'; // Use key instead of display value
-  final int _countryId = 165; // Default Oman
 
   // Location dropdowns
-  List<Governorate> _governorates = [];
-  List<StateModel> _states = [];
-  List<Place> _places = [];
+  List<location_models.Country> _countries = [];
+  List<location_models.Governorate> _governorates = [];
+  List<location_models.StateModel> _states = [];
+  List<location_models.Place> _places = [];
 
-  Governorate? _selectedGovernorate;
-  StateModel? _selectedState;
-  Place? _selectedPlace;
+  location_models.Country? _selectedCountry;
+  location_models.Governorate? _selectedGovernorate;
+  location_models.StateModel? _selectedState;
+  location_models.Place? _selectedPlace;
 
   // Address book selection
   AddressBookEntry? _selectedAddress;
+
+  // Pricing data
+  List<PricingData> _pricingData = [];
+  bool _isLoadingPricing = false;
+  PricingCubit? _pricingCubit;
 
   // Track if form has data to suggest saving as address book entry
   bool get _hasFormData {
     return _nameController.text.isNotEmpty &&
         _phoneController.text.isNotEmpty &&
-        _emailController.text.isNotEmpty &&
-        _streetAddressController.text.isNotEmpty &&
+        _selectedCountry != null &&
         _selectedGovernorate != null &&
-        _selectedState != null &&
-        _selectedPlace != null;
+        _selectedState != null;
   }
 
   // Track if user dismissed the save suggestion
@@ -95,9 +102,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   void initState() {
     super.initState();
     // Set default values
-    _deliveryFeeController.text = '5.00';
     _amountController.text = '0';
+    _loadCountries();
     _loadLocationData();
+    _loadPricingData();
 
     // Initialize from incoming sticker (if navigated with it)
     if (widget.stickerNumber != null && widget.stickerNumber!.isNotEmpty) {
@@ -121,14 +129,121 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     });
   }
 
+  void _loadCountries() async {
+    try {
+      final countries = await LocationService.fetchCountries();
+      setState(() {
+        _countries = countries;
+        // Set default to Oman (ID: 165) if available
+        _selectedCountry = countries.firstWhere(
+          (country) => country.id == 165,
+          orElse:
+              () => countries.isNotEmpty ? countries.first : countries.first,
+        );
+      });
+    } catch (e) {
+      print('Error loading countries: $e');
+    }
+  }
+
   void _loadLocationData() {
     setState(() {
       _governorates = LocationService.getAllGovernorates();
-      // Set default selection to first governorate
-      if (_governorates.isNotEmpty) {
-        _selectedGovernorate = _governorates.first;
-        _loadStatesForGovernorate(_selectedGovernorate!.id);
+      // Don't set default selection - let user choose
+    });
+  }
+
+  void _loadPricingData() async {
+    setState(() {
+      _isLoadingPricing = true;
+    });
+
+    try {
+      final user = LocalData.user;
+      if (user?.id != null) {
+        // Create a single cubit instance and keep it
+        _pricingCubit = getIt<PricingCubit>();
+
+        // Load pricing data
+        await _pricingCubit!.loadPricingForClient(user!.id!);
+
+        // Listen to pricing state changes
+        _pricingCubit!.stream.listen((state) {
+          if (state is PricingLoaded) {
+            print('🟢 Pricing loaded: ${state.pricingData.length} items');
+            for (var pricing in state.pricingData) {
+              print(
+                '🟢 Pricing item - State ID: ${pricing.stateId}, Delivery Fee: ${pricing.deliveryFee}',
+              );
+            }
+
+            // Store pricing data permanently
+            _pricingData = List.from(state.pricingData);
+            setState(() {
+              _isLoadingPricing = false;
+            });
+
+            print('🟢 Pricing data stored: ${_pricingData.length} items');
+
+            // Update delivery fee if state is already selected
+            if (_selectedState != null) {
+              print(
+                '🟢 Auto-updating delivery fee for state: ${_selectedState!.id}',
+              );
+              _updateDeliveryFeeForState(_selectedState!.id);
+            }
+          } else if (state is PricingError) {
+            setState(() {
+              _isLoadingPricing = false;
+            });
+            print('🔴 Pricing loading error: ${state.message}');
+          } else if (state is PricingEmpty) {
+            setState(() {
+              _isLoadingPricing = false;
+            });
+            print('🟡 Pricing data is empty: ${state.message}');
+          }
+        });
       }
+    } catch (e) {
+      setState(() {
+        _isLoadingPricing = false;
+      });
+      print('Error loading pricing data: $e');
+    }
+  }
+
+  void _updateDeliveryFeeForState(int stateId) {
+    print('🟢 Looking for pricing for state ID: $stateId');
+    print('🟢 Available pricing data: ${_pricingData.length} items');
+
+    // If no pricing data available, try to reload it
+    if (_pricingData.isEmpty && _pricingCubit != null) {
+      print('🟡 No pricing data available, attempting to reload...');
+      _pricingCubit!.loadPricingForClient(LocalData.user!.id!);
+      return;
+    }
+
+    final pricingForState = _pricingData.firstWhere(
+      (pricing) => pricing.stateId == stateId,
+      orElse: () {
+        print('🟡 No pricing found for state $stateId, using default');
+        return PricingData(
+          id: 0,
+          clientId: 0,
+          countryId: 0,
+          stateId: 0,
+          deliveryFee: '5.00', // Default fallback
+          returnFee: '0.00',
+          createdAt: '',
+          updatedAt: '',
+        );
+      },
+    );
+
+    print('🟢 Setting delivery fee to: ${pricingForState.deliveryFee}');
+    setState(() {
+      _deliveryFeeController.text = pricingForState.deliveryFee;
     });
   }
 
@@ -139,11 +254,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       _selectedPlace = null;
       _places = [];
 
-      // Set default selection to first state
-      if (_states.isNotEmpty) {
-        _selectedState = _states.first;
-        _loadPlacesForState(_selectedState!.id);
-      }
+      // Don't set default selection - let user choose
     });
   }
 
@@ -152,10 +263,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       _places = LocationService.getPlacesByStateId(stateId);
       _selectedPlace = null;
 
-      // Set default selection to first place
-      if (_places.isNotEmpty) {
-        _selectedPlace = _places.first;
-      }
+      // Don't set default selection - let user choose
     });
   }
 
@@ -178,6 +286,17 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
       // Set location dropdowns based on selected address
       if (address.governorate != null) {
+        // Find and set country first
+        final country = _countries.firstWhere(
+          (c) => c.id == address.countryId,
+          orElse:
+              () => _countries.firstWhere(
+                (c) => c.id == 165, // Default to Oman
+                orElse: () => _countries.first,
+              ),
+        );
+        _selectedCountry = country;
+
         // Find and set governorate
         final governorate = _governorates.firstWhere(
           (g) => g.id == address.governorateId,
@@ -198,6 +317,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               _selectedState = state;
             });
             _loadPlacesForState(state.id);
+            // Update delivery fee based on selected state from address
+            _updateDeliveryFeeForState(state.id);
 
             // Set place after loading
             Future.delayed(const Duration(milliseconds: 100), () {
@@ -227,10 +348,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       email: _emailController.text.trim(),
       cellphone: _phoneController.text.trim(),
       alternatePhone: _alternatePhoneController.text.trim(),
-      countryId: 165, // Oman's country ID
+      countryId: _selectedCountry!.id,
       governorateId: _selectedGovernorate!.id,
       stateId: _selectedState!.id,
-      placeId: _selectedPlace!.id,
+      placeId: _selectedPlace?.id ?? 1,
       streetAddress: _streetAddressController.text.trim(),
       zipcode:
           _zipcodeController.text.trim().isNotEmpty
@@ -294,6 +415,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     for (final c in _itemQuantityCtrls) c.dispose();
 
     _scrollController.dispose();
+    _pricingCubit?.close();
     super.dispose();
   }
 
@@ -879,15 +1001,18 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         const SizedBox(height: 20),
         _buildTextField(
           controller: _emailController,
-          label: AppLocalizations.of(context)!.emailAddress,
+          label:
+              '${AppLocalizations.of(context)!.emailAddress} (${AppLocalizations.of(context)!.optional})',
           hint: AppLocalizations.of(context)!.emailPlaceholder,
           icon: Icons.email_outlined,
           keyboardType: TextInputType.emailAddress,
           validator: (value) {
-            if (value?.isEmpty == true)
-              return AppLocalizations.of(context)!.emailRequired;
-            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value!)) {
-              return AppLocalizations.of(context)!.pleaseEnterValidEmail;
+            if (value != null && value.isNotEmpty) {
+              if (!RegExp(
+                r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+              ).hasMatch(value)) {
+                return AppLocalizations.of(context)!.pleaseEnterValidEmail;
+              }
             }
             return null;
           },
@@ -901,8 +1026,35 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       title: AppLocalizations.of(context)!.locationDetails,
       icon: Icons.location_on_rounded,
       children: [
+        // Country Dropdown
+        LocationDropdown<location_models.Country>(
+          label: AppLocalizations.of(context)!.country,
+          value: _selectedCountry,
+          items: _countries,
+          onChanged: (country) {
+            setState(() {
+              _selectedCountry = country;
+              // Reset other location fields when country changes
+              _selectedGovernorate = null;
+              _selectedState = null;
+              _selectedPlace = null;
+              _states = [];
+              _places = [];
+            });
+          },
+          itemBuilder: (country) => country.name,
+          icon: Icons.public_outlined,
+          validator:
+              (value) =>
+                  value == null
+                      ? AppLocalizations.of(
+                        context,
+                      )!.pleaseEnterField(AppLocalizations.of(context)!.country)
+                      : null,
+        ),
+        const SizedBox(height: 20),
         // Governorate Dropdown
-        LocationDropdown<Governorate>(
+        LocationDropdown<location_models.Governorate>(
           label: AppLocalizations.of(context)!.governorate,
           value: _selectedGovernorate,
           items: _governorates,
@@ -926,7 +1078,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         ),
         const SizedBox(height: 20),
         // State Dropdown
-        LocationDropdown<StateModel>(
+        LocationDropdown<location_models.StateModel>(
           label: AppLocalizations.of(context)!.state,
           value: _selectedState,
           items: _states,
@@ -935,6 +1087,11 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               _selectedState = state;
               if (state != null) {
                 _loadPlacesForState(state.id);
+                // Update delivery fee based on selected state
+                print(
+                  '🟢 State changed to: ${state.id}, pricing data available: ${_pricingData.length}',
+                );
+                _updateDeliveryFeeForState(state.id);
               }
             });
           },
@@ -950,8 +1107,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         ),
         const SizedBox(height: 20),
         // Place Dropdown
-        LocationDropdown<Place>(
-          label: AppLocalizations.of(context)!.place,
+        LocationDropdown<location_models.Place>(
+          label:
+              '${AppLocalizations.of(context)!.place} (${AppLocalizations.of(context)!.optional})',
           value: _selectedPlace,
           items: _places,
           onChanged: (place) {
@@ -961,41 +1119,29 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           },
           itemBuilder: (place) => place.enName,
           icon: Icons.place_outlined,
-          validator:
-              (value) =>
-                  value == null
-                      ? AppLocalizations.of(
-                        context,
-                      )!.pleaseEnterField(AppLocalizations.of(context)!.place)
-                      : null,
+          validator: null, // No validation - optional field
         ),
         const SizedBox(height: 20),
         _buildTextField(
           controller: _streetAddressController,
-          label: AppLocalizations.of(context)!.streetAddress,
+          label:
+              '${AppLocalizations.of(context)!.streetAddress} (${AppLocalizations.of(context)!.optional})',
           hint: AppLocalizations.of(context)!.streetAddressHint,
           icon: Icons.home_outlined,
           maxLines: 2,
-          validator:
-              (value) =>
-                  value?.isEmpty == true
-                      ? AppLocalizations.of(context)!.streetAddressRequired
-                      : null,
+          validator: null, // No validation - optional field
         ),
         const SizedBox(height: 20),
         _buildTextField(
           controller: _zipcodeController,
-          label: AppLocalizations.of(context)!.zipcode,
+          label:
+              '${AppLocalizations.of(context)!.zipcode} (${AppLocalizations.of(context)!.optional})',
           hint: AppLocalizations.of(
             context,
           )!.pleaseEnterField(AppLocalizations.of(context)!.zipcode),
           icon: Icons.mail_outlined,
           keyboardType: TextInputType.number,
-          validator:
-              (value) =>
-                  value?.isEmpty == true
-                      ? AppLocalizations.of(context)!.zipcodeRequired
-                      : null,
+          validator: null, // No validation - optional field
         ),
       ],
     );
@@ -1025,19 +1171,95 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         Row(
           children: [
             Expanded(
-              child: _buildTextField(
-                controller: _deliveryFeeController,
-                label: AppLocalizations.of(context)!.deliveryFee,
-                hint: AppLocalizations.of(context)!.deliveryFeeHint,
-                icon: Icons.local_shipping_outlined,
-                keyboardType: TextInputType.number,
-                validator:
-                    (value) =>
-                        value?.isEmpty == true
-                            ? AppLocalizations.of(
-                              context,
-                            )!.pleaseEnterDeliveryFee
-                            : null,
+              child: Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              AppLocalizations.of(context)!.deliveryFee,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.grey.shade800,
+                              ),
+                            ),
+                          ),
+                          if (_isLoadingPricing) ...[
+                            SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: SpinKitThreeBounce(
+                                color: Colors.blue.shade600,
+                                size: 12,
+                              ),
+                            ),
+                          ] else if (_selectedState != null &&
+                              _pricingData.isNotEmpty) ...[
+                            Icon(
+                              Icons.check_circle,
+                              color: Colors.green.shade600,
+                              size: 16,
+                            ),
+                          ],
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: _deliveryFeeController,
+                        keyboardType: TextInputType.number,
+                        readOnly: true,
+                        validator:
+                            (value) =>
+                                value?.isEmpty == true
+                                    ? AppLocalizations.of(
+                                      context,
+                                    )!.pleaseEnterDeliveryFee
+                                    : null,
+                        decoration: InputDecoration(
+                          hintText:
+                              AppLocalizations.of(context)!.deliveryFeeHint,
+                          prefixIcon: Icon(
+                            Icons.local_shipping_outlined,
+                            color: Colors.grey.shade600,
+                            size: 20,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: Colors.blue.shade600,
+                              width: 2,
+                            ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: Colors.red.shade400,
+                              width: 1,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey.shade50,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 18,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
             const SizedBox(width: 20),
@@ -1665,10 +1887,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
   void _submitOrder() {
     if (_formKey.currentState!.validate()) {
-      // Validate location selections
-      if (_selectedGovernorate == null ||
-          _selectedState == null ||
-          _selectedPlace == null) {
+      // Validate required location selections
+      if (_selectedCountry == null ||
+          _selectedGovernorate == null ||
+          _selectedState == null) {
         _showErrorToast(AppLocalizations.of(context)!.pleaseSelectGovernorate);
         return;
       }
@@ -1688,10 +1910,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         alternatePhone: _alternatePhoneController.text.trim(),
         email: _emailController.text.trim(),
         district: "", // Default empty as per API spec
-        countryId: _countryId,
+        countryId: _selectedCountry!.id,
         governorateId: _selectedGovernorate!.id,
         stateId: _selectedState!.id,
-        placeId: _selectedPlace!.id,
+        placeId: _selectedPlace?.id ?? 1, // Default to 1 if no place selected
         cityId: 1, // Default as per API spec
         zipcode: _zipcodeController.text.trim(),
         streetAddress: _streetAddressController.text.trim(),
