@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
+import 'package:client_app/core/widgets/stylish_bottom_navigation.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/dashboard/cubit/dashboard_cubit.dart';
@@ -14,6 +15,9 @@ import 'package:client_app/features/shipment/presentation/pages/create_order_pag
 import 'package:client_app/features/wallet/cubit/wallet_cubit.dart';
 import 'package:client_app/features/wallet/data/repositories/wallet_repository.dart';
 import 'package:client_app/features/wallet/presentation/pages/wallet_page.dart';
+import 'package:client_app/features/map/cubit/map_cubit.dart';
+import 'package:client_app/features/map/presentation/pages/map_page.dart';
+import 'package:client_app/features/map/presentation/pages/locations_list_page.dart';
 import 'package:client_app/injections.dart';
 import 'package:client_app/main.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +37,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late AnimationController _fabAnimationController;
   late List<AnimationController> _iconControllers;
 
-  // Removed _navItems usage with the new NavigationBar
+  // Using Salomon navigation style
+  NavigationStyle _navigationStyle = NavigationStyle.salomon;
 
   @override
   void initState() {
@@ -45,7 +50,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
 
     _iconControllers = List.generate(
-      4,
+      6,
       (index) => AnimationController(
         duration: const Duration(milliseconds: 300),
         vsync: this,
@@ -80,6 +85,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             child: const DashboardPage(),
           ),
           _buildOrdersPage(),
+          _buildCreateOrderPage(),
+          _buildMapPage(),
           _buildInvoicesPage(),
           _buildProfilePage(),
         ],
@@ -89,51 +96,55 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildNavigationBar() {
-    final destinations = <NavigationDestination>[
-      NavigationDestination(
-        icon: const Icon(Icons.dashboard_outlined),
-        selectedIcon: const Icon(Icons.dashboard_rounded),
+    // Create navigation items with localized labels
+    final navigationItems = [
+      NavigationItem(
+        icon: Icons.dashboard_outlined,
         label: AppLocalizations.of(context)!.dashboard,
+        selectedColor: const Color(0xFF6366F1),
+        unselectedColor: Colors.grey,
       ),
-      NavigationDestination(
-        icon: const Icon(Icons.receipt_long_outlined),
-        selectedIcon: const Icon(Icons.receipt_long_rounded),
+      NavigationItem(
+        icon: Icons.receipt_long_outlined,
         label: AppLocalizations.of(context)!.orders,
+        selectedColor: const Color(0xFF10B981),
+        unselectedColor: Colors.grey,
       ),
-      NavigationDestination(
-        icon: const Icon(Icons.add_circle_outline),
-        selectedIcon: const Icon(Icons.add_circle),
+      NavigationItem(
+        icon: Icons.add_circle_outline,
         label: AppLocalizations.of(context)!.createOrder,
+        selectedColor: const Color(0xFFF59E0B),
+        unselectedColor: Colors.grey,
       ),
-      NavigationDestination(
-        icon: const Icon(Icons.receipt_outlined),
-        selectedIcon: const Icon(Icons.receipt_rounded),
+      NavigationItem(
+        icon: Icons.map_outlined,
+        label: 'Map',
+        selectedColor: const Color(0xFF06B6D4),
+        unselectedColor: Colors.grey,
+      ),
+      NavigationItem(
+        icon: Icons.receipt_outlined,
         label: AppLocalizations.of(context)!.invoices,
+        selectedColor: const Color(0xFF8B5CF6),
+        unselectedColor: Colors.grey,
       ),
-      NavigationDestination(
-        icon: const Icon(Icons.person_outline),
-        selectedIcon: const Icon(Icons.person_rounded),
+      NavigationItem(
+        icon: Icons.person_outline,
         label: AppLocalizations.of(context)!.profile,
+        selectedColor: const Color(0xFFEF4444),
+        unselectedColor: Colors.grey,
       ),
     ];
 
-    int barIndex = _selectedIndex >= 2 ? _selectedIndex + 1 : _selectedIndex;
-
-    return NavigationBar(
-      selectedIndex: barIndex,
-      onDestinationSelected: (int index) {
-        if (index == 2) {
-          _navigateToCreateOrder();
-          return;
-        }
-        final pageIndex = index > 2 ? index - 1 : index;
-        if (pageIndex != _selectedIndex) {
-          _onNavItemTapped(pageIndex);
+    return StylishBottomNavigation(
+      selectedIndex: _selectedIndex,
+      style: _navigationStyle,
+      items: navigationItems,
+      onTap: (int index) {
+        if (index != _selectedIndex) {
+          _onNavItemTapped(index);
         }
       },
-      destinations: destinations,
-      height: 72,
-      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
     );
   }
 
@@ -184,6 +195,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return BlocProvider(
       create: (context) => getIt<ShipmentCubit>(),
       child: const OrdersListPage(showAppBar: false),
+    );
+  }
+
+  Widget _buildCreateOrderPage() {
+    return BlocProvider(
+      create: (context) => getIt<ShipmentCubit>(),
+      child: const CreateOrderPage(),
+    );
+  }
+
+  Widget _buildMapPage() {
+    return BlocProvider(
+      create: (context) => getIt<MapCubit>(),
+      child: const MapPage(),
     );
   }
 
@@ -459,14 +484,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   print(
                     '🟢 Navigating to NotificationSettingsPage with userId: $userId, clientId: $clientId',
                   );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) => NotificationSettingsPage(
-                            userId: userId, // For API endpoint
-                            clientId: clientId, // For form data
-                          ),
+                  _navigateWithSlideTransition(
+                    NotificationSettingsPage(
+                      userId: userId, // For API endpoint
+                      clientId: clientId, // For form data
                     ),
                   );
                 } else {
@@ -496,12 +517,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               subtitle: AppLocalizations.of(context)!.viewAllNotifications,
               color: const Color(0xFF8b5cf6),
               onTap:
-                  () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const NotificationsPage(),
-                    ),
-                  ),
+                  () => _navigateWithSlideTransition(const NotificationsPage()),
             ),
             const SizedBox(height: 16),
             _buildSettingItem(
@@ -510,17 +526,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               subtitle: AppLocalizations.of(context)!.viewWalletSubtitle,
               color: const Color(0xFF0ea5e9),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (context) => BlocProvider(
-                          create:
-                              (_) =>
-                                  WalletCubit(const WalletRepository())
-                                    ..loadWallet(),
-                          child: const WalletPage(),
-                        ),
+                _navigateWithSlideTransition(
+                  BlocProvider(
+                    create:
+                        (_) =>
+                            WalletCubit(const WalletRepository())..loadWallet(),
+                    child: const WalletPage(),
                   ),
                 );
               },
@@ -531,13 +542,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               title: AppLocalizations.of(context)!.viewPricing,
               subtitle: AppLocalizations.of(context)!.viewDeliveryPricing,
               color: const Color(0xFF10b981),
-              onTap:
-                  () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const PricingPage(),
-                    ),
-                  ),
+              onTap: () => _navigateWithSlideTransition(const PricingPage()),
             ),
             const SizedBox(height: 16),
             _buildSettingItem(
@@ -758,15 +763,27 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  void _navigateToCreateOrder() {
+  void _navigateWithSlideTransition(Widget page) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder:
-            (context) => BlocProvider(
-              create: (context) => getIt<ShipmentCubit>(),
-              child: const CreateOrderPage(),
-            ),
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => page,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(0.0, 1.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOutCubic;
+
+          var tween = Tween(
+            begin: begin,
+            end: end,
+          ).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 350),
       ),
     );
   }

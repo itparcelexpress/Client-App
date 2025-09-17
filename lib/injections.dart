@@ -1,3 +1,5 @@
+import 'package:client_app/core/cubit/app_version_cubit.dart';
+import 'package:client_app/core/services/app_version_service.dart';
 import 'package:client_app/core/utilities/app_endpoints.dart';
 import 'package:client_app/features/address_book/cubit/address_book_cubit.dart';
 import 'package:client_app/features/address_book/data/repositories/address_book_repository.dart';
@@ -16,6 +18,9 @@ import 'package:client_app/features/profile/cubit/client_settings_cubit.dart';
 import 'package:client_app/features/profile/data/repositories/client_settings_repository.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/data/repositories/order_repository.dart';
+import 'package:client_app/features/map/cubit/map_cubit.dart';
+import 'package:client_app/features/map/data/repositories/map_repository.dart';
+import 'package:client_app/features/map/data/repositories/map_repository_impl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
@@ -85,6 +90,11 @@ Future<void> initInj() async {
 
   getIt.registerSingleton<Dio>(dio);
 
+  // Register AppVersionService
+  final appVersionService = AppVersionService();
+  await appVersionService.initialize(dio);
+  getIt.registerSingleton<AppVersionService>(appVersionService);
+
   // Register repositories
   getIt.registerLazySingleton<AddressBookRepository>(
     () => AddressBookRepositoryImpl(),
@@ -99,6 +109,7 @@ Future<void> initInj() async {
     () => ClientSettingsRepository(),
   );
   getIt.registerLazySingleton<PricingRepository>(() => PricingRepository());
+  getIt.registerLazySingleton<MapRepository>(() => MapRepositoryImpl());
 
   // Register cubits
   getIt.registerFactory<AddressBookCubit>(
@@ -121,6 +132,10 @@ Future<void> initInj() async {
   getIt.registerFactory<PricingCubit>(
     () => PricingCubit(getIt<PricingRepository>()),
   );
+  getIt.registerFactory<AppVersionCubit>(
+    () => AppVersionCubit(appVersionService: getIt<AppVersionService>()),
+  );
+  getIt.registerFactory<MapCubit>(() => MapCubit(getIt<MapRepository>()));
 
   // Guest Feature
   getIt.registerFactory(() => GuestCubit(getIt()));

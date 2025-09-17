@@ -15,6 +15,7 @@ import 'package:client_app/features/pricing/cubit/pricing_state.dart';
 import 'package:client_app/features/pricing/data/models/pricing_models.dart';
 import 'package:client_app/injections.dart';
 import 'package:client_app/l10n/app_localizations.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
@@ -85,6 +86,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   List<PricingData> _pricingData = [];
   bool _isLoadingPricing = false;
   PricingCubit? _pricingCubit;
+  StreamSubscription? _pricingSubscription;
 
   // Track if form has data to suggest saving as address book entry
   bool get _hasFormData {
@@ -168,7 +170,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         await _pricingCubit!.loadPricingForClient(user!.id!);
 
         // Listen to pricing state changes
-        _pricingCubit!.stream.listen((state) {
+        _pricingSubscription = _pricingCubit!.stream.listen((state) {
+          if (!mounted) return; // Check if widget is still mounted
+
           if (state is PricingLoaded) {
             print('🟢 Pricing loaded: ${state.pricingData.length} items');
             for (var pricing in state.pricingData) {
@@ -206,9 +210,11 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         });
       }
     } catch (e) {
-      setState(() {
-        _isLoadingPricing = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoadingPricing = false;
+        });
+      }
       print('Error loading pricing data: $e');
     }
   }
@@ -242,9 +248,11 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     );
 
     print('🟢 Setting delivery fee to: ${pricingForState.deliveryFee}');
-    setState(() {
-      _deliveryFeeController.text = pricingForState.deliveryFee;
-    });
+    if (mounted) {
+      setState(() {
+        _deliveryFeeController.text = pricingForState.deliveryFee;
+      });
+    }
   }
 
   void _loadStatesForGovernorate(int governorateId) {
@@ -415,6 +423,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     for (final c in _itemQuantityCtrls) c.dispose();
 
     _scrollController.dispose();
+    _pricingSubscription?.cancel(); // Cancel the stream subscription
     _pricingCubit?.close();
     super.dispose();
   }

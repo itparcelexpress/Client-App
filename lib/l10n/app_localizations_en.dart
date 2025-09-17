@@ -1493,4 +1493,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invoice => 'Invoice';
+
+  @override
+  String get update_required => 'Update Required';
+
+  @override
+  String get update_available => 'Update Available';
+
+  @override
+  String get current_version => 'Current Version:';
+
+  @override
+  String get latest_version => 'Latest Version:';
+
+  @override
+  String get update_now => 'Update Now';
+
+  @override
+  String get later => 'Later';
+
+  @override
+  String get critical_update_required =>
+      'Critical update required. Please update immediately.';
+
+  @override
+  String get update_required_message => 'Update required for continued use.';
+
+  @override
+  String get update_available_message =>
+      'New version available with improvements.';
+
+  @override
+  String get forced_update_warning_message =>
+      'You must update the app to continue using it. The app will not function until you install the latest version.';
+
+  @override
+  String get version_7_required_message =>
+      'This version is no longer supported. Please update to version 7.0.0 or higher to continue using the app.';
+
+  @override
+  String get copyright_text => '© 2024 Parcel Express. All rights reserved.';
+
+  @override
+  String version_text(String version) {
+    return 'Version $version';
+  }
 }

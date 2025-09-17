@@ -1,4 +1,5 @@
 import 'package:client_app/core/utilities/responsive_utils.dart';
+import 'package:client_app/core/widgets/app_footer.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/auth/presentation/pages/home_page.dart';
 import 'package:client_app/features/guest/cubit/guest_cubit.dart';
@@ -138,49 +139,62 @@ class _LoginPageState extends State<LoginPage> {
                 }
               },
               builder: (context, state) {
-                return SingleChildScrollView(
-                  padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
-                    context,
-                    const EdgeInsets.all(24.0),
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: ResponsiveUtils.getResponsivePadding(
+                return Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
                           context,
-                          40,
+                          const EdgeInsets.all(24.0),
+                        ),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: ResponsiveUtils.getResponsivePadding(
+                                context,
+                                40,
+                              ),
+                            ),
+                            _buildHeader(),
+                            SizedBox(
+                              height: ResponsiveUtils.getResponsivePadding(
+                                context,
+                                60,
+                              ),
+                            ),
+                            _buildLoginForm(context, state),
+                            SizedBox(
+                              height: ResponsiveUtils.getResponsivePadding(
+                                context,
+                                40,
+                              ),
+                            ),
+                            _buildLoginButton(context, state),
+                            SizedBox(
+                              height: ResponsiveUtils.getResponsivePadding(
+                                context,
+                                20,
+                              ),
+                            ),
+                            _buildGuestButton(context),
+                            SizedBox(
+                              height: ResponsiveUtils.getResponsivePadding(
+                                context,
+                                20,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      _buildHeader(),
-                      SizedBox(
-                        height: ResponsiveUtils.getResponsivePadding(
-                          context,
-                          60,
-                        ),
+                    ),
+                    // Footer at the bottom
+                    const SimpleAppFooter(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24.0,
+                        vertical: 8.0,
                       ),
-                      _buildLoginForm(context, state),
-                      SizedBox(
-                        height: ResponsiveUtils.getResponsivePadding(
-                          context,
-                          40,
-                        ),
-                      ),
-                      _buildLoginButton(context, state),
-                      SizedBox(
-                        height: ResponsiveUtils.getResponsivePadding(
-                          context,
-                          20,
-                        ),
-                      ),
-                      _buildGuestButton(context),
-                      SizedBox(
-                        height: ResponsiveUtils.getResponsivePadding(
-                          context,
-                          60,
-                        ),
-                      ), // Added extra space at bottom
-                    ],
-                  ),
+                    ),
+                  ],
                 );
               },
             ),

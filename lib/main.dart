@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:client_app/core/services/location_service.dart';
 import 'package:client_app/core/utilities/app_themes.dart';
+import 'package:client_app/core/widgets/app_version_wrapper.dart';
 import 'package:client_app/core/widgets/environment_banner.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
@@ -80,7 +81,7 @@ class MyAppState extends State<MyApp> {
       title: _getAppTitle(),
       theme: AppThemes.theme,
       locale: _locale,
-      home: const AuthWrapper(),
+      home: const AppVersionWrapper(child: AuthWrapper()),
     );
   }
 }

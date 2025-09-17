@@ -1491,4 +1491,47 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get invoice => 'فاتورة';
+
+  @override
+  String get update_required => 'تحديث مطلوب';
+
+  @override
+  String get update_available => 'تحديث متاح';
+
+  @override
+  String get current_version => 'الإصدار الحالي:';
+
+  @override
+  String get latest_version => 'أحدث إصدار:';
+
+  @override
+  String get update_now => 'تحديث الآن';
+
+  @override
+  String get later => 'لاحقاً';
+
+  @override
+  String get critical_update_required => 'تحديث حرج مطلوب. يرجى التحديث فوراً.';
+
+  @override
+  String get update_required_message => 'تحديث مطلوب للاستخدام المستمر.';
+
+  @override
+  String get update_available_message => 'إصدار جديد متاح مع تحسينات.';
+
+  @override
+  String get forced_update_warning_message =>
+      'يجب عليك تحديث التطبيق للمتابعة. لن يعمل التطبيق حتى تقوم بتثبيت أحدث إصدار.';
+
+  @override
+  String get version_7_required_message =>
+      'هذا الإصدار لم يعد مدعوماً. يرجى التحديث إلى الإصدار 7.0.0 أو أحدث للمتابعة.';
+
+  @override
+  String get copyright_text => '© 2024 Parcel Express. جميع الحقوق محفوظة.';
+
+  @override
+  String version_text(String version) {
+    return 'الإصدار $version';
+  }
 }

@@ -75,4 +75,8 @@ class AppEndPoints {
 
   // Customer Orders
   static const String customerOrders = '/customer-orders/store';
+
+  // Map endpoints
+  static const String stations = 'stations';
+  static const String hubs = 'hubs';
 }

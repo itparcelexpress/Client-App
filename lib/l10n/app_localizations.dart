@@ -2893,6 +2893,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Invoice'**
   String get invoice;
+
+  /// Update required title
+  ///
+  /// In en, this message translates to:
+  /// **'Update Required'**
+  String get update_required;
+
+  /// Update available title
+  ///
+  /// In en, this message translates to:
+  /// **'Update Available'**
+  String get update_available;
+
+  /// Current version label
+  ///
+  /// In en, this message translates to:
+  /// **'Current Version:'**
+  String get current_version;
+
+  /// Latest version label
+  ///
+  /// In en, this message translates to:
+  /// **'Latest Version:'**
+  String get latest_version;
+
+  /// Update now button text
+  ///
+  /// In en, this message translates to:
+  /// **'Update Now'**
+  String get update_now;
+
+  /// Later button text
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get later;
+
+  /// Critical update required message
+  ///
+  /// In en, this message translates to:
+  /// **'Critical update required. Please update immediately.'**
+  String get critical_update_required;
+
+  /// Update required message
+  ///
+  /// In en, this message translates to:
+  /// **'Update required for continued use.'**
+  String get update_required_message;
+
+  /// Update available message
+  ///
+  /// In en, this message translates to:
+  /// **'New version available with improvements.'**
+  String get update_available_message;
+
+  /// Forced update warning message
+  ///
+  /// In en, this message translates to:
+  /// **'You must update the app to continue using it. The app will not function until you install the latest version.'**
+  String get forced_update_warning_message;
+
+  /// Version 7 required message
+  ///
+  /// In en, this message translates to:
+  /// **'This version is no longer supported. Please update to version 7.0.0 or higher to continue using the app.'**
+  String get version_7_required_message;
+
+  /// Copyright text for app footer
+  ///
+  /// In en, this message translates to:
+  /// **'© 2024 Parcel Express. All rights reserved.'**
+  String get copyright_text;
+
+  /// Version text for app footer
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String version_text(String version);
 }
 
 class _AppLocalizationsDelegate
