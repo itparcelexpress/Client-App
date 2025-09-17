@@ -269,11 +269,11 @@ class _AddAddressPageState extends State<AddAddressPage> {
           children: [
             _buildTextField(
               controller: _nameController,
-              label: 'Full Name',
+              label: AppLocalizations.of(context)!.fullName,
               icon: Icons.person_rounded,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter your full name';
+                  return AppLocalizations.of(context)!.pleaseEnterYourFullName;
                 }
                 return null;
               },
@@ -281,17 +281,21 @@ class _AddAddressPageState extends State<AddAddressPage> {
             const SizedBox(height: 16),
             _buildTextField(
               controller: _emailController,
-              label: 'Email Address',
+              label: AppLocalizations.of(context)!.emailAddress,
               icon: Icons.email_rounded,
               keyboardType: TextInputType.emailAddress,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter your email address';
+                  return AppLocalizations.of(
+                    context,
+                  )!.pleaseEnterYourEmailAddress;
                 }
                 if (!RegExp(
                   r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
                 ).hasMatch(value)) {
-                  return 'Please enter a valid email address';
+                  return AppLocalizations.of(
+                    context,
+                  )!.pleaseEnterAValidEmailAddress;
                 }
                 return null;
               },
@@ -299,7 +303,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
             const SizedBox(height: 16),
             UnifiedPhoneInput(
               controller: _cellphoneController,
-              label: 'Phone Number',
+              label: AppLocalizations.of(context)!.phoneNumber,
               isRequired: true,
               onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
                 // Handle phone number change if needed
@@ -308,7 +312,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
             const SizedBox(height: 16),
             UnifiedPhoneInput(
               controller: _alternatePhoneController,
-              label: 'Alternate Phone Number',
+              label: AppLocalizations.of(context)!.alternatePhoneNumber,
               isRequired: true,
               onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
                 // Handle alternate phone number change if needed
@@ -340,7 +344,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
           children: [
             LocationDropdown<Governorate>(
               value: _selectedGovernorate,
-              label: 'Governorate',
+              label: AppLocalizations.of(context)!.governorate,
               icon: Icons.location_city_rounded,
               items: _governorates,
               onChanged: (value) {
@@ -357,12 +361,17 @@ class _AddAddressPageState extends State<AddAddressPage> {
               },
               itemBuilder: (governorate) => governorate.enName,
               validator:
-                  (value) => value == null ? 'Please select Governorate' : null,
+                  (value) =>
+                      value == null
+                          ? AppLocalizations.of(
+                            context,
+                          )!.pleaseSelectGovernorate
+                          : null,
             ),
             const SizedBox(height: 16),
             LocationDropdown<StateModel>(
               value: _selectedState,
-              label: 'State',
+              label: AppLocalizations.of(context)!.state,
               icon: Icons.location_on_rounded,
               items: _states,
               onChanged: (value) {
@@ -377,12 +386,15 @@ class _AddAddressPageState extends State<AddAddressPage> {
               },
               itemBuilder: (state) => state.enName,
               validator:
-                  (value) => value == null ? 'Please select State' : null,
+                  (value) =>
+                      value == null
+                          ? AppLocalizations.of(context)!.pleaseSelectState
+                          : null,
             ),
             const SizedBox(height: 16),
             LocationDropdown<Place>(
               value: _selectedPlace,
-              label: 'Place',
+              label: AppLocalizations.of(context)!.place,
               icon: Icons.place_rounded,
               items: _places,
               onChanged: (value) {
@@ -392,17 +404,22 @@ class _AddAddressPageState extends State<AddAddressPage> {
               },
               itemBuilder: (place) => place.enName,
               validator:
-                  (value) => value == null ? 'Please select Place' : null,
+                  (value) =>
+                      value == null
+                          ? AppLocalizations.of(context)!.pleaseSelectPlace
+                          : null,
             ),
             const SizedBox(height: 16),
             _buildTextField(
               controller: _streetAddressController,
-              label: 'Street Address',
+              label: AppLocalizations.of(context)!.streetAddress,
               icon: Icons.home_rounded,
               maxLines: 2,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter your street address';
+                  return AppLocalizations.of(
+                    context,
+                  )!.pleaseEnterYourStreetAddress;
                 }
                 return null;
               },
@@ -433,14 +450,14 @@ class _AddAddressPageState extends State<AddAddressPage> {
           children: [
             _buildTextField(
               controller: _zipcodeController,
-              label: 'Zip Code (Optional)',
+              label: AppLocalizations.of(context)!.zipCodeOptional,
               icon: Icons.markunread_mailbox_rounded,
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 16),
             _buildTextField(
               controller: _locationUrlController,
-              label: 'Location URL (Optional)',
+              label: AppLocalizations.of(context)!.locationUrlOptional,
               icon: Icons.link_rounded,
               keyboardType: TextInputType.url,
             ),

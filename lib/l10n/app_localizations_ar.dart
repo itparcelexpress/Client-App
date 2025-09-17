@@ -1534,4 +1534,48 @@ class AppLocalizationsAr extends AppLocalizations {
   String version_text(String version) {
     return 'الإصدار $version';
   }
+
+  @override
+  String get stations => 'المحطات';
+
+  @override
+  String get hubs => 'المراكز';
+
+  @override
+  String selected(String name) {
+    return 'المحدد: $name';
+  }
+
+  @override
+  String get map => 'محطاتنا';
+
+  @override
+  String get viewLocationsAndRoutes => 'شاهدنا على الخريطة';
+
+  @override
+  String get mapView => 'عرض الخريطة';
+
+  @override
+  String get listView => 'عرض القائمة';
+
+  @override
+  String get switchToListView => 'التبديل إلى عرض القائمة';
+
+  @override
+  String get switchToMapView => 'التبديل إلى عرض الخريطة';
+
+  @override
+  String get refreshData => 'تحديث البيانات';
+
+  @override
+  String get noLocationsAvailable => 'لا توجد مواقع متاحة';
+
+  @override
+  String get stationsAndHubsWillAppearHere =>
+      'ستظهر المحطات والمراكز هنا بمجرد توفر واجهة برمجة التطبيقات.';
+
+  @override
+  String locationsCount(int count) {
+    return 'المواقع ($count)';
+  }
 }

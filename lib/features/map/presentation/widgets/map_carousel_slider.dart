@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 
 import '../../data/models/hub_model.dart' as hub_models;
 import '../../data/models/station_model.dart';
@@ -65,7 +66,7 @@ class _MapCarouselSliderState extends State<MapCarouselSlider> {
                 Icon(Icons.location_off, size: 48, color: Colors.grey[400]),
                 const SizedBox(height: 12),
                 Text(
-                  'No Locations Available',
+                  AppLocalizations.of(context)!.noLocationsAvailable,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.grey[700],
@@ -73,7 +74,7 @@ class _MapCarouselSliderState extends State<MapCarouselSlider> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Stations and hubs will appear here\nonce the API is available.',
+                  AppLocalizations.of(context)!.stationsAndHubsWillAppearHere,
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
@@ -111,7 +112,9 @@ class _MapCarouselSliderState extends State<MapCarouselSlider> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Locations (${_allItems.length})',
+                  AppLocalizations.of(
+                    context,
+                  )!.locationsCount(_allItems.length),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),

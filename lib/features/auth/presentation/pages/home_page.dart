@@ -887,8 +887,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             items: [
               MorePageItem(
                 icon: Icons.map_outlined,
-                title: 'Map',
-                subtitle: 'View locations and routes',
+                title: AppLocalizations.of(context)!.map,
+                subtitle: AppLocalizations.of(context)!.viewLocationsAndRoutes,
                 color: const Color(0xFF06B6D4),
                 onTap: () {
                   Navigator.pop(context);

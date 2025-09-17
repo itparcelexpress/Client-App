@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 
 import '../../cubit/map_cubit.dart';
 import '../../data/models/hub_model.dart' as hub_models;
@@ -127,7 +128,11 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isMapView ? 'Map View' : 'List View'),
+        title: Text(
+          _isMapView
+              ? AppLocalizations.of(context)!.mapView
+              : AppLocalizations.of(context)!.listView,
+        ),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
@@ -135,12 +140,15 @@ class _MapPageState extends State<MapPage> {
           IconButton(
             icon: Icon(_isMapView ? Icons.list : Icons.map),
             onPressed: _toggleView,
-            tooltip: _isMapView ? 'Switch to List View' : 'Switch to Map View',
+            tooltip:
+                _isMapView
+                    ? AppLocalizations.of(context)!.switchToListView
+                    : AppLocalizations.of(context)!.switchToMapView,
           ),
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () => context.read<MapCubit>().refreshMapData(),
-            tooltip: 'Refresh Data',
+            tooltip: AppLocalizations.of(context)!.refreshData,
           ),
         ],
       ),
@@ -163,7 +171,7 @@ class _MapPageState extends State<MapPage> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () => context.read<MapCubit>().loadMapData(),
-                    child: const Text('Retry'),
+                    child: Text(AppLocalizations.of(context)!.retry),
                   ),
                 ],
               ),
@@ -175,7 +183,9 @@ class _MapPageState extends State<MapPage> {
               return _buildListView(state);
             }
           }
-          return const Center(child: Text('No data available'));
+          return Center(
+            child: Text(AppLocalizations.of(context)!.noDataAvailable),
+          );
         },
       ),
     );
@@ -230,7 +240,7 @@ class _MapPageState extends State<MapPage> {
                   Icon(Icons.location_off, size: 48, color: Colors.grey[400]),
                   const SizedBox(height: 12),
                   Text(
-                    'No Locations Available',
+                    AppLocalizations.of(context)!.noLocationsAvailable,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Colors.grey[700],
@@ -238,7 +248,7 @@ class _MapPageState extends State<MapPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Stations and hubs will appear here once the API is available.',
+                    AppLocalizations.of(context)!.stationsAndHubsWillAppearHere,
                     style: Theme.of(
                       context,
                     ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),

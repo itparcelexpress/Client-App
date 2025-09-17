@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 import '../cubit/app_version_cubit.dart';
 import '../widgets/app_version_dialog.dart';
 import '../widgets/forced_update_screen.dart';
@@ -86,7 +87,7 @@ class AppVersionWrapper extends StatelessWidget {
                 onPressed: () {
                   context.read<AppVersionCubit>().checkVersion();
                 },
-                child: const Text('Retry'),
+                child: Text(AppLocalizations.of(context)!.retry),
               ),
             ],
           ),

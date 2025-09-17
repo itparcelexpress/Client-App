@@ -2971,6 +2971,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Version {version}'**
   String version_text(String version);
+
+  /// Stations label
+  ///
+  /// In en, this message translates to:
+  /// **'Stations'**
+  String get stations;
+
+  /// Hubs label
+  ///
+  /// In en, this message translates to:
+  /// **'Hubs'**
+  String get hubs;
+
+  /// Selected item label
+  ///
+  /// In en, this message translates to:
+  /// **'Selected: {name}'**
+  String selected(String name);
+
+  /// Map page title
+  ///
+  /// In en, this message translates to:
+  /// **'Our Stations'**
+  String get map;
+
+  /// Map page subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'See us on the map'**
+  String get viewLocationsAndRoutes;
+
+  /// Map view title
+  ///
+  /// In en, this message translates to:
+  /// **'Map View'**
+  String get mapView;
+
+  /// List view title
+  ///
+  /// In en, this message translates to:
+  /// **'List View'**
+  String get listView;
+
+  /// Switch to list view tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to List View'**
+  String get switchToListView;
+
+  /// Switch to map view tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to Map View'**
+  String get switchToMapView;
+
+  /// Refresh data tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Data'**
+  String get refreshData;
+
+  /// No locations available title
+  ///
+  /// In en, this message translates to:
+  /// **'No Locations Available'**
+  String get noLocationsAvailable;
+
+  /// No locations available description
+  ///
+  /// In en, this message translates to:
+  /// **'Stations and hubs will appear here once the API is available.'**
+  String get stationsAndHubsWillAppearHere;
+
+  /// Locations count header
+  ///
+  /// In en, this message translates to:
+  /// **'Locations ({count})'**
+  String locationsCount(int count);
 }
 
 class _AppLocalizationsDelegate

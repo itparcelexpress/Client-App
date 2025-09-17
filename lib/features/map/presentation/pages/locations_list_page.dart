@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 
 import '../../data/models/hub_model.dart' as hub_models;
 import '../../data/models/station_model.dart';
@@ -55,7 +56,9 @@ class _LocationsListPageState extends State<LocationsListPage>
                   children: [
                     Icon(FontAwesomeIcons.locationDot, size: 16),
                     const SizedBox(width: 8),
-                    Text('Stations (${widget.stations.length})'),
+                    Text(
+                      '${AppLocalizations.of(context)!.stations} (${widget.stations.length})',
+                    ),
                   ],
                 ),
               ),
@@ -65,7 +68,9 @@ class _LocationsListPageState extends State<LocationsListPage>
                   children: [
                     Icon(FontAwesomeIcons.warehouse, size: 16),
                     const SizedBox(width: 8),
-                    Text('Hubs (${widget.hubs.length})'),
+                    Text(
+                      '${AppLocalizations.of(context)!.hubs} (${widget.hubs.length})',
+                    ),
                   ],
                 ),
               ),
@@ -127,7 +132,9 @@ class _LocationsListPageState extends State<LocationsListPage>
               // Handle station tap - could navigate to details or show on map
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Selected: ${station.name}'),
+                  content: Text(
+                    AppLocalizations.of(context)!.selected(station.name),
+                  ),
                   duration: const Duration(seconds: 2),
                 ),
               );
@@ -180,7 +187,9 @@ class _LocationsListPageState extends State<LocationsListPage>
               // Handle hub tap - could navigate to details or show on map
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Selected: ${hub.name}'),
+                  content: Text(
+                    AppLocalizations.of(context)!.selected(hub.name),
+                  ),
                   duration: const Duration(seconds: 2),
                 ),
               );

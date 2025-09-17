@@ -1538,4 +1538,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String version_text(String version) {
     return 'Version $version';
   }
+
+  @override
+  String get stations => 'Stations';
+
+  @override
+  String get hubs => 'Hubs';
+
+  @override
+  String selected(String name) {
+    return 'Selected: $name';
+  }
+
+  @override
+  String get map => 'Our Stations';
+
+  @override
+  String get viewLocationsAndRoutes => 'See us on the map';
+
+  @override
+  String get mapView => 'Map View';
+
+  @override
+  String get listView => 'List View';
+
+  @override
+  String get switchToListView => 'Switch to List View';
+
+  @override
+  String get switchToMapView => 'Switch to Map View';
+
+  @override
+  String get refreshData => 'Refresh Data';
+
+  @override
+  String get noLocationsAvailable => 'No Locations Available';
+
+  @override
+  String get stationsAndHubsWillAppearHere =>
+      'Stations and hubs will appear here once the API is available.';
+
+  @override
+  String locationsCount(int count) {
+    return 'Locations ($count)';
+  }
 }
