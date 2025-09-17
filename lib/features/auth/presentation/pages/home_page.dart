@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/core/widgets/stylish_bottom_navigation.dart';
+import 'package:client_app/core/widgets/more_pages_popup.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/dashboard/cubit/dashboard_cubit.dart';
@@ -17,7 +18,6 @@ import 'package:client_app/features/wallet/data/repositories/wallet_repository.d
 import 'package:client_app/features/wallet/presentation/pages/wallet_page.dart';
 import 'package:client_app/features/map/cubit/map_cubit.dart';
 import 'package:client_app/features/map/presentation/pages/map_page.dart';
-import 'package:client_app/features/map/presentation/pages/locations_list_page.dart';
 import 'package:client_app/injections.dart';
 import 'package:client_app/main.dart';
 import 'package:flutter/material.dart';
@@ -86,12 +86,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
           _buildOrdersPage(),
           _buildCreateOrderPage(),
-          _buildMapPage(),
           _buildInvoicesPage(),
           _buildProfilePage(),
         ],
       ),
       bottomNavigationBar: _buildNavigationBar(),
+      floatingActionButton: _buildMoreButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 
@@ -114,12 +115,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         icon: Icons.add_circle_outline,
         label: AppLocalizations.of(context)!.createOrder,
         selectedColor: const Color(0xFFF59E0B),
-        unselectedColor: Colors.grey,
-      ),
-      NavigationItem(
-        icon: Icons.map_outlined,
-        label: 'Map',
-        selectedColor: const Color(0xFF06B6D4),
         unselectedColor: Colors.grey,
       ),
       NavigationItem(
@@ -202,13 +197,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return BlocProvider(
       create: (context) => getIt<ShipmentCubit>(),
       child: const CreateOrderPage(),
-    );
-  }
-
-  Widget _buildMapPage() {
-    return BlocProvider(
-      create: (context) => getIt<MapCubit>(),
-      child: const MapPage(),
     );
   }
 
@@ -870,6 +858,60 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         );
       }
     }
+  }
+
+  Widget _buildMoreButton() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 80, right: 16),
+      child: FloatingActionButton(
+        onPressed: _showMorePagesPopup,
+        backgroundColor: Colors.white,
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: const Icon(
+          Icons.more_horiz_rounded,
+          color: Color(0xFF6366F1),
+          size: 28,
+        ),
+      ),
+    );
+  }
+
+  void _showMorePagesPopup() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder:
+          (context) => MorePagesPopup(
+            items: [
+              MorePageItem(
+                icon: Icons.map_outlined,
+                title: 'Map',
+                subtitle: 'View locations and routes',
+                color: const Color(0xFF06B6D4),
+                onTap: () {
+                  Navigator.pop(context);
+                  _navigateToMap();
+                },
+              ),
+              // Add more items here as needed
+            ],
+          ),
+    );
+  }
+
+  void _navigateToMap() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder:
+            (context) => BlocProvider(
+              create: (context) => getIt<MapCubit>(),
+              child: const MapPage(),
+            ),
+      ),
+    );
   }
 }
 

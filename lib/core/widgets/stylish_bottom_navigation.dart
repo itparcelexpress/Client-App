@@ -8,6 +8,7 @@ class StylishBottomNavigation extends StatelessWidget {
   final Function(int) onTap;
   final NavigationStyle style;
   final List<NavigationItem> items;
+  final VoidCallback? onMorePressed;
 
   const StylishBottomNavigation({
     super.key,
@@ -15,6 +16,7 @@ class StylishBottomNavigation extends StatelessWidget {
     required this.onTap,
     this.style = NavigationStyle.salomon,
     required this.items,
+    this.onMorePressed,
   });
 
   @override
@@ -31,14 +33,17 @@ class StylishBottomNavigation extends StatelessWidget {
               .map(
                 (item) => SalomonBottomBarItem(
                   icon: Icon(item.icon),
-                  title: Text(item.label),
+                  title: Text(
+                    item.label,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
                   selectedColor: item.selectedColor ?? Colors.blue,
                   unselectedColor: item.unselectedColor ?? Colors.grey,
                 ),
               )
               .toList(),
       selectedItemColor: Colors.blue,
-      unselectedItemColor: Colors.grey,
       backgroundColor: Colors.white,
       margin: const EdgeInsets.all(16),
       itemShape: RoundedRectangleBorder(
