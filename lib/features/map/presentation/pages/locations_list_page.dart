@@ -10,12 +10,14 @@ class LocationsListPage extends StatefulWidget {
   final List<Station> stations;
   final List<hub_models.HubDetail> hubs;
   final VoidCallback onRefresh;
+  final Function(dynamic)? onItemSelected;
 
   const LocationsListPage({
     super.key,
     required this.stations,
     required this.hubs,
     required this.onRefresh,
+    this.onItemSelected,
   });
 
   @override
@@ -129,15 +131,19 @@ class _LocationsListPageState extends State<LocationsListPage>
           return LocationListItem(
             item: station,
             onTap: () {
-              // Handle station tap - could navigate to details or show on map
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    AppLocalizations.of(context)!.selected(station.name),
+              // Navigate to map view and show selected station
+              if (widget.onItemSelected != null) {
+                widget.onItemSelected!(station);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      AppLocalizations.of(context)!.selected(station.name),
+                    ),
+                    duration: const Duration(seconds: 2),
                   ),
-                  duration: const Duration(seconds: 2),
-                ),
-              );
+                );
+              }
             },
           );
         },
@@ -184,15 +190,19 @@ class _LocationsListPageState extends State<LocationsListPage>
           return LocationListItem(
             item: hub,
             onTap: () {
-              // Handle hub tap - could navigate to details or show on map
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    AppLocalizations.of(context)!.selected(hub.name),
+              // Navigate to map view and show selected hub
+              if (widget.onItemSelected != null) {
+                widget.onItemSelected!(hub);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      AppLocalizations.of(context)!.selected(hub.name),
+                    ),
+                    duration: const Duration(seconds: 2),
                   ),
-                  duration: const Duration(seconds: 2),
-                ),
-              );
+                );
+              }
             },
           );
         },

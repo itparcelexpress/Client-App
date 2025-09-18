@@ -6,6 +6,8 @@ import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client_app/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:client_app/features/finance/cubit/finance_cubit.dart';
+import 'package:client_app/features/finance/presentation/pages/finance_page.dart';
 import 'package:client_app/features/invoices/invoices.dart';
 import 'package:client_app/features/notifications/notifications.dart';
 import 'package:client_app/features/pricing/pricing.dart';
@@ -17,7 +19,7 @@ import 'package:client_app/features/wallet/cubit/wallet_cubit.dart';
 import 'package:client_app/features/wallet/data/repositories/wallet_repository.dart';
 import 'package:client_app/features/wallet/presentation/pages/wallet_page.dart';
 import 'package:client_app/features/map/cubit/map_cubit.dart';
-import 'package:client_app/features/map/presentation/pages/map_page.dart';
+import 'package:client_app/features/map/presentation/pages/enhanced_map_page.dart';
 import 'package:client_app/injections.dart';
 import 'package:client_app/main.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +52,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
 
     _iconControllers = List.generate(
-      6,
+      5,
       (index) => AnimationController(
         duration: const Duration(milliseconds: 300),
         vsync: this,
@@ -86,7 +88,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
           _buildOrdersPage(),
           _buildCreateOrderPage(),
-          _buildInvoicesPage(),
+          _buildFinancePage(),
           _buildProfilePage(),
         ],
       ),
@@ -118,9 +120,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         unselectedColor: Colors.grey,
       ),
       NavigationItem(
-        icon: Icons.receipt_outlined,
-        label: AppLocalizations.of(context)!.invoices,
-        selectedColor: const Color(0xFF8B5CF6),
+        icon: Icons.account_balance_wallet_outlined,
+        label: AppLocalizations.of(context)!.finance,
+        selectedColor: const Color(0xFF06B6D4),
         unselectedColor: Colors.grey,
       ),
       NavigationItem(
@@ -200,10 +202,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildInvoicesPage() {
+  Widget _buildFinancePage() {
     return BlocProvider(
-      create: (context) => getIt<InvoiceCubit>(),
-      child: const InvoicesPage(showAppBar: false),
+      create: (context) => getIt<FinanceCubit>(),
+      child: const FinancePage(),
     );
   }
 
@@ -886,6 +888,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           (context) => MorePagesPopup(
             items: [
               MorePageItem(
+                icon: Icons.receipt_outlined,
+                title: AppLocalizations.of(context)!.invoices,
+                subtitle: AppLocalizations.of(context)!.invoicesAndPayments,
+                color: const Color(0xFF8B5CF6),
+                onTap: () {
+                  Navigator.pop(context);
+                  _navigateToInvoices();
+                },
+              ),
+              MorePageItem(
                 icon: Icons.map_outlined,
                 title: AppLocalizations.of(context)!.map,
                 subtitle: AppLocalizations.of(context)!.viewLocationsAndRoutes,
@@ -901,6 +913,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
+  void _navigateToInvoices() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder:
+            (context) => BlocProvider(
+              create: (context) => getIt<InvoiceCubit>(),
+              child: const InvoicesPage(),
+            ),
+      ),
+    );
+  }
+
   void _navigateToMap() {
     Navigator.push(
       context,
@@ -908,7 +933,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         builder:
             (context) => BlocProvider(
               create: (context) => getIt<MapCubit>(),
-              child: const MapPage(),
+              child: const EnhancedMapPage(),
             ),
       ),
     );

@@ -7,6 +7,8 @@ import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/auth/data/repositories/auth_repository.dart';
 import 'package:client_app/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client_app/features/dashboard/data/repositories/dashboard_repository.dart';
+import 'package:client_app/features/finance/cubit/finance_cubit.dart';
+import 'package:client_app/features/finance/data/repositories/finance_repository.dart';
 import 'package:client_app/features/guest/cubit/guest_cubit.dart';
 import 'package:client_app/features/guest/data/repositories/guest_repository.dart';
 import 'package:client_app/features/invoices/cubit/invoice_cubit.dart';
@@ -110,6 +112,7 @@ Future<void> initInj() async {
   );
   getIt.registerLazySingleton<PricingRepository>(() => PricingRepository());
   getIt.registerLazySingleton<MapRepository>(() => MapRepositoryImpl());
+  getIt.registerLazySingleton<FinanceRepository>(() => FinanceRepositoryImpl());
 
   // Register cubits
   getIt.registerFactory<AddressBookCubit>(
@@ -136,6 +139,9 @@ Future<void> initInj() async {
     () => AppVersionCubit(appVersionService: getIt<AppVersionService>()),
   );
   getIt.registerFactory<MapCubit>(() => MapCubit(getIt<MapRepository>()));
+  getIt.registerFactory<FinanceCubit>(
+    () => FinanceCubit(getIt<FinanceRepository>()),
+  );
 
   // Guest Feature
   getIt.registerFactory(() => GuestCubit(getIt()));

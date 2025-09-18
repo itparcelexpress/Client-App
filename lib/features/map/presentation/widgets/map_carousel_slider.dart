@@ -39,10 +39,22 @@ class _MapCarouselSliderState extends State<MapCarouselSlider> {
   void didUpdateWidget(MapCarouselSlider oldWidget) {
     super.didUpdateWidget(oldWidget);
     _allItems = [...widget.stations, ...widget.hubs];
+
+    // Animate to the current index if it changed
+    if (widget.currentIndex != oldWidget.currentIndex) {
+      _carouselController.animateToPage(
+        widget.currentIndex,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    print(
+      '🗺️ CarouselSlider: Building with ${_allItems.length} items (${widget.stations.length} stations, ${widget.hubs.length} hubs)',
+    );
     if (_allItems.isEmpty) {
       return Container(
         height: 200,
@@ -180,6 +192,7 @@ class _MapCarouselSliderState extends State<MapCarouselSlider> {
                   autoPlayCurve: Curves.fastOutSlowIn,
                   enlargeCenterPage: true,
                   enlargeFactor: 0.2,
+                  scrollPhysics: const BouncingScrollPhysics(),
                   onPageChanged: (index, reason) {
                     if (reason == CarouselPageChangedReason.manual) {
                       widget.onItemSelected(index, _allItems[index]);

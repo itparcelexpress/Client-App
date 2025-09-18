@@ -1582,4 +1582,123 @@ class AppLocalizationsEn extends AppLocalizations {
   String locationsCount(int count) {
     return 'Locations ($count)';
   }
+
+  @override
+  String get finance => 'Finance';
+
+  @override
+  String get viewFinance => 'Finance';
+
+  @override
+  String get viewFinanceSubtitle => 'View account balance and transactions';
+
+  @override
+  String get accountBalance => 'Account Balance';
+
+  @override
+  String get totalCod => 'Total COD';
+
+  @override
+  String get totalFees => 'Total Fees';
+
+  @override
+  String get totalSettlements => 'Total Settlements';
+
+  @override
+  String get currentBalance => 'Current Balance';
+
+  @override
+  String get transactionHistory => 'Transaction History';
+
+  @override
+  String get loadingFinanceData => 'Loading finance data...';
+
+  @override
+  String get errorLoadingFinance => 'Error Loading Finance';
+
+  @override
+  String get noFinanceData => 'No Finance Data';
+
+  @override
+  String get noTransactionsYet => 'No transactions yet';
+
+  @override
+  String get transactionsWillAppearHere =>
+      'Your transaction history will appear here once you start making transactions.';
+
+  @override
+  String get transactionType => 'Type';
+
+  @override
+  String get transactionReference => 'Reference';
+
+  @override
+  String get transactionDescription => 'Description';
+
+  @override
+  String get transactionAmount => 'Amount';
+
+  @override
+  String get transactionDate => 'Date';
+
+  @override
+  String get codTransaction => 'COD';
+
+  @override
+  String get feeTransaction => 'Fee';
+
+  @override
+  String get settlementTransaction => 'Settlement';
+
+  @override
+  String get credit => 'Credit';
+
+  @override
+  String get debit => 'Debit';
+
+  @override
+  String get loadMoreTransactions => 'Load More Transactions';
+
+  @override
+  String get noMoreTransactions => 'No more transactions to load';
+
+  @override
+  String get financeSummary => 'Finance Summary';
+
+  @override
+  String get totalTransactions => 'Total Transactions';
+
+  @override
+  String showingTransactionsCount(int shown, int total) {
+    return 'Showing $shown of $total transactions';
+  }
+
+  @override
+  String get refreshFinanceData => 'Refresh Finance Data';
+
+  @override
+  String get exportToExcel => 'Export to Excel';
+
+  @override
+  String get exportingToExcel => 'Exporting to Excel...';
+
+  @override
+  String get excelExportSuccess => 'Excel file exported successfully!';
+
+  @override
+  String get excelExportFailed => 'Failed to export Excel file';
+
+  @override
+  String excelFileSaved(String filePath) {
+    return 'Excel file saved to: $filePath';
+  }
+
+  @override
+  String get openExcelFile => 'Open Excel File';
+
+  @override
+  String get excelExportError => 'Excel Export Error';
+
+  @override
+  String get exportedOn => 'Exported on';
 }

@@ -3049,6 +3049,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Locations ({count})'**
   String locationsCount(int count);
+
+  /// Finance page title
+  ///
+  /// In en, this message translates to:
+  /// **'Finance'**
+  String get finance;
+
+  /// Finance menu item title
+  ///
+  /// In en, this message translates to:
+  /// **'Finance'**
+  String get viewFinance;
+
+  /// Finance menu item subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'View account balance and transactions'**
+  String get viewFinanceSubtitle;
+
+  /// Account balance label
+  ///
+  /// In en, this message translates to:
+  /// **'Account Balance'**
+  String get accountBalance;
+
+  /// Total COD label
+  ///
+  /// In en, this message translates to:
+  /// **'Total COD'**
+  String get totalCod;
+
+  /// Total fees label
+  ///
+  /// In en, this message translates to:
+  /// **'Total Fees'**
+  String get totalFees;
+
+  /// Total settlements label
+  ///
+  /// In en, this message translates to:
+  /// **'Total Settlements'**
+  String get totalSettlements;
+
+  /// Current balance label
+  ///
+  /// In en, this message translates to:
+  /// **'Current Balance'**
+  String get currentBalance;
+
+  /// Transaction history section title
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction History'**
+  String get transactionHistory;
+
+  /// Loading finance data message
+  ///
+  /// In en, this message translates to:
+  /// **'Loading finance data...'**
+  String get loadingFinanceData;
+
+  /// Error loading finance title
+  ///
+  /// In en, this message translates to:
+  /// **'Error Loading Finance'**
+  String get errorLoadingFinance;
+
+  /// No finance data title
+  ///
+  /// In en, this message translates to:
+  /// **'No Finance Data'**
+  String get noFinanceData;
+
+  /// No transactions yet message
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions yet'**
+  String get noTransactionsYet;
+
+  /// Transactions placeholder message
+  ///
+  /// In en, this message translates to:
+  /// **'Your transaction history will appear here once you start making transactions.'**
+  String get transactionsWillAppearHere;
+
+  /// Transaction type label
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get transactionType;
+
+  /// Transaction reference label
+  ///
+  /// In en, this message translates to:
+  /// **'Reference'**
+  String get transactionReference;
+
+  /// Transaction description label
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get transactionDescription;
+
+  /// Transaction amount label
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get transactionAmount;
+
+  /// Transaction date label
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get transactionDate;
+
+  /// COD transaction type
+  ///
+  /// In en, this message translates to:
+  /// **'COD'**
+  String get codTransaction;
+
+  /// Fee transaction type
+  ///
+  /// In en, this message translates to:
+  /// **'Fee'**
+  String get feeTransaction;
+
+  /// Settlement transaction type
+  ///
+  /// In en, this message translates to:
+  /// **'Settlement'**
+  String get settlementTransaction;
+
+  /// Credit transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Credit'**
+  String get credit;
+
+  /// Debit transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Debit'**
+  String get debit;
+
+  /// Load more transactions button text
+  ///
+  /// In en, this message translates to:
+  /// **'Load More Transactions'**
+  String get loadMoreTransactions;
+
+  /// No more transactions message
+  ///
+  /// In en, this message translates to:
+  /// **'No more transactions to load'**
+  String get noMoreTransactions;
+
+  /// Finance summary section title
+  ///
+  /// In en, this message translates to:
+  /// **'Finance Summary'**
+  String get financeSummary;
+
+  /// Total transactions label
+  ///
+  /// In en, this message translates to:
+  /// **'Total Transactions'**
+  String get totalTransactions;
+
+  /// Transactions count message
+  ///
+  /// In en, this message translates to:
+  /// **'Showing {shown} of {total} transactions'**
+  String showingTransactionsCount(int shown, int total);
+
+  /// Refresh finance data tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Finance Data'**
+  String get refreshFinanceData;
+
+  /// Export to Excel button text
+  ///
+  /// In en, this message translates to:
+  /// **'Export to Excel'**
+  String get exportToExcel;
+
+  /// Exporting to Excel loading message
+  ///
+  /// In en, this message translates to:
+  /// **'Exporting to Excel...'**
+  String get exportingToExcel;
+
+  /// Excel export success message
+  ///
+  /// In en, this message translates to:
+  /// **'Excel file exported successfully!'**
+  String get excelExportSuccess;
+
+  /// Excel export failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to export Excel file'**
+  String get excelExportFailed;
+
+  /// Excel file saved message with path
+  ///
+  /// In en, this message translates to:
+  /// **'Excel file saved to: {filePath}'**
+  String excelFileSaved(String filePath);
+
+  /// Open Excel file button text
+  ///
+  /// In en, this message translates to:
+  /// **'Open Excel File'**
+  String get openExcelFile;
+
+  /// Excel export error title
+  ///
+  /// In en, this message translates to:
+  /// **'Excel Export Error'**
+  String get excelExportError;
+
+  /// Exported on label
+  ///
+  /// In en, this message translates to:
+  /// **'Exported on'**
+  String get exportedOn;
 }
 
 class _AppLocalizationsDelegate

@@ -5,16 +5,19 @@ class MapViewWidget extends StatelessWidget {
   final Set<Marker> markers;
   final Function(GoogleMapController) onMapCreated;
   final CameraPosition initialCameraPosition;
+  final Function(LatLng)? onMapTapped;
 
   const MapViewWidget({
     super.key,
     required this.markers,
     required this.onMapCreated,
     required this.initialCameraPosition,
+    this.onMapTapped,
   });
 
   @override
   Widget build(BuildContext context) {
+    print('🗺️ MapViewWidget: Building with ${markers.length} markers');
     return GoogleMap(
       onMapCreated: onMapCreated,
       initialCameraPosition: initialCameraPosition,
@@ -24,11 +27,17 @@ class MapViewWidget extends StatelessWidget {
       myLocationButtonEnabled: true,
       zoomControlsEnabled: true,
       mapToolbarEnabled: false,
-      onTap: (LatLng position) {
-        // Handle map tap if needed
-      },
+      compassEnabled: true,
+      rotateGesturesEnabled: true,
+      scrollGesturesEnabled: true,
+      tiltGesturesEnabled: true,
+      zoomGesturesEnabled: true,
+      onTap: onMapTapped,
       onCameraMove: (CameraPosition position) {
         // Handle camera movement if needed
+      },
+      onCameraIdle: () {
+        // Handle camera idle if needed
       },
     );
   }

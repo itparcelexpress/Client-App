@@ -1,0 +1,531 @@
+import 'dart:io';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Row;
+import 'package:path_provider/path_provider.dart';
+import 'package:client_app/features/finance/data/models/finance_models.dart';
+import 'package:client_app/l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+
+/// Service for exporting finance data to Excel format
+class ExcelExportService {
+  /// Request storage permissions if needed
+  static Future<bool> _requestStoragePermissions() async {
+    if (Platform.isAndroid) {
+      // For Android 13+ (API 33+), we need different permissions
+      if (await _isAndroid13OrHigher()) {
+        return await _requestAndroid13Permissions();
+      } else {
+        // For older Android versions, use traditional storage permission
+        return await _requestLegacyStoragePermission();
+      }
+    }
+    return true; // iOS doesn't need explicit storage permission
+  }
+
+  /// Check if device is running Android 13+ (API 33+)
+  static Future<bool> _isAndroid13OrHigher() async {
+    try {
+      final deviceInfo = await DeviceInfoPlugin().androidInfo;
+      return deviceInfo.version.sdkInt >= 33;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error checking Android version: $e');
+      }
+      return false;
+    }
+  }
+
+  /// Request permissions for Android 13+ (API 33+)
+  static Future<bool> _requestAndroid13Permissions() async {
+    try {
+      // For Android 13+, we can use the Downloads directory without special permissions
+      // But we still need to check if we can access external storage
+      final status = await Permission.manageExternalStorage.status;
+
+      if (status.isGranted) {
+        return true;
+      }
+
+      if (status.isDenied) {
+        final result = await Permission.manageExternalStorage.request();
+        return result.isGranted;
+      }
+
+      if (status.isPermanentlyDenied) {
+        if (kDebugMode) {
+          print('🔴 Manage external storage permission permanently denied.');
+        }
+        return false;
+      }
+
+      return status.isGranted;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error requesting Android 13+ permissions: $e');
+      }
+      // Fallback to legacy permission
+      return await _requestLegacyStoragePermission();
+    }
+  }
+
+  /// Request legacy storage permission for older Android versions
+  static Future<bool> _requestLegacyStoragePermission() async {
+    try {
+      var status = await Permission.storage.status;
+
+      if (status.isGranted) {
+        return true;
+      }
+
+      if (status.isDenied) {
+        status = await Permission.storage.request();
+        return status.isGranted;
+      }
+
+      if (status.isPermanentlyDenied) {
+        if (kDebugMode) {
+          print('🔴 Storage permission permanently denied.');
+        }
+        return false;
+      }
+
+      return status.isGranted;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error requesting legacy storage permission: $e');
+      }
+      return false;
+    }
+  }
+
+  /// Export finance data to CSV file as a fallback
+  ///
+  /// Returns the file path of the created CSV file
+  static Future<String> exportFinanceDataToCSV({
+    required FinanceData financeData,
+    required AppLocalizations localizations,
+  }) async {
+    try {
+      // Get the downloads directory or fallback to documents directory
+      Directory? directory;
+      try {
+        if (Platform.isAndroid) {
+          // For Android, try different approaches based on version
+          if (await _isAndroid13OrHigher()) {
+            // Android 13+ - Use Downloads directory directly
+            directory = Directory('/storage/emulated/0/Download');
+            if (!await directory.exists()) {
+              await directory.create(recursive: true);
+            }
+          } else {
+            // Older Android versions - Use external storage
+            directory = await getExternalStorageDirectory();
+            if (directory != null) {
+              directory = Directory('${directory.path}/Download');
+              if (!await directory.exists()) {
+                await directory.create(recursive: true);
+              }
+            }
+          }
+
+          // If external storage fails, try app-specific external directory
+          if (directory == null || !await directory.exists()) {
+            directory = await getExternalStorageDirectory();
+            if (directory != null) {
+              directory = Directory('${directory.path}/Documents');
+              if (!await directory.exists()) {
+                await directory.create(recursive: true);
+              }
+            }
+          }
+        } else {
+          // For iOS, use documents directory
+          directory = await getApplicationDocumentsDirectory();
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          print('Error accessing external storage: $e');
+        }
+        // Fallback to application documents directory
+        directory = await getApplicationDocumentsDirectory();
+      }
+
+      if (directory == null) {
+        throw Exception('Could not access storage directory');
+      }
+
+      final fileName =
+          'finance_report_${DateTime.now().millisecondsSinceEpoch}.csv';
+      final filePath = '${directory.path}/$fileName';
+
+      // Create CSV content
+      final csvContent = _createCSVContent(financeData, localizations);
+
+      // Write the CSV file
+      final File file = File(filePath);
+      await file.writeAsString(csvContent, flush: true);
+
+      // Verify the file was created successfully
+      if (!await file.exists()) {
+        throw Exception('Failed to create CSV file');
+      }
+
+      final fileSize = await file.length();
+      if (fileSize == 0) {
+        throw Exception('CSV file is empty');
+      }
+
+      if (kDebugMode) {
+        print('📊 CSV file exported successfully: $filePath');
+        print('📊 File size: $fileSize bytes');
+      }
+
+      return filePath;
+    } catch (e) {
+      if (kDebugMode) {
+        print('🔴 CSV export error: $e');
+      }
+      throw Exception('Failed to export CSV file: ${e.toString()}');
+    }
+  }
+
+  /// Create CSV content from finance data
+  static String _createCSVContent(
+    FinanceData financeData,
+    AppLocalizations localizations,
+  ) {
+    final buffer = StringBuffer();
+
+    // Add BOM for proper UTF-8 encoding
+    buffer.write('\uFEFF');
+
+    // Summary section
+    buffer.writeln(localizations.financeSummary);
+    buffer.writeln(
+      '${localizations.currentBalance},${financeData.summary.currentBalance.toStringAsFixed(2)} OMR',
+    );
+    buffer.writeln(
+      '${localizations.totalCod},${financeData.summary.totalCod.toStringAsFixed(2)} OMR',
+    );
+    buffer.writeln(
+      '${localizations.totalFees},${financeData.summary.totalFees.toStringAsFixed(2)} OMR',
+    );
+    buffer.writeln(
+      '${localizations.totalSettlements},${financeData.summary.totalSettlements.toStringAsFixed(2)} OMR',
+    );
+    buffer.writeln('');
+
+    // Transactions section
+    buffer.writeln(localizations.transactionHistory);
+    buffer.writeln(
+      '${localizations.transactionDate},${localizations.transactionReference},${localizations.transactionType},${localizations.transactionDescription},${localizations.transactionAmount}',
+    );
+
+    for (final transaction in financeData.transactions) {
+      buffer.writeln(
+        '${transaction.date},${transaction.reference},${transaction.type},${transaction.description},${transaction.formattedAmount} OMR',
+      );
+    }
+
+    buffer.writeln('');
+    buffer.writeln('${localizations.exportedOn}: ${DateTime.now().toString()}');
+
+    return buffer.toString();
+  }
+
+  /// Export finance data to Excel file
+  ///
+  /// Returns the file path of the created Excel file
+  static Future<String> exportFinanceDataToExcel({
+    required FinanceData financeData,
+    required AppLocalizations localizations,
+  }) async {
+    try {
+      // Request storage permissions
+      final hasPermission = await _requestStoragePermissions();
+      if (!hasPermission) {
+        throw Exception('Storage permission denied');
+      }
+      // Create a new Excel workbook
+      final Workbook workbook = Workbook();
+
+      // Create Summary sheet
+      await _createSummarySheet(workbook, financeData.summary, localizations);
+
+      // Create Transactions sheet
+      await _createTransactionsSheet(
+        workbook,
+        financeData.transactions,
+        localizations,
+      );
+
+      // Add a simple test cell to ensure the file has content
+      final testSheet = workbook.worksheets[0];
+      final testCell = testSheet.getRangeByIndex(10, 1);
+      testCell.setText('Generated by ParcelExpress Client App');
+      testCell.cellStyle.fontSize = 10;
+      testCell.cellStyle.fontColor = '#999999';
+
+      // Get the downloads directory or fallback to documents directory
+      Directory? directory;
+      try {
+        if (Platform.isAndroid) {
+          // For Android, try different approaches based on version
+          if (await _isAndroid13OrHigher()) {
+            // Android 13+ - Use Downloads directory directly
+            directory = Directory('/storage/emulated/0/Download');
+            if (!await directory.exists()) {
+              await directory.create(recursive: true);
+            }
+          } else {
+            // Older Android versions - Use external storage
+            directory = await getExternalStorageDirectory();
+            if (directory != null) {
+              directory = Directory('${directory.path}/Download');
+              if (!await directory.exists()) {
+                await directory.create(recursive: true);
+              }
+            }
+          }
+
+          // If external storage fails, try app-specific external directory
+          if (directory == null || !await directory.exists()) {
+            directory = await getExternalStorageDirectory();
+            if (directory != null) {
+              directory = Directory('${directory.path}/Documents');
+              if (!await directory.exists()) {
+                await directory.create(recursive: true);
+              }
+            }
+          }
+        } else {
+          // For iOS, use documents directory
+          directory = await getApplicationDocumentsDirectory();
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          print('Error accessing external storage: $e');
+        }
+        // Fallback to application documents directory
+        directory = await getApplicationDocumentsDirectory();
+      }
+
+      if (directory == null) {
+        throw Exception('Could not access storage directory');
+      }
+
+      final fileName =
+          'finance_report_${DateTime.now().millisecondsSinceEpoch}.xlsx';
+      final filePath = '${directory.path}/$fileName';
+
+      // Save the workbook as Excel format
+      final List<int> bytes = workbook.saveAsStream();
+      workbook.dispose();
+
+      // Write the file with proper Excel format
+      final File file = File(filePath);
+      await file.writeAsBytes(bytes, flush: true);
+
+      // Verify the file was created successfully
+      if (!await file.exists()) {
+        throw Exception('Failed to create Excel file');
+      }
+
+      // Check file size to ensure it's not empty
+      final fileSize = await file.length();
+      if (fileSize == 0) {
+        throw Exception('Excel file is empty');
+      }
+
+      if (kDebugMode) {
+        print('📊 Excel file exported successfully: $filePath');
+        print('📊 File size: $fileSize bytes');
+      }
+
+      return filePath;
+    } catch (e) {
+      if (kDebugMode) {
+        print('🔴 Excel export error: $e');
+      }
+      throw Exception('Failed to export Excel file: ${e.toString()}');
+    }
+  }
+
+  /// Create summary sheet with account overview
+  static Future<void> _createSummarySheet(
+    Workbook workbook,
+    AccountSummary summary,
+    AppLocalizations localizations,
+  ) async {
+    final Worksheet sheet = workbook.worksheets[0];
+    sheet.name = localizations.financeSummary;
+
+    // Column widths will be auto-adjusted for compatibility
+
+    // Title row
+    final Range titleCell = sheet.getRangeByIndex(1, 1);
+    titleCell.setText(localizations.financeSummary);
+    titleCell.cellStyle.bold = true;
+    titleCell.cellStyle.fontSize = 18;
+    titleCell.cellStyle.backColor = '#E3F2FD';
+    titleCell.cellStyle.hAlign = HAlignType.center;
+
+    // Title spans both columns (no merging needed for this version)
+
+    // Summary data
+    final summaryData = [
+      [
+        localizations.currentBalance,
+        '${summary.currentBalance.toStringAsFixed(2)} OMR',
+      ],
+      [localizations.totalCod, '${summary.totalCod.toStringAsFixed(2)} OMR'],
+      [localizations.totalFees, '${summary.totalFees.toStringAsFixed(2)} OMR'],
+      [
+        localizations.totalSettlements,
+        '${summary.totalSettlements.toStringAsFixed(2)} OMR',
+      ],
+    ];
+
+    for (int i = 0; i < summaryData.length; i++) {
+      final row = i + 3; // Start from row 3
+      final labelCell = sheet.getRangeByIndex(row, 1);
+      final valueCell = sheet.getRangeByIndex(row, 2);
+
+      labelCell.setText(summaryData[i][0]);
+      labelCell.cellStyle.bold = true;
+
+      valueCell.setText(summaryData[i][1]);
+      valueCell.cellStyle.backColor = '#E8F5E8';
+      valueCell.cellStyle.hAlign = HAlignType.right;
+    }
+
+    // Export info
+    final exportRow = summaryData.length + 4;
+    final exportCell = sheet.getRangeByIndex(exportRow, 1);
+    exportCell.setText(
+      '${localizations.exportedOn}: ${DateTime.now().toString()}',
+    );
+    exportCell.cellStyle.fontSize = 10;
+    exportCell.cellStyle.fontColor = '#666666';
+  }
+
+  /// Create transactions sheet with transaction history
+  static Future<void> _createTransactionsSheet(
+    Workbook workbook,
+    List<Transaction> transactions,
+    AppLocalizations localizations,
+  ) async {
+    final Worksheet sheet = workbook.worksheets.add();
+    sheet.name = localizations.transactionHistory;
+
+    // Column widths will be auto-adjusted
+
+    // Header row
+    final headers = [
+      localizations.transactionDate,
+      localizations.transactionReference,
+      localizations.transactionType,
+      localizations.transactionDescription,
+      localizations.transactionAmount,
+    ];
+
+    for (int i = 0; i < headers.length; i++) {
+      final headerCell = sheet.getRangeByIndex(1, i + 1);
+      headerCell.setText(headers[i]);
+      headerCell.cellStyle.bold = true;
+      headerCell.cellStyle.backColor = '#E3F2FD';
+      headerCell.cellStyle.hAlign = HAlignType.center;
+    }
+
+    // Transaction rows
+    for (int i = 0; i < transactions.length; i++) {
+      final transaction = transactions[i];
+      final row = i + 2; // Start from row 2
+
+      // Date
+      final dateCell = sheet.getRangeByIndex(row, 1);
+      dateCell.setText(transaction.date);
+      dateCell.cellStyle.hAlign = HAlignType.center;
+
+      // Reference
+      final refCell = sheet.getRangeByIndex(row, 2);
+      refCell.setText(transaction.reference);
+
+      // Type
+      final typeCell = sheet.getRangeByIndex(row, 3);
+      typeCell.setText(transaction.type);
+      typeCell.cellStyle.hAlign = HAlignType.center;
+
+      // Description
+      final descCell = sheet.getRangeByIndex(row, 4);
+      descCell.setText(transaction.description);
+
+      // Amount
+      final amountCell = sheet.getRangeByIndex(row, 5);
+      final amountText = '${transaction.formattedAmount} OMR';
+      amountCell.setText(amountText);
+      amountCell.cellStyle.hAlign = HAlignType.right;
+
+      // Color coding for amounts
+      if (transaction.isCredit) {
+        amountCell.cellStyle.backColor = '#E8F5E8';
+        amountCell.cellStyle.fontColor = '#2E7D32';
+      } else {
+        amountCell.cellStyle.backColor = '#FFEBEE';
+        amountCell.cellStyle.fontColor = '#C62828';
+      }
+    }
+
+    // Summary row
+    final summaryRow = transactions.length + 3;
+    final totalLabelCell = sheet.getRangeByIndex(summaryRow, 4);
+    final totalValueCell = sheet.getRangeByIndex(summaryRow, 5);
+
+    totalLabelCell.setText('${localizations.totalTransactions}:');
+    totalLabelCell.cellStyle.bold = true;
+
+    totalValueCell.setText('${transactions.length}');
+    totalValueCell.cellStyle.bold = true;
+    totalValueCell.cellStyle.backColor = '#FFF3E0';
+    totalValueCell.cellStyle.hAlign = HAlignType.center;
+  }
+
+  /// Get file size in human readable format
+  static String getFileSize(String filePath) {
+    final file = File(filePath);
+    if (file.existsSync()) {
+      final bytes = file.lengthSync();
+      if (bytes < 1024) {
+        return '$bytes B';
+      } else if (bytes < 1024 * 1024) {
+        return '${(bytes / 1024).toStringAsFixed(1)} KB';
+      } else {
+        return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+      }
+    }
+    return '0 B';
+  }
+
+  /// Check if file exists
+  static bool fileExists(String filePath) {
+    return File(filePath).existsSync();
+  }
+
+  /// Delete file
+  static Future<bool> deleteFile(String filePath) async {
+    try {
+      final file = File(filePath);
+      if (file.existsSync()) {
+        await file.delete();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      if (kDebugMode) {
+        print('🔴 Error deleting file: $e');
+      }
+      return false;
+    }
+  }
+}

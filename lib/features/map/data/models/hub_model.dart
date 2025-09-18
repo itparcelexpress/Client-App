@@ -28,25 +28,32 @@ class HubResponse extends Equatable {
 
 @JsonSerializable()
 class HubData extends Equatable {
+  @JsonKey(name: 'current_page')
   final int currentPage;
   final List<HubDetail> data;
+  @JsonKey(name: 'first_page_url')
   final String firstPageUrl;
-  final int from;
+  final int? from;
+  @JsonKey(name: 'last_page')
   final int lastPage;
+  @JsonKey(name: 'last_page_url')
   final String lastPageUrl;
   final List<HubLink> links;
+  @JsonKey(name: 'next_page_url')
   final String? nextPageUrl;
   final String path;
+  @JsonKey(name: 'per_page')
   final int perPage;
+  @JsonKey(name: 'prev_page_url')
   final String? prevPageUrl;
-  final int to;
+  final int? to;
   final int total;
 
   const HubData({
     required this.currentPage,
     required this.data,
     required this.firstPageUrl,
-    required this.from,
+    this.from,
     required this.lastPage,
     required this.lastPageUrl,
     required this.links,
@@ -54,7 +61,7 @@ class HubData extends Equatable {
     required this.path,
     required this.perPage,
     this.prevPageUrl,
-    required this.to,
+    this.to,
     required this.total,
   });
 
@@ -87,17 +94,27 @@ class HubDetail extends Equatable {
   final String name;
   final String location;
   final String? address;
+  @JsonKey(name: 'owner_type')
   final String? ownerType;
+  @JsonKey(name: 'owner_id')
   final int? ownerId;
+  @JsonKey(name: 'contact_number')
   final String contactNumber;
+  @JsonKey(name: 'country_id')
   final int countryId;
+  @JsonKey(name: 'governorate_id')
   final int governorateId;
+  @JsonKey(name: 'state_id')
   final int stateId;
+  @JsonKey(name: 'place_id')
   final int placeId;
+  @JsonKey(name: 'city_id')
   final int cityId;
   final String lat;
   final String lng;
+  @JsonKey(name: 'created_at')
   final String createdAt;
+  @JsonKey(name: 'updated_at')
   final String updatedAt;
   final Country country;
   final State state;
@@ -166,7 +183,9 @@ class Country extends Equatable {
   final String name;
   final String code;
   final int phonecode;
+  @JsonKey(name: 'created_at')
   final String? createdAt;
+  @JsonKey(name: 'updated_at')
   final String? updatedAt;
 
   const Country({
@@ -190,15 +209,22 @@ class Country extends Equatable {
 @JsonSerializable()
 class State extends Equatable {
   final int id;
+  @JsonKey(name: 'country_id')
   final int countryId;
+  @JsonKey(name: 'governorate_id')
   final int governorateId;
+  @JsonKey(name: 'en_name')
   final String enName;
+  @JsonKey(name: 'ar_name')
   final String arName;
   final String lat;
   final String lng;
   final String? polygon;
+  @JsonKey(name: 'created_at')
   final String createdAt;
+  @JsonKey(name: 'updated_at')
   final String updatedAt;
+  @JsonKey(name: 'polygon_geojson')
   final PolygonGeojson? polygonGeojson;
 
   const State({
@@ -238,9 +264,12 @@ class State extends Equatable {
 @JsonSerializable()
 class City extends Equatable {
   final int id;
+  @JsonKey(name: 'state_id')
   final int stateId;
   final String name;
+  @JsonKey(name: 'created_at')
   final String? createdAt;
+  @JsonKey(name: 'updated_at')
   final String? updatedAt;
 
   const City({
@@ -262,12 +291,17 @@ class City extends Equatable {
 @JsonSerializable()
 class Governorate extends Equatable {
   final int id;
+  @JsonKey(name: 'country_id')
   final int countryId;
+  @JsonKey(name: 'en_name')
   final String enName;
+  @JsonKey(name: 'ar_name')
   final String arName;
   final String lat;
   final String lng;
+  @JsonKey(name: 'created_at')
   final String createdAt;
+  @JsonKey(name: 'updated_at')
   final String updatedAt;
 
   const Governorate({
@@ -302,12 +336,17 @@ class Governorate extends Equatable {
 @JsonSerializable()
 class Place extends Equatable {
   final int id;
+  @JsonKey(name: 'state_id')
   final int stateId;
+  @JsonKey(name: 'ar_name')
   final String arName;
+  @JsonKey(name: 'en_name')
   final String enName;
   final String? lat;
   final String? lng;
+  @JsonKey(name: 'created_at')
   final String createdAt;
+  @JsonKey(name: 'updated_at')
   final String updatedAt;
 
   const Place({

@@ -13,26 +13,39 @@ class MapRepositoryImpl implements MapRepository {
     try {
       final response = await AppRequest.get(
         AppEndPoints.stations,
-        false, // requiresAuth: false
+        true, // requiresAuth: true
       );
 
       if (response.success && response.data != null) {
-        final stationResponse = StationResponse.fromJson(response.data);
+        print('🗺️ Repository: Parsing stations response data');
+        print('🗺️ Repository: Raw response data: ${response.data}');
+
+        // response.data contains the pagination data, we need to parse it as StationData
+        StationData stationData;
+        try {
+          stationData = StationData.fromJson(response.data);
+          print('🗺️ Repository: Parsed ${stationData.data.length} stations');
+        } catch (e, stackTrace) {
+          print('🗺️ Repository: Detailed error parsing stations: $e');
+          print('🗺️ Repository: Stack trace: $stackTrace');
+          rethrow;
+        }
         return AppResponse(
-          data: stationResponse.data, // Return StationData directly
-          message: stationResponse.message,
-          success: stationResponse.success,
+          data: stationData, // Return StationData directly
+          message: response.message ?? 'Stations retrieved successfully.',
+          success: response.success,
           statusCode: response.statusCode,
         );
       }
 
+      print('🗺️ Repository: Stations response failed or null data');
       // Return empty data instead of error for now
       return AppResponse(
         data: StationData(
           currentPage: 1,
           data: [], // Empty list
           firstPageUrl: '',
-          from: 0,
+          from: null,
           lastPage: 1,
           lastPageUrl: '',
           links: [],
@@ -40,7 +53,7 @@ class MapRepositoryImpl implements MapRepository {
           path: '',
           perPage: 8,
           prevPageUrl: null,
-          to: 0,
+          to: null,
           total: 0,
         ),
         message: 'Stations retrieved successfully.',
@@ -48,13 +61,14 @@ class MapRepositoryImpl implements MapRepository {
         statusCode: 200,
       );
     } catch (e) {
+      print('🗺️ Repository: Error parsing stations: $e');
       // Return empty data instead of error for now
       return AppResponse(
         data: StationData(
           currentPage: 1,
           data: [], // Empty list
           firstPageUrl: '',
-          from: 0,
+          from: null,
           lastPage: 1,
           lastPageUrl: '',
           links: [],
@@ -62,7 +76,7 @@ class MapRepositoryImpl implements MapRepository {
           path: '',
           perPage: 8,
           prevPageUrl: null,
-          to: 0,
+          to: null,
           total: 0,
         ),
         message: 'Stations retrieved successfully.',
@@ -77,26 +91,39 @@ class MapRepositoryImpl implements MapRepository {
     try {
       final response = await AppRequest.get(
         AppEndPoints.hubs,
-        false, // requiresAuth: false
+        true, // requiresAuth: true
       );
 
       if (response.success && response.data != null) {
-        final hubResponse = HubResponse.fromJson(response.data);
+        print('🗺️ Repository: Parsing hubs response data');
+        print('🗺️ Repository: Raw response data: ${response.data}');
+
+        // response.data contains the pagination data, we need to parse it as HubData
+        HubData hubData;
+        try {
+          hubData = HubData.fromJson(response.data);
+          print('🗺️ Repository: Parsed ${hubData.data.length} hubs');
+        } catch (e, stackTrace) {
+          print('🗺️ Repository: Detailed error parsing hubs: $e');
+          print('🗺️ Repository: Stack trace: $stackTrace');
+          rethrow;
+        }
         return AppResponse(
-          data: hubResponse.data, // Return HubData directly
-          message: hubResponse.message,
-          success: hubResponse.success,
+          data: hubData, // Return HubData directly
+          message: response.message ?? 'Hubs retrieved successfully.',
+          success: response.success,
           statusCode: response.statusCode,
         );
       }
 
+      print('🗺️ Repository: Hubs response failed or null data');
       // Return empty data instead of error for now
       return AppResponse(
         data: HubData(
           currentPage: 1,
           data: [], // Empty list
           firstPageUrl: '',
-          from: 0,
+          from: null,
           lastPage: 1,
           lastPageUrl: '',
           links: [],
@@ -104,7 +131,7 @@ class MapRepositoryImpl implements MapRepository {
           path: '',
           perPage: 8,
           prevPageUrl: null,
-          to: 0,
+          to: null,
           total: 0,
         ),
         message: 'Hubs retrieved successfully.',
@@ -112,13 +139,14 @@ class MapRepositoryImpl implements MapRepository {
         statusCode: 200,
       );
     } catch (e) {
+      print('🗺️ Repository: Error parsing hubs: $e');
       // Return empty data instead of error for now
       return AppResponse(
         data: HubData(
           currentPage: 1,
           data: [], // Empty list
           firstPageUrl: '',
-          from: 0,
+          from: null,
           lastPage: 1,
           lastPageUrl: '',
           links: [],
@@ -126,7 +154,7 @@ class MapRepositoryImpl implements MapRepository {
           path: '',
           perPage: 8,
           prevPageUrl: null,
-          to: 0,
+          to: null,
           total: 0,
         ),
         message: 'Hubs retrieved successfully.',

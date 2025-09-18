@@ -15,11 +15,15 @@ import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initInj();
   await LocationService.initialize();
+  await _initializePermissions();
 
   // Note: Removed automatic logout on app start for better UX
   // Authentication state will be checked in AuthWrapper
@@ -31,6 +35,37 @@ Future<void> main() async {
   runApp(
     MyApp(), // Wrap your app
   );
+}
+
+/// Initialize necessary permissions for the app
+Future<void> _initializePermissions() async {
+  if (Platform.isAndroid) {
+    try {
+      // Request storage permissions for Excel export functionality
+      // This will show permission dialogs when needed
+      await Permission.storage.request();
+
+      // For Android 13+, also request manage external storage
+      if (await _isAndroid13OrHigher()) {
+        await Permission.manageExternalStorage.request();
+      }
+    } catch (e) {
+      // Permission request failed, but app can still function
+      if (kDebugMode) {
+        print('Permission initialization failed: $e');
+      }
+    }
+  }
+}
+
+/// Check if device is running Android 13+ (API 33+)
+Future<bool> _isAndroid13OrHigher() async {
+  try {
+    final deviceInfo = await DeviceInfoPlugin().androidInfo;
+    return deviceInfo.version.sdkInt >= 33;
+  } catch (e) {
+    return false;
+  }
 }
 
 class MyApp extends StatefulWidget {

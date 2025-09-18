@@ -79,4 +79,7 @@ class AppEndPoints {
   // Map endpoints
   static const String stations = 'stations';
   static const String hubs = 'hubs';
+
+  // Client Account Finance
+  static const String clientAccount = 'client/account';
 }

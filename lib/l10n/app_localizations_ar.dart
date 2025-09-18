@@ -1578,4 +1578,123 @@ class AppLocalizationsAr extends AppLocalizations {
   String locationsCount(int count) {
     return 'المواقع ($count)';
   }
+
+  @override
+  String get finance => 'المالية';
+
+  @override
+  String get viewFinance => 'المالية';
+
+  @override
+  String get viewFinanceSubtitle => 'عرض رصيد الحساب والمعاملات';
+
+  @override
+  String get accountBalance => 'رصيد الحساب';
+
+  @override
+  String get totalCod => 'إجمالي الدفع عند الاستلام';
+
+  @override
+  String get totalFees => 'إجمالي الرسوم';
+
+  @override
+  String get totalSettlements => 'إجمالي التسويات';
+
+  @override
+  String get currentBalance => 'الرصيد الحالي';
+
+  @override
+  String get transactionHistory => 'تاريخ المعاملات';
+
+  @override
+  String get loadingFinanceData => 'جاري تحميل البيانات المالية...';
+
+  @override
+  String get errorLoadingFinance => 'خطأ في تحميل البيانات المالية';
+
+  @override
+  String get noFinanceData => 'لا توجد بيانات مالية';
+
+  @override
+  String get noTransactionsYet => 'لا توجد معاملات حتى الآن';
+
+  @override
+  String get transactionsWillAppearHere =>
+      'ستظهر سجل معاملاتك هنا بمجرد بدء إجراء المعاملات.';
+
+  @override
+  String get transactionType => 'النوع';
+
+  @override
+  String get transactionReference => 'المرجع';
+
+  @override
+  String get transactionDescription => 'الوصف';
+
+  @override
+  String get transactionAmount => 'المبلغ';
+
+  @override
+  String get transactionDate => 'التاريخ';
+
+  @override
+  String get codTransaction => 'الدفع عند الاستلام';
+
+  @override
+  String get feeTransaction => 'الرسوم';
+
+  @override
+  String get settlementTransaction => 'التسوية';
+
+  @override
+  String get credit => 'ائتمان';
+
+  @override
+  String get debit => 'خصم';
+
+  @override
+  String get loadMoreTransactions => 'تحميل المزيد من المعاملات';
+
+  @override
+  String get noMoreTransactions => 'لا توجد معاملات أخرى للتحميل';
+
+  @override
+  String get financeSummary => 'ملخص المالية';
+
+  @override
+  String get totalTransactions => 'إجمالي المعاملات';
+
+  @override
+  String showingTransactionsCount(int shown, int total) {
+    return 'عرض $shown من $total معاملة';
+  }
+
+  @override
+  String get refreshFinanceData => 'تحديث البيانات المالية';
+
+  @override
+  String get exportToExcel => 'تصدير إلى Excel';
+
+  @override
+  String get exportingToExcel => 'جاري التصدير إلى Excel...';
+
+  @override
+  String get excelExportSuccess => 'تم تصدير ملف Excel بنجاح!';
+
+  @override
+  String get excelExportFailed => 'فشل في تصدير ملف Excel';
+
+  @override
+  String excelFileSaved(String filePath) {
+    return 'تم حفظ ملف Excel في: $filePath';
+  }
+
+  @override
+  String get openExcelFile => 'فتح ملف Excel';
+
+  @override
+  String get excelExportError => 'خطأ تصدير Excel';
+
+  @override
+  String get exportedOn => 'تم التصدير في';
 }

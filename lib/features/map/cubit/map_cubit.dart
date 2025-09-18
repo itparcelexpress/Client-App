@@ -29,6 +29,9 @@ class MapCubit extends Cubit<MapState> {
       if (isClosed) return;
 
       if (stationsResponse.success && hubsResponse.success) {
+        print(
+          '🗺️ MapCubit: Emitting MapLoaded with ${stationsResponse.data.data.length} stations and ${hubsResponse.data.data.length} hubs',
+        );
         emit(
           MapLoaded(
             stations: stationsResponse.data.data,

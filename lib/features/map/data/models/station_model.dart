@@ -28,25 +28,32 @@ class StationResponse extends Equatable {
 
 @JsonSerializable()
 class StationData extends Equatable {
+  @JsonKey(name: 'current_page')
   final int currentPage;
   final List<Station> data;
+  @JsonKey(name: 'first_page_url')
   final String firstPageUrl;
-  final int from;
+  final int? from;
+  @JsonKey(name: 'last_page')
   final int lastPage;
+  @JsonKey(name: 'last_page_url')
   final String lastPageUrl;
   final List<StationLink> links;
+  @JsonKey(name: 'next_page_url')
   final String? nextPageUrl;
   final String path;
+  @JsonKey(name: 'per_page')
   final int perPage;
+  @JsonKey(name: 'prev_page_url')
   final String? prevPageUrl;
-  final int to;
+  final int? to;
   final int total;
 
   const StationData({
     required this.currentPage,
     required this.data,
     required this.firstPageUrl,
-    required this.from,
+    this.from,
     required this.lastPage,
     required this.lastPageUrl,
     required this.links,
@@ -54,7 +61,7 @@ class StationData extends Equatable {
     required this.path,
     required this.perPage,
     this.prevPageUrl,
-    required this.to,
+    this.to,
     required this.total,
   });
 
@@ -84,21 +91,32 @@ class StationData extends Equatable {
 @JsonSerializable()
 class Station extends Equatable {
   final int id;
+  @JsonKey(name: 'owner_type')
   final String? ownerType;
+  @JsonKey(name: 'owner_id')
   final int? ownerId;
+  @JsonKey(name: 'hub_id')
   final int hubId;
   final String name;
+  @JsonKey(name: 'contact_number')
   final String contactNumber;
   final String location;
   final String? address;
+  @JsonKey(name: 'country_id')
   final int countryId;
+  @JsonKey(name: 'governorate_id')
   final int governorateId;
+  @JsonKey(name: 'state_id')
   final int stateId;
+  @JsonKey(name: 'place_id')
   final int placeId;
+  @JsonKey(name: 'city_id')
   final int cityId;
   final String lat;
   final String lng;
+  @JsonKey(name: 'created_at')
   final String createdAt;
+  @JsonKey(name: 'updated_at')
   final String updatedAt;
   final Hub hub;
 
@@ -157,17 +175,27 @@ class Hub extends Equatable {
   final String name;
   final String location;
   final String? address;
+  @JsonKey(name: 'owner_type')
   final String? ownerType;
+  @JsonKey(name: 'owner_id')
   final int? ownerId;
+  @JsonKey(name: 'contact_number')
   final String contactNumber;
+  @JsonKey(name: 'country_id')
   final int countryId;
+  @JsonKey(name: 'governorate_id')
   final int governorateId;
+  @JsonKey(name: 'state_id')
   final int stateId;
+  @JsonKey(name: 'place_id')
   final int placeId;
+  @JsonKey(name: 'city_id')
   final int cityId;
   final String lat;
   final String lng;
+  @JsonKey(name: 'created_at')
   final String createdAt;
+  @JsonKey(name: 'updated_at')
   final String updatedAt;
 
   const Hub({
