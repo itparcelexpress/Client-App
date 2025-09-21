@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:client_app/core/widgets/loading_widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../l10n/app_localizations.dart';
 import '../cubit/app_version_cubit.dart';
@@ -202,12 +203,12 @@ class ForcedUpdateScreen extends StatelessWidget {
         child: BlocBuilder<AppVersionCubit, AppVersionState>(
           builder: (context, state) {
             if (state is AppVersionUpdateInProgress) {
-              return const SizedBox(
+              return SizedBox(
                 width: 24,
                 height: 24,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                child: LoadingWidgets.compactLoading(
+                  color: Colors.white,
+                  size: 24,
                 ),
               );
             }

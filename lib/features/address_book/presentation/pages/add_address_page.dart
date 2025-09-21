@@ -12,6 +12,7 @@ import 'package:client_app/features/address_book/data/models/address_book_models
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client_app/core/widgets/loading_widgets.dart';
 
 class AddAddressPage extends StatefulWidget {
   final AddressBookEntry? existingEntry;
@@ -523,12 +524,12 @@ class _AddAddressPageState extends State<AddAddressPage> {
           ),
           child:
               _isLoading
-                  ? const SizedBox(
+                  ? SizedBox(
                     height: 20,
                     width: 20,
-                    child: CircularProgressIndicator(
+                    child: LoadingWidgets.compactLoading(
                       color: Colors.white,
-                      strokeWidth: 2,
+                      size: 20,
                     ),
                   )
                   : Text(

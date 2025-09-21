@@ -6,6 +6,7 @@ import 'package:client_app/features/invoices/presentation/widgets/payment_transa
 import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client_app/core/widgets/loading_widgets.dart';
 
 class PaymentsPage extends StatefulWidget {
   const PaymentsPage({super.key});
@@ -47,7 +48,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
       body: BlocBuilder<InvoiceCubit, InvoiceState>(
         builder: (context, state) {
           if (state is PaymentLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return LoadingWidgets.fullScreenLoading();
           } else if (state is PaymentError) {
             return _buildErrorWidget(state.message);
           } else if (state is PaymentEmpty) {
@@ -63,7 +64,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
           }
 
           // Default case - show loading
-          return const Center(child: CircularProgressIndicator());
+          return LoadingWidgets.fullScreenLoading();
         },
       ),
     );

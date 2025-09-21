@@ -44,3 +44,49 @@ class FinanceError extends FinanceState {
   @override
   List<Object?> get props => [message];
 }
+
+/// State when PDF export is in progress
+class FinanceExportingPdf extends FinanceState {}
+
+/// State when PDF export is successful
+class FinancePdfExportSuccess extends FinanceState {
+  final String filePath;
+
+  const FinancePdfExportSuccess({required this.filePath});
+
+  @override
+  List<Object?> get props => [filePath];
+}
+
+/// State when PDF export fails
+class FinancePdfExportError extends FinanceState {
+  final String message;
+
+  const FinancePdfExportError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
+
+/// State when settlement request is being submitted
+class FinanceSettlementRequestSubmitting extends FinanceState {}
+
+/// State when settlement request is successfully submitted
+class FinanceSettlementRequestSuccess extends FinanceState {
+  final String message;
+
+  const FinanceSettlementRequestSuccess({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
+
+/// State when settlement request submission fails
+class FinanceSettlementRequestError extends FinanceState {
+  final String message;
+
+  const FinanceSettlementRequestError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

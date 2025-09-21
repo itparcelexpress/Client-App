@@ -13,6 +13,7 @@ import 'package:client_app/injections.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client_app/core/widgets/loading_widgets.dart';
 
 class InvoicesPage extends StatefulWidget {
   final bool showAppBar;
@@ -297,7 +298,7 @@ class _InvoicesPageState extends State<InvoicesPage>
         }
 
         if (state is PaymentLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return LoadingWidgets.fullScreenLoading();
         } else if (state is PaymentError) {
           return _buildPaymentErrorWidget(state.message);
         } else if (state is PaymentEmpty) {
@@ -314,7 +315,7 @@ class _InvoicesPageState extends State<InvoicesPage>
         }
 
         // Default loading state
-        return const Center(child: CircularProgressIndicator());
+        return LoadingWidgets.fullScreenLoading();
       },
     );
   }
@@ -865,9 +866,7 @@ class _InvoicesPageState extends State<InvoicesPage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(AppColor.accentColor),
-            ),
+            LoadingWidgets.listLoading(color: AppColor.accentColor),
             const SizedBox(height: 16),
             Text(
               AppLocalizations.of(context)!.loadingInvoices,
@@ -1005,10 +1004,8 @@ class _InvoicesPageState extends State<InvoicesPage>
           ),
         ],
       ),
-      child: const Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(AppColor.accentColor),
-        ),
+      child: Center(
+        child: LoadingWidgets.listLoading(color: AppColor.accentColor),
       ),
     );
   }

@@ -226,6 +226,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get filter => 'تصفية';
 
   @override
+  String get fromDate => 'من تاريخ';
+
+  @override
+  String get toDate => 'إلى تاريخ';
+
+  @override
+  String get apply => 'تطبيق';
+
+  @override
   String get refresh => 'تحديث';
 
   @override
@@ -1685,6 +1694,71 @@ class AppLocalizationsAr extends AppLocalizations {
   String get excelExportFailed => 'فشل في تصدير ملف Excel';
 
   @override
+  String get exportToPdf => 'تصدير إلى PDF';
+
+  @override
+  String get exportingToPdf => 'جاري التصدير إلى PDF...';
+
+  @override
+  String get pdfExportSuccess => 'تم تصدير ملف PDF بنجاح!';
+
+  @override
+  String get pdfExportFailed => 'فشل في تصدير ملف PDF';
+
+  @override
+  String get welcomeToParcelExpress => 'مرحباً بك في ParcelExpress';
+
+  @override
+  String get permissionRequestSubtitle =>
+      'لتوفير أفضل تجربة لك، نحتاج إلى بعض الأذونات';
+
+  @override
+  String get weNeedThesePermissions => 'نحتاج هذه الأذونات:';
+
+  @override
+  String get grantPermissions => 'منح الأذونات';
+
+  @override
+  String get skipForNow => 'تخطي الآن';
+
+  @override
+  String get continueButton => 'متابعة';
+
+  @override
+  String get openSettings => 'فتح الإعدادات';
+
+  @override
+  String get continueAnyway => 'متابعة على أي حال';
+
+  @override
+  String get allPermissionsGranted => 'تم منح جميع الأذونات!';
+
+  @override
+  String permissionsPartiallyGranted(int granted, int total) {
+    return '$granted من $total أذونات تم منحها';
+  }
+
+  @override
+  String get permissionsDeniedMessage =>
+      'تم رفض بعض الأذونات. يمكنك تفعيلها لاحقاً في الإعدادات.';
+
+  @override
+  String get whyDoWeNeedPermissions => 'لماذا نحتاج هذه الأذونات؟';
+
+  @override
+  String get permissionBenefits =>
+      '• تصدير بياناتك المالية إلى PDF و Excel\n• مسح رموز QR لتتبع الطرود\n• إرسال إشعارات مهمة عن التسليم';
+
+  @override
+  String get permissionsRequiredMessage =>
+      'بعض الأذونات مطلوبة للوظائف الكاملة';
+
+  @override
+  String requestingPermission(String permission) {
+    return 'طلب $permission...';
+  }
+
+  @override
   String excelFileSaved(String filePath) {
     return 'تم حفظ ملف Excel في: $filePath';
   }
@@ -1697,4 +1771,44 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get exportedOn => 'تم التصدير في';
+
+  @override
+  String get requestSettlement => 'طلب تسوية';
+
+  @override
+  String get settlementRequest => 'طلب التسوية';
+
+  @override
+  String get settlementRequestDescription => 'اطلب تسوية لرصيد حسابك';
+
+  @override
+  String get enterSettlementAmount => 'أدخل مبلغ التسوية';
+
+  @override
+  String get settlementAmountHint => '0.00';
+
+  @override
+  String get settlementNotesHint => 'ملاحظات اختيارية لطلب التسوية هذا';
+
+  @override
+  String get submitSettlementRequest => 'إرسال طلب التسوية';
+
+  @override
+  String get submittingSettlementRequest => 'جاري إرسال طلب التسوية...';
+
+  @override
+  String get settlementRequestSubmitted => 'تم إرسال طلب التسوية بنجاح!';
+
+  @override
+  String get settlementRequestFailed => 'فشل في إرسال طلب التسوية';
+
+  @override
+  String get pleaseEnterSettlementAmount => 'يرجى إدخال مبلغ التسوية';
+
+  @override
+  String get pleaseEnterValidSettlementAmount => 'يرجى إدخال مبلغ تسوية صحيح';
+
+  @override
+  String get settlementAmountMustBeGreaterThanZero =>
+      'يجب أن يكون مبلغ التسوية أكبر من 0';
 }

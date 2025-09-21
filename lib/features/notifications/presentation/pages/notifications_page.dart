@@ -5,6 +5,7 @@ import 'package:client_app/injections.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client_app/core/widgets/loading_widgets.dart';
 
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
@@ -245,11 +246,7 @@ class _NotificationsViewState extends State<NotificationsView> {
 
   Widget _buildBody(BuildContext context, NotificationState state) {
     if (state is NotificationLoading) {
-      return const Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF667eea)),
-        ),
-      );
+      return LoadingWidgets.fullScreenLoading();
     } else if (state is NotificationLoaded) {
       return _buildNotificationsList(
         context,
@@ -282,10 +279,10 @@ class _NotificationsViewState extends State<NotificationsView> {
       itemCount: notifications.length + (hasMore ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == notifications.length) {
-          return const Center(
+          return Center(
             child: Padding(
               padding: EdgeInsets.all(16),
-              child: CircularProgressIndicator(),
+              child: LoadingWidgets.listLoading(),
             ),
           );
         }

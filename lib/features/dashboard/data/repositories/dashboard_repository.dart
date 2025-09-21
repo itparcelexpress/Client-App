@@ -1,4 +1,5 @@
 import 'package:client_app/core/utilities/app_endpoints.dart';
+import 'package:client_app/core/utilities/error_message_sanitizer.dart';
 import 'package:client_app/data/remote/app_request.dart';
 import 'package:client_app/data/remote/helper/app_response.dart';
 import 'package:client_app/features/dashboard/data/models/dashboard_models.dart';
@@ -30,10 +31,14 @@ class DashboardRepository {
           }
         }
 
-        throw Exception(errorMessage);
+        throw Exception(ErrorMessageSanitizer.sanitize(errorMessage));
       }
     } catch (e) {
-      throw Exception('Error fetching dashboard data: ${e.toString()}');
+      throw Exception(
+        ErrorMessageSanitizer.sanitize(
+          'Error fetching dashboard data: ${e.toString()}',
+        ),
+      );
     }
   }
 }

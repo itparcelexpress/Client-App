@@ -4,6 +4,7 @@ import 'package:client_app/features/wallet/cubit/wallet_cubit.dart';
 import 'package:client_app/features/wallet/cubit/wallet_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client_app/core/widgets/loading_widgets.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 
 class WalletPage extends StatelessWidget {
@@ -17,7 +18,7 @@ class WalletPage extends StatelessWidget {
       body: BlocBuilder<WalletCubit, WalletState>(
         builder: (context, state) {
           if (state is WalletLoading || state is WalletInitial) {
-            return const Center(child: CircularProgressIndicator());
+            return LoadingWidgets.fullScreenLoading();
           }
 
           if (state is WalletError) {

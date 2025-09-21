@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:client_app/core/cubit/permission_cubit.dart';
+import 'package:client_app/core/services/global_auth_manager.dart';
 import 'package:client_app/core/services/location_service.dart';
 import 'package:client_app/core/utilities/app_themes.dart';
 import 'package:client_app/core/widgets/app_version_wrapper.dart';
@@ -15,15 +17,14 @@ import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/foundation.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initInj();
   await LocationService.initialize();
-  await _initializePermissions();
+
+  // Note: Removed automatic permission request from main()
+  // Permissions will now be handled through the PermissionCubit and UI
 
   // Note: Removed automatic logout on app start for better UX
   // Authentication state will be checked in AuthWrapper
@@ -35,37 +36,6 @@ Future<void> main() async {
   runApp(
     MyApp(), // Wrap your app
   );
-}
-
-/// Initialize necessary permissions for the app
-Future<void> _initializePermissions() async {
-  if (Platform.isAndroid) {
-    try {
-      // Request storage permissions for Excel export functionality
-      // This will show permission dialogs when needed
-      await Permission.storage.request();
-
-      // For Android 13+, also request manage external storage
-      if (await _isAndroid13OrHigher()) {
-        await Permission.manageExternalStorage.request();
-      }
-    } catch (e) {
-      // Permission request failed, but app can still function
-      if (kDebugMode) {
-        print('Permission initialization failed: $e');
-      }
-    }
-  }
-}
-
-/// Check if device is running Android 13+ (API 33+)
-Future<bool> _isAndroid13OrHigher() async {
-  try {
-    final deviceInfo = await DeviceInfoPlugin().androidInfo;
-    return deviceInfo.version.sdkInt >= 33;
-  } catch (e) {
-    return false;
-  }
 }
 
 class MyApp extends StatefulWidget {
@@ -116,7 +86,14 @@ class MyAppState extends State<MyApp> {
       title: _getAppTitle(),
       theme: AppThemes.theme,
       locale: _locale,
-      home: const AppVersionWrapper(child: AuthWrapper()),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider<PermissionCubit>(
+            create: (context) => PermissionCubit()..initializePermissions(),
+          ),
+        ],
+        child: const AppVersionWrapper(child: AuthWrapper()),
+      ),
     );
   }
 }
@@ -130,11 +107,32 @@ class AuthWrapper extends StatefulWidget {
 
 class _AuthWrapperState extends State<AuthWrapper> {
   bool _hasCheckedAuth = false;
+  late AuthCubit _authCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _authCubit = getIt<AuthCubit>();
+
+    // Set up the GlobalAuthManager to use this AuthCubit instance
+    GlobalAuthManager.instance.setLogoutCallback(() {
+      if (!_authCubit.isClosed) {
+        _authCubit.clearAuthState();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // Clear the logout callback when the widget is disposed
+    GlobalAuthManager.instance.clearLogoutCallback();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<AuthCubit>(),
+      create: (context) => _authCubit,
       child: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           // Handle state changes if needed
@@ -166,22 +164,75 @@ class _AuthWrapperState extends State<AuthWrapper> {
   }
 
   Widget _buildBody(AuthState state) {
-    if (state is AuthLoading) {
-      return const SplashPage();
-    } else if (state is AuthSuccess) {
-      return const HomePage();
-    } else if (state is AuthCheckSuccess) {
-      // If user is authenticated, show home page
-      if (state.isAuthenticated) {
-        return const HomePage();
-      } else {
-        // If not authenticated, show login page
-        return const LoginPage();
-      }
-    } else {
-      // Always show login page for initial state or any other state
-      return const LoginPage();
-    }
+    // First check permissions
+    return BlocConsumer<PermissionCubit, PermissionState>(
+      listener: (context, permissionState) {
+        // Handle permission state changes if needed
+      },
+      builder: (context, permissionState) {
+        // If permissions are being checked or requested, show loading
+        if (permissionState is PermissionChecking ||
+            permissionState is PermissionRequesting) {
+          return const SplashPage();
+        }
+
+        // If permissions are permanently denied, show a message but continue
+        if (permissionState is PermissionPermanentlyDenied) {
+          final localizations = AppLocalizations.of(context)!;
+          return Scaffold(
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.warning, size: 64, color: Colors.orange),
+                    const SizedBox(height: 16),
+                    Text(
+                      localizations.permissionsRequiredMessage,
+                      style: const TextStyle(fontSize: 18),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<PermissionCubit>().openAppSettings();
+                      },
+                      child: Text(localizations.openSettings),
+                    ),
+                    const SizedBox(height: 12),
+                    TextButton(
+                      onPressed: () {
+                        context.read<PermissionCubit>().skipPermissions();
+                      },
+                      child: Text(localizations.continueAnyway),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+
+        // Permissions are handled, now check authentication
+        if (state is AuthLoading) {
+          return const SplashPage();
+        } else if (state is AuthSuccess) {
+          return const HomePage();
+        } else if (state is AuthCheckSuccess) {
+          // If user is authenticated, show home page
+          if (state.isAuthenticated) {
+            return const HomePage();
+          } else {
+            // If not authenticated, show login page
+            return const LoginPage();
+          }
+        } else {
+          // Always show login page for initial state or any other state
+          return const LoginPage();
+        }
+      },
+    );
   }
 }
 

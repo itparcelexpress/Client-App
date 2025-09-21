@@ -6,6 +6,7 @@ import 'package:client_app/injections.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client_app/core/widgets/loading_widgets.dart';
 
 class AddressSelectionWidget extends StatefulWidget {
   final AddressBookEntry? selectedAddress;
@@ -215,13 +216,7 @@ class _AddressSelectionBottomSheetState
             child: BlocBuilder<AddressBookCubit, AddressBookState>(
               builder: (context, state) {
                 if (state is AddressBookLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Color(0xFF667eea),
-                      ),
-                    ),
-                  );
+                  return LoadingWidgets.fullScreenLoading();
                 } else if (state is AddressBookEmpty) {
                   return _buildEmptyState();
                 } else if (state is AddressBookLoaded) {

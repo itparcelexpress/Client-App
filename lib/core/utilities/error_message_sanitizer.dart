@@ -25,7 +25,10 @@ class ErrorMessageSanitizer {
     }
 
     if (sanitized.contains('unauthorized') ||
-        sanitized.contains('unauthenticated')) {
+        sanitized.contains('unauthenticated') ||
+        sanitized.contains('401') ||
+        sanitized.contains('dioexceptiontype.badresponse') ||
+        sanitized.contains('status code of 401')) {
       return 'Your session has expired. Please log in again.';
     }
 

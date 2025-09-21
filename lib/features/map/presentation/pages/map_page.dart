@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:client_app/core/widgets/loading_widgets.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 
 import '../../cubit/map_cubit.dart';
@@ -296,7 +297,7 @@ class _MapPageState extends State<MapPage> {
       body: BlocBuilder<MapCubit, MapState>(
         builder: (context, state) {
           if (state is MapLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return LoadingWidgets.mapLoading();
           } else if (state is MapError) {
             return Center(
               child: Column(

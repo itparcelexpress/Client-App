@@ -1,3 +1,4 @@
+import 'package:client_app/core/widgets/loading_widgets.dart';
 import 'package:client_app/features/finance/data/models/finance_models.dart';
 import 'package:client_app/features/finance/presentation/widgets/transaction_item.dart';
 import 'package:client_app/l10n/app_localizations.dart';
@@ -76,7 +77,7 @@ class TransactionList extends StatelessWidget {
       child: Column(
         children: [
           if (isLoadingMore)
-            const CircularProgressIndicator()
+            LoadingWidgets.listLoading()
           else if (hasMorePages && onLoadMore != null)
             ElevatedButton(
               onPressed: onLoadMore,

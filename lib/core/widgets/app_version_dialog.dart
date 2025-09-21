@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client_app/core/widgets/loading_widgets.dart';
 import '../../l10n/app_localizations.dart';
 import '../cubit/app_version_cubit.dart';
 import '../models/app_version_models.dart';
@@ -207,12 +208,12 @@ class AppVersionDialog extends StatelessWidget {
             child: BlocBuilder<AppVersionCubit, AppVersionState>(
               builder: (context, state) {
                 if (state is AppVersionUpdateInProgress) {
-                  return const SizedBox(
+                  return SizedBox(
                     width: 16,
                     height: 16,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    child: LoadingWidgets.compactLoading(
+                      color: Colors.white,
+                      size: 16,
                     ),
                   );
                 }

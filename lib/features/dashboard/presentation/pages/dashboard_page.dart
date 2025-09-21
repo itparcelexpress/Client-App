@@ -1,6 +1,8 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:client_app/core/services/global_auth_manager.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/data/local/local_data.dart';
+import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client_app/features/dashboard/presentation/widgets/dashboard_widgets.dart';
 import 'package:client_app/features/notifications/notifications.dart';
@@ -33,7 +35,13 @@ class _DashboardPageState extends State<DashboardPage> {
       backgroundColor: Colors.grey[50],
       body: RefreshIndicator(
         onRefresh: () async {
-          await context.read<DashboardCubit>().refreshDashboardStats();
+          // Check if user is still authenticated before refreshing
+          if (GlobalAuthManager.instance.isAuthenticated) {
+            await context.read<DashboardCubit>().refreshDashboardStats();
+          } else {
+            // User has been logged out, trigger logout
+            context.read<AuthCubit>().logout();
+          }
         },
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -317,8 +325,15 @@ class _DashboardPageState extends State<DashboardPage> {
                   height: ResponsiveUtils.getResponsivePadding(context, 20),
                 ),
                 ElevatedButton(
-                  onPressed:
-                      () => context.read<DashboardCubit>().loadDashboardStats(),
+                  onPressed: () {
+                    // Check if user is still authenticated before retrying
+                    if (GlobalAuthManager.instance.isAuthenticated) {
+                      context.read<DashboardCubit>().loadDashboardStats();
+                    } else {
+                      // User has been logged out, trigger logout
+                      context.read<AuthCubit>().logout();
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF667eea),
                     foregroundColor: Colors.white,

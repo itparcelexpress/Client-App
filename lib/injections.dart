@@ -1,5 +1,6 @@
 import 'package:client_app/core/cubit/app_version_cubit.dart';
 import 'package:client_app/core/services/app_version_service.dart';
+import 'package:client_app/core/services/auth_error_handler.dart';
 import 'package:client_app/core/utilities/app_endpoints.dart';
 import 'package:client_app/features/address_book/cubit/address_book_cubit.dart';
 import 'package:client_app/features/address_book/data/repositories/address_book_repository.dart';
@@ -74,7 +75,7 @@ Future<void> initInj() async {
   // Add error interceptor for better error handling
   dio.interceptors.add(
     InterceptorsWrapper(
-      onError: (DioException error, ErrorInterceptorHandler handler) {
+      onError: (DioException error, ErrorInterceptorHandler handler) async {
         if (kDebugMode) {
           print('🔴 DioError: ${error.type}');
           print('🔴 Message: ${error.message}');
@@ -85,6 +86,12 @@ Future<void> initInj() async {
             print('🔴 Try switching between WiFi and mobile data');
           }
         }
+
+        // Handle 401 authentication errors globally
+        if (error.response?.statusCode == 401) {
+          await AuthErrorHandler.instance.handleAuthError(error);
+        }
+
         handler.next(error);
       },
     ),

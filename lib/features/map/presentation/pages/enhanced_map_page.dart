@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:client_app/core/widgets/loading_widgets.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 
 import '../../cubit/map_cubit.dart';
@@ -239,10 +240,10 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
             WidgetsBinding.instance.addPostFrameCallback((_) {
               context.read<MapCubit>().loadMapData();
             });
-            return const Center(child: CircularProgressIndicator());
+            return LoadingWidgets.mapLoading();
           } else if (state is MapLoading) {
             print('🗺️ EnhancedMapPage: Showing loading state');
-            return const Center(child: CircularProgressIndicator());
+            return LoadingWidgets.mapLoading();
           } else if (state is MapError) {
             print('🗺️ EnhancedMapPage: Showing error state: ${state.message}');
             return _buildErrorState(state.message);

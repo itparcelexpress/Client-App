@@ -524,6 +524,24 @@ abstract class AppLocalizations {
   /// **'Filter'**
   String get filter;
 
+  /// From date label for date range filter
+  ///
+  /// In en, this message translates to:
+  /// **'From Date'**
+  String get fromDate;
+
+  /// To date label for date range filter
+  ///
+  /// In en, this message translates to:
+  /// **'To Date'**
+  String get toDate;
+
+  /// Apply button text
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get apply;
+
   /// Refresh button text
   ///
   /// In en, this message translates to:
@@ -3254,6 +3272,120 @@ abstract class AppLocalizations {
   /// **'Failed to export Excel file'**
   String get excelExportFailed;
 
+  /// Export to PDF button text
+  ///
+  /// In en, this message translates to:
+  /// **'Export to PDF'**
+  String get exportToPdf;
+
+  /// Exporting to PDF loading message
+  ///
+  /// In en, this message translates to:
+  /// **'Exporting to PDF...'**
+  String get exportingToPdf;
+
+  /// PDF export success message
+  ///
+  /// In en, this message translates to:
+  /// **'PDF file exported successfully!'**
+  String get pdfExportSuccess;
+
+  /// PDF export failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to export PDF file'**
+  String get pdfExportFailed;
+
+  /// Welcome message for permission screen
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to ParcelExpress'**
+  String get welcomeToParcelExpress;
+
+  /// Subtitle for permission request screen
+  ///
+  /// In en, this message translates to:
+  /// **'To provide you with the best experience, we need a few permissions'**
+  String get permissionRequestSubtitle;
+
+  /// Title for permission list section
+  ///
+  /// In en, this message translates to:
+  /// **'We need these permissions:'**
+  String get weNeedThesePermissions;
+
+  /// Button text to grant permissions
+  ///
+  /// In en, this message translates to:
+  /// **'Grant Permissions'**
+  String get grantPermissions;
+
+  /// Button text to skip permissions
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get skipForNow;
+
+  /// Continue button text
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueButton;
+
+  /// Open settings button text
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get openSettings;
+
+  /// Continue anyway button text
+  ///
+  /// In en, this message translates to:
+  /// **'Continue Anyway'**
+  String get continueAnyway;
+
+  /// Message when all permissions are granted
+  ///
+  /// In en, this message translates to:
+  /// **'All permissions granted!'**
+  String get allPermissionsGranted;
+
+  /// Message when some permissions are granted
+  ///
+  /// In en, this message translates to:
+  /// **'{granted} of {total} permissions granted'**
+  String permissionsPartiallyGranted(int granted, int total);
+
+  /// Message when permissions are denied
+  ///
+  /// In en, this message translates to:
+  /// **'Some permissions were denied. You can enable them later in Settings.'**
+  String get permissionsDeniedMessage;
+
+  /// Title for benefits section
+  ///
+  /// In en, this message translates to:
+  /// **'Why do we need these permissions?'**
+  String get whyDoWeNeedPermissions;
+
+  /// List of permission benefits
+  ///
+  /// In en, this message translates to:
+  /// **'• Export your finance data to PDF and Excel\n• Scan QR codes for package tracking\n• Send you important delivery notifications'**
+  String get permissionBenefits;
+
+  /// Message when permissions are required
+  ///
+  /// In en, this message translates to:
+  /// **'Some permissions are required for full functionality'**
+  String get permissionsRequiredMessage;
+
+  /// Message when requesting a permission
+  ///
+  /// In en, this message translates to:
+  /// **'Requesting {permission}...'**
+  String requestingPermission(String permission);
+
   /// Excel file saved message with path
   ///
   /// In en, this message translates to:
@@ -3277,6 +3409,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Exported on'**
   String get exportedOn;
+
+  /// Request settlement button text
+  ///
+  /// In en, this message translates to:
+  /// **'Request Settlement'**
+  String get requestSettlement;
+
+  /// Settlement request dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Settlement Request'**
+  String get settlementRequest;
+
+  /// Settlement request dialog description
+  ///
+  /// In en, this message translates to:
+  /// **'Request a settlement for your account balance'**
+  String get settlementRequestDescription;
+
+  /// Settlement amount field label
+  ///
+  /// In en, this message translates to:
+  /// **'Enter settlement amount'**
+  String get enterSettlementAmount;
+
+  /// Settlement amount input hint
+  ///
+  /// In en, this message translates to:
+  /// **'0.00'**
+  String get settlementAmountHint;
+
+  /// Settlement notes input hint
+  ///
+  /// In en, this message translates to:
+  /// **'Optional notes for this settlement request'**
+  String get settlementNotesHint;
+
+  /// Submit settlement request button text
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Settlement Request'**
+  String get submitSettlementRequest;
+
+  /// Settlement request submission loading message
+  ///
+  /// In en, this message translates to:
+  /// **'Submitting settlement request...'**
+  String get submittingSettlementRequest;
+
+  /// Settlement request success message
+  ///
+  /// In en, this message translates to:
+  /// **'Settlement request submitted successfully!'**
+  String get settlementRequestSubmitted;
+
+  /// Settlement request failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit settlement request'**
+  String get settlementRequestFailed;
+
+  /// Settlement amount required validation message
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a settlement amount'**
+  String get pleaseEnterSettlementAmount;
+
+  /// Invalid settlement amount validation message
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid settlement amount'**
+  String get pleaseEnterValidSettlementAmount;
+
+  /// Settlement amount minimum validation message
+  ///
+  /// In en, this message translates to:
+  /// **'Settlement amount must be greater than 0'**
+  String get settlementAmountMustBeGreaterThanZero;
 }
 
 class _AppLocalizationsDelegate

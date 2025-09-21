@@ -1,8 +1,11 @@
 import 'package:client_app/core/widgets/app_version_wrapper.dart';
+import 'package:client_app/core/widgets/loading_widgets.dart';
 import 'package:client_app/features/finance/cubit/finance_cubit.dart';
 import 'package:client_app/features/finance/data/models/finance_models.dart';
 import 'package:client_app/features/finance/data/services/excel_export_service.dart';
+import 'package:client_app/features/finance/presentation/widgets/finance_filter_widget.dart';
 import 'package:client_app/features/finance/presentation/widgets/finance_summary_card.dart';
+import 'package:client_app/features/finance/presentation/widgets/settlement_request_dialog.dart';
 import 'package:client_app/features/finance/presentation/widgets/transaction_list.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +49,116 @@ class _FinancePageState extends State<FinancePage> {
         _scrollController.position.maxScrollExtent * 0.8) {
       // Load more when scrolled to 80% of the content
       context.read<FinanceCubit>().loadMoreFinanceData();
+    }
+  }
+
+  Future<void> _exportToPdf(FinanceData data) async {
+    final localizations = AppLocalizations.of(context)!;
+
+    // Show confirmation dialog
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text(localizations.exportToPdf),
+            content: Text(
+              'Are you sure you want to export your finance data as a PDF?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(localizations.exportToPdf),
+              ),
+            ],
+          ),
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      final filePath = await context.read<FinanceCubit>().exportToPdf(
+        localizations,
+      );
+
+      if (mounted) {
+        // Open the PDF file
+        try {
+          final result = await OpenFile.open(filePath);
+
+          if (result.type == ResultType.done && mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(localizations.pdfExportSuccess),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 3),
+              ),
+            );
+          } else {
+            throw Exception('Could not open file: ${result.message}');
+          }
+        } catch (openError) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  '${localizations.pdfExportSuccess}\nFile saved to Downloads folder.',
+                ),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 4),
+              ),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        String errorMessage = localizations.pdfExportFailed;
+
+        if (e.toString().contains('Storage permission denied')) {
+          errorMessage =
+              'Storage permission is required to save PDF files. Please grant permission in app settings.';
+        } else if (e.toString().contains(
+          'Could not access storage directory',
+        )) {
+          errorMessage =
+              'Unable to access storage. Please check your device storage and try again.';
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+            action:
+                e.toString().contains('Storage permission denied')
+                    ? SnackBarAction(
+                      label: 'Settings',
+                      textColor: Colors.white,
+                      onPressed: () async {
+                        try {
+                          await openAppSettings();
+                        } catch (settingsError) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Please manually enable storage permission in app settings',
+                                ),
+                                backgroundColor: Colors.orange,
+                              ),
+                            );
+                          }
+                        }
+                      },
+                    )
+                    : null,
+          ),
+        );
+      }
     }
   }
 
@@ -204,6 +317,23 @@ class _FinancePageState extends State<FinancePage> {
     }
   }
 
+  Future<void> _showSettlementRequestDialog() async {
+    final result = await showDialog<Map<String, dynamic>>(
+      context: context,
+      builder: (context) => const SettlementRequestDialog(),
+    );
+
+    if (result != null && mounted) {
+      final amount = result['amount'] as double;
+      final notes = result['notes'] as String;
+
+      await context.read<FinanceCubit>().submitSettlementRequest(
+        amount: amount,
+        notes: notes,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppVersionWrapper(
@@ -214,32 +344,115 @@ class _FinancePageState extends State<FinancePage> {
           backgroundColor: Colors.white,
           elevation: 0,
           actions: [
+            // Settlement Request Button
             BlocBuilder<FinanceCubit, FinanceState>(
               builder: (context, state) {
                 if (state is FinanceLoaded) {
-                  return IconButton(
-                    icon:
-                        _isExporting
-                            ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                            : const Icon(Icons.file_download_outlined),
-                    onPressed:
-                        _isExporting ? null : () => _exportToExcel(state.data),
-                    tooltip: AppLocalizations.of(context)!.exportToExcel,
+                  final isSubmitting =
+                      context
+                          .read<FinanceCubit>()
+                          .isSubmittingSettlementRequest;
+                  return Container(
+                    margin: const EdgeInsets.only(right: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      gradient: LinearGradient(
+                        colors: [
+                          Theme.of(context).primaryColor,
+                          Theme.of(context).primaryColor.withOpacity(0.8),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(
+                            context,
+                          ).primaryColor.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: IconButton(
+                      onPressed:
+                          isSubmitting ? null : _showSettlementRequestDialog,
+                      icon:
+                          isSubmitting
+                              ? LoadingWidgets.compactLoading()
+                              : const Icon(
+                                Icons.account_balance_wallet_rounded,
+                                color: Colors.white,
+                              ),
+                      tooltip: AppLocalizations.of(context)!.requestSettlement,
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.all(12),
+                      ),
+                    ),
                   );
                 }
                 return const SizedBox.shrink();
               },
             ),
-            IconButton(
-              icon: const Icon(Icons.refresh),
-              onPressed: () {
-                context.read<FinanceCubit>().refreshFinanceData();
+            // Export Menu
+            BlocBuilder<FinanceCubit, FinanceState>(
+              builder: (context, state) {
+                if (state is FinanceLoaded) {
+                  return PopupMenuButton<String>(
+                    icon:
+                        _isExporting ||
+                                context.read<FinanceCubit>().isExportingPdf
+                            ? LoadingWidgets.compactLoading()
+                            : const Icon(Icons.file_download_outlined),
+                    onSelected: (value) async {
+                      switch (value) {
+                        case 'excel':
+                          await _exportToExcel(state.data);
+                          break;
+                        case 'pdf':
+                          await _exportToPdf(state.data);
+                          break;
+                      }
+                    },
+                    itemBuilder:
+                        (context) => [
+                          PopupMenuItem(
+                            value: 'excel',
+                            enabled:
+                                !_isExporting &&
+                                !context.read<FinanceCubit>().isExportingPdf,
+                            child: Row(
+                              children: [
+                                const Icon(Icons.table_chart_outlined),
+                                const SizedBox(width: 8),
+                                Text(
+                                  AppLocalizations.of(context)!.exportToExcel,
+                                ),
+                              ],
+                            ),
+                          ),
+                          PopupMenuItem(
+                            value: 'pdf',
+                            enabled:
+                                !_isExporting &&
+                                !context.read<FinanceCubit>().isExportingPdf,
+                            child: Row(
+                              children: [
+                                const Icon(Icons.picture_as_pdf_outlined),
+                                const SizedBox(width: 8),
+                                Text(AppLocalizations.of(context)!.exportToPdf),
+                              ],
+                            ),
+                          ),
+                        ],
+                  );
+                }
+                return const SizedBox.shrink();
               },
-              tooltip: AppLocalizations.of(context)!.refreshFinanceData,
             ),
           ],
         ),
@@ -252,17 +465,57 @@ class _FinancePageState extends State<FinancePage> {
                   backgroundColor: Colors.red,
                 ),
               );
+            } else if (state is FinancePdfExportError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            } else if (state is FinanceSettlementRequestSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.green,
+                  duration: const Duration(seconds: 3),
+                ),
+              );
+            } else if (state is FinanceSettlementRequestError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.red,
+                ),
+              );
             }
           },
           builder: (context, state) {
             if (state is FinanceLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return LoadingWidgets.fullScreenLoading(
+                message: AppLocalizations.of(context)!.loadingFinanceData,
+              );
             } else if (state is FinanceError) {
               return _buildErrorState(context, state.message);
             } else if (state is FinanceLoaded) {
               return _buildLoadedState(context, state);
+            } else if (state is FinanceSettlementRequestSubmitting) {
+              // Show loading with settlement request message
+              return LoadingWidgets.fullScreenLoading(
+                message:
+                    AppLocalizations.of(context)!.submittingSettlementRequest,
+              );
+            } else if (state is FinanceSettlementRequestSuccess) {
+              // Show success message and return to previous state
+              // The cubit will handle returning to FinanceLoaded state
+              return LoadingWidgets.fullScreenLoading(message: state.message);
+            } else if (state is FinanceSettlementRequestError) {
+              // Show error message and return to previous state
+              // The cubit will handle returning to FinanceLoaded state
+              return LoadingWidgets.fullScreenLoading(message: state.message);
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return LoadingWidgets.fullScreenLoading(
+                message: AppLocalizations.of(context)!.loadingFinanceData,
+              );
             }
           },
         ),
@@ -314,11 +567,26 @@ class _FinancePageState extends State<FinancePage> {
       },
       child: CustomScrollView(
         controller: _scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
+          // Filter Widget
+          SliverToBoxAdapter(
+            child: FinanceFilterWidget(
+              currentFilter: context.read<FinanceCubit>().currentFilter,
+              onFilterChanged: (filter) {
+                if (filter != null) {
+                  context.read<FinanceCubit>().applyFilter(filter);
+                } else {
+                  context.read<FinanceCubit>().clearFilters();
+                }
+              },
+            ),
+          ),
+
           // Finance Summary Card
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: FinanceSummaryCard(summary: data.summary),
             ),
           ),
@@ -364,12 +632,7 @@ class _FinancePageState extends State<FinancePage> {
 
           // Loading more indicator
           if (state is FinanceLoadingMore)
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Center(child: CircularProgressIndicator()),
-              ),
-            ),
+            SliverToBoxAdapter(child: LoadingWidgets.paginationLoading()),
         ],
       ),
     );

@@ -8,6 +8,7 @@ import 'package:client_app/features/address_book/presentation/pages/address_deta
 import 'package:client_app/injections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client_app/core/widgets/loading_widgets.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 
 class AddressBookPage extends StatefulWidget {
@@ -159,11 +160,7 @@ class _AddressBookPageState extends State<AddressBookPage> {
   }
 
   Widget _buildLoadingState() {
-    return const Center(
-      child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF667eea)),
-      ),
-    );
+    return LoadingWidgets.fullScreenLoading();
   }
 
   Widget _buildEmptyState() {
@@ -361,13 +358,9 @@ class _AddressBookPageState extends State<AddressBookPage> {
         itemBuilder: (context, index) {
           if (index == state.entries.length) {
             // Loading indicator for more items
-            return const Padding(
+            return Padding(
               padding: EdgeInsets.all(20),
-              child: Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF667eea)),
-                ),
-              ),
+              child: Center(child: LoadingWidgets.listLoading()),
             );
           }
 

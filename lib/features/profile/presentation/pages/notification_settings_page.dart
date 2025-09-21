@@ -5,6 +5,7 @@ import 'package:client_app/injections.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client_app/core/widgets/loading_widgets.dart';
 
 class NotificationSettingsPage extends StatelessWidget {
   final int userId;
@@ -125,11 +126,7 @@ class NotificationSettingsView extends StatelessWidget {
 
   Widget _buildBody(BuildContext context, ClientSettingsState state) {
     if (state is ClientSettingsLoading) {
-      return const Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF667eea)),
-        ),
-      );
+      return LoadingWidgets.fullScreenLoading();
     } else if (state is ClientSettingsLoaded) {
       return _buildSettingsList(context, state.settings);
     } else if (state is ClientSettingsError) {
@@ -272,14 +269,11 @@ class NotificationSettingsView extends StatelessWidget {
           ),
           trailing:
               isUpdating
-                  ? const SizedBox(
+                  ? SizedBox(
                     width: 24,
                     height: 24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Color(0xFF667eea),
-                      ),
+                    child: LoadingWidgets.compactLoading(
+                      color: Color(0xFF667eea),
                     ),
                   )
                   : Switch.adaptive(

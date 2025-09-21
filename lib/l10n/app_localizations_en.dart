@@ -227,6 +227,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get filter => 'Filter';
 
   @override
+  String get fromDate => 'From Date';
+
+  @override
+  String get toDate => 'To Date';
+
+  @override
+  String get apply => 'Apply';
+
+  @override
   String get refresh => 'Refresh';
 
   @override
@@ -1689,6 +1698,71 @@ class AppLocalizationsEn extends AppLocalizations {
   String get excelExportFailed => 'Failed to export Excel file';
 
   @override
+  String get exportToPdf => 'Export to PDF';
+
+  @override
+  String get exportingToPdf => 'Exporting to PDF...';
+
+  @override
+  String get pdfExportSuccess => 'PDF file exported successfully!';
+
+  @override
+  String get pdfExportFailed => 'Failed to export PDF file';
+
+  @override
+  String get welcomeToParcelExpress => 'Welcome to ParcelExpress';
+
+  @override
+  String get permissionRequestSubtitle =>
+      'To provide you with the best experience, we need a few permissions';
+
+  @override
+  String get weNeedThesePermissions => 'We need these permissions:';
+
+  @override
+  String get grantPermissions => 'Grant Permissions';
+
+  @override
+  String get skipForNow => 'Skip for now';
+
+  @override
+  String get continueButton => 'Continue';
+
+  @override
+  String get openSettings => 'Open Settings';
+
+  @override
+  String get continueAnyway => 'Continue Anyway';
+
+  @override
+  String get allPermissionsGranted => 'All permissions granted!';
+
+  @override
+  String permissionsPartiallyGranted(int granted, int total) {
+    return '$granted of $total permissions granted';
+  }
+
+  @override
+  String get permissionsDeniedMessage =>
+      'Some permissions were denied. You can enable them later in Settings.';
+
+  @override
+  String get whyDoWeNeedPermissions => 'Why do we need these permissions?';
+
+  @override
+  String get permissionBenefits =>
+      '• Export your finance data to PDF and Excel\n• Scan QR codes for package tracking\n• Send you important delivery notifications';
+
+  @override
+  String get permissionsRequiredMessage =>
+      'Some permissions are required for full functionality';
+
+  @override
+  String requestingPermission(String permission) {
+    return 'Requesting $permission...';
+  }
+
+  @override
   String excelFileSaved(String filePath) {
     return 'Excel file saved to: $filePath';
   }
@@ -1701,4 +1775,48 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportedOn => 'Exported on';
+
+  @override
+  String get requestSettlement => 'Request Settlement';
+
+  @override
+  String get settlementRequest => 'Settlement Request';
+
+  @override
+  String get settlementRequestDescription =>
+      'Request a settlement for your account balance';
+
+  @override
+  String get enterSettlementAmount => 'Enter settlement amount';
+
+  @override
+  String get settlementAmountHint => '0.00';
+
+  @override
+  String get settlementNotesHint =>
+      'Optional notes for this settlement request';
+
+  @override
+  String get submitSettlementRequest => 'Submit Settlement Request';
+
+  @override
+  String get submittingSettlementRequest => 'Submitting settlement request...';
+
+  @override
+  String get settlementRequestSubmitted =>
+      'Settlement request submitted successfully!';
+
+  @override
+  String get settlementRequestFailed => 'Failed to submit settlement request';
+
+  @override
+  String get pleaseEnterSettlementAmount => 'Please enter a settlement amount';
+
+  @override
+  String get pleaseEnterValidSettlementAmount =>
+      'Please enter a valid settlement amount';
+
+  @override
+  String get settlementAmountMustBeGreaterThanZero =>
+      'Settlement amount must be greater than 0';
 }

@@ -7,6 +7,7 @@ import 'package:client_app/features/invoices/data/models/invoice_models.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client_app/core/widgets/loading_widgets.dart';
 import 'package:intl/intl.dart';
 
 class InvoiceDetailPage extends StatefulWidget {
@@ -85,11 +86,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
         child: BlocBuilder<InvoiceCubit, InvoiceState>(
           builder: (context, state) {
             if (state is InvoiceDetailLoading) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF667eea)),
-                ),
-              );
+              return LoadingWidgets.fullScreenLoading();
             }
 
             if (state is InvoiceDetailError) {
@@ -672,12 +669,12 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
               ),
               icon:
                   isDownloading
-                      ? const SizedBox(
+                      ? SizedBox(
                         width: 20,
                         height: 20,
-                        child: CircularProgressIndicator(
+                        child: LoadingWidgets.compactLoading(
                           color: Colors.white,
-                          strokeWidth: 2,
+                          size: 20,
                         ),
                       )
                       : const Icon(Icons.download_rounded),

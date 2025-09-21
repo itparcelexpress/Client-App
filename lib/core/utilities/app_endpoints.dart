@@ -82,4 +82,5 @@ class AppEndPoints {
 
   // Client Account Finance
   static const String clientAccount = 'client/account';
+  static const String settlementRequests = 'client/account/settlement-requests';
 }

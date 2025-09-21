@@ -1,3 +1,4 @@
+import 'package:client_app/core/utilities/error_message_sanitizer.dart';
 import 'package:client_app/features/dashboard/data/models/dashboard_models.dart';
 import 'package:client_app/features/dashboard/data/repositories/dashboard_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -24,11 +25,15 @@ class DashboardCubit extends Cubit<DashboardState> {
       if (response.success) {
         emit(DashboardLoaded(data: response.data));
       } else {
-        emit(DashboardError(message: response.message));
+        final sanitizedMessage = ErrorMessageSanitizer.sanitize(
+          response.message,
+        );
+        emit(DashboardError(message: sanitizedMessage));
       }
     } catch (e) {
       if (!isClosed) {
-        emit(DashboardError(message: e.toString()));
+        final sanitizedMessage = ErrorMessageSanitizer.sanitize(e.toString());
+        emit(DashboardError(message: sanitizedMessage));
       }
     }
   }
@@ -44,7 +49,8 @@ class DashboardCubit extends Cubit<DashboardState> {
       }
     } catch (e) {
       if (!isClosed) {
-        emit(DashboardError(message: e.toString()));
+        final sanitizedMessage = ErrorMessageSanitizer.sanitize(e.toString());
+        emit(DashboardError(message: sanitizedMessage));
       }
     }
   }
