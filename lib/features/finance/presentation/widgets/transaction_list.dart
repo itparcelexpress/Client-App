@@ -4,12 +4,13 @@ import 'package:client_app/features/finance/presentation/widgets/transaction_ite
 import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-/// Transaction list widget displaying transaction history
-class TransactionList extends StatelessWidget {
+/// Transaction list widget displaying transaction history with automatic pagination
+class TransactionList extends StatefulWidget {
   final List<Transaction> transactions;
   final bool hasMorePages;
   final bool isLoadingMore;
   final VoidCallback? onLoadMore;
+  final ScrollController? scrollController;
 
   const TransactionList({
     super.key,
@@ -17,11 +18,56 @@ class TransactionList extends StatelessWidget {
     required this.hasMorePages,
     required this.isLoadingMore,
     this.onLoadMore,
+    this.scrollController,
   });
 
   @override
+  State<TransactionList> createState() => _TransactionListState();
+}
+
+class _TransactionListState extends State<TransactionList> {
+  bool _hasTriggeredLoadMore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.scrollController?.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    widget.scrollController?.removeListener(_onScroll);
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (widget.isLoadingMore ||
+        !widget.hasMorePages ||
+        widget.onLoadMore == null ||
+        widget.scrollController == null) {
+      return;
+    }
+
+    // Trigger load more when scrolled to 80% of the content
+    if (widget.scrollController!.position.pixels >=
+        widget.scrollController!.position.maxScrollExtent * 0.8) {
+      if (!_hasTriggeredLoadMore) {
+        _hasTriggeredLoadMore = true;
+        widget.onLoadMore!();
+
+        // Reset the flag after a delay to allow for new data to load
+        Future.delayed(const Duration(milliseconds: 1000), () {
+          if (mounted) {
+            _hasTriggeredLoadMore = false;
+          }
+        });
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (transactions.isEmpty) {
+    if (widget.transactions.isEmpty) {
       return SliverFillRemaining(
         child: Center(
           child: Column(
@@ -52,55 +98,53 @@ class TransactionList extends StatelessWidget {
     }
 
     return SliverList(
-      delegate: SliverChildBuilderDelegate((context, index) {
-        // Show transaction item
-        if (index < transactions.length) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: TransactionItem(transaction: transactions[index]),
-          );
-        }
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          // Show transaction item
+          if (index < widget.transactions.length) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: TransactionItem(transaction: widget.transactions[index]),
+            );
+          }
 
-        // Show load more button or loading indicator
-        if (index == transactions.length) {
-          return _buildLoadMoreSection(context);
-        }
+          // Show loading indicator at the bottom when loading more
+          if (index == widget.transactions.length && widget.isLoadingMore) {
+            return _buildLoadingIndicator(context);
+          }
 
-        return null;
-      }, childCount: transactions.length + (hasMorePages ? 1 : 0)),
+          // Show end of list indicator when no more pages
+          if (index == widget.transactions.length && !widget.hasMorePages) {
+            return _buildEndOfListIndicator(context);
+          }
+
+          return null;
+        },
+        childCount:
+            widget.transactions.length +
+            (widget.isLoadingMore ? 1 : 0) +
+            (!widget.hasMorePages && widget.transactions.isNotEmpty ? 1 : 0),
+      ),
     );
   }
 
-  Widget _buildLoadMoreSection(BuildContext context) {
+  Widget _buildLoadingIndicator(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          if (isLoadingMore)
-            LoadingWidgets.listLoading()
-          else if (hasMorePages && onLoadMore != null)
-            ElevatedButton(
-              onPressed: onLoadMore,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(
-                  context,
-                ).primaryColor.withOpacity(0.1),
-                foregroundColor: Theme.of(context).primaryColor,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text(AppLocalizations.of(context)!.loadMoreTransactions),
-            )
-          else
-            Text(
-              AppLocalizations.of(context)!.noMoreTransactions,
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
-            ),
-        ],
+      child: LoadingWidgets.paginationLoading(),
+    );
+  }
+
+  Widget _buildEndOfListIndicator(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Center(
+        child: Text(
+          AppLocalizations.of(context)!.noMoreTransactions,
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
+        ),
       ),
     );
   }

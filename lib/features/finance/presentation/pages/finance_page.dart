@@ -25,12 +25,12 @@ class FinancePage extends StatefulWidget {
 class _FinancePageState extends State<FinancePage> {
   late ScrollController _scrollController;
   bool _isExporting = false;
+  bool _isRefreshing = false;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _scrollController.addListener(_onScroll);
 
     // Load initial finance data
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -44,14 +44,6 @@ class _FinancePageState extends State<FinancePage> {
     super.dispose();
   }
 
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent * 0.8) {
-      // Load more when scrolled to 80% of the content
-      context.read<FinanceCubit>().loadMoreFinanceData();
-    }
-  }
-
   Future<void> _exportToPdf(FinanceData data) async {
     final localizations = AppLocalizations.of(context)!;
 
@@ -61,13 +53,11 @@ class _FinancePageState extends State<FinancePage> {
       builder:
           (context) => AlertDialog(
             title: Text(localizations.exportToPdf),
-            content: Text(
-              'Are you sure you want to export your finance data as a PDF?',
-            ),
+            content: Text(localizations.confirmExportPdf),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: Text('Cancel'),
+                child: Text(localizations.cancel),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(true),
@@ -105,7 +95,7 @@ class _FinancePageState extends State<FinancePage> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  '${localizations.pdfExportSuccess}\nFile saved to Downloads folder.',
+                  '${localizations.pdfExportSuccess}\n${localizations.fileSavedToDownloads}.',
                 ),
                 backgroundColor: Colors.green,
                 duration: const Duration(seconds: 4),
@@ -119,13 +109,11 @@ class _FinancePageState extends State<FinancePage> {
         String errorMessage = localizations.pdfExportFailed;
 
         if (e.toString().contains('Storage permission denied')) {
-          errorMessage =
-              'Storage permission is required to save PDF files. Please grant permission in app settings.';
+          errorMessage = localizations.storagePermissionRequired;
         } else if (e.toString().contains(
           'Could not access storage directory',
         )) {
-          errorMessage =
-              'Unable to access storage. Please check your device storage and try again.';
+          errorMessage = localizations.unableToAccessStorage;
         }
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -136,7 +124,7 @@ class _FinancePageState extends State<FinancePage> {
             action:
                 e.toString().contains('Storage permission denied')
                     ? SnackBarAction(
-                      label: 'Settings',
+                      label: AppLocalizations.of(context)!.settings,
                       textColor: Colors.white,
                       onPressed: () async {
                         try {
@@ -146,7 +134,9 @@ class _FinancePageState extends State<FinancePage> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  'Please manually enable storage permission in app settings',
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.manuallyEnablePermission,
                                 ),
                                 backgroundColor: Colors.orange,
                               ),
@@ -232,7 +222,7 @@ class _FinancePageState extends State<FinancePage> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
-                              'File saved to Downloads folder. Check your file manager.',
+                              '${localizations.fileSavedToDownloads}. ${localizations.checkFileManager}.',
                             ),
                             backgroundColor: Colors.blue,
                             duration: const Duration(seconds: 4),
@@ -246,7 +236,7 @@ class _FinancePageState extends State<FinancePage> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            'File saved to Downloads folder. Check your file manager.',
+                            '${localizations.fileSavedToDownloads}. ${localizations.checkFileManager}.',
                           ),
                           backgroundColor: Colors.blue,
                           duration: const Duration(seconds: 4),
@@ -268,12 +258,11 @@ class _FinancePageState extends State<FinancePage> {
         // Provide specific error messages for common issues
         if (e.toString().contains('Storage permission denied')) {
           errorMessage =
-              'Storage permission is required to save Excel files. Please grant permission in app settings.';
+              AppLocalizations.of(context)!.storagePermissionRequired;
         } else if (e.toString().contains(
           'Could not access storage directory',
         )) {
-          errorMessage =
-              'Unable to access storage. Please check your device storage and try again.';
+          errorMessage = AppLocalizations.of(context)!.unableToAccessStorage;
         }
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -284,7 +273,7 @@ class _FinancePageState extends State<FinancePage> {
             action:
                 e.toString().contains('Storage permission denied')
                     ? SnackBarAction(
-                      label: 'Settings',
+                      label: AppLocalizations.of(context)!.settings,
                       textColor: Colors.white,
                       onPressed: () async {
                         // Open app settings to grant permissions
@@ -295,7 +284,9 @@ class _FinancePageState extends State<FinancePage> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  'Please manually enable storage permission in app settings',
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.manuallyEnablePermission,
                                 ),
                                 backgroundColor: Colors.orange,
                               ),
@@ -563,7 +554,13 @@ class _FinancePageState extends State<FinancePage> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<FinanceCubit>().refreshFinanceData();
+        if (_isRefreshing) return;
+        _isRefreshing = true;
+        try {
+          await context.read<FinanceCubit>().refreshFinanceData();
+        } finally {
+          _isRefreshing = false;
+        }
       },
       child: CustomScrollView(
         controller: _scrollController,
@@ -624,15 +621,12 @@ class _FinancePageState extends State<FinancePage> {
           TransactionList(
             transactions: data.transactions,
             hasMorePages: data.hasMorePages,
-            isLoadingMore: state is FinanceLoadingMore,
+            isLoadingMore: state.isLoadingMore,
+            scrollController: _scrollController,
             onLoadMore: () {
               context.read<FinanceCubit>().loadMoreFinanceData();
             },
           ),
-
-          // Loading more indicator
-          if (state is FinanceLoadingMore)
-            SliverToBoxAdapter(child: LoadingWidgets.paginationLoading()),
         ],
       ),
     );

@@ -82,7 +82,16 @@ class FinanceCubit extends Cubit<FinanceState> {
 
     try {
       _isLoadingMore = true;
-      emit(FinanceLoadingMore(data: _financeData!));
+      // Emit current state with loading flag to show loading indicator
+      if (_financeData != null) {
+        emit(
+          FinanceLoaded(
+            data: _financeData!,
+            isRefresh: false,
+            isLoadingMore: true,
+          ),
+        );
+      }
 
       final nextPage = _currentPage + 1;
       final response = await _financeRepository.getClientAccount(
@@ -110,7 +119,13 @@ class FinanceCubit extends Cubit<FinanceState> {
         );
 
         _financeData = updatedData;
-        emit(FinanceLoaded(data: updatedData, isRefresh: false));
+        emit(
+          FinanceLoaded(
+            data: updatedData,
+            isRefresh: false,
+            isLoadingMore: false,
+          ),
+        );
       } else {
         emit(
           FinanceError(

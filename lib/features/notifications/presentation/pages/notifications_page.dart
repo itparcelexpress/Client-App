@@ -519,7 +519,7 @@ class _NotificationsViewState extends State<NotificationsView> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  notification.content,
+                  notification.formattedContent,
                   style: TextStyle(
                     fontSize: 14,
                     color:
@@ -529,6 +529,11 @@ class _NotificationsViewState extends State<NotificationsView> {
                     height: 1.4,
                   ),
                 ),
+                // Display additional information based on notification type
+                if (_shouldShowAdditionalInfo(notification)) ...[
+                  const SizedBox(height: 12),
+                  _buildAdditionalInfo(notification),
+                ],
                 const SizedBox(height: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -556,6 +561,157 @@ class _NotificationsViewState extends State<NotificationsView> {
     );
   }
 
+  bool _shouldShowAdditionalInfo(NotificationModel notification) {
+    return notification.type == 'pickup_task_assigned' ||
+        notification.type == 'sticker_requested';
+  }
+
+  Widget _buildAdditionalInfo(NotificationModel notification) {
+    switch (notification.type) {
+      case 'pickup_task_assigned':
+        return _buildPickupTaskInfo(notification);
+      case 'sticker_requested':
+        return _buildStickerRequestInfo(notification);
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+
+  Widget _buildPickupTaskInfo(NotificationModel notification) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFF10b981).withOpacity(0.05),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: const Color(0xFF10b981).withOpacity(0.2),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.local_shipping_rounded,
+                size: 16,
+                color: const Color(0xFF10b981),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Pickup Task Details',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF10b981),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          if (notification.taskId != null) ...[
+            _buildInfoRow('Task ID', '#${notification.taskId}'),
+            const SizedBox(height: 4),
+          ],
+          if (notification.numberOfOrders != null) ...[
+            _buildInfoRow('Orders Count', notification.numberOfOrders!),
+            const SizedBox(height: 4),
+          ],
+          if (notification.clientName != null) ...[
+            _buildInfoRow('Client', notification.clientName!),
+            const SizedBox(height: 4),
+          ],
+          _buildInfoRow('Priority', notification.priority.toUpperCase()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStickerRequestInfo(NotificationModel notification) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFF8b5cf6).withOpacity(0.05),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: const Color(0xFF8b5cf6).withOpacity(0.2),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.label_rounded,
+                size: 16,
+                color: const Color(0xFF8b5cf6),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Sticker Details',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF8b5cf6),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          if (notification.stickerId != null) ...[
+            _buildInfoRow('Sticker ID', '#${notification.stickerId}'),
+            const SizedBox(height: 4),
+          ],
+          if (notification.trackingNumber != null) ...[
+            _buildInfoRow('Tracking', notification.trackingNumber!),
+            const SizedBox(height: 4),
+          ],
+          if (notification.quantity != null) ...[
+            _buildInfoRow('Quantity', '${notification.quantity} sticker(s)'),
+            const SizedBox(height: 4),
+          ],
+          if (notification.clientName != null) ...[
+            _buildInfoRow('Client', notification.clientName!),
+            const SizedBox(height: 4),
+          ],
+          _buildInfoRow('Priority', notification.priority.toUpperCase()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 80,
+          child: Text(
+            '$label:',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[600],
+            ),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: const Color(0xFF1a1a1a),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildNotificationIcon(String type) {
     final typeData = _getNotificationTypeData(type);
     return Container(
@@ -576,6 +732,13 @@ class _NotificationsViewState extends State<NotificationsView> {
           'icon': Icons.local_shipping_rounded,
           'color': const Color(0xFF10b981),
         };
+      case 'pickup_task_assigned':
+        return {
+          'icon': Icons.local_shipping_rounded,
+          'color': const Color(0xFF10b981),
+        };
+      case 'sticker_requested':
+        return {'icon': Icons.label_rounded, 'color': const Color(0xFF8b5cf6)};
       case 'promotional':
         return {
           'icon': Icons.local_offer_rounded,

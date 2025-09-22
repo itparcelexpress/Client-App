@@ -31,7 +31,7 @@ class NotificationService {
 
   // Mark notification as read
   static Future<MarkReadResponse?> markNotificationAsRead(
-    int notificationId,
+    String notificationId,
   ) async {
     try {
       final AppResponse response = await AppRequest.patch(
@@ -137,7 +137,7 @@ class NotificationService {
 
   // Delete notification
   static Future<MarkReadResponse?> deleteNotification(
-    int notificationId,
+    String notificationId,
   ) async {
     try {
       final AppResponse response = await AppRequest.post(

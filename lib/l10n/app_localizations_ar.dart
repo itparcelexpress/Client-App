@@ -1811,4 +1811,38 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get settlementAmountMustBeGreaterThanZero =>
       'يجب أن يكون مبلغ التسوية أكبر من 0';
+
+  @override
+  String get filterDescription => 'قم بتصفية معاملاتك حسب النطاق الزمني والنوع';
+
+  @override
+  String get confirmExportPdf =>
+      'هل أنت متأكد من تصدير بياناتك المالية كملف PDF؟';
+
+  @override
+  String get storagePermissionRequired =>
+      'مطلوب إذن التخزين لحفظ الملفات. يرجى منح الإذن في إعدادات التطبيق.';
+
+  @override
+  String get unableToAccessStorage =>
+      'غير قادر على الوصول للتخزين. يرجى التحقق من تخزين الجهاز والمحاولة مرة أخرى.';
+
+  @override
+  String get manuallyEnablePermission =>
+      'يرجى تمكين إذن التخزين يدوياً في إعدادات التطبيق';
+
+  @override
+  String get fileSavedToDownloads => 'تم حفظ الملف في مجلد التحميلات';
+
+  @override
+  String get checkFileManager => 'تحقق من مدير الملفات';
+
+  @override
+  String get noFilters => 'لا توجد مرشحات';
+
+  @override
+  String get from => 'من';
+
+  @override
+  String get to => 'إلى';
 }

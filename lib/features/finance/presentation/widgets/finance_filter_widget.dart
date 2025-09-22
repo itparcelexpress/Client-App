@@ -21,7 +21,6 @@ class _FinanceFilterWidgetState extends State<FinanceFilterWidget> {
   DateTime? _fromDate;
   DateTime? _toDate;
   TransactionType _transactionType = TransactionType.all;
-  bool _isExpanded = false;
 
   @override
   void initState() {
@@ -35,6 +34,147 @@ class _FinanceFilterWidgetState extends State<FinanceFilterWidget> {
     if (widget.currentFilter != oldWidget.currentFilter) {
       _initializeFromCurrentFilter();
     }
+  }
+
+  void _initializeFromCurrentFilter() {
+    if (widget.currentFilter != null) {
+      _fromDate = widget.currentFilter!.fromDate;
+      _toDate = widget.currentFilter!.toDate;
+      _transactionType = widget.currentFilter!.transactionType;
+    }
+  }
+
+  void _showFilterBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder:
+          (context) => _FinanceFilterBottomSheet(
+            currentFilter: widget.currentFilter,
+            onFilterChanged: widget.onFilterChanged,
+          ),
+    );
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    final hasActiveFilters =
+        _fromDate != null ||
+        _toDate != null ||
+        _transactionType != TransactionType.all;
+
+    return Container(
+      margin: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: _showFilterBottomSheet,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Icon(
+                Icons.filter_list,
+                color:
+                    hasActiveFilters
+                        ? const Color(0xFF667eea)
+                        : Colors.grey[600],
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      localizations.filter,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color:
+                            hasActiveFilters
+                                ? const Color(0xFF667eea)
+                                : Colors.grey[800],
+                      ),
+                    ),
+                    if (hasActiveFilters) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        _buildFilterDisplayText(),
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              Icon(Icons.arrow_forward_ios, color: Colors.grey[600], size: 16),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _buildFilterDisplayText() {
+    final parts = <String>[];
+
+    if (_fromDate != null && _toDate != null) {
+      parts.add('${_formatDate(_fromDate!)} - ${_formatDate(_toDate!)}');
+    } else if (_fromDate != null) {
+      parts.add(
+        '${AppLocalizations.of(context)!.from} ${_formatDate(_fromDate!)}',
+      );
+    } else if (_toDate != null) {
+      parts.add('${AppLocalizations.of(context)!.to} ${_formatDate(_toDate!)}');
+    }
+
+    if (_transactionType != TransactionType.all) {
+      parts.add(_transactionType.value);
+    }
+
+    return parts.join(' • ');
+  }
+}
+
+/// Bottom sheet widget for finance filtering
+class _FinanceFilterBottomSheet extends StatefulWidget {
+  final FinanceFilter? currentFilter;
+  final Function(FinanceFilter?) onFilterChanged;
+
+  const _FinanceFilterBottomSheet({
+    required this.currentFilter,
+    required this.onFilterChanged,
+  });
+
+  @override
+  State<_FinanceFilterBottomSheet> createState() =>
+      _FinanceFilterBottomSheetState();
+}
+
+class _FinanceFilterBottomSheetState extends State<_FinanceFilterBottomSheet> {
+  DateTime? _fromDate;
+  DateTime? _toDate;
+  TransactionType _transactionType = TransactionType.all;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeFromCurrentFilter();
   }
 
   void _initializeFromCurrentFilter() {
@@ -93,9 +233,7 @@ class _FinanceFilterWidgetState extends State<FinanceFilterWidget> {
     );
 
     widget.onFilterChanged(filter);
-    setState(() {
-      _isExpanded = false;
-    });
+    Navigator.of(context).pop();
   }
 
   void _clearFilters() {
@@ -105,100 +243,136 @@ class _FinanceFilterWidgetState extends State<FinanceFilterWidget> {
       _transactionType = TransactionType.all;
     });
     widget.onFilterChanged(null);
-    setState(() {
-      _isExpanded = false;
-    });
+    Navigator.of(context).pop();
   }
 
   String _formatDate(DateTime date) {
     return '${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}';
   }
 
+  String _getLocalizedTransactionType(TransactionType type) {
+    final localizations = AppLocalizations.of(context)!;
+    switch (type) {
+      case TransactionType.all:
+        return localizations.all;
+      case TransactionType.cod:
+        return localizations.codTransaction;
+      case TransactionType.fee:
+        return localizations.feeTransaction;
+      case TransactionType.settlement:
+        return localizations.settlementTransaction;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final hasActiveFilters =
-        _fromDate != null ||
-        _toDate != null ||
-        _transactionType != TransactionType.all;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Container(
-      margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 30,
+            offset: const Offset(0, -10),
           ),
         ],
       ),
-      child: Column(
-        children: [
-          // Filter Header
-          InkWell(
-            onTap: () {
-              setState(() {
-                _isExpanded = !_isExpanded;
-              });
-            },
-            borderRadius: BorderRadius.circular(12),
-            child: Container(
-              padding: const EdgeInsets.all(16),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Handle bar
+            Container(
+              margin: const EdgeInsets.only(top: 12),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+
+            // Header
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    theme.primaryColor,
+                    theme.primaryColor.withOpacity(0.8),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.filter_list,
-                    color:
-                        hasActiveFilters
-                            ? const Color(0xFF667eea)
-                            : Colors.grey[600],
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Icon(
+                      Icons.filter_list_rounded,
+                      color: Colors.white,
+                      size: 28,
+                    ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           localizations.filter,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color:
-                                hasActiveFilters
-                                    ? const Color(0xFF667eea)
-                                    : Colors.grey[800],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        if (hasActiveFilters) ...[
-                          const SizedBox(height: 2),
-                          Text(
-                            _buildFilterDisplayText(),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                            ),
+                        const SizedBox(height: 4),
+                        Text(
+                          localizations.filterDescription,
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.9),
+                            fontSize: 14,
                           ),
-                        ],
+                        ),
                       ],
                     ),
                   ),
-                  Icon(
-                    _isExpanded ? Icons.expand_less : Icons.expand_more,
-                    color: Colors.grey[600],
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(
+                        Icons.close_rounded,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      constraints: const BoxConstraints(),
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
 
-          // Filter Content
-          if (_isExpanded) ...[
-            const Divider(height: 1),
+            // Filter Content
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -348,7 +522,7 @@ class _FinanceFilterWidgetState extends State<FinanceFilterWidget> {
                                 ),
                               ),
                               child: Text(
-                                type.value,
+                                _getLocalizedTransactionType(type),
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
@@ -363,45 +537,80 @@ class _FinanceFilterWidgetState extends State<FinanceFilterWidget> {
                         }).toList(),
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 28),
 
                   // Action Buttons
                   Row(
                     children: [
                       Expanded(
-                        child: OutlinedButton(
-                          onPressed: _clearFilters,
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: Colors.grey[400]!),
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                        child: Container(
+                          height: 56,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(0.3),
+                              width: 2,
                             ),
                           ),
-                          child: Text(
-                            localizations.clear,
-                            style: TextStyle(
-                              color: Colors.grey[700],
-                              fontWeight: FontWeight.w500,
+                          child: OutlinedButton(
+                            onPressed: _clearFilters,
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                            ),
+                            child: Text(
+                              localizations.clear,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 16),
                       Expanded(
-                        child: ElevatedButton(
-                          onPressed: _applyFilter,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF667eea),
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                        child: Container(
+                          height: 56,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            gradient: LinearGradient(
+                              colors: [
+                                theme.primaryColor,
+                                theme.primaryColor.withOpacity(0.8),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
                             ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: theme.primaryColor.withOpacity(0.3),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
-                          child: Text(
-                            localizations.apply,
-                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          child: ElevatedButton(
+                            onPressed: _applyFilter,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                            ),
+                            child: Text(
+                              localizations.apply,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -411,26 +620,8 @@ class _FinanceFilterWidgetState extends State<FinanceFilterWidget> {
               ),
             ),
           ],
-        ],
+        ),
       ),
     );
-  }
-
-  String _buildFilterDisplayText() {
-    final parts = <String>[];
-
-    if (_fromDate != null && _toDate != null) {
-      parts.add('${_formatDate(_fromDate!)} - ${_formatDate(_toDate!)}');
-    } else if (_fromDate != null) {
-      parts.add('From ${_formatDate(_fromDate!)}');
-    } else if (_toDate != null) {
-      parts.add('To ${_formatDate(_toDate!)}');
-    }
-
-    if (_transactionType != TransactionType.all) {
-      parts.add(_transactionType.value);
-    }
-
-    return parts.join(' • ');
   }
 }

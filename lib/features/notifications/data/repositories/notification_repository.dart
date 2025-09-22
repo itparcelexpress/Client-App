@@ -14,7 +14,9 @@ class NotificationRepository {
   }
 
   // Mark a specific notification as read
-  Future<MarkReadResponse?> markNotificationAsRead(int notificationId) async {
+  Future<MarkReadResponse?> markNotificationAsRead(
+    String notificationId,
+  ) async {
     return await NotificationService.markNotificationAsRead(notificationId);
   }
 
@@ -53,7 +55,7 @@ class NotificationRepository {
   }
 
   // Delete a specific notification
-  Future<MarkReadResponse?> deleteNotification(int notificationId) async {
+  Future<MarkReadResponse?> deleteNotification(String notificationId) async {
     return await NotificationService.deleteNotification(notificationId);
   }
 
@@ -79,7 +81,7 @@ class NotificationRepository {
 
   // Batch mark notifications as read
   Future<List<MarkReadResponse?>> markMultipleNotificationsAsRead(
-    List<int> notificationIds,
+    List<String> notificationIds,
   ) async {
     final List<Future<MarkReadResponse?>> futures =
         notificationIds.map((id) => markNotificationAsRead(id)).toList();

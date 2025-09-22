@@ -28,11 +28,16 @@ class FinanceLoadingMore extends FinanceState {
 class FinanceLoaded extends FinanceState {
   final FinanceData data;
   final bool isRefresh;
+  final bool isLoadingMore;
 
-  const FinanceLoaded({required this.data, this.isRefresh = false});
+  const FinanceLoaded({
+    required this.data,
+    this.isRefresh = false,
+    this.isLoadingMore = false,
+  });
 
   @override
-  List<Object?> get props => [data, isRefresh];
+  List<Object?> get props => [data, isRefresh, isLoadingMore];
 }
 
 /// Error state when finance data fetching fails

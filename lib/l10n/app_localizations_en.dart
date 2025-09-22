@@ -1819,4 +1819,39 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get settlementAmountMustBeGreaterThanZero =>
       'Settlement amount must be greater than 0';
+
+  @override
+  String get filterDescription =>
+      'Filter your transactions by date range and type';
+
+  @override
+  String get confirmExportPdf =>
+      'Are you sure you want to export your finance data as a PDF?';
+
+  @override
+  String get storagePermissionRequired =>
+      'Storage permission is required to save files. Please grant permission in app settings.';
+
+  @override
+  String get unableToAccessStorage =>
+      'Unable to access storage. Please check your device storage and try again.';
+
+  @override
+  String get manuallyEnablePermission =>
+      'Please manually enable storage permission in app settings';
+
+  @override
+  String get fileSavedToDownloads => 'File saved to Downloads folder';
+
+  @override
+  String get checkFileManager => 'Check your file manager';
+
+  @override
+  String get noFilters => 'No filters';
+
+  @override
+  String get from => 'From';
+
+  @override
+  String get to => 'To';
 }

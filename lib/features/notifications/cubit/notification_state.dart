@@ -81,7 +81,7 @@ class NotificationLoaded extends NotificationState {
 
 // Action success states
 class NotificationMarkAsReadSuccess extends NotificationState {
-  final int notificationId;
+  final String notificationId;
   final List<NotificationModel> updatedNotifications;
 
   const NotificationMarkAsReadSuccess(
@@ -103,7 +103,7 @@ class NotificationMarkAllAsReadSuccess extends NotificationState {
 }
 
 class NotificationDeleteSuccess extends NotificationState {
-  final int deletedNotificationId;
+  final String deletedNotificationId;
   final List<NotificationModel> remainingNotifications;
 
   const NotificationDeleteSuccess(

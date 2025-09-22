@@ -824,7 +824,7 @@ abstract class AppLocalizations {
   /// **'Location'**
   String get location;
 
-  /// Settings label
+  /// Settings button text
   ///
   /// In en, this message translates to:
   /// **'Settings'**
@@ -3487,6 +3487,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settlement amount must be greater than 0'**
   String get settlementAmountMustBeGreaterThanZero;
+
+  /// Filter bottom sheet description
+  ///
+  /// In en, this message translates to:
+  /// **'Filter your transactions by date range and type'**
+  String get filterDescription;
+
+  /// PDF export confirmation dialog message
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to export your finance data as a PDF?'**
+  String get confirmExportPdf;
+
+  /// Storage permission required message
+  ///
+  /// In en, this message translates to:
+  /// **'Storage permission is required to save files. Please grant permission in app settings.'**
+  String get storagePermissionRequired;
+
+  /// Storage access error message
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to access storage. Please check your device storage and try again.'**
+  String get unableToAccessStorage;
+
+  /// Manual permission enable message
+  ///
+  /// In en, this message translates to:
+  /// **'Please manually enable storage permission in app settings'**
+  String get manuallyEnablePermission;
+
+  /// File saved to downloads message
+  ///
+  /// In en, this message translates to:
+  /// **'File saved to Downloads folder'**
+  String get fileSavedToDownloads;
+
+  /// Check file manager message
+  ///
+  /// In en, this message translates to:
+  /// **'Check your file manager'**
+  String get checkFileManager;
+
+  /// No filters applied message
+  ///
+  /// In en, this message translates to:
+  /// **'No filters'**
+  String get noFilters;
+
+  /// From date label
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get from;
+
+  /// To date label
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get to;
 }
 
 class _AppLocalizationsDelegate

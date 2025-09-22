@@ -157,12 +157,15 @@ class NotificationPaginationData extends Equatable {
 
 // Individual Notification Model
 class NotificationModel extends Equatable {
-  final int id;
+  final String id; // Changed from int to String to match API response
   final String notifiableType;
   final int notifiableId;
   final String title;
   final String content;
   final String type;
+  final int autoId; // Added auto_id field
+  final Map<String, dynamic>? data; // Added data object for rich content
+  final String? sortOrder; // Added sort_order field
   final DateTime? readAt;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -174,6 +177,9 @@ class NotificationModel extends Equatable {
     required this.title,
     required this.content,
     required this.type,
+    required this.autoId,
+    this.data,
+    this.sortOrder,
     this.readAt,
     required this.createdAt,
     required this.updatedAt,
@@ -182,12 +188,18 @@ class NotificationModel extends Equatable {
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     try {
       return NotificationModel(
-        id: json['id'] ?? 0,
+        id: json['id']?.toString() ?? '',
         notifiableType: json['notifiable_type'] ?? '',
         notifiableId: json['notifiable_id'] ?? 0,
         title: json['title'] ?? '',
         content: json['content'] ?? '',
         type: json['type'] ?? '',
+        autoId: json['auto_id'] ?? 0,
+        data:
+            json['data'] != null
+                ? Map<String, dynamic>.from(json['data'])
+                : null,
+        sortOrder: json['sort_order']?.toString(),
         readAt:
             json['read_at'] != null ? DateTime.parse(json['read_at']) : null,
         createdAt:
@@ -214,6 +226,9 @@ class NotificationModel extends Equatable {
       'title': title,
       'content': content,
       'type': type,
+      'auto_id': autoId,
+      'data': data,
+      'sort_order': sortOrder,
       'read_at': readAt?.toIso8601String(),
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
@@ -223,6 +238,73 @@ class NotificationModel extends Equatable {
   // Helper method to check if notification is read
   bool get isRead => readAt != null;
 
+  // Helper method to get formatted content with proper line breaks
+  String get formattedContent {
+    if (content.isEmpty) return '';
+
+    // Replace \n with actual line breaks and clean up extra spaces
+    return content
+        .replaceAll('\\n', '\n')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
+  }
+
+  // Helper method to get priority from data
+  String get priority {
+    if (data != null && data!['priority'] != null) {
+      return data!['priority'].toString();
+    }
+    return 'medium';
+  }
+
+  // Helper method to get task ID for pickup tasks
+  int? get taskId {
+    if (data != null && data!['task_id'] != null) {
+      return int.tryParse(data!['task_id'].toString());
+    }
+    return null;
+  }
+
+  // Helper method to get sticker ID for sticker requests
+  int? get stickerId {
+    if (data != null && data!['sticker_id'] != null) {
+      return int.tryParse(data!['sticker_id'].toString());
+    }
+    return null;
+  }
+
+  // Helper method to get tracking number
+  String? get trackingNumber {
+    if (data != null && data!['tracking_no'] != null) {
+      return data!['tracking_no'].toString();
+    }
+    return null;
+  }
+
+  // Helper method to get client name
+  String? get clientName {
+    if (data != null && data!['client_name'] != null) {
+      return data!['client_name'].toString();
+    }
+    return null;
+  }
+
+  // Helper method to get quantity for sticker requests
+  String? get quantity {
+    if (data != null && data!['quantity'] != null) {
+      return data!['quantity'].toString();
+    }
+    return null;
+  }
+
+  // Helper method to get number of orders for pickup tasks
+  String? get numberOfOrders {
+    if (data != null && data!['no_of_orders'] != null) {
+      return data!['no_of_orders'].toString();
+    }
+    return null;
+  }
+
   // Helper method to get notification type display name
   String get typeDisplayName {
     switch (type) {
@@ -230,6 +312,10 @@ class NotificationModel extends Equatable {
         return 'Statement';
       case 'pickup_notification':
         return 'Pickup';
+      case 'pickup_task_assigned':
+        return 'Pickup Task';
+      case 'sticker_requested':
+        return 'Sticker';
       case 'promotional':
         return 'Promotion';
       case 'security_alert':
@@ -249,12 +335,15 @@ class NotificationModel extends Equatable {
 
   // Copy method for updating notification
   NotificationModel copyWith({
-    int? id,
+    String? id,
     String? notifiableType,
     int? notifiableId,
     String? title,
     String? content,
     String? type,
+    int? autoId,
+    Map<String, dynamic>? data,
+    String? sortOrder,
     DateTime? readAt,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -266,6 +355,9 @@ class NotificationModel extends Equatable {
       title: title ?? this.title,
       content: content ?? this.content,
       type: type ?? this.type,
+      autoId: autoId ?? this.autoId,
+      data: data ?? this.data,
+      sortOrder: sortOrder ?? this.sortOrder,
       readAt: readAt ?? this.readAt,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -280,6 +372,9 @@ class NotificationModel extends Equatable {
     title,
     content,
     type,
+    autoId,
+    data,
+    sortOrder,
     readAt,
     createdAt,
     updatedAt,

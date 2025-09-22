@@ -132,7 +132,7 @@ class NotificationCubit extends Cubit<NotificationState> {
   }
 
   // Mark a specific notification as read
-  Future<void> markNotificationAsRead(int notificationId) async {
+  Future<void> markNotificationAsRead(String notificationId) async {
     try {
       final response = await _repository.markNotificationAsRead(notificationId);
 
@@ -239,7 +239,7 @@ class NotificationCubit extends Cubit<NotificationState> {
   }
 
   // Delete a notification
-  Future<void> deleteNotification(int notificationId) async {
+  Future<void> deleteNotification(String notificationId) async {
     try {
       final response = await _repository.deleteNotification(notificationId);
 
