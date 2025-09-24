@@ -430,102 +430,110 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[50],
-      body: SafeArea(
-        child: Column(
-          children: [
-            _buildAppBar(),
-            Expanded(
-              child: BlocListener<ShipmentCubit, ShipmentState>(
-                listener: (context, state) {
-                  if (state is OrderCreated) {
-                    print('Order created successfully: ${state.orderData.id}');
-                    _showSuccessDialog(state.orderData);
-                  } else if (state is OrderCreationError) {
-                    print('Order creation error: ${state.message}');
-                    _showErrorToast(state.message);
-                  }
-                },
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
-                    context,
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                  ),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        _buildHeader(),
-                        SizedBox(
-                          height: ResponsiveUtils.getResponsivePadding(
-                            context,
-                            32,
-                          ),
-                        ),
-                        _buildStickerSection(),
-                        SizedBox(
-                          height: ResponsiveUtils.getResponsivePadding(
-                            context,
-                            32,
-                          ),
-                        ),
-                        _buildAddressBookSection(),
-                        SizedBox(
-                          height: ResponsiveUtils.getResponsivePadding(
-                            context,
-                            32,
-                          ),
-                        ),
-                        _buildPersonalInfoSection(),
-                        SizedBox(
-                          height: ResponsiveUtils.getResponsivePadding(
-                            context,
-                            32,
-                          ),
-                        ),
-                        _buildAddressSection(),
-                        SizedBox(
-                          height: ResponsiveUtils.getResponsivePadding(
-                            context,
-                            32,
-                          ),
-                        ),
-                        if (_hasFormData &&
-                            _selectedAddress == null &&
-                            !_dismissedSaveSuggestion)
-                          _buildSaveAddressSuggestion(),
-                        if (_hasFormData &&
-                            _selectedAddress == null &&
-                            !_dismissedSaveSuggestion)
+    return WillPopScope(
+      onWillPop: () async {
+        // Prevent popping the root route (which leads to a black screen)
+        return Navigator.canPop(context);
+      },
+      child: Scaffold(
+        backgroundColor: Colors.grey[50],
+        body: SafeArea(
+          child: Column(
+            children: [
+              _buildAppBar(),
+              Expanded(
+                child: BlocListener<ShipmentCubit, ShipmentState>(
+                  listener: (context, state) {
+                    if (state is OrderCreated) {
+                      print(
+                        'Order created successfully: ${state.orderData.id}',
+                      );
+                      _showSuccessDialog(state.orderData);
+                    } else if (state is OrderCreationError) {
+                      print('Order creation error: ${state.message}');
+                      _showErrorToast(state.message);
+                    }
+                  },
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
+                      context,
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                    ),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          _buildHeader(),
                           SizedBox(
                             height: ResponsiveUtils.getResponsivePadding(
                               context,
-                              24,
+                              32,
                             ),
                           ),
-                        _buildOrderDetailsSection(),
-                        SizedBox(
-                          height: ResponsiveUtils.getResponsivePadding(
-                            context,
-                            40,
+                          _buildStickerSection(),
+                          SizedBox(
+                            height: ResponsiveUtils.getResponsivePadding(
+                              context,
+                              32,
+                            ),
                           ),
-                        ),
-                        _buildSubmitButton(),
-                        SizedBox(
-                          height: ResponsiveUtils.getResponsivePadding(
-                            context,
-                            20,
+                          _buildAddressBookSection(),
+                          SizedBox(
+                            height: ResponsiveUtils.getResponsivePadding(
+                              context,
+                              32,
+                            ),
                           ),
-                        ),
-                      ],
+                          _buildPersonalInfoSection(),
+                          SizedBox(
+                            height: ResponsiveUtils.getResponsivePadding(
+                              context,
+                              32,
+                            ),
+                          ),
+                          _buildAddressSection(),
+                          SizedBox(
+                            height: ResponsiveUtils.getResponsivePadding(
+                              context,
+                              32,
+                            ),
+                          ),
+                          if (_hasFormData &&
+                              _selectedAddress == null &&
+                              !_dismissedSaveSuggestion)
+                            _buildSaveAddressSuggestion(),
+                          if (_hasFormData &&
+                              _selectedAddress == null &&
+                              !_dismissedSaveSuggestion)
+                            SizedBox(
+                              height: ResponsiveUtils.getResponsivePadding(
+                                context,
+                                24,
+                              ),
+                            ),
+                          _buildOrderDetailsSection(),
+                          SizedBox(
+                            height: ResponsiveUtils.getResponsivePadding(
+                              context,
+                              40,
+                            ),
+                          ),
+                          _buildSubmitButton(),
+                          SizedBox(
+                            height: ResponsiveUtils.getResponsivePadding(
+                              context,
+                              20,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -542,17 +550,20 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         color: Colors.white,
         child: Row(
           children: [
-            GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(12),
+            if (Navigator.canPop(context))
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.arrow_back, size: 20),
                 ),
-                child: const Icon(Icons.arrow_back, size: 20),
-              ),
-            ),
+              )
+            else
+              const SizedBox(width: 36),
             Expanded(
               child: Text(
                 AppLocalizations.of(context)!.createOrder,
@@ -1905,9 +1916,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       }
 
       final user = LocalData.user;
-      // Use the correct client ID from the user data
-      final clientId =
-          user?.client?.id ?? 1; // Default to 1 if no client ID found
+      // Use the authenticated user ID when creating orders (backend expects user id)
+      final clientId = user?.id ?? 1; // Fallback to 1 if not found
 
       final request = CreateOrderRequest(
         stickerNumber:

@@ -78,12 +78,14 @@ class AppVersionCubit extends Cubit<AppVersionState> {
 
       await checkVersion();
     } catch (e) {
-      emit(
-        AppVersionError(
-          message: 'Failed to initialize version check: ${e.toString()}',
-          canContinue: true,
-        ),
-      );
+      if (!isClosed) {
+        emit(
+          AppVersionError(
+            message: 'Failed to initialize version check: ${e.toString()}',
+            canContinue: true,
+          ),
+        );
+      }
     }
   }
 

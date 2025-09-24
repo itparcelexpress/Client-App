@@ -86,13 +86,19 @@ class MyAppState extends State<MyApp> {
       title: _getAppTitle(),
       theme: AppThemes.theme,
       locale: _locale,
-      home: MultiBlocProvider(
-        providers: [
-          BlocProvider<PermissionCubit>(
-            create: (context) => PermissionCubit()..initializePermissions(),
-          ),
-        ],
-        child: const AppVersionWrapper(child: AuthWrapper()),
+      home: WillPopScope(
+        onWillPop: () async {
+          // Do not allow system back to close the app when at root
+          return Navigator.canPop(context);
+        },
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<PermissionCubit>(
+              create: (context) => PermissionCubit()..initializePermissions(),
+            ),
+          ],
+          child: const AppVersionWrapper(child: AuthWrapper()),
+        ),
       ),
     );
   }

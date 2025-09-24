@@ -108,6 +108,9 @@ class _LoginPageState extends State<LoginPage> {
             child: BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) {
                 if (state is AuthSuccess) {
+                  setState(() {
+                    _isLoading = false;
+                  });
                   // Clear sensitive data from controllers
                   _clearSensitiveData();
 
@@ -122,6 +125,9 @@ class _LoginPageState extends State<LoginPage> {
                     MaterialPageRoute(builder: (context) => const HomePage()),
                   );
                 } else if (state is AuthFailure) {
+                  setState(() {
+                    _isLoading = false;
+                  });
                   // Don't clear fields on failure - let user retry with same credentials
                   final key = mapLoginErrorToKey(
                     message: state.message,

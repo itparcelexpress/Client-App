@@ -95,6 +95,8 @@ class CreateOrderRequest extends Equatable {
       'shipper_id': shipperId,
       'notes': notes,
       'payment_type': paymentType,
+      // Send both 'value' and 'amount' to satisfy validation and business use
+      'value': amount,
       'amount': amount,
       'delivery_fee': deliveryFee,
       'client_id': clientId,
