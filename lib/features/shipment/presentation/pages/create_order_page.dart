@@ -56,7 +56,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   final _lengthController = TextEditingController();
   final _weightController = TextEditingController();
   String _unit = 'Kg';
-  String _feePayer = 'customer';
+  String _feePayer = 'client';
   final List<TextEditingController> _itemNameCtrls = [TextEditingController()];
   final List<TextEditingController> _itemCategoryCtrls = [
     TextEditingController(),
@@ -1184,7 +1184,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           label: AppLocalizations.of(context)!.feePayer,
           value: _feePayer,
           icon: Icons.account_balance_wallet_outlined,
-          items: const ['customer', 'shipper'],
+          items: const ['client', 'customer'],
           onChanged: (value) => setState(() => _feePayer = value!),
         ),
         const SizedBox(height: 20),
@@ -1835,8 +1835,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   displayText = AppLocalizations.of(context)!.prepaid;
                 } else if (item == 'customer') {
                   displayText = AppLocalizations.of(context)!.customer;
-                } else if (item == 'shipper') {
-                  displayText = AppLocalizations.of(context)!.shipper;
+                } else if (item == 'client') {
+                  displayText = AppLocalizations.of(context)!.client;
                 } else if (item == 'Kg') {
                   displayText = AppLocalizations.of(context)!.kg;
                 } else if (item == 'length') {

@@ -1236,7 +1236,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addAnotherItem => 'Add Another Item';
 
   @override
-  String get shipper => 'Shipper';
+  String get client => 'Client';
 
   @override
   String get kg => 'Kg';

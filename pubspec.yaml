@@ -139,9 +139,16 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 # Flutter Launcher Icons Configuration
 flutter_launcher_icons:
-  android: "launcher_icon"
+  android: true
   ios: true
-  image_path: "assets/images/logo.png"
+  # Android adaptive icon to prevent circular mask clipping
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/playstore_padded.png"
+  adaptive_icon_monochrome: "assets/images/playstore_padded_mono.png"
+  image_path_android: "assets/images/playstore_padded.png"
+  # iOS icon
+  image_path_ios: "assets/images/appstore_padded.png"
+  remove_alpha_ios: true
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
     generate: true

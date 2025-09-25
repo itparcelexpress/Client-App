@@ -2414,11 +2414,11 @@ abstract class AppLocalizations {
   /// **'Add Another Item'**
   String get addAnotherItem;
 
-  /// Shipper fee payer option
+  /// Client fee payer option
   ///
   /// In en, this message translates to:
-  /// **'Shipper'**
-  String get shipper;
+  /// **'Client'**
+  String get client;
 
   /// Kilogram unit
   ///

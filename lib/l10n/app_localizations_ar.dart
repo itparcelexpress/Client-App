@@ -1233,7 +1233,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addAnotherItem => 'إضافة عنصر آخر';
 
   @override
-  String get shipper => 'الشاحن';
+  String get client => 'المرسل';
 
   @override
   String get kg => 'كيلو';

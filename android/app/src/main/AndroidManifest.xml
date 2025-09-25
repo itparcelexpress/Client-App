@@ -21,9 +21,9 @@
         tools:ignore="ScopedStorage" />
     
     <application
-        android:label="client_app"
+        android:label="ParcelExpress"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon"
+        android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network_security_config">
         <activity
