@@ -5,9 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:permission_handler/permission_handler.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/foundation.dart';
 
 /// Service for exporting finance data to PDF format
 class PdfExportService {
@@ -20,92 +17,8 @@ class PdfExportService {
 
   /// Request storage permissions if needed
   static Future<bool> _requestStoragePermissions() async {
-    if (Platform.isAndroid) {
-      // For Android 13+ (API 33+), we need different permissions
-      if (await _isAndroid13OrHigher()) {
-        return await _requestAndroid13Permissions();
-      } else {
-        // For older Android versions, use traditional storage permission
-        return await _requestLegacyStoragePermission();
-      }
-    }
-    return true; // iOS doesn't need explicit storage permission
-  }
-
-  /// Check if device is running Android 13+ (API 33+)
-  static Future<bool> _isAndroid13OrHigher() async {
-    try {
-      final deviceInfo = await DeviceInfoPlugin().androidInfo;
-      return deviceInfo.version.sdkInt >= 33;
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error checking Android version: $e');
-      }
-      return false;
-    }
-  }
-
-  /// Request permissions for Android 13+ (API 33+)
-  static Future<bool> _requestAndroid13Permissions() async {
-    try {
-      // For Android 13+, we can use the Downloads directory without special permissions
-      // But we still need to check if we can access external storage
-      final status = await Permission.manageExternalStorage.status;
-
-      if (status.isGranted) {
-        return true;
-      }
-
-      if (status.isDenied) {
-        final result = await Permission.manageExternalStorage.request();
-        return result.isGranted;
-      }
-
-      if (status.isPermanentlyDenied) {
-        if (kDebugMode) {
-          print('🔴 Manage external storage permission permanently denied.');
-        }
-        return false;
-      }
-
-      return status.isGranted;
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error requesting Android 13+ permissions: $e');
-      }
-      // Fallback to legacy permission
-      return await _requestLegacyStoragePermission();
-    }
-  }
-
-  /// Request legacy storage permission for older Android versions
-  static Future<bool> _requestLegacyStoragePermission() async {
-    try {
-      var status = await Permission.storage.status;
-
-      if (status.isGranted) {
-        return true;
-      }
-
-      if (status.isDenied) {
-        status = await Permission.storage.request();
-        return status.isGranted;
-      }
-
-      if (status.isPermanentlyDenied) {
-        if (kDebugMode) {
-          print('🔴 Storage permission permanently denied.');
-        }
-        return false;
-      }
-
-      return status.isGranted;
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error requesting legacy storage permission: $e');
-      }
-      return false;
-    }
+    // No special permissions needed for app-specific directories
+    return true;
   }
 
   /// Export finance data to PDF file
@@ -606,39 +519,18 @@ class PdfExportService {
     );
   }
 
-  /// Get download directory
+  /// Get app-specific directory for saving files
   static Future<Directory> _getDownloadDirectory() async {
-    if (Platform.isAndroid) {
-      // Try to get the Downloads directory
-      final directory = await getExternalStorageDirectory();
-      if (directory != null) {
-        // Navigate to the Downloads folder
-        final downloadsPath = Directory(
-          '${directory.parent.parent.parent.parent.path}/Download',
-        );
-        if (await downloadsPath.exists()) {
-          return downloadsPath;
-        }
+    // Use app-specific documents directory instead of Downloads folder
+    final directory = await getApplicationDocumentsDirectory();
 
-        // Fallback to app-specific external directory
-        final downloadDir = Directory('${directory.path}/Download');
-        if (!await downloadDir.exists()) {
-          await downloadDir.create(recursive: true);
-        }
-        return downloadDir;
-      }
-    } else if (Platform.isIOS) {
-      return await getApplicationDocumentsDirectory();
+    // Create a subdirectory for exported files
+    final exportDir = Directory('${directory.path}/ExportedFiles');
+    if (!await exportDir.exists()) {
+      await exportDir.create(recursive: true);
     }
 
-    // Final fallback to downloads directory
-    final downloadsDir = await getDownloadsDirectory();
-    if (downloadsDir != null) {
-      return downloadsDir;
-    }
-
-    // Ultimate fallback to documents directory
-    return await getApplicationDocumentsDirectory();
+    return exportDir;
   }
 
   /// Generate file name with timestamp

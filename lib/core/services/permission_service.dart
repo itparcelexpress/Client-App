@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -7,8 +6,6 @@ class PermissionService {
   static final Map<Permission, String> _permissionDescriptions = {
     Permission.storage:
         'Storage access is needed to save exported files (Excel, PDF) and access downloaded documents.',
-    Permission.manageExternalStorage:
-        'External storage management is required for saving files to Downloads folder.',
     Permission.camera:
         'Camera access is needed to scan QR codes and barcodes for shipment tracking.',
     Permission.location:
@@ -32,11 +29,6 @@ class PermissionService {
       Permission.notification,
       Permission.phone,
     ];
-
-    // Add Android 13+ specific permissions
-    if (Platform.isAndroid) {
-      permissions.add(Permission.manageExternalStorage);
-    }
 
     return permissions;
   }
@@ -195,8 +187,6 @@ class PermissionService {
     switch (permission) {
       case Permission.storage:
         return 'Storage';
-      case Permission.manageExternalStorage:
-        return 'External Storage';
       case Permission.camera:
         return 'Camera';
       case Permission.location:

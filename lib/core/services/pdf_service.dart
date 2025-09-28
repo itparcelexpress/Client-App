@@ -15,27 +15,13 @@ class PdfService {
     bool openAfterSave = true,
   }) async {
     try {
-      // Get the downloads directory
-      Directory? directory;
-      if (Platform.isAndroid) {
-        directory = await getExternalStorageDirectory();
-        if (directory != null) {
-          // Navigate to the Downloads folder
-          final downloadsPath = Directory(
-            '${directory.parent.parent.parent.parent.path}/Download',
-          );
-          if (await downloadsPath.exists()) {
-            directory = downloadsPath;
-          }
-        }
-      } else if (Platform.isIOS) {
-        directory = await getApplicationDocumentsDirectory();
-      } else {
-        directory = await getDownloadsDirectory();
-      }
+      // Use app-specific documents directory
+      final directory = await getApplicationDocumentsDirectory();
 
-      if (directory == null) {
-        throw Exception('Could not access device storage');
+      // Create a subdirectory for exported files
+      final exportDir = Directory('${directory.path}/ExportedFiles');
+      if (!await exportDir.exists()) {
+        await exportDir.create(recursive: true);
       }
 
       // Ensure filename has .pdf extension
@@ -44,7 +30,7 @@ class PdfService {
       }
 
       // Create the file
-      final file = File('${directory.path}/$fileName');
+      final file = File('${exportDir.path}/$fileName');
 
       // Write the PDF bytes to the file
       await file.writeAsBytes(Uint8List.fromList(pdfBytes));

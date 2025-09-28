@@ -82,7 +82,9 @@ class _FinancePageState extends State<FinancePage> {
           if (result.type == ResultType.done && mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(localizations.pdfExportSuccess),
+                content: Text(
+                  'PDF exported successfully. Check app documents folder.',
+                ),
                 backgroundColor: Colors.green,
                 duration: const Duration(seconds: 3),
               ),
@@ -95,7 +97,7 @@ class _FinancePageState extends State<FinancePage> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  '${localizations.pdfExportSuccess}\n${localizations.fileSavedToDownloads}.',
+                  'PDF exported successfully. Check app documents folder.',
                 ),
                 backgroundColor: Colors.green,
                 duration: const Duration(seconds: 4),
@@ -193,10 +195,10 @@ class _FinancePageState extends State<FinancePage> {
             scaffoldMessenger.showSnackBar(
               SnackBar(
                 content: Text(
-                  '$fileExtension ${localizations.excelExportSuccess}',
+                  '$fileExtension exported successfully. Check app documents folder.',
                 ),
                 backgroundColor: Colors.green,
-                duration: const Duration(seconds: 3),
+                duration: const Duration(seconds: 4),
               ),
             );
           } else {
