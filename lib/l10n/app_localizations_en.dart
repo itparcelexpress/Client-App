@@ -1335,6 +1335,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unitedKingdom => 'United Kingdom';
 
   @override
+  String get selectCountry => 'Select Country';
+
+  @override
+  String get popularCountries => 'Popular Countries';
+
+  @override
+  String get allCountries => 'All Countries';
+
+  @override
+  String get noCountriesFound => 'No countries found';
+
+  @override
+  String get tryDifferentSearchTerm => 'Try a different search term';
+
+  @override
+  String get selectGovernorate => 'Select Governorate';
+
+  @override
+  String get noGovernoratesFound => 'No governorates found';
+
+  @override
+  String get selectState => 'Select State';
+
+  @override
+  String get noStatesFound => 'No states found';
+
+  @override
+  String get selectPlace => 'Select Place';
+
+  @override
+  String get noPlacesFound => 'No places found';
+
+  @override
   String get canada => 'Canada';
 
   @override

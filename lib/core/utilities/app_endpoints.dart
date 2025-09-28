@@ -48,6 +48,15 @@ class AppEndPoints {
   // Countries
   static const String countries = 'countries';
 
+  // Governorates
+  static const String governorates = 'governorates/all';
+
+  // States
+  static const String states = 'states/all';
+
+  // Places
+  static const String places = 'places/all';
+
   // Address Book
   static const String addressBook = 'client/address_book';
   static const String createAddressBook = 'client/address_book/store';

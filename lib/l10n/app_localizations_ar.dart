@@ -1333,6 +1333,39 @@ class AppLocalizationsAr extends AppLocalizations {
   String get unitedKingdom => 'المملكة المتحدة';
 
   @override
+  String get selectCountry => 'اختر الدولة';
+
+  @override
+  String get popularCountries => 'الدول الشائعة';
+
+  @override
+  String get allCountries => 'جميع الدول';
+
+  @override
+  String get noCountriesFound => 'لم يتم العثور على دول';
+
+  @override
+  String get tryDifferentSearchTerm => 'جرب مصطلح بحث مختلف';
+
+  @override
+  String get selectGovernorate => 'اختر المحافظة';
+
+  @override
+  String get noGovernoratesFound => 'لم يتم العثور على محافظات';
+
+  @override
+  String get selectState => 'اختر الولاية';
+
+  @override
+  String get noStatesFound => 'لم يتم العثور على ولايات';
+
+  @override
+  String get selectPlace => 'اختر المكان';
+
+  @override
+  String get noPlacesFound => 'لم يتم العثور على أماكن';
+
+  @override
   String get canada => 'كندا';
 
   @override

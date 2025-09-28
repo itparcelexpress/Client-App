@@ -46,13 +46,59 @@ class LocationService {
   // Load initial data from JSON files
   static Future<void> _loadInitialData() async {
     if (_governoratesBox!.isEmpty) {
-      await _loadGovernoratesFromJson();
+      // Try to load from API first, fallback to JSON
+      try {
+        final apiGovernorates = await fetchGovernorates();
+        if (apiGovernorates.isNotEmpty) {
+          for (final governorate in apiGovernorates) {
+            await _governoratesBox!.put(governorate.id, governorate);
+          }
+          debugPrint(
+            'Governorates loaded from API: ${apiGovernorates.length} items',
+          );
+        } else {
+          await _loadGovernoratesFromJson();
+        }
+      } catch (e) {
+        debugPrint(
+          'Failed to load governorates from API, falling back to JSON: $e',
+        );
+        await _loadGovernoratesFromJson();
+      }
     }
     if (_statesBox!.isEmpty) {
-      await _loadStatesFromJson();
+      // Try to load from API first, fallback to JSON
+      try {
+        final apiStates = await fetchStates();
+        if (apiStates.isNotEmpty) {
+          for (final state in apiStates) {
+            await _statesBox!.put(state.id, state);
+          }
+          debugPrint('States loaded from API: ${apiStates.length} items');
+        } else {
+          await _loadStatesFromJson();
+        }
+      } catch (e) {
+        debugPrint('Failed to load states from API, falling back to JSON: $e');
+        await _loadStatesFromJson();
+      }
     }
     if (_placesBox!.isEmpty) {
-      await _loadPlacesFromJson();
+      // Try to load from API first, fallback to JSON
+      try {
+        final apiPlaces = await fetchPlaces();
+        if (apiPlaces.isNotEmpty) {
+          for (final place in apiPlaces) {
+            await _placesBox!.put(place.id, place);
+          }
+          debugPrint('Places loaded from API: ${apiPlaces.length} items');
+        } else {
+          await _loadPlacesFromJson();
+        }
+      } catch (e) {
+        debugPrint('Failed to load places from API, falling back to JSON: $e');
+        await _loadPlacesFromJson();
+      }
     }
   }
 
@@ -112,6 +158,16 @@ class LocationService {
     return _governoratesBox?.values.toList() ?? [];
   }
 
+  // Get all states
+  static List<StateModel> getAllStates() {
+    return _statesBox?.values.toList() ?? [];
+  }
+
+  // Get all places
+  static List<Place> getAllPlaces() {
+    return _placesBox?.values.toList() ?? [];
+  }
+
   // Get states by governorate ID
   static List<StateModel> getStatesByGovernorateId(int governorateId) {
     return _statesBox?.values
@@ -141,6 +197,62 @@ class LocationService {
   // Get place by ID
   static Place? getPlaceById(int id) {
     return _placesBox?.get(id);
+  }
+
+  // Refresh governorates from API
+  static Future<void> refreshGovernorates() async {
+    try {
+      final apiGovernorates = await fetchGovernorates();
+      if (apiGovernorates.isNotEmpty) {
+        await _governoratesBox?.clear();
+        for (final governorate in apiGovernorates) {
+          await _governoratesBox!.put(governorate.id, governorate);
+        }
+        debugPrint(
+          'Governorates refreshed from API: ${apiGovernorates.length} items',
+        );
+      }
+    } catch (e) {
+      debugPrint('Error refreshing governorates from API: $e');
+      // Don't clear existing data if API fails
+      debugPrint('Keeping existing governorate data');
+    }
+  }
+
+  // Refresh states from API
+  static Future<void> refreshStates() async {
+    try {
+      final apiStates = await fetchStates();
+      if (apiStates.isNotEmpty) {
+        await _statesBox?.clear();
+        for (final state in apiStates) {
+          await _statesBox!.put(state.id, state);
+        }
+        debugPrint('States refreshed from API: ${apiStates.length} items');
+      }
+    } catch (e) {
+      debugPrint('Error refreshing states from API: $e');
+      // Don't clear existing data if API fails
+      debugPrint('Keeping existing state data');
+    }
+  }
+
+  // Refresh places from API
+  static Future<void> refreshPlaces() async {
+    try {
+      final apiPlaces = await fetchPlaces();
+      if (apiPlaces.isNotEmpty) {
+        await _placesBox?.clear();
+        for (final place in apiPlaces) {
+          await _placesBox!.put(place.id, place);
+        }
+        debugPrint('Places refreshed from API: ${apiPlaces.length} items');
+      }
+    } catch (e) {
+      debugPrint('Error refreshing places from API: $e');
+      // Don't clear existing data if API fails
+      debugPrint('Keeping existing place data');
+    }
   }
 
   // Clear all data (for testing or refresh)
@@ -175,6 +287,71 @@ class LocationService {
       }
     } catch (e) {
       debugPrint('Error fetching countries: $e');
+      return [];
+    }
+  }
+
+  // Fetch governorates from API
+  static Future<List<Governorate>> fetchGovernorates() async {
+    try {
+      final AppResponse response = await AppRequest.get(
+        AppEndPoints.governorates,
+        true, // Authentication required
+      );
+
+      if (response.success && response.origin != null) {
+        final governorateResponse = GovernorateResponse.fromJson(
+          response.origin!,
+        );
+        return governorateResponse.data;
+      } else {
+        debugPrint('Failed to fetch governorates: ${response.message}');
+        return [];
+      }
+    } catch (e) {
+      debugPrint('Error fetching governorates: $e');
+      return [];
+    }
+  }
+
+  // Fetch states from API
+  static Future<List<StateModel>> fetchStates() async {
+    try {
+      final AppResponse response = await AppRequest.get(
+        AppEndPoints.states,
+        true, // Authentication required
+      );
+
+      if (response.success && response.origin != null) {
+        final stateResponse = StateResponse.fromJson(response.origin!);
+        return stateResponse.data;
+      } else {
+        debugPrint('Failed to fetch states: ${response.message}');
+        return [];
+      }
+    } catch (e) {
+      debugPrint('Error fetching states: $e');
+      return [];
+    }
+  }
+
+  // Fetch places from API
+  static Future<List<Place>> fetchPlaces() async {
+    try {
+      final AppResponse response = await AppRequest.get(
+        AppEndPoints.places,
+        true, // Authentication required
+      );
+
+      if (response.success && response.origin != null) {
+        final placeResponse = PlaceResponse.fromJson(response.origin!);
+        return placeResponse.data;
+      } else {
+        debugPrint('Failed to fetch places: ${response.message}');
+        return [];
+      }
+    } catch (e) {
+      debugPrint('Error fetching places: $e');
       return [];
     }
   }

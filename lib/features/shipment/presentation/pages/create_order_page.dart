@@ -1,10 +1,14 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:client_app/core/models/location_models.dart' as location_models;
 import 'package:client_app/core/services/location_service.dart';
+import 'package:client_app/core/services/country_localization_service.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/core/utilities/taost_service.dart';
 import 'package:client_app/core/utilities/unified_phone_input.dart';
-import 'package:client_app/core/widgets/overflow_safe_dropdown.dart';
+import 'package:client_app/core/widgets/searchable_country_dropdown.dart';
+import 'package:client_app/core/widgets/searchable_governorate_dropdown.dart';
+import 'package:client_app/core/widgets/searchable_state_dropdown.dart';
+import 'package:client_app/core/widgets/searchable_place_dropdown.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/address_book/address_book.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
@@ -133,32 +137,62 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
   void _loadCountries() async {
     try {
-      final countries = await LocationService.fetchCountries();
-      setState(() {
-        _countries = countries;
-        // Set default to Oman (ID: 165) if available
-        _selectedCountry = countries.firstWhere(
-          (country) => country.id == 165,
-          orElse:
-              () => countries.isNotEmpty ? countries.first : countries.first,
-        );
-      });
+      final countries = CountryLocalizationService.getAllCountries();
+      if (mounted) {
+        setState(() {
+          _countries = countries;
+          // Set default to Oman (ID: 165) if available
+          _selectedCountry = countries.firstWhere(
+            (country) => country.id == 165,
+            orElse:
+                () => countries.isNotEmpty ? countries.first : countries.first,
+          );
+        });
+      }
     } catch (e) {
       print('Error loading countries: $e');
+      // Fallback to API if local data fails
+      try {
+        final countries = await LocationService.fetchCountries();
+        if (mounted) {
+          setState(() {
+            _countries = countries;
+            _selectedCountry = countries.firstWhere(
+              (country) => country.id == 165,
+              orElse:
+                  () =>
+                      countries.isNotEmpty ? countries.first : countries.first,
+            );
+          });
+        }
+      } catch (apiError) {
+        print('Error loading countries from API: $apiError');
+      }
     }
   }
 
-  void _loadLocationData() {
-    setState(() {
-      _governorates = LocationService.getAllGovernorates();
-      // Don't set default selection - let user choose
-    });
+  void _loadLocationData() async {
+    // Refresh governorates from API to ensure we have the latest data
+    try {
+      await LocationService.refreshGovernorates();
+    } catch (e) {
+      debugPrint('Failed to refresh governorates: $e');
+    }
+
+    if (mounted) {
+      setState(() {
+        _governorates = LocationService.getAllGovernorates();
+        // Don't set default selection - let user choose
+      });
+    }
   }
 
   void _loadPricingData() async {
-    setState(() {
-      _isLoadingPricing = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoadingPricing = true;
+      });
+    }
 
     try {
       final user = LocalData.user;
@@ -183,9 +217,11 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
             // Store pricing data permanently
             _pricingData = List.from(state.pricingData);
-            setState(() {
-              _isLoadingPricing = false;
-            });
+            if (mounted) {
+              setState(() {
+                _isLoadingPricing = false;
+              });
+            }
 
             print('🟢 Pricing data stored: ${_pricingData.length} items');
 
@@ -197,14 +233,18 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               _updateDeliveryFeeForState(_selectedState!.id);
             }
           } else if (state is PricingError) {
-            setState(() {
-              _isLoadingPricing = false;
-            });
+            if (mounted) {
+              setState(() {
+                _isLoadingPricing = false;
+              });
+            }
             print('🔴 Pricing loading error: ${state.message}');
           } else if (state is PricingEmpty) {
-            setState(() {
-              _isLoadingPricing = false;
-            });
+            if (mounted) {
+              setState(() {
+                _isLoadingPricing = false;
+              });
+            }
             print('🟡 Pricing data is empty: ${state.message}');
           }
         });
@@ -276,9 +316,11 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   }
 
   void _onAddressSelected(AddressBookEntry? address) {
-    setState(() {
-      _selectedAddress = address;
-    });
+    if (mounted) {
+      setState(() {
+        _selectedAddress = address;
+      });
+    }
 
     if (address != null) {
       // Auto-fill form fields from selected address
@@ -376,9 +418,11 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       final addressBookCubit = getIt<AddressBookCubit>();
       await addressBookCubit.createAddressBookEntry(request);
 
-      setState(() {
-        _dismissedSaveSuggestion = true;
-      });
+      if (mounted) {
+        setState(() {
+          _dismissedSaveSuggestion = true;
+        });
+      }
 
       if (mounted) {
         ToastService.showSuccess(
@@ -397,9 +441,11 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   }
 
   void _dismissSaveSuggestion() {
-    setState(() {
-      _dismissedSaveSuggestion = true;
-    });
+    if (mounted) {
+      setState(() {
+        _dismissedSaveSuggestion = true;
+      });
+    }
   }
 
   @override
@@ -842,10 +888,12 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                     final code = capture.barcodes.first.rawValue;
                     if (code != null && code.isNotEmpty) {
                       Navigator.pop(context);
-                      setState(() {
-                        _stickerNumber = code;
-                        _stickerController.text = code;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          _stickerNumber = code;
+                          _stickerController.text = code;
+                        });
+                      }
                       ToastService.showCustomToast(
                         message: AppLocalizations.of(
                           context,
@@ -1046,23 +1094,40 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       title: AppLocalizations.of(context)!.locationDetails,
       icon: Icons.location_on_rounded,
       children: [
-        // Country Dropdown
-        LocationDropdown<location_models.Country>(
-          label: AppLocalizations.of(context)!.country,
+        // Country Dropdown with Search
+        SearchableCountryDropdown(
           value: _selectedCountry,
-          items: _countries,
-          onChanged: (country) {
-            setState(() {
-              _selectedCountry = country;
-              // Reset other location fields when country changes
-              _selectedGovernorate = null;
-              _selectedState = null;
-              _selectedPlace = null;
-              _states = [];
-              _places = [];
-            });
+          onChanged: (country) async {
+            if (mounted) {
+              setState(() {
+                _selectedCountry = country;
+                // Reset other location fields when country changes
+                _selectedGovernorate = null;
+                _selectedState = null;
+                _selectedPlace = null;
+                _states = [];
+                _places = [];
+              });
+            }
+
+            // Refresh governorates for the selected country
+            if (country != null) {
+              try {
+                await LocationService.refreshGovernorates();
+              } catch (e) {
+                debugPrint('Failed to refresh governorates: $e');
+              }
+              if (mounted) {
+                setState(() {
+                  _governorates =
+                      LocationService.getAllGovernorates()
+                          .where((g) => g.countryId == country.id)
+                          .toList();
+                });
+              }
+            }
           },
-          itemBuilder: (country) => country.name,
+          label: AppLocalizations.of(context)!.country,
           icon: Icons.public_outlined,
           validator:
               (value) =>
@@ -1073,21 +1138,39 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       : null,
         ),
         const SizedBox(height: 20),
-        // Governorate Dropdown
-        LocationDropdown<location_models.Governorate>(
-          label: AppLocalizations.of(context)!.governorate,
+        // Governorate Dropdown with Search
+        SearchableGovernorateDropdown(
           value: _selectedGovernorate,
-          items: _governorates,
-          onChanged: (governorate) {
-            setState(() {
-              _selectedGovernorate = governorate;
-              if (governorate != null) {
-                _loadStatesForGovernorate(governorate.id);
+          onChanged: (governorate) async {
+            if (mounted) {
+              setState(() {
+                _selectedGovernorate = governorate;
+                if (governorate != null) {
+                  _loadStatesForGovernorate(governorate.id);
+                }
+              });
+            }
+
+            // Refresh states for the selected governorate
+            if (governorate != null) {
+              try {
+                await LocationService.refreshStates();
+              } catch (e) {
+                debugPrint('Failed to refresh states: $e');
               }
-            });
+              if (mounted) {
+                setState(() {
+                  _states =
+                      LocationService.getAllStates()
+                          .where((s) => s.governorateId == governorate.id)
+                          .toList();
+                });
+              }
+            }
           },
-          itemBuilder: (governorate) => governorate.enName,
+          label: AppLocalizations.of(context)!.governorate,
           icon: Icons.location_city_outlined,
+          countryId: _selectedCountry?.id,
           validator:
               (value) =>
                   value == null
@@ -1097,26 +1180,44 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       : null,
         ),
         const SizedBox(height: 20),
-        // State Dropdown
-        LocationDropdown<location_models.StateModel>(
-          label: AppLocalizations.of(context)!.state,
+        // State Dropdown with Search
+        SearchableStateDropdown(
           value: _selectedState,
-          items: _states,
-          onChanged: (state) {
-            setState(() {
-              _selectedState = state;
-              if (state != null) {
-                _loadPlacesForState(state.id);
-                // Update delivery fee based on selected state
-                print(
-                  '🟢 State changed to: ${state.id}, pricing data available: ${_pricingData.length}',
-                );
-                _updateDeliveryFeeForState(state.id);
+          onChanged: (state) async {
+            if (mounted) {
+              setState(() {
+                _selectedState = state;
+                if (state != null) {
+                  _loadPlacesForState(state.id);
+                  // Update delivery fee based on selected state
+                  print(
+                    '🟢 State changed to: ${state.id}, pricing data available: ${_pricingData.length}',
+                  );
+                  _updateDeliveryFeeForState(state.id);
+                }
+              });
+            }
+
+            // Refresh places for the selected state
+            if (state != null) {
+              try {
+                await LocationService.refreshPlaces();
+              } catch (e) {
+                debugPrint('Failed to refresh places: $e');
               }
-            });
+              if (mounted) {
+                setState(() {
+                  _places =
+                      LocationService.getAllPlaces()
+                          .where((p) => p.stateId == state.id)
+                          .toList();
+                });
+              }
+            }
           },
-          itemBuilder: (state) => state.enName,
+          label: AppLocalizations.of(context)!.state,
           icon: Icons.location_searching_outlined,
+          governorateId: _selectedGovernorate?.id,
           validator:
               (value) =>
                   value == null
@@ -1126,19 +1227,21 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       : null,
         ),
         const SizedBox(height: 20),
-        // Place Dropdown
-        LocationDropdown<location_models.Place>(
+        // Place Dropdown with Search
+        SearchablePlaceDropdown(
+          value: _selectedPlace,
+          onChanged: (place) {
+            if (mounted) {
+              setState(() {
+                _selectedPlace = place;
+              });
+            }
+          },
           label:
               '${AppLocalizations.of(context)!.place} (${AppLocalizations.of(context)!.optional})',
-          value: _selectedPlace,
-          items: _places,
-          onChanged: (place) {
-            setState(() {
-              _selectedPlace = place;
-            });
-          },
-          itemBuilder: (place) => place.enName,
           icon: Icons.place_outlined,
+          stateId: _selectedState?.id,
+          isRequired: false,
           validator: null, // No validation - optional field
         ),
         const SizedBox(height: 20),
@@ -1545,11 +1648,13 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       ),
                       child: IconButton(
                         onPressed: () {
-                          setState(() {
-                            _itemNameCtrls.removeAt(index).dispose();
-                            _itemCategoryCtrls.removeAt(index).dispose();
-                            _itemQuantityCtrls.removeAt(index).dispose();
-                          });
+                          if (mounted) {
+                            setState(() {
+                              _itemNameCtrls.removeAt(index).dispose();
+                              _itemCategoryCtrls.removeAt(index).dispose();
+                              _itemQuantityCtrls.removeAt(index).dispose();
+                            });
+                          }
                         },
                         icon: Icon(
                           Icons.delete_outline,
@@ -1614,11 +1719,13 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           margin: const EdgeInsets.only(top: 8),
           child: ElevatedButton.icon(
             onPressed: () {
-              setState(() {
-                _itemNameCtrls.add(TextEditingController());
-                _itemCategoryCtrls.add(TextEditingController());
-                _itemQuantityCtrls.add(TextEditingController());
-              });
+              if (mounted) {
+                setState(() {
+                  _itemNameCtrls.add(TextEditingController());
+                  _itemCategoryCtrls.add(TextEditingController());
+                  _itemQuantityCtrls.add(TextEditingController());
+                });
+              }
             },
             icon: Icon(Icons.add_circle_outline, color: Colors.white),
             label: Text(
@@ -1932,7 +2039,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         countryId: _selectedCountry!.id,
         governorateId: _selectedGovernorate!.id,
         stateId: _selectedState!.id,
-        placeId: _selectedPlace?.id ?? 1, // Default to 1 if no place selected
+        placeId:
+            _selectedPlace?.id, // Only send place ID if a place is selected
         cityId: 1, // Default as per API spec
         zipcode: _zipcodeController.text.trim(),
         streetAddress: _streetAddressController.text.trim(),

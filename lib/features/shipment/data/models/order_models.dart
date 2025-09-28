@@ -11,7 +11,7 @@ class CreateOrderRequest extends Equatable {
   final int countryId;
   final int governorateId;
   final int stateId;
-  final int placeId;
+  final int? placeId;
   final int cityId;
   final String zipcode;
   final String streetAddress;
@@ -48,7 +48,7 @@ class CreateOrderRequest extends Equatable {
     required this.countryId,
     required this.governorateId,
     required this.stateId,
-    required this.placeId,
+    this.placeId,
     this.cityId = 1,
     required this.zipcode,
     required this.streetAddress,
@@ -84,7 +84,7 @@ class CreateOrderRequest extends Equatable {
       'country_id': countryId,
       'governorate_id': governorateId,
       'state_id': stateId,
-      'place_id': placeId,
+      if (placeId != null) 'place_id': placeId,
       'city_id': cityId,
       'zipcode': zipcode,
       'streetAddress': streetAddress,

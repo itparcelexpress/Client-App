@@ -390,38 +390,71 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 fontWeight: FontWeight.w400,
               ),
             ),
-            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 24)),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildInfoItem(
-                    icon: Icons.badge_rounded,
-                    title: AppLocalizations.of(context)!.role,
-                    value:
-                        user?.role?.name ??
-                        AppLocalizations.of(context)!.notAvailable,
-                    color: const Color(0xFF10b981),
-                  ),
+            if (user?.client?.contactNo != null) ...[
+              SizedBox(
+                height: ResponsiveUtils.getResponsivePadding(context, 4),
+              ),
+              Text(
+                user!.client!.contactNo!,
+                style: TextStyle(
+                  fontSize: ResponsiveUtils.getResponsiveFontSize(context, 12),
+                  color: Colors.grey[500],
+                  fontWeight: FontWeight.w400,
                 ),
-                if (user?.client?.address != null) ...[
-                  SizedBox(
-                    width: ResponsiveUtils.getResponsivePadding(context, 16),
-                  ),
+              ),
+            ],
+            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 24)),
+            if (user?.client?.governorate != null ||
+                user?.client?.state != null ||
+                user?.client?.place != null)
+              Row(
+                children: [
                   Expanded(
                     child: _buildInfoItem(
                       icon: Icons.location_on_rounded,
                       title: AppLocalizations.of(context)!.location,
-                      value: 'Oman',
+                      value: _getLocationString(user?.client),
                       color: const Color(0xFFf59e0b),
                     ),
                   ),
                 ],
-              ],
-            ),
+              ),
           ],
         ),
       ),
     );
+  }
+
+  String _getLocationString(dynamic client) {
+    if (client == null) return AppLocalizations.of(context)!.notAvailable;
+
+    List<String> locationParts = [];
+
+    // Add place if available
+    if (client.place?.enName != null) {
+      final isRTL = Localizations.localeOf(context).languageCode == 'ar';
+      locationParts.add(isRTL ? client.place.arName : client.place.enName);
+    }
+
+    // Add state if available
+    if (client.state?.name != null) {
+      locationParts.add(client.state.name);
+    }
+
+    // Add governorate if available
+    if (client.governorate?.enName != null) {
+      final isRTL = Localizations.localeOf(context).languageCode == 'ar';
+      locationParts.add(
+        isRTL ? client.governorate.arName : client.governorate.enName,
+      );
+    }
+
+    // If no location data, return "Oman" as fallback
+    if (locationParts.isEmpty) {
+      return 'Oman';
+    }
+
+    return locationParts.join(', ');
   }
 
   Widget _buildSettingsSection() {

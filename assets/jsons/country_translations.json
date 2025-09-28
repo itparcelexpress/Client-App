@@ -1,0 +1,1019 @@
+{
+  "translations": [
+    {
+      "country_id": 64,
+      "ar_name": "مصر",
+      "en_name": "Egypt"
+    },
+    {
+      "country_id": 191,
+      "ar_name": "المملكة العربية السعودية",
+      "en_name": "Saudi Arabia"
+    },
+    {
+      "country_id": 229,
+      "ar_name": "الإمارات العربية المتحدة",
+      "en_name": "United Arab Emirates"
+    },
+    {
+      "country_id": 117,
+      "ar_name": "الكويت",
+      "en_name": "Kuwait"
+    },
+    {
+      "country_id": 178,
+      "ar_name": "قطر",
+      "en_name": "Qatar"
+    },
+    {
+      "country_id": 17,
+      "ar_name": "البحرين",
+      "en_name": "Bahrain"
+    },
+    {
+      "country_id": 165,
+      "ar_name": "عُمان",
+      "en_name": "Oman"
+    },
+    {
+      "country_id": 111,
+      "ar_name": "الأردن",
+      "en_name": "Jordan"
+    },
+    {
+      "country_id": 121,
+      "ar_name": "لبنان",
+      "en_name": "Lebanon"
+    },
+    {
+      "country_id": 231,
+      "ar_name": "الولايات المتحدة",
+      "en_name": "United States"
+    },
+    {
+      "country_id": 230,
+      "ar_name": "المملكة المتحدة",
+      "en_name": "United Kingdom"
+    },
+    {
+      "country_id": 38,
+      "ar_name": "كندا",
+      "en_name": "Canada"
+    },
+    {
+      "country_id": 82,
+      "ar_name": "ألمانيا",
+      "en_name": "Germany"
+    },
+    {
+      "country_id": 75,
+      "ar_name": "فرنسا",
+      "en_name": "France"
+    },
+    {
+      "country_id": 107,
+      "ar_name": "إيطاليا",
+      "en_name": "Italy"
+    },
+    {
+      "country_id": 205,
+      "ar_name": "إسبانيا",
+      "en_name": "Spain"
+    },
+    {
+      "country_id": 155,
+      "ar_name": "هولندا",
+      "en_name": "Netherlands"
+    },
+    {
+      "country_id": 14,
+      "ar_name": "النمسا",
+      "en_name": "Austria"
+    },
+    {
+      "country_id": 21,
+      "ar_name": "بلجيكا",
+      "en_name": "Belgium"
+    },
+    {
+      "country_id": 164,
+      "ar_name": "النرويج",
+      "en_name": "Norway"
+    },
+    {
+      "country_id": 74,
+      "ar_name": "فنلندا",
+      "en_name": "Finland"
+    },
+    {
+      "country_id": 211,
+      "ar_name": "السويد",
+      "en_name": "Sweden"
+    },
+    {
+      "country_id": 212,
+      "ar_name": "سويسرا",
+      "en_name": "Switzerland"
+    },
+    {
+      "country_id": 58,
+      "ar_name": "الدنمارك",
+      "en_name": "Denmark"
+    },
+    {
+      "country_id": 57,
+      "ar_name": "جمهورية التشيك",
+      "en_name": "Czech Republic"
+    },
+    {
+      "country_id": 126,
+      "ar_name": "ليتوانيا",
+      "en_name": "Lithuania"
+    },
+    {
+      "country_id": 120,
+      "ar_name": "لاتفيا",
+      "en_name": "Latvia"
+    },
+    {
+      "country_id": 68,
+      "ar_name": "إستونيا",
+      "en_name": "Estonia"
+    },
+    {
+      "country_id": 175,
+      "ar_name": "بولندا",
+      "en_name": "Poland"
+    },
+    {
+      "country_id": 176,
+      "ar_name": "البرتغال",
+      "en_name": "Portugal"
+    },
+    {
+      "country_id": 99,
+      "ar_name": "المجر",
+      "en_name": "Hungary"
+    },
+    {
+      "country_id": 197,
+      "ar_name": "سلوفاكيا",
+      "en_name": "Slovakia"
+    },
+    {
+      "country_id": 198,
+      "ar_name": "سلوفينيا",
+      "en_name": "Slovenia"
+    },
+    {
+      "country_id": 193,
+      "ar_name": "صربيا",
+      "en_name": "Serbia"
+    },
+    {
+      "country_id": 27,
+      "ar_name": "البوسنة والهرسك",
+      "en_name": "Bosnia and Herzegovina"
+    },
+    {
+      "country_id": 54,
+      "ar_name": "كرواتيا",
+      "en_name": "Croatia"
+    },
+    {
+      "country_id": 180,
+      "ar_name": "رومانيا",
+      "en_name": "Romania"
+    },
+    {
+      "country_id": 33,
+      "ar_name": "بلغاريا",
+      "en_name": "Bulgaria"
+    },
+    {
+      "country_id": 181,
+      "ar_name": "روسيا",
+      "en_name": "Russia"
+    },
+    {
+      "country_id": 112,
+      "ar_name": "كازاخستان",
+      "en_name": "Kazakhstan"
+    },
+    {
+      "country_id": 81,
+      "ar_name": "جورجيا",
+      "en_name": "Georgia"
+    },
+    {
+      "country_id": 11,
+      "ar_name": "أرمينيا",
+      "en_name": "Armenia"
+    },
+    {
+      "country_id": 118,
+      "ar_name": "قيرغيزستان",
+      "en_name": "Kyrgyzstan"
+    },
+    {
+      "country_id": 234,
+      "ar_name": "أوزبكستان",
+      "en_name": "Uzbekistan"
+    },
+    {
+      "country_id": 215,
+      "ar_name": "طاجيكستان",
+      "en_name": "Tajikistan"
+    },
+    {
+      "country_id": 223,
+      "ar_name": "تركيا",
+      "en_name": "Turkey"
+    },
+    {
+      "country_id": 103,
+      "ar_name": "إيران",
+      "en_name": "Iran"
+    },
+    {
+      "country_id": 104,
+      "ar_name": "العراق",
+      "en_name": "Iraq"
+    },
+    {
+      "country_id": 213,
+      "ar_name": "سوريا",
+      "en_name": "Syria"
+    },
+    {
+      "country_id": 106,
+      "ar_name": "إسرائيل",
+      "en_name": "Israel"
+    },
+    {
+      "country_id": 168,
+      "ar_name": "فلسطين",
+      "en_name": "Palestinian Territory"
+    },
+    {
+      "country_id": 101,
+      "ar_name": "الهند",
+      "en_name": "India"
+    },
+    {
+      "country_id": 102,
+      "ar_name": "إندونيسيا",
+      "en_name": "Indonesia"
+    },
+    {
+      "country_id": 109,
+      "ar_name": "اليابان",
+      "en_name": "Japan"
+    },
+    {
+      "country_id": 116,
+      "ar_name": "كوريا الجنوبية",
+      "en_name": "South Korea"
+    },
+    {
+      "country_id": 115,
+      "ar_name": "كوريا الشمالية",
+      "en_name": "North Korea"
+    },
+    {
+      "country_id": 44,
+      "ar_name": "الصين",
+      "en_name": "China"
+    },
+    {
+      "country_id": 132,
+      "ar_name": "ماليزيا",
+      "en_name": "Malaysia"
+    },
+    {
+      "country_id": 196,
+      "ar_name": "سنغافورة",
+      "en_name": "Singapore"
+    },
+    {
+      "country_id": 217,
+      "ar_name": "تايلاند",
+      "en_name": "Thailand"
+    },
+    {
+      "country_id": 173,
+      "ar_name": "الفلبين",
+      "en_name": "Philippines"
+    },
+    {
+      "country_id": 150,
+      "ar_name": "ميانمار",
+      "en_name": "Myanmar"
+    },
+    {
+      "country_id": 36,
+      "ar_name": "كمبوديا",
+      "en_name": "Cambodia"
+    },
+    {
+      "country_id": 119,
+      "ar_name": "لاوس",
+      "en_name": "Laos"
+    },
+    {
+      "country_id": 238,
+      "ar_name": "فيتنام",
+      "en_name": "Vietnam"
+    },
+    {
+      "country_id": 13,
+      "ar_name": "أستراليا",
+      "en_name": "Australia"
+    },
+    {
+      "country_id": 157,
+      "ar_name": "نيوزيلندا",
+      "en_name": "New Zealand"
+    },
+    {
+      "country_id": 30,
+      "ar_name": "البرازيل",
+      "en_name": "Brazil"
+    },
+    {
+      "country_id": 43,
+      "ar_name": "تشيلي",
+      "en_name": "Chile"
+    },
+    {
+      "country_id": 47,
+      "ar_name": "كولومبيا",
+      "en_name": "Colombia"
+    },
+    {
+      "country_id": 172,
+      "ar_name": "بيرو",
+      "en_name": "Peru"
+    },
+    {
+      "country_id": 142,
+      "ar_name": "المكسيك",
+      "en_name": "Mexico"
+    },
+    {
+      "country_id": 169,
+      "ar_name": "بنما",
+      "en_name": "Panama"
+    },
+    {
+      "country_id": 26,
+      "ar_name": "بوليفيا",
+      "en_name": "Bolivia"
+    },
+    {
+      "country_id": 63,
+      "ar_name": "الإكوادور",
+      "en_name": "Ecuador"
+    },
+    {
+      "country_id": 171,
+      "ar_name": "باراغواي",
+      "en_name": "Paraguay"
+    },
+    {
+      "country_id": 233,
+      "ar_name": "أوروغواي",
+      "en_name": "Uruguay"
+    },
+    {
+      "country_id": 237,
+      "ar_name": "فنزويلا",
+      "en_name": "Venezuela"
+    },
+    {
+      "country_id": 10,
+      "ar_name": "الأرجنتين",
+      "en_name": "Argentina"
+    },
+    {
+      "country_id": 202,
+      "ar_name": "جنوب أفريقيا",
+      "en_name": "South Africa"
+    },
+    {
+      "country_id": 113,
+      "ar_name": "كينيا",
+      "en_name": "Kenya"
+    },
+    {
+      "country_id": 160,
+      "ar_name": "نيجيريا",
+      "en_name": "Nigeria"
+    },
+    {
+      "country_id": 83,
+      "ar_name": "غانا",
+      "en_name": "Ghana"
+    },
+    {
+      "country_id": 148,
+      "ar_name": "المغرب",
+      "en_name": "Morocco"
+    },
+    {
+      "country_id": 222,
+      "ar_name": "تونس",
+      "en_name": "Tunisia"
+    },
+    {
+      "country_id": 124,
+      "ar_name": "ليبيا",
+      "en_name": "Libya"
+    },
+    {
+      "country_id": 243,
+      "ar_name": "اليمن",
+      "en_name": "Yemen"
+    },
+    {
+      "country_id": 201,
+      "ar_name": "الصومال",
+      "en_name": "Somalia"
+    },
+    {
+      "country_id": 216,
+      "ar_name": "تنزانيا",
+      "en_name": "Tanzania"
+    },
+    {
+      "country_id": 182,
+      "ar_name": "رواندا",
+      "en_name": "Rwanda"
+    },
+    {
+      "country_id": 149,
+      "ar_name": "موزمبيق",
+      "en_name": "Mozambique"
+    },
+    {
+      "country_id": 131,
+      "ar_name": "مالاوي",
+      "en_name": "Malawi"
+    },
+    {
+      "country_id": 130,
+      "ar_name": "مدغشقر",
+      "en_name": "Madagascar"
+    },
+    {
+      "country_id": 140,
+      "ar_name": "موريشيوس",
+      "en_name": "Mauritius"
+    },
+    {
+      "country_id": 194,
+      "ar_name": "سيشل",
+      "en_name": "Seychelles"
+    },
+    {
+      "country_id": 195,
+      "ar_name": "سيراليون",
+      "en_name": "Sierra Leone"
+    },
+    {
+      "country_id": 123,
+      "ar_name": "ليبيريا",
+      "en_name": "Liberia"
+    },
+    {
+      "country_id": 192,
+      "ar_name": "السنغال",
+      "en_name": "Senegal"
+    },
+    {
+      "country_id": 139,
+      "ar_name": "موريتانيا",
+      "en_name": "Mauritania"
+    },
+    {
+      "country_id": 34,
+      "ar_name": "بوركينا فاسو",
+      "en_name": "Burkina Faso"
+    },
+    {
+      "country_id": 35,
+      "ar_name": "بوروندي",
+      "en_name": "Burundi"
+    },
+    {
+      "country_id": 23,
+      "ar_name": "بنين",
+      "en_name": "Benin"
+    },
+    {
+      "country_id": 79,
+      "ar_name": "الغابون",
+      "en_name": "Gabon"
+    },
+    {
+      "country_id": 49,
+      "ar_name": "الكونغو",
+      "en_name": "Congo"
+    },
+    {
+      "country_id": 50,
+      "ar_name": "جمهورية الكونغو الديمقراطية",
+      "en_name": "Democratic Republic of Congo"
+    },
+    {
+      "country_id": 159,
+      "ar_name": "النيجر",
+      "en_name": "Niger"
+    },
+    {
+      "country_id": 134,
+      "ar_name": "مالي",
+      "en_name": "Mali"
+    },
+    {
+      "country_id": 42,
+      "ar_name": "تشاد",
+      "en_name": "Chad"
+    },
+    {
+      "country_id": 41,
+      "ar_name": "جمهورية أفريقيا الوسطى",
+      "en_name": "Central African Republic"
+    },
+    {
+      "country_id": 37,
+      "ar_name": "الكاميرون",
+      "en_name": "Cameroon"
+    },
+    {
+      "country_id": 66,
+      "ar_name": "غينيا الاستوائية",
+      "en_name": "Equatorial Guinea"
+    },
+    {
+      "country_id": 92,
+      "ar_name": "غينيا",
+      "en_name": "Guinea"
+    },
+    {
+      "country_id": 93,
+      "ar_name": "غينيا بيساو",
+      "en_name": "Guinea-Bissau"
+    },
+    {
+      "country_id": 95,
+      "ar_name": "هايتي",
+      "en_name": "Haiti"
+    },
+    {
+      "country_id": 97,
+      "ar_name": "هندوراس",
+      "en_name": "Honduras"
+    },
+    {
+      "country_id": 90,
+      "ar_name": "غواتيمالا",
+      "en_name": "Guatemala"
+    },
+    {
+      "country_id": 65,
+      "ar_name": "السلفادور",
+      "en_name": "El Salvador"
+    },
+    {
+      "country_id": 158,
+      "ar_name": "نيكاراغوا",
+      "en_name": "Nicaragua"
+    },
+    {
+      "country_id": 52,
+      "ar_name": "كوستا ريكا",
+      "en_name": "Costa Rica"
+    },
+    {
+      "country_id": 108,
+      "ar_name": "جامايكا",
+      "en_name": "Jamaica"
+    },
+    {
+      "country_id": 61,
+      "ar_name": "جمهورية الدومينيكان",
+      "en_name": "Dominican Republic"
+    },
+    {
+      "country_id": 60,
+      "ar_name": "دومينيكا",
+      "en_name": "Dominica"
+    },
+    {
+      "country_id": 87,
+      "ar_name": "غرينادا",
+      "en_name": "Grenada"
+    },
+    {
+      "country_id": 9,
+      "ar_name": "أنتيغوا وباربودا",
+      "en_name": "Antigua and Barbuda"
+    },
+    {
+      "country_id": 187,
+      "ar_name": "سانت فنسنت وجزر غرينادين",
+      "en_name": "Saint Vincent and the Grenadines"
+    },
+    {
+      "country_id": 185,
+      "ar_name": "سانت لوسيا",
+      "en_name": "Saint Lucia"
+    },
+    {
+      "country_id": 184,
+      "ar_name": "سانت كيتس ونيفيس",
+      "en_name": "Saint Kitts and Nevis"
+    },
+    {
+      "country_id": 188,
+      "ar_name": "ساموا",
+      "en_name": "Samoa"
+    },
+    {
+      "country_id": 220,
+      "ar_name": "تونغا",
+      "en_name": "Tonga"
+    },
+    {
+      "country_id": 235,
+      "ar_name": "فانواتو",
+      "en_name": "Vanuatu"
+    },
+    {
+      "country_id": 200,
+      "ar_name": "جزر سليمان",
+      "en_name": "Solomon Islands"
+    },
+    {
+      "country_id": 170,
+      "ar_name": "بابوا غينيا الجديدة",
+      "en_name": "Papua New Guinea"
+    },
+    {
+      "country_id": 73,
+      "ar_name": "فيجي",
+      "en_name": "Fiji"
+    },
+    {
+      "country_id": 114,
+      "ar_name": "كيريباتي",
+      "en_name": "Kiribati"
+    },
+    {
+      "country_id": 152,
+      "ar_name": "ناورو",
+      "en_name": "Nauru"
+    },
+    {
+      "country_id": 226,
+      "ar_name": "توفالو",
+      "en_name": "Tuvalu"
+    },
+    {
+      "country_id": 51,
+      "ar_name": "جزر كوك",
+      "en_name": "Cook Islands"
+    },
+    {
+      "country_id": 161,
+      "ar_name": "نيوي",
+      "en_name": "Niue"
+    },
+    {
+      "country_id": 162,
+      "ar_name": "جزيرة نورفولك",
+      "en_name": "Norfolk Island"
+    },
+    {
+      "country_id": 45,
+      "ar_name": "جزيرة الكريسماس",
+      "en_name": "Christmas Island"
+    },
+    {
+      "country_id": 46,
+      "ar_name": "جزر كوكوس",
+      "en_name": "Cocos Islands"
+    },
+    {
+      "country_id": 156,
+      "ar_name": "كاليدونيا الجديدة",
+      "en_name": "New Caledonia"
+    },
+    {
+      "country_id": 179,
+      "ar_name": "ريونيون",
+      "en_name": "Réunion"
+    },
+    {
+      "country_id": 141,
+      "ar_name": "مايوت",
+      "en_name": "Mayotte"
+    },
+    {
+      "country_id": 88,
+      "ar_name": "غوادلوب",
+      "en_name": "Guadeloupe"
+    },
+    {
+      "country_id": 138,
+      "ar_name": "مارتينيك",
+      "en_name": "Martinique"
+    },
+    {
+      "country_id": 78,
+      "ar_name": "الأراضي الفرنسية الجنوبية",
+      "en_name": "French Southern Territories"
+    },
+    {
+      "country_id": 76,
+      "ar_name": "غويانا الفرنسية",
+      "en_name": "French Guiana"
+    },
+    {
+      "country_id": 77,
+      "ar_name": "بولينيزيا الفرنسية",
+      "en_name": "French Polynesia"
+    },
+    {
+      "country_id": 241,
+      "ar_name": "واليس وفوتونا",
+      "en_name": "Wallis and Futuna"
+    },
+    {
+      "country_id": 186,
+      "ar_name": "سانت بيير وميكلون",
+      "en_name": "Saint Pierre and Miquelon"
+    },
+    {
+      "country_id": 183,
+      "ar_name": "سانت هيلينا",
+      "en_name": "Saint Helena"
+    },
+    {
+      "country_id": 174,
+      "ar_name": "جزيرة بيتكيرن",
+      "en_name": "Pitcairn Island"
+    },
+    {
+      "country_id": 189,
+      "ar_name": "سان مارينو",
+      "en_name": "San Marino"
+    },
+    {
+      "country_id": 125,
+      "ar_name": "ليختنشتاين",
+      "en_name": "Liechtenstein"
+    },
+    {
+      "country_id": 145,
+      "ar_name": "موناكو",
+      "en_name": "Monaco"
+    },
+    {
+      "country_id": 236,
+      "ar_name": "الفاتيكان",
+      "en_name": "Vatican City"
+    },
+    {
+      "country_id": 4,
+      "ar_name": "ساموا الأمريكية",
+      "en_name": "American Samoa"
+    },
+    {
+      "country_id": 89,
+      "ar_name": "غوام",
+      "en_name": "Guam"
+    },
+    {
+      "country_id": 163,
+      "ar_name": "جزر ماريانا الشمالية",
+      "en_name": "Northern Mariana Islands"
+    },
+    {
+      "country_id": 177,
+      "ar_name": "بورتوريكو",
+      "en_name": "Puerto Rico"
+    },
+    {
+      "country_id": 239,
+      "ar_name": "جزر العذراء البريطانية",
+      "en_name": "British Virgin Islands"
+    },
+    {
+      "country_id": 240,
+      "ar_name": "جزر العذراء الأمريكية",
+      "en_name": "US Virgin Islands"
+    },
+    {
+      "country_id": 225,
+      "ar_name": "جزر تركس وكايكوس",
+      "en_name": "Turks and Caicos Islands"
+    },
+    {
+      "country_id": 24,
+      "ar_name": "برمودا",
+      "en_name": "Bermuda"
+    },
+    {
+      "country_id": 84,
+      "ar_name": "جبل طارق",
+      "en_name": "Gibraltar"
+    },
+    {
+      "country_id": 91,
+      "ar_name": "غيرنزي وألدرني",
+      "en_name": "Guernsey and Alderney"
+    },
+    {
+      "country_id": 110,
+      "ar_name": "جيرسي",
+      "en_name": "Jersey"
+    },
+    {
+      "country_id": 136,
+      "ar_name": "جزيرة مان",
+      "en_name": "Isle of Man"
+    },
+    {
+      "country_id": 199,
+      "ar_name": "أقاليم المملكة المتحدة الأصغر",
+      "en_name": "Smaller UK Territories"
+    },
+    {
+      "country_id": 31,
+      "ar_name": "إقليم المحيط الهندي البريطاني",
+      "en_name": "British Indian Ocean Territory"
+    },
+    {
+      "country_id": 203,
+      "ar_name": "جورجيا الجنوبية",
+      "en_name": "South Georgia"
+    },
+    {
+      "country_id": 71,
+      "ar_name": "جزر فوكلاند",
+      "en_name": "Falkland Islands"
+    },
+    {
+      "country_id": 96,
+      "ar_name": "جزر هيرد وماكدونالد",
+      "en_name": "Heard and McDonald Islands"
+    },
+    {
+      "country_id": 29,
+      "ar_name": "جزيرة بوفيه",
+      "en_name": "Bouvet Island"
+    },
+    {
+      "country_id": 209,
+      "ar_name": "سفالبارد وجان ماين",
+      "en_name": "Svalbard and Jan Mayen"
+    },
+    {
+      "country_id": 8,
+      "ar_name": "أنتاركتيكا",
+      "en_name": "Antarctica"
+    },
+    {
+      "country_id": 242,
+      "ar_name": "الصحراء الغربية",
+      "en_name": "Western Sahara"
+    },
+    {
+      "country_id": 204,
+      "ar_name": "جنوب السودان",
+      "en_name": "South Sudan"
+    },
+    {
+      "country_id": 207,
+      "ar_name": "السودان",
+      "en_name": "Sudan"
+    },
+    {
+      "country_id": 67,
+      "ar_name": "إريتريا",
+      "en_name": "Eritrea"
+    },
+    {
+      "country_id": 69,
+      "ar_name": "إثيوبيا",
+      "en_name": "Ethiopia"
+    },
+    {
+      "country_id": 218,
+      "ar_name": "توغو",
+      "en_name": "Togo"
+    },
+    {
+      "country_id": 48,
+      "ar_name": "جزر القمر",
+      "en_name": "Comoros"
+    },
+    {
+      "country_id": 133,
+      "ar_name": "جزر المالديف",
+      "en_name": "Maldives"
+    },
+    {
+      "country_id": 32,
+      "ar_name": "بروناي",
+      "en_name": "Brunei"
+    },
+    {
+      "country_id": 98,
+      "ar_name": "هونغ كونغ",
+      "en_name": "Hong Kong"
+    },
+    {
+      "country_id": 128,
+      "ar_name": "ماكاو",
+      "en_name": "Macau"
+    },
+    {
+      "country_id": 214,
+      "ar_name": "تايوان",
+      "en_name": "Taiwan"
+    },
+    {
+      "country_id": 62,
+      "ar_name": "تيمور الشرقية",
+      "en_name": "East Timor"
+    },
+    {
+      "country_id": 18,
+      "ar_name": "بنغلاديش",
+      "en_name": "Bangladesh"
+    },
+    {
+      "country_id": 153,
+      "ar_name": "نيبال",
+      "en_name": "Nepal"
+    },
+    {
+      "country_id": 25,
+      "ar_name": "بوتان",
+      "en_name": "Bhutan"
+    },
+    {
+      "country_id": 135,
+      "ar_name": "مالطا",
+      "en_name": "Malta"
+    },
+    {
+      "country_id": 137,
+      "ar_name": "جزر مارشال",
+      "en_name": "Marshall Islands"
+    },
+    {
+      "country_id": 143,
+      "ar_name": "ميكرونيزيا",
+      "en_name": "Micronesia"
+    },
+    {
+      "country_id": 144,
+      "ar_name": "مولدوفا",
+      "en_name": "Moldova"
+    },
+    {
+      "country_id": 146,
+      "ar_name": "منغوليا",
+      "en_name": "Mongolia"
+    },
+    {
+      "country_id": 147,
+      "ar_name": "مونتسيرات",
+      "en_name": "Montserrat"
+    },
+    {
+      "country_id": 190,
+      "ar_name": "ساو تومي وبرينسيبي",
+      "en_name": "São Tomé and Príncipe"
+    },
+    {
+      "country_id": 210,
+      "ar_name": "إسواتيني",
+      "en_name": "Eswatini"
+    },
+    {
+      "country_id": 122,
+      "ar_name": "ليسوتو",
+      "en_name": "Lesotho"
+    },
+    {
+      "country_id": 219,
+      "ar_name": "توكيلاو",
+      "en_name": "Tokelau"
+    }
+  ]
+}

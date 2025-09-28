@@ -2606,6 +2606,72 @@ abstract class AppLocalizations {
   /// **'United Kingdom'**
   String get unitedKingdom;
 
+  /// Select country label
+  ///
+  /// In en, this message translates to:
+  /// **'Select Country'**
+  String get selectCountry;
+
+  /// Popular countries section title
+  ///
+  /// In en, this message translates to:
+  /// **'Popular Countries'**
+  String get popularCountries;
+
+  /// All countries section title
+  ///
+  /// In en, this message translates to:
+  /// **'All Countries'**
+  String get allCountries;
+
+  /// No countries found message
+  ///
+  /// In en, this message translates to:
+  /// **'No countries found'**
+  String get noCountriesFound;
+
+  /// Try different search term message
+  ///
+  /// In en, this message translates to:
+  /// **'Try a different search term'**
+  String get tryDifferentSearchTerm;
+
+  /// Select governorate label
+  ///
+  /// In en, this message translates to:
+  /// **'Select Governorate'**
+  String get selectGovernorate;
+
+  /// No governorates found message
+  ///
+  /// In en, this message translates to:
+  /// **'No governorates found'**
+  String get noGovernoratesFound;
+
+  /// Select state label
+  ///
+  /// In en, this message translates to:
+  /// **'Select State'**
+  String get selectState;
+
+  /// No states found message
+  ///
+  /// In en, this message translates to:
+  /// **'No states found'**
+  String get noStatesFound;
+
+  /// Select place label
+  ///
+  /// In en, this message translates to:
+  /// **'Select Place'**
+  String get selectPlace;
+
+  /// No places found message
+  ///
+  /// In en, this message translates to:
+  /// **'No places found'**
+  String get noPlacesFound;
+
   /// Canada country name
   ///
   /// In en, this message translates to:

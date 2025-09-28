@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:client_app/core/cubit/permission_cubit.dart';
 import 'package:client_app/core/services/global_auth_manager.dart';
 import 'package:client_app/core/services/location_service.dart';
+import 'package:client_app/core/services/country_localization_service.dart';
 import 'package:client_app/core/utilities/app_themes.dart';
 import 'package:client_app/core/widgets/app_version_wrapper.dart';
 import 'package:client_app/core/widgets/environment_banner.dart';
@@ -22,6 +23,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initInj();
   await LocationService.initialize();
+  await CountryLocalizationService.initialize();
 
   // Note: Removed automatic permission request from main()
   // Permissions will now be handled through the PermissionCubit and UI
