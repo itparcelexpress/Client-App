@@ -9,6 +9,7 @@ import 'package:client_app/core/widgets/searchable_country_dropdown.dart';
 import 'package:client_app/core/widgets/searchable_governorate_dropdown.dart';
 import 'package:client_app/core/widgets/searchable_state_dropdown.dart';
 import 'package:client_app/core/widgets/searchable_place_dropdown.dart';
+import 'package:client_app/core/utilities/currency_utils.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/address_book/address_book.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
@@ -1350,6 +1351,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                             color: Colors.grey.shade600,
                             size: 20,
                           ),
+                          suffixText: CurrencyUtils.symbol(context),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(color: Colors.grey.shade300),
@@ -1391,7 +1393,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 controller: _amountController,
                 label: AppLocalizations.of(context)!.amount,
                 hint: AppLocalizations.of(context)!.amountHint,
-                icon: Icons.attach_money_rounded,
+                icon: Icons.payments_outlined,
                 keyboardType: TextInputType.number,
                 validator:
                     (value) =>
@@ -1400,6 +1402,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                               context,
                             )!.pleaseEnterAmountField
                             : null,
+                suffixText: CurrencyUtils.symbol(context),
               ),
             ),
           ],
@@ -1825,6 +1828,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     String? Function(String?)? validator,
     int maxLines = 1,
     List<TextInputFormatter>? inputFormatters,
+    String? suffixText,
   }) {
     final isRTL = Localizations.localeOf(context).languageCode == 'ar';
 
@@ -1861,6 +1865,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   isRTL
                       ? Icon(icon, color: Colors.grey.shade600, size: 20)
                       : null,
+              suffixText: suffixText,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: Colors.grey.shade300),

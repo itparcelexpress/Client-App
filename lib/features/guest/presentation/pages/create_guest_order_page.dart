@@ -3,6 +3,7 @@ import 'package:client_app/core/models/location_models.dart';
 import 'package:client_app/core/services/location_service.dart';
 import 'package:client_app/core/utilities/app_color.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
+import 'package:client_app/core/utilities/currency_utils.dart';
 import 'package:client_app/core/utilities/taost_service.dart';
 import 'package:client_app/core/utilities/unified_phone_input.dart';
 import 'package:client_app/core/utilities/validators.dart';
@@ -246,6 +247,7 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
     TextInputType? keyboardType,
     int? maxLines,
     bool isRequired = true,
+    String? suffixText,
   }) {
     return TextFormField(
       controller: controller,
@@ -255,6 +257,7 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
             !_shouldShowError(label)
                 ? const TextStyle(fontSize: 0, height: 0)
                 : null,
+        suffixText: suffixText,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey[300]!),
@@ -565,6 +568,7 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
                 (value) =>
                     Validators.amount(value, context: context, minAmount: 5.0),
             keyboardType: TextInputType.numberWithOptions(decimal: true),
+            suffixText: CurrencyUtils.symbol(context),
           ),
           const SizedBox(height: 16),
           _buildTextField(

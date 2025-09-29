@@ -630,7 +630,7 @@
     "description": "Type label"
   },
 
-  "customer": "العميل:",
+  "customer": "المستلم:",
   "@customer": {
     "description": "Customer label"
   },
@@ -910,7 +910,7 @@
   "@quantityHint": {"description": "نص تلميح إدخال الكمية"},
   "addAnotherItem": "إضافة عنصر آخر",
   "@addAnotherItem": {"description": "نص زر إضافة عنصر آخر"},
-  "customer": "العميل",
+  "customer": "المستلم",
   "@customer": {"description": "خيار دافع الرسوم العميل"},
   "client": "المرسل",
   "@client": {"description": "خيار دافع الرسوم المرسل"},

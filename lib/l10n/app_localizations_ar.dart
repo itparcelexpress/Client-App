@@ -835,7 +835,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get type => 'النوع:';
 
   @override
-  String get customer => 'العميل';
+  String get customer => 'المستلم';
 
   @override
   String get phone => 'الهاتف:';
