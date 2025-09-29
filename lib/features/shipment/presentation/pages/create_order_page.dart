@@ -502,6 +502,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                     }
                   },
                   child: SingleChildScrollView(
+                    key: const PageStorageKey('create_order_scroll'),
                     controller: _scrollController,
                     padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
                       context,
