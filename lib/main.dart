@@ -15,6 +15,8 @@ import 'package:client_app/features/auth/presentation/pages/login_page.dart';
 import 'package:client_app/features/splash/splash.dart';
 import 'package:client_app/injections.dart';
 import 'package:client_app/l10n/app_localizations.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +38,11 @@ Future<void> main() async {
   FlutterError.onError = (FlutterErrorDetails details) {};
 
   runApp(
-    MyApp(), // Wrap your app
+    DevicePreview(
+      enabled: !kReleaseMode, // Only enable in debug mode
+      defaultDevice: Devices.ios.iPhone13,
+      builder: (context) => MyApp(),
+    ),
   );
 }
 
@@ -87,7 +93,9 @@ class MyAppState extends State<MyApp> {
       supportedLocales: AppLocalizations.supportedLocales,
       title: _getAppTitle(),
       theme: AppThemes.theme,
-      locale: _locale,
+      locale:
+          _locale, // Always use Arabic as default, ignore device preview locale
+      builder: DevicePreview.appBuilder,
       home: WillPopScope(
         onWillPop: () async {
           // Do not allow system back to close the app when at root

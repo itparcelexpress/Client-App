@@ -724,7 +724,9 @@ class _OrdersListPageState extends State<OrdersListPage> {
                     ? () {
                       context.read<ShipmentCubit>().loadPreviousPage(
                         status:
-                            _selectedStatus == AppLocalizations.of(context)!.all
+                            (_selectedStatus == null ||
+                                    _selectedStatus ==
+                                        AppLocalizations.of(context)!.all)
                                 ? null
                                 : _getEnglishStatus(_selectedStatus!),
                         fromDate: _fromDate,
@@ -761,7 +763,9 @@ class _OrdersListPageState extends State<OrdersListPage> {
                     ? () {
                       context.read<ShipmentCubit>().loadNextPage(
                         status:
-                            _selectedStatus == AppLocalizations.of(context)!.all
+                            (_selectedStatus == null ||
+                                    _selectedStatus ==
+                                        AppLocalizations.of(context)!.all)
                                 ? null
                                 : _getEnglishStatus(_selectedStatus!),
                         fromDate: _fromDate,

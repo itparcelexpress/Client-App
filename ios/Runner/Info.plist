@@ -45,5 +45,30 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<!-- Permissions: Location (Geolocator/Geocoding/Maps) -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We use your location to show nearby places and improve delivery accuracy.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We use your location to provide accurate pickups and deliveries.</string>
+
+	<!-- Permissions: Camera (Mobile Scanner / QR) -->
+	<key>NSCameraUsageDescription</key>
+	<string>Camera access is needed to scan QR/barcodes and attach photos.</string>
+
+	<!-- Permissions: Photo Library (File picker / attachments) -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photo Library access lets you pick images and files to upload.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We save images or documents to your library when you export or download.</string>
+
+	<!-- Permissions: Contacts (flutter_contacts) -->
+	<key>NSContactsUsageDescription</key>
+	<string>Contacts access lets you select recipients and speed up parcel entries.</string>
+
+	<!-- Background modes: Firebase Messaging push notifications -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>
