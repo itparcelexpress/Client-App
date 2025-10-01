@@ -388,8 +388,9 @@ class DriverSettings {
 }
 
 class Workspace {
-  int? id;
+  dynamic id; // Can be int or String (encrypted ID)
   String? name;
+  String? type;
   String? description;
   String? createdAt;
   String? updatedAt;
@@ -397,14 +398,16 @@ class Workspace {
   Workspace({
     this.id,
     this.name,
+    this.type,
     this.description,
     this.createdAt,
     this.updatedAt,
   });
 
   Workspace.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['id']; // Can be int or String
     name = json['name'];
+    type = json['type'];
     description = json['description'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -414,6 +417,7 @@ class Workspace {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
+    data['type'] = type;
     data['description'] = description;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
@@ -429,6 +433,7 @@ class Client {
   int? placeId;
   int? userId;
   String? address;
+  String? countryCode;
   String? contactNo;
   double? lat;
   double? lng;
@@ -450,6 +455,7 @@ class Client {
     this.placeId,
     this.userId,
     this.address,
+    this.countryCode,
     this.contactNo,
     this.lat,
     this.lng,
@@ -472,6 +478,7 @@ class Client {
     placeId = json['place_id'];
     userId = json['user_id'];
     address = json['address'];
+    countryCode = json['country_code'];
     contactNo = json['contact_no'];
     lat = json['lat']?.toDouble();
     lng = json['lng']?.toDouble();
@@ -498,6 +505,7 @@ class Client {
     data['place_id'] = placeId;
     data['user_id'] = userId;
     data['address'] = address;
+    data['country_code'] = countryCode;
     data['contact_no'] = contactNo;
     data['lat'] = lat;
     data['lng'] = lng;
@@ -572,15 +580,41 @@ class Governorate {
 
 class State {
   int? id;
-  String? name;
+  int? countryId;
+  int? governorateId;
+  String? enName;
+  String? arName;
+  String? lat;
+  String? lng;
+  dynamic polygon;
+  Map<String, dynamic>? polygonGeojson;
   String? createdAt;
   String? updatedAt;
 
-  State({this.id, this.name, this.createdAt, this.updatedAt});
+  State({
+    this.id,
+    this.countryId,
+    this.governorateId,
+    this.enName,
+    this.arName,
+    this.lat,
+    this.lng,
+    this.polygon,
+    this.polygonGeojson,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   State.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
+    countryId = json['country_id'];
+    governorateId = json['governorate_id'];
+    enName = json['en_name'];
+    arName = json['ar_name'];
+    lat = json['lat'];
+    lng = json['lng'];
+    polygon = json['polygon'];
+    polygonGeojson = json['polygon_geojson'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -588,11 +622,21 @@ class State {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['name'] = name;
+    data['country_id'] = countryId;
+    data['governorate_id'] = governorateId;
+    data['en_name'] = enName;
+    data['ar_name'] = arName;
+    data['lat'] = lat;
+    data['lng'] = lng;
+    data['polygon'] = polygon;
+    data['polygon_geojson'] = polygonGeojson;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     return data;
   }
+
+  // Helper getter for backwards compatibility
+  String? get name => enName;
 }
 
 class Place {

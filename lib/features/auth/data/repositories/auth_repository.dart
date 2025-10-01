@@ -21,9 +21,31 @@ class AuthRepositoryImpl implements AuthRepository {
         data: request.toJson(),
       );
 
+      if (kDebugMode) {
+        print(
+          '🔐 AuthRepository.login - AppResponse.success: ${response.success}',
+        );
+        print('🔐 AuthRepository.login - AppResponse.data: ${response.data}');
+        print(
+          '🔐 AuthRepository.login - AppResponse.origin: ${response.origin}',
+        );
+      }
+
       if (response.success && response.data != null) {
         // Use the original response structure to parse the login response
         final loginResponse = LoginResponse.fromJson(response.origin ?? {});
+
+        if (kDebugMode) {
+          print(
+            '🔐 AuthRepository.login - LoginResponse.success: ${loginResponse.success}',
+          );
+          print(
+            '🔐 AuthRepository.login - LoginResponse.data: ${loginResponse.data}',
+          );
+          print(
+            '🔐 AuthRepository.login - LoginResponse.errors: ${loginResponse.errors}',
+          );
+        }
 
         // Save user data locally if login is successful
         if (loginResponse.success && loginResponse.data != null) {
@@ -32,11 +54,35 @@ class AuthRepositoryImpl implements AuthRepository {
             await LocalData.setToken(user.token!);
             await LocalData.setUser(user);
             await LocalData.setIsLoggedIn(true);
+
+            if (kDebugMode) {
+              print('🔐 AuthRepository.login - User saved successfully');
+            }
+          }
+        } else {
+          if (kDebugMode) {
+            print('🔐 AuthRepository.login - LoginResponse validation failed');
+            print(
+              '🔐 AuthRepository.login - loginResponse.success: ${loginResponse.success}',
+            );
+            print(
+              '🔐 AuthRepository.login - loginResponse.data != null: ${loginResponse.data != null}',
+            );
           }
         }
 
         return loginResponse;
       } else {
+        if (kDebugMode) {
+          print('🔐 AuthRepository.login - AppResponse validation failed');
+          print(
+            '🔐 AuthRepository.login - response.success: ${response.success}',
+          );
+          print(
+            '🔐 AuthRepository.login - response.data != null: ${response.data != null}',
+          );
+        }
+
         // Normalize errors to a list of strings
         List<String> normalizedErrors = [];
         final rawErrors = response.origin?['errors'];
@@ -62,6 +108,10 @@ class AuthRepositoryImpl implements AuthRepository {
         );
       }
     } catch (e) {
+      if (kDebugMode) {
+        print('🔐 AuthRepository.login - Exception caught: $e');
+      }
+
       return LoginResponse(
         message: 'An error occurred during login',
         success: false,
