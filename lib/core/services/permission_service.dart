@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart' as ph;
 
@@ -6,6 +7,8 @@ class PermissionService {
   static final Map<ph.Permission, String> _permissionDescriptions = {
     ph.Permission.storage:
         'Storage access is needed to save exported files (Excel, PDF) and access downloaded documents.',
+    ph.Permission.photos:
+        'Photo library access is needed to save and access exported files (Excel, PDF) and attach images.',
     ph.Permission.camera:
         'Camera access is needed to scan QR codes and barcodes for shipment tracking.',
     ph.Permission.location:
@@ -23,11 +26,15 @@ class PermissionService {
   /// Get all permissions that the app needs
   static List<ph.Permission> getRequiredPermissions() {
     final permissions = <ph.Permission>[
-      ph.Permission.storage,
+      // Only request storage on Android (iOS uses photo library instead)
+      if (!Platform.isIOS) ph.Permission.storage,
       ph.Permission.camera,
       ph.Permission.location,
       ph.Permission.notification,
-      ph.Permission.phone,
+      // Phone permission doesn't exist on iOS (calls work via URL schemes)
+      if (!Platform.isIOS) ph.Permission.phone,
+      // On iOS, use photo library for file access
+      if (Platform.isIOS) ph.Permission.photos,
     ];
 
     return permissions;

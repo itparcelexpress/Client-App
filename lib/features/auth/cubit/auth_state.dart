@@ -38,3 +38,10 @@ class AuthCheckSuccess extends AuthState {
   @override
   List<Object?> get props => [isAuthenticated];
 }
+
+class AuthLogoutSuccess extends AuthState {
+  const AuthLogoutSuccess();
+
+  @override
+  List<Object?> get props => [];
+}

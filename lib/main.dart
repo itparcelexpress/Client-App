@@ -142,10 +142,26 @@ class _AuthWrapperState extends State<AuthWrapper> {
       create: (context) => _authCubit,
       child: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
-          // Handle state changes if needed
+          // Handle logout success state
+          if (state is AuthLogoutSuccess) {
+            // Reset the auth check flag when logout happens
+            _hasCheckedAuth = false;
+
+            if (kDebugMode) {
+              print(
+                '🚪 AuthWrapper: Logout successful, forcing navigation to login',
+              );
+            }
+          }
+
+          // Handle auth initial state
           if (state is AuthInitial) {
-            // User has been logged out - the builder will automatically show LoginPage
-            // No additional navigation needed since we're already in the AuthWrapper
+            // Reset the auth check flag
+            _hasCheckedAuth = false;
+
+            if (kDebugMode) {
+              print('🔄 AuthWrapper: Auth state reset to initial');
+            }
           }
         },
         builder: (context, state) {
@@ -224,6 +240,9 @@ class _AuthWrapperState extends State<AuthWrapper> {
         // Permissions are handled, now check authentication
         if (state is AuthLoading) {
           return const SplashPage();
+        } else if (state is AuthLogoutSuccess) {
+          // Force show login page immediately on logout
+          return const LoginPage();
         } else if (state is AuthSuccess) {
           return const HomePage();
         } else if (state is AuthCheckSuccess) {

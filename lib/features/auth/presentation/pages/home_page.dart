@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/core/widgets/stylish_bottom_navigation.dart';
 import 'package:client_app/core/widgets/more_pages_popup.dart';
+import 'package:client_app/core/services/global_auth_manager.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/dashboard/cubit/dashboard_cubit.dart';
@@ -22,6 +23,7 @@ import 'package:client_app/features/map/cubit/map_cubit.dart';
 import 'package:client_app/features/map/presentation/pages/enhanced_map_page.dart';
 import 'package:client_app/injections.dart';
 import 'package:client_app/main.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client_app/l10n/app_localizations.dart';
@@ -850,30 +852,68 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void _performLogout() async {
+    if (kDebugMode) {
+      print('🚪 HomePage: Starting logout process...');
+    }
+
+    // Show loading indicator
+    if (mounted) {
+      final localizations = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Text(localizations.logout),
+            ],
+          ),
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+
     try {
-      // Try to find the AuthCubit in the current widget tree
+      // Try to get AuthCubit using BlocProvider
       final authCubit = BlocProvider.of<AuthCubit>(context, listen: false);
+
+      // Call logout - this will call the API and clear local data
       await authCubit.logout();
 
-      // Show success message
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.logoutSuccessful),
-            backgroundColor: Colors.green,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        );
+      if (kDebugMode) {
+        print('🚪 HomePage: Logout completed successfully via AuthCubit');
       }
+
+      // The AuthWrapper will automatically handle navigation to login page
+      // based on the AuthLogoutSuccess and AuthInitial states
     } catch (e) {
-      // Fallback: Clear local data and let AuthWrapper handle navigation
+      if (kDebugMode) {
+        print('🚪 HomePage: Logout error: $e');
+        print('🚪 HomePage: Using fallback logout via GlobalAuthManager');
+      }
+
+      // Fallback: Clear local data and use GlobalAuthManager
       await LocalData.logout();
 
+      // Trigger the global auth manager to force state change and navigation
+      await GlobalAuthManager.instance.performLogout();
+
+      if (kDebugMode) {
+        print('🚪 HomePage: Fallback logout completed');
+      }
+
       if (mounted) {
-        // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(AppLocalizations.of(context)!.logoutSuccessful),
@@ -883,13 +923,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-        );
-
-        // The AuthWrapper will automatically show LoginPage when it detects no auth
-        // Force refresh the AuthWrapper by navigating to it
-        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const AuthWrapper()),
-          (route) => false,
         );
       }
     }

@@ -25,22 +25,41 @@ class GlobalAuthManager {
   /// Handle authentication failure (401 errors)
   Future<void> handleAuthFailure() async {
     if (kDebugMode) {
-      print('🔴 GlobalAuthManager: Handling authentication failure');
+      print('🔴 GlobalAuthManager: Handling authentication failure (401)');
     }
 
-    // Clear local authentication data
+    // Clear local authentication data first
     await LocalData.logout();
 
     // Call the logout callback if it's set
     if (_onLogoutCallback != null) {
       if (kDebugMode) {
-        print('🔴 GlobalAuthManager: Calling logout callback');
+        print(
+          '🔴 GlobalAuthManager: Triggering logout callback to force navigation',
+        );
       }
       _onLogoutCallback!();
     } else {
       if (kDebugMode) {
-        print('🔴 GlobalAuthManager: No logout callback set');
+        print(
+          '🔴 GlobalAuthManager: WARNING - No logout callback set, navigation may not occur',
+        );
       }
+    }
+  }
+
+  /// Perform a manual logout (can be called from anywhere in the app)
+  Future<void> performLogout() async {
+    if (kDebugMode) {
+      print('🚪 GlobalAuthManager: Performing manual logout');
+    }
+
+    // Clear local authentication data
+    await LocalData.logout();
+
+    // Trigger the logout callback to update UI
+    if (_onLogoutCallback != null) {
+      _onLogoutCallback!();
     }
   }
 

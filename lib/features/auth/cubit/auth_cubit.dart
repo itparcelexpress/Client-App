@@ -90,16 +90,22 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
 
     try {
+      // Call logout endpoint and clear local data
       await _authRepository.logout();
 
-      // Always emit AuthInitial regardless of API response
-      // because local data is cleared in the repository
-      emit(AuthInitial());
+      // Emit logout success state to trigger navigation
+      emit(const AuthLogoutSuccess());
 
-      // Optional: You could emit a logout success state if needed
-      // emit(AuthLogoutSuccess());
+      // Wait a brief moment for UI to process the state change
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      // Then emit AuthInitial to reset the state completely
+      emit(AuthInitial());
     } catch (e) {
-      // Even if logout fails, clear the state since local data is cleared
+      // Even if logout fails, local data is cleared in repository
+      // So we still proceed with logout flow
+      emit(const AuthLogoutSuccess());
+      await Future.delayed(const Duration(milliseconds: 100));
       emit(AuthInitial());
     }
   }
