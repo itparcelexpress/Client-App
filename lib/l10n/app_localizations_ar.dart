@@ -155,6 +155,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get viewDeliveryPricing => 'عرض تسعير التوصيل لكل ولاية';
 
   @override
+  String get deleteAccountTitle => 'حذف الحساب';
+
+  @override
+  String get deleteAccountSubtitle => 'إلغاء تنشيط حسابك نهائيًا';
+
+  @override
+  String get deleteAccountConfirm =>
+      'هل تريد بالتأكيد حذف حسابك؟ سيتم إلغاء تنشيط الحساب ولن تتمكن من الوصول إليه بعد الآن.';
+
+  @override
+  String get accountDeletedSuccess => 'تم إلغاء تنشيط حسابك بنجاح.';
+
+  @override
   String get signOutAccount => 'تسجيل الخروج من حسابك';
 
   @override
@@ -262,16 +275,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tryAgain => 'حاول مرة أخرى';
 
   @override
-  String get connectionError => 'خطأ في الاتصال';
+  String get connectionError =>
+      'خطأ في الاتصال. يرجى التحقق من اتصالك بالإنترنت.';
 
   @override
   String get invalidData => 'بيانات غير صحيحة';
 
   @override
   String get orders => 'الطلبات';
-
-  @override
-  String get invoices => 'الفواتير';
 
   @override
   String get profile => 'الملف الشخصي';
@@ -382,27 +393,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get logoutConfirmation => 'هل أنت متأكد من تسجيل الخروج؟';
 
   @override
-  String get invoicesAndPayments => 'الفواتير والمدفوعات';
-
-  @override
-  String get searchByInvoiceNumber => 'البحث برقم الفاتورة...';
-
-  @override
-  String get loadingInvoices => 'جاري تحميل الفواتير...';
-
-  @override
-  String get noInvoices => 'لا توجد فواتير';
-
-  @override
-  String get noInvoicesYet => 'لا توجد لديك فواتير حتى الآن.';
-
-  @override
   String get noResults => 'لا توجد نتائج';
-
-  @override
-  String noInvoicesFound(String query) {
-    return 'لم يتم العثور على فواتير لـ \"$query\"';
-  }
 
   @override
   String get clearSearch => 'مسح البحث';
@@ -859,29 +850,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get totalBalance => 'الرصيد الإجمالي';
 
   @override
-  String get invoiceSummary => 'ملخص الفواتير';
-
-  @override
   String get totalAmount => 'المبلغ الإجمالي';
-
-  @override
-  String get totalInvoices => 'إجمالي الفواتير';
 
   @override
   String get paid => 'مدفوع';
 
   @override
   String get overdue => 'متأخر';
-
-  @override
-  String invoicesCount(int count) {
-    return '$count فواتير';
-  }
-
-  @override
-  String invoiceNumber(String number) {
-    return 'فاتورة #$number';
-  }
 
   @override
   String id(int id) {
@@ -982,7 +957,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get loginErrorUnknown => 'تعذر تسجيل الدخول. يرجى المحاولة مرة أخرى.';
 
   @override
-  String get networkError => 'خطأ في الشبكة. يرجى التحقق من الاتصال.';
+  String get networkError => 'خطأ في الشبكة. يرجى التحقق من اتصالك بالإنترنت.';
 
   @override
   String get serverError => 'خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقاً.';
@@ -1176,15 +1151,6 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get wallet => 'المحفظة';
-
-  @override
-  String get viewWallet => 'المحفظة';
-
-  @override
-  String get viewWalletSubtitle => 'عرض الرصيد والمعاملات';
-
-  @override
   String get feePayer => 'دافع الرسوم';
 
   @override
@@ -1275,7 +1241,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى';
 
   @override
-  String get requestTimeout => 'انتهت مهلة الطلب';
+  String get requestTimeout => 'انتهت مهلة الطلب. يرجى المحاولة مرة أخرى.';
 
   @override
   String get requestTookTooLong =>
@@ -1530,9 +1496,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get errorSavingPdf => 'خطأ في حفظ PDF';
-
-  @override
-  String get invoice => 'فاتورة';
 
   @override
   String get update_required => 'تحديث مطلوب';
@@ -1890,4 +1853,214 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get stay => 'البقاء';
+
+  @override
+  String get settlementAmountExceedsBalance =>
+      'المبلغ المطلوب يتجاوز رصيدك الحالي. يرجى إدخال مبلغ أصغر.';
+
+  @override
+  String get insufficientBalance => 'رصيد غير كافٍ. يرجى التحقق من رصيد حسابك.';
+
+  @override
+  String get invalidSettlementAmount =>
+      'مبلغ تسوية غير صحيح. يرجى إدخال مبلغ صحيح.';
+
+  @override
+  String get settlementRequestAlreadyExists =>
+      'طلب تسوية موجود بالفعل. يرجى الانتظار حتى يتم معالجته.';
+
+  @override
+  String get minimumSettlementAmount =>
+      'مبلغ التسوية أقل من الحد الأدنى المطلوب.';
+
+  @override
+  String get maximumSettlementAmount =>
+      'مبلغ التسوية يتجاوز الحد الأقصى المسموح به.';
+
+  @override
+  String get accountNotFound => 'الحساب غير موجود. يرجى التواصل مع الدعم.';
+
+  @override
+  String get sessionExpired =>
+      'انتهت صلاحية جلستك. يرجى تسجيل الدخول مرة أخرى.';
+
+  @override
+  String get accessDenied =>
+      'الوصول مرفوض. ليس لديك صلاحية لتنفيذ هذا الإجراء.';
+
+  @override
+  String get resourceNotFound => 'المورد المطلوب غير موجود.';
+
+  @override
+  String get validationFailed =>
+      'فشل التحقق. يرجى التحقق من المدخلات والمحاولة مرة أخرى.';
+
+  @override
+  String get serviceUnavailable =>
+      'الخدمة غير متاحة مؤقتاً. يرجى المحاولة مرة أخرى لاحقاً.';
+
+  @override
+  String get tooManyRequests =>
+      'طلبات كثيرة جداً. يرجى الانتظار قليلاً والمحاولة مرة أخرى.';
+
+  @override
+  String get paymentRequired => 'مطلوب دفع للوصول إلى هذه الميزة.';
+
+  @override
+  String get resourceConflict =>
+      'المورد موجود بالفعل أو يتعارض مع البيانات الموجودة.';
+
+  @override
+  String get preconditionFailed => 'فشل الشرط المسبق. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get requestTooLarge => 'الطلب كبير جداً. يرجى تقليل حجم البيانات.';
+
+  @override
+  String get unsupportedMediaType =>
+      'نوع الوسائط غير مدعوم. يرجى التحقق من تنسيق الملف.';
+
+  @override
+  String get unprocessableEntity =>
+      'لا يمكن معالجة الطلب. يرجى التحقق من المدخلات.';
+
+  @override
+  String get resourceLocked => 'المورد مقفل ولا يمكن تعديله.';
+
+  @override
+  String get failedDependency => 'فشل الطلب بسبب مشكلة في التبعية.';
+
+  @override
+  String get upgradeRequired => 'مطلوب ترقية للوصول إلى هذه الميزة.';
+
+  @override
+  String get preconditionRequired => 'مطلوب شرط مسبق لهذا الطلب.';
+
+  @override
+  String get tooManyConnections =>
+      'اتصالات كثيرة جداً. يرجى المحاولة مرة أخرى لاحقاً.';
+
+  @override
+  String get unavailableForLegalReasons =>
+      'هذه الخدمة غير متاحة لأسباب قانونية.';
+
+  @override
+  String get badRequest =>
+      'طلب غير صحيح. يرجى التحقق من المدخلات والمحاولة مرة أخرى.';
+
+  @override
+  String get unauthorized => 'وصول غير مصرح به. يرجى تسجيل الدخول مرة أخرى.';
+
+  @override
+  String get forbidden => 'الوصول محظور. ليس لديك صلاحية.';
+
+  @override
+  String get notFound => 'المورد المطلوب غير موجود.';
+
+  @override
+  String get methodNotAllowed => 'هذه الطريقة غير مسموحة لهذا المورد.';
+
+  @override
+  String get notAcceptable => 'الطلب غير مقبول.';
+
+  @override
+  String get gone => 'المورد لم يعد متاحاً.';
+
+  @override
+  String get lengthRequired => 'طول المحتوى مطلوب لهذا الطلب.';
+
+  @override
+  String get payloadTooLarge => 'حمولة الطلب كبيرة جداً.';
+
+  @override
+  String get uriTooLong => 'رابط الطلب طويل جداً.';
+
+  @override
+  String get rangeNotSatisfiable => 'النطاق المطلوب غير قابل للتحقق.';
+
+  @override
+  String get expectationFailed => 'لا يمكن تلبية التوقع.';
+
+  @override
+  String get imATeapot => 'أنا إبريق شاي. هذا خطأ مزاح.';
+
+  @override
+  String get misdirectedRequest => 'الطلب كان في الاتجاه الخطأ.';
+
+  @override
+  String get locked => 'المورد مقفل.';
+
+  @override
+  String get tooEarly => 'الطلب تم في وقت مبكر جداً.';
+
+  @override
+  String get requestHeaderFieldsTooLarge => 'حقول رأس الطلب كبيرة جداً.';
+
+  @override
+  String get internalServerError =>
+      'خطأ داخلي في الخادم. يرجى المحاولة مرة أخرى لاحقاً.';
+
+  @override
+  String get notImplemented => 'هذه الميزة غير مطبقة بعد.';
+
+  @override
+  String get badGateway => 'بوابة سيئة. يرجى المحاولة مرة أخرى لاحقاً.';
+
+  @override
+  String get gatewayTimeout =>
+      'انتهت مهلة البوابة. يرجى المحاولة مرة أخرى لاحقاً.';
+
+  @override
+  String get httpVersionNotSupported => 'إصدار HTTP غير مدعوم.';
+
+  @override
+  String get variantAlsoNegotiates => 'خطأ المتغير يتفاوض أيضاً.';
+
+  @override
+  String get insufficientStorage => 'تخزين غير كافٍ على الخادم.';
+
+  @override
+  String get loopDetected => 'تم اكتشاف حلقة لا نهائية.';
+
+  @override
+  String get notExtended => 'خطأ غير ممدد.';
+
+  @override
+  String get networkAuthenticationRequired => 'مطلوب مصادقة الشبكة.';
+
+  @override
+  String get invalidAmount => 'مبلغ غير صحيح. يرجى إدخال رقم صحيح.';
+
+  @override
+  String get invalidEmail =>
+      'عنوان بريد إلكتروني غير صحيح. يرجى إدخال بريد صحيح.';
+
+  @override
+  String get invalidPhone => 'رقم هاتف غير صحيح. يرجى إدخال رقم هاتف صحيح.';
+
+  @override
+  String get invalidPassword =>
+      'كلمة مرور غير صحيحة. يرجى التحقق من كلمة المرور.';
+
+  @override
+  String get fieldRequired => 'هذا الحقل مطلوب. يرجى ملؤه.';
+
+  @override
+  String get badResponse => 'استجابة سيئة من الخادم. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get connectionTimeout =>
+      'انتهت مهلة الاتصال. يرجى التحقق من اتصالك بالإنترنت.';
+
+  @override
+  String get sendTimeout => 'انتهت مهلة الإرسال. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get receiveTimeout => 'انتهت مهلة الاستقبال. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get requestCancelled => 'تم إلغاء الطلب.';
+
+  @override
+  String get unknownError => 'حدث خطأ غير معروف. يرجى المحاولة مرة أخرى.';
 }

@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:client_app/core/services/messaging_service.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/features/address_book/cubit/address_book_cubit.dart';
 import 'package:client_app/features/address_book/cubit/address_book_state.dart';
@@ -56,27 +57,9 @@ class _AddressBookPageState extends State<AddressBookPage> {
       body: BlocConsumer<AddressBookCubit, AddressBookState>(
         listener: (context, state) {
           if (state is AddressBookEntryCreated) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.green,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            );
+            MessagingService.showSuccess(context, state.message);
           } else if (state is AddressBookEntryDeleted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.orange,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            );
+            MessagingService.showWarning(context, state.message);
           } else if (state is AddressBookError ||
               state is AddressBookCreateError ||
               state is AddressBookDeleteError) {
@@ -85,16 +68,7 @@ class _AddressBookPageState extends State<AddressBookPage> {
             if (state is AddressBookCreateError) message = state.message;
             if (state is AddressBookDeleteError) message = state.message;
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(message),
-                backgroundColor: Colors.red,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            );
+            MessagingService.showError(context, message);
           }
         },
         builder: (context, state) {

@@ -65,15 +65,6 @@ class AppEndPoints {
   static String deleteAddressBook(int addressId) =>
       'client/address_book/$addressId/delete';
 
-  // Client Invoices
-  static String clientInvoices(int userId) => 'client/invoices/$userId';
-  static String clientInvoiceDetails(int userId, int invoiceId) =>
-      'client/invoices/$userId/$invoiceId';
-  static String clientInvoiceDownload(int userId, int invoiceId) =>
-      'client/invoices/$userId/$invoiceId/download';
-  static String clientInvoicesSearch(int userId) =>
-      'client/invoices/$userId/search';
-
   // Client Payments
   static const String clientPaymentTransactions =
       'client/payments/transactions';
@@ -92,4 +83,6 @@ class AppEndPoints {
   // Client Account Finance
   static const String clientAccount = 'client/account';
   static const String settlementRequests = 'client/account/settlement-requests';
+  // Account deletion (deactivate account)
+  static const String deleteClientAccount = 'delete/client/account';
 }

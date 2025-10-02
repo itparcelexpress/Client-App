@@ -1,3 +1,4 @@
+import 'package:client_app/core/services/messaging_service.dart';
 import 'package:client_app/core/widgets/app_version_wrapper.dart';
 import 'package:client_app/core/widgets/loading_widgets.dart';
 import 'package:client_app/features/finance/cubit/finance_cubit.dart';
@@ -80,28 +81,18 @@ class _FinancePageState extends State<FinancePage> {
           final result = await OpenFile.open(filePath);
 
           if (result.type == ResultType.done && mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'PDF exported successfully. Check app documents folder.',
-                ),
-                backgroundColor: Colors.green,
-                duration: const Duration(seconds: 3),
-              ),
+            MessagingService.showSuccess(
+              context,
+              'PDF exported successfully. Check app documents folder.',
             );
           } else {
             throw Exception('Could not open file: ${result.message}');
           }
         } catch (openError) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'PDF exported successfully. Check app documents folder.',
-                ),
-                backgroundColor: Colors.green,
-                duration: const Duration(seconds: 4),
-              ),
+            MessagingService.showSuccess(
+              context,
+              'PDF exported successfully. Check app documents folder.',
             );
           }
         }
@@ -118,37 +109,30 @@ class _FinancePageState extends State<FinancePage> {
           errorMessage = localizations.unableToAccessStorage;
         }
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(errorMessage),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 5),
-            action:
-                e.toString().contains('Storage permission denied')
-                    ? SnackBarAction(
-                      label: AppLocalizations.of(context)!.settings,
-                      textColor: Colors.white,
-                      onPressed: () async {
-                        try {
-                          await openAppSettings();
-                        } catch (settingsError) {
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  AppLocalizations.of(
-                                    context,
-                                  )!.manuallyEnablePermission,
-                                ),
-                                backgroundColor: Colors.orange,
-                              ),
-                            );
-                          }
-                        }
-                      },
-                    )
-                    : null,
-          ),
+        MessagingService.showError(
+          context,
+          errorMessage,
+          actionLabel:
+              e.toString().contains('Storage permission denied')
+                  ? AppLocalizations.of(context)!.settings
+                  : null,
+          onActionTap:
+              e.toString().contains('Storage permission denied')
+                  ? () async {
+                    try {
+                      await openAppSettings();
+                    } catch (settingsError) {
+                      if (mounted) {
+                        MessagingService.showWarning(
+                          context,
+                          AppLocalizations.of(
+                            context,
+                          )!.manuallyEnablePermission,
+                        );
+                      }
+                    }
+                  }
+                  : null,
         );
       }
     }
@@ -207,49 +191,31 @@ class _FinancePageState extends State<FinancePage> {
           }
         } catch (openError) {
           // If opening fails, show a message with option to open manually
-          scaffoldMessenger.showSnackBar(
-            SnackBar(
-              content: Text(
-                '${localizations.excelExportSuccess}\nFile saved to: ${filePath.split('/').last}',
-              ),
-              backgroundColor: Colors.green,
-              action: SnackBarAction(
-                label: localizations.openExcelFile,
-                textColor: Colors.white,
-                onPressed: () async {
-                  try {
-                    final result = await OpenFile.open(filePath);
-                    if (result.type != ResultType.done) {
-                      if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              '${localizations.fileSavedToDownloads}. ${localizations.checkFileManager}.',
-                            ),
-                            backgroundColor: Colors.blue,
-                            duration: const Duration(seconds: 4),
-                          ),
-                        );
-                      }
-                    }
-                  } catch (e) {
-                    // Show error if manual open also fails
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            '${localizations.fileSavedToDownloads}. ${localizations.checkFileManager}.',
-                          ),
-                          backgroundColor: Colors.blue,
-                          duration: const Duration(seconds: 4),
-                        ),
-                      );
-                    }
+          MessagingService.showSuccess(
+            context,
+            '${localizations.excelExportSuccess}\nFile saved to: ${filePath.split('/').last}',
+            actionLabel: localizations.openExcelFile,
+            onActionTap: () async {
+              try {
+                final result = await OpenFile.open(filePath);
+                if (result.type != ResultType.done) {
+                  if (mounted) {
+                    MessagingService.showInfo(
+                      context,
+                      '${localizations.fileSavedToDownloads}. ${localizations.checkFileManager}.',
+                    );
                   }
-                },
-              ),
-              duration: const Duration(seconds: 6),
-            ),
+                }
+              } catch (e) {
+                // Show error if manual open also fails
+                if (mounted) {
+                  MessagingService.showInfo(
+                    context,
+                    '${localizations.fileSavedToDownloads}. ${localizations.checkFileManager}.',
+                  );
+                }
+              }
+            },
           );
         }
       }
@@ -267,38 +233,31 @@ class _FinancePageState extends State<FinancePage> {
           errorMessage = AppLocalizations.of(context)!.unableToAccessStorage;
         }
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(errorMessage),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 5),
-            action:
-                e.toString().contains('Storage permission denied')
-                    ? SnackBarAction(
-                      label: AppLocalizations.of(context)!.settings,
-                      textColor: Colors.white,
-                      onPressed: () async {
-                        // Open app settings to grant permissions
-                        try {
-                          await openAppSettings();
-                        } catch (settingsError) {
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  AppLocalizations.of(
-                                    context,
-                                  )!.manuallyEnablePermission,
-                                ),
-                                backgroundColor: Colors.orange,
-                              ),
-                            );
-                          }
-                        }
-                      },
-                    )
-                    : null,
-          ),
+        MessagingService.showError(
+          context,
+          errorMessage,
+          actionLabel:
+              e.toString().contains('Storage permission denied')
+                  ? AppLocalizations.of(context)!.settings
+                  : null,
+          onActionTap:
+              e.toString().contains('Storage permission denied')
+                  ? () async {
+                    // Open app settings to grant permissions
+                    try {
+                      await openAppSettings();
+                    } catch (settingsError) {
+                      if (mounted) {
+                        MessagingService.showWarning(
+                          context,
+                          AppLocalizations.of(
+                            context,
+                          )!.manuallyEnablePermission,
+                        );
+                      }
+                    }
+                  }
+                  : null,
         );
       }
     } finally {
@@ -323,6 +282,7 @@ class _FinancePageState extends State<FinancePage> {
       await context.read<FinanceCubit>().submitSettlementRequest(
         amount: amount,
         notes: notes,
+        context: context,
       );
     }
   }
@@ -452,34 +412,13 @@ class _FinancePageState extends State<FinancePage> {
         body: BlocConsumer<FinanceCubit, FinanceState>(
           listener: (context, state) {
             if (state is FinanceError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.red,
-                ),
-              );
+              MessagingService.showError(context, state.message);
             } else if (state is FinancePdfExportError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.red,
-                ),
-              );
+              MessagingService.showError(context, state.message);
             } else if (state is FinanceSettlementRequestSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.green,
-                  duration: const Duration(seconds: 3),
-                ),
-              );
+              MessagingService.showSuccess(context, state.message);
             } else if (state is FinanceSettlementRequestError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.red,
-                ),
-              );
+              MessagingService.showError(context, state.message);
             }
           },
           builder: (context, state) {

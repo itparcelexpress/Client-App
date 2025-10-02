@@ -12,7 +12,6 @@ import 'package:client_app/features/finance/cubit/finance_cubit.dart';
 import 'package:client_app/features/finance/data/repositories/finance_repository.dart';
 import 'package:client_app/features/guest/cubit/guest_cubit.dart';
 import 'package:client_app/features/guest/data/repositories/guest_repository.dart';
-import 'package:client_app/features/invoices/cubit/invoice_cubit.dart';
 import 'package:client_app/features/notifications/cubit/notification_cubit.dart';
 import 'package:client_app/features/notifications/data/repositories/notification_repository.dart';
 import 'package:client_app/features/pricing/cubit/pricing_cubit.dart';
@@ -132,7 +131,6 @@ Future<void> initInj() async {
   getIt.registerFactory<DashboardCubit>(
     () => DashboardCubit(getIt<DashboardRepository>()),
   );
-  getIt.registerFactory<InvoiceCubit>(() => InvoiceCubit());
   getIt.registerFactory<NotificationCubit>(
     () => NotificationCubit(getIt<NotificationRepository>()),
   );

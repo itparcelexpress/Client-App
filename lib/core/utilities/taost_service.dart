@@ -1,11 +1,10 @@
 // toast_service.dart
 
+import 'package:client_app/core/services/messaging_service.dart';
+import 'package:client_app/core/widgets/messaging/toast_notification.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
-enum ToastType { success, error, info, warning }
 
 class ToastService {
   // Flag to suppress auth error messages during logout/redirect
@@ -27,6 +26,7 @@ class ToastService {
   static void showCustomToast({
     required String message,
     ToastType type = ToastType.info,
+    BuildContext? context,
   }) {
     // Skip auth-related error messages when user is being logged out
     if (_suppressAuthErrors && type == ToastType.error) {
@@ -51,38 +51,37 @@ class ToastService {
       }
     }
 
-    Color backgroundColor;
-    String icon;
+    // Convert old ToastType to new ToastType
+    final newType = _convertToastType(type);
 
-    // Assign icon and background color based on the toast type
-    switch (type) {
-      case ToastType.success:
-        backgroundColor = Colors.green;
-        icon = "✅"; // Checkmark emoji
-        break;
-      case ToastType.error:
-        backgroundColor = Colors.red;
-        icon = "❌"; // Cross mark emoji
-        break;
-      case ToastType.warning:
-        backgroundColor = Colors.orange;
-        icon = "⚠️"; // Warning emoji
-        break;
-      case ToastType.info:
-        backgroundColor = Colors.blue;
-        icon = "ℹ️"; // Information emoji
+    // Use new messaging service if context is available
+    if (context != null) {
+      MessagingService.showToast(context, message: message, type: newType);
+    } else {
+      // Fallback to old system if no context
+      _showLegacyToast(message, type);
     }
+  }
 
-    // Display the toast
-    Fluttertoast.showToast(
-      msg: "$icon $message", // Combine icon and message
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: backgroundColor,
-      textColor: Colors.white,
-      fontSize: 16.0,
-      // Optionally, you can add padding and other customization
-    );
+  /// Convert old ToastType to new ToastType
+  static ToastType _convertToastType(ToastType oldType) {
+    switch (oldType) {
+      case ToastType.success:
+        return ToastType.success;
+      case ToastType.error:
+        return ToastType.error;
+      case ToastType.warning:
+        return ToastType.warning;
+      case ToastType.info:
+        return ToastType.info;
+    }
+  }
+
+  /// Legacy toast fallback
+  static void _showLegacyToast(String message, ToastType type) {
+    // This is a fallback for cases where context is not available
+    // In practice, this should rarely be used
+    print('Toast: $message (Type: $type)');
   }
 
   /// Displays a localized toast with an icon based on the [type].
@@ -98,7 +97,7 @@ class ToastService {
     final localizations = AppLocalizations.of(context);
     if (localizations == null) {
       // Fallback to non-localized toast if localizations are not available
-      showCustomToast(message: messageKey, type: type);
+      showCustomToast(message: messageKey, type: type, context: context);
       return;
     }
 
@@ -111,7 +110,7 @@ class ToastService {
       message = messageKey;
     }
 
-    showCustomToast(message: message, type: type);
+    showCustomToast(message: message, type: type, context: context);
   }
 
   /// Helper method to get localized message using reflection
@@ -226,5 +225,39 @@ class ToastService {
       messageKey: messageKey,
       type: ToastType.warning,
     );
+  }
+
+  /// New convenience methods using the modern messaging system
+  static void showSuccessToast(BuildContext context, String message) {
+    MessagingService.showSuccess(context, message);
+  }
+
+  static void showErrorToast(BuildContext context, String message) {
+    MessagingService.showError(context, message);
+  }
+
+  static void showInfoToast(BuildContext context, String message) {
+    MessagingService.showInfo(context, message);
+  }
+
+  static void showWarningToast(BuildContext context, String message) {
+    MessagingService.showWarning(context, message);
+  }
+
+  /// Banner methods for important messages
+  static void showSuccessBanner(BuildContext context, String message) {
+    MessagingService.showSuccessBanner(context, message);
+  }
+
+  static void showErrorBanner(BuildContext context, String message) {
+    MessagingService.showErrorBanner(context, message);
+  }
+
+  static void showInfoBanner(BuildContext context, String message) {
+    MessagingService.showInfoBanner(context, message);
+  }
+
+  static void showWarningBanner(BuildContext context, String message) {
+    MessagingService.showWarningBanner(context, message);
   }
 }

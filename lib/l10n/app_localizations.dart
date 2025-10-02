@@ -386,6 +386,30 @@ abstract class AppLocalizations {
   /// **'View delivery pricing per state'**
   String get viewDeliveryPricing;
 
+  /// Delete account setting title
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccountTitle;
+
+  /// Delete account setting subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently deactivate your account'**
+  String get deleteAccountSubtitle;
+
+  /// Delete account confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete your account? This will deactivate your account and you will no longer be able to access it.'**
+  String get deleteAccountConfirm;
+
+  /// Delete account success
+  ///
+  /// In en, this message translates to:
+  /// **'Your account has been deactivated successfully.'**
+  String get accountDeletedSuccess;
+
   /// Logout subtitle
   ///
   /// In en, this message translates to:
@@ -596,10 +620,10 @@ abstract class AppLocalizations {
   /// **'Try Again'**
   String get tryAgain;
 
-  /// Connection error message
+  /// Connection error
   ///
   /// In en, this message translates to:
-  /// **'Connection error'**
+  /// **'Connection error. Please check your internet connection.'**
   String get connectionError;
 
   /// Invalid data message
@@ -613,12 +637,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Orders'**
   String get orders;
-
-  /// Invoices tab title
-  ///
-  /// In en, this message translates to:
-  /// **'Invoices'**
-  String get invoices;
 
   /// Profile navigation label
   ///
@@ -836,47 +854,11 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to logout?'**
   String get logoutConfirmation;
 
-  /// Invoices and payments page title
-  ///
-  /// In en, this message translates to:
-  /// **'Invoices & Payments'**
-  String get invoicesAndPayments;
-
-  /// Invoice search placeholder
-  ///
-  /// In en, this message translates to:
-  /// **'Search by invoice number...'**
-  String get searchByInvoiceNumber;
-
-  /// Loading invoices message
-  ///
-  /// In en, this message translates to:
-  /// **'Loading invoices...'**
-  String get loadingInvoices;
-
-  /// No invoices message
-  ///
-  /// In en, this message translates to:
-  /// **'No Invoices'**
-  String get noInvoices;
-
-  /// No invoices yet message
-  ///
-  /// In en, this message translates to:
-  /// **'You don\'t have any invoices yet.'**
-  String get noInvoicesYet;
-
   /// No search results message
   ///
   /// In en, this message translates to:
   /// **'No Results'**
   String get noResults;
-
-  /// No invoices found message
-  ///
-  /// In en, this message translates to:
-  /// **'No invoices found for \"{query}\"'**
-  String noInvoicesFound(String query);
 
   /// Clear search button text
   ///
@@ -1706,23 +1688,11 @@ abstract class AppLocalizations {
   /// **'Total Balance'**
   String get totalBalance;
 
-  /// Invoice summary section title
-  ///
-  /// In en, this message translates to:
-  /// **'Invoice Summary'**
-  String get invoiceSummary;
-
   /// Total amount label
   ///
   /// In en, this message translates to:
   /// **'Total Amount'**
   String get totalAmount;
-
-  /// Total invoices label
-  ///
-  /// In en, this message translates to:
-  /// **'Total Invoices'**
-  String get totalInvoices;
 
   /// Paid status label
   ///
@@ -1735,18 +1705,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Overdue'**
   String get overdue;
-
-  /// Invoices count with number
-  ///
-  /// In en, this message translates to:
-  /// **'{count} invoices'**
-  String invoicesCount(int count);
-
-  /// Invoice number with hash
-  ///
-  /// In en, this message translates to:
-  /// **'Invoice #{number}'**
-  String invoiceNumber(String number);
 
   /// ID with number
   ///
@@ -1925,7 +1883,7 @@ abstract class AppLocalizations {
   /// Network error message
   ///
   /// In en, this message translates to:
-  /// **'Network error. Please check your connection.'**
+  /// **'Network error. Please check your internet connection.'**
   String get networkError;
 
   /// Server error message
@@ -2300,24 +2258,6 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to delete \"{name}\" address?'**
   String deleteAddressConfirmation(String name);
 
-  /// Wallet page title
-  ///
-  /// In en, this message translates to:
-  /// **'Wallet'**
-  String get wallet;
-
-  /// Wallet menu item title
-  ///
-  /// In en, this message translates to:
-  /// **'Wallet'**
-  String get viewWallet;
-
-  /// Wallet menu item subtitle
-  ///
-  /// In en, this message translates to:
-  /// **'View balance and transactions'**
-  String get viewWalletSubtitle;
-
   /// Fee payer field label
   ///
   /// In en, this message translates to:
@@ -2492,10 +2432,10 @@ abstract class AppLocalizations {
   /// **'Please check your internet connection and try again'**
   String get pleaseCheckInternetConnection;
 
-  /// Request timeout message
+  /// Request timeout error
   ///
   /// In en, this message translates to:
-  /// **'Request timeout'**
+  /// **'Request timed out. Please try again.'**
   String get requestTimeout;
 
   /// Request timeout detailed message
@@ -2971,12 +2911,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error saving PDF'**
   String get errorSavingPdf;
-
-  /// Invoice file prefix
-  ///
-  /// In en, this message translates to:
-  /// **'Invoice'**
-  String get invoice;
 
   /// Update required title
   ///
@@ -3637,6 +3571,384 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Stay'**
   String get stay;
+
+  /// Settlement amount exceeds balance error
+  ///
+  /// In en, this message translates to:
+  /// **'The requested amount exceeds your current balance. Please enter a smaller amount.'**
+  String get settlementAmountExceedsBalance;
+
+  /// Insufficient balance error
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient balance. Please check your account balance.'**
+  String get insufficientBalance;
+
+  /// Invalid settlement amount error
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid settlement amount. Please enter a valid amount.'**
+  String get invalidSettlementAmount;
+
+  /// Settlement request already exists error
+  ///
+  /// In en, this message translates to:
+  /// **'A settlement request already exists. Please wait for it to be processed.'**
+  String get settlementRequestAlreadyExists;
+
+  /// Minimum settlement amount error
+  ///
+  /// In en, this message translates to:
+  /// **'The settlement amount is below the minimum required amount.'**
+  String get minimumSettlementAmount;
+
+  /// Maximum settlement amount error
+  ///
+  /// In en, this message translates to:
+  /// **'The settlement amount exceeds the maximum allowed amount.'**
+  String get maximumSettlementAmount;
+
+  /// Account not found error
+  ///
+  /// In en, this message translates to:
+  /// **'Account not found. Please contact support.'**
+  String get accountNotFound;
+
+  /// Session expired error
+  ///
+  /// In en, this message translates to:
+  /// **'Your session has expired. Please log in again.'**
+  String get sessionExpired;
+
+  /// Access denied error
+  ///
+  /// In en, this message translates to:
+  /// **'Access denied. You don\'t have permission to perform this action.'**
+  String get accessDenied;
+
+  /// Resource not found error
+  ///
+  /// In en, this message translates to:
+  /// **'The requested resource was not found.'**
+  String get resourceNotFound;
+
+  /// Validation failed error
+  ///
+  /// In en, this message translates to:
+  /// **'Validation failed. Please check your input and try again.'**
+  String get validationFailed;
+
+  /// Service unavailable error
+  ///
+  /// In en, this message translates to:
+  /// **'Service is temporarily unavailable. Please try again later.'**
+  String get serviceUnavailable;
+
+  /// Too many requests error
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Please wait a moment and try again.'**
+  String get tooManyRequests;
+
+  /// Payment required error
+  ///
+  /// In en, this message translates to:
+  /// **'Payment required to access this feature.'**
+  String get paymentRequired;
+
+  /// Resource conflict error
+  ///
+  /// In en, this message translates to:
+  /// **'The resource already exists or conflicts with existing data.'**
+  String get resourceConflict;
+
+  /// Precondition failed error
+  ///
+  /// In en, this message translates to:
+  /// **'Precondition failed. Please try again.'**
+  String get preconditionFailed;
+
+  /// Request too large error
+  ///
+  /// In en, this message translates to:
+  /// **'Request is too large. Please reduce the data size.'**
+  String get requestTooLarge;
+
+  /// Unsupported media type error
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported media type. Please check your file format.'**
+  String get unsupportedMediaType;
+
+  /// Unprocessable entity error
+  ///
+  /// In en, this message translates to:
+  /// **'The request could not be processed. Please check your input.'**
+  String get unprocessableEntity;
+
+  /// Resource locked error
+  ///
+  /// In en, this message translates to:
+  /// **'The resource is locked and cannot be modified.'**
+  String get resourceLocked;
+
+  /// Failed dependency error
+  ///
+  /// In en, this message translates to:
+  /// **'The request failed due to a dependency issue.'**
+  String get failedDependency;
+
+  /// Upgrade required error
+  ///
+  /// In en, this message translates to:
+  /// **'An upgrade is required to access this feature.'**
+  String get upgradeRequired;
+
+  /// Precondition required error
+  ///
+  /// In en, this message translates to:
+  /// **'A precondition is required for this request.'**
+  String get preconditionRequired;
+
+  /// Too many connections error
+  ///
+  /// In en, this message translates to:
+  /// **'Too many connections. Please try again later.'**
+  String get tooManyConnections;
+
+  /// Unavailable for legal reasons error
+  ///
+  /// In en, this message translates to:
+  /// **'This service is unavailable for legal reasons.'**
+  String get unavailableForLegalReasons;
+
+  /// Bad request error
+  ///
+  /// In en, this message translates to:
+  /// **'Bad request. Please check your input and try again.'**
+  String get badRequest;
+
+  /// Unauthorized error
+  ///
+  /// In en, this message translates to:
+  /// **'Unauthorized access. Please log in again.'**
+  String get unauthorized;
+
+  /// Forbidden error
+  ///
+  /// In en, this message translates to:
+  /// **'Access forbidden. You don\'t have permission.'**
+  String get forbidden;
+
+  /// Not found error
+  ///
+  /// In en, this message translates to:
+  /// **'The requested resource was not found.'**
+  String get notFound;
+
+  /// Method not allowed error
+  ///
+  /// In en, this message translates to:
+  /// **'This method is not allowed for this resource.'**
+  String get methodNotAllowed;
+
+  /// Not acceptable error
+  ///
+  /// In en, this message translates to:
+  /// **'The request is not acceptable.'**
+  String get notAcceptable;
+
+  /// Gone error
+  ///
+  /// In en, this message translates to:
+  /// **'The resource is no longer available.'**
+  String get gone;
+
+  /// Length required error
+  ///
+  /// In en, this message translates to:
+  /// **'Content length is required for this request.'**
+  String get lengthRequired;
+
+  /// Payload too large error
+  ///
+  /// In en, this message translates to:
+  /// **'The request payload is too large.'**
+  String get payloadTooLarge;
+
+  /// URI too long error
+  ///
+  /// In en, this message translates to:
+  /// **'The request URI is too long.'**
+  String get uriTooLong;
+
+  /// Range not satisfiable error
+  ///
+  /// In en, this message translates to:
+  /// **'The requested range is not satisfiable.'**
+  String get rangeNotSatisfiable;
+
+  /// Expectation failed error
+  ///
+  /// In en, this message translates to:
+  /// **'The expectation could not be met.'**
+  String get expectationFailed;
+
+  /// I'm a teapot error
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m a teapot. This is a joke error.'**
+  String get imATeapot;
+
+  /// Misdirected request error
+  ///
+  /// In en, this message translates to:
+  /// **'The request was misdirected.'**
+  String get misdirectedRequest;
+
+  /// Locked error
+  ///
+  /// In en, this message translates to:
+  /// **'The resource is locked.'**
+  String get locked;
+
+  /// Too early error
+  ///
+  /// In en, this message translates to:
+  /// **'The request was made too early.'**
+  String get tooEarly;
+
+  /// Request header fields too large error
+  ///
+  /// In en, this message translates to:
+  /// **'Request header fields are too large.'**
+  String get requestHeaderFieldsTooLarge;
+
+  /// Internal server error
+  ///
+  /// In en, this message translates to:
+  /// **'Internal server error. Please try again later.'**
+  String get internalServerError;
+
+  /// Not implemented error
+  ///
+  /// In en, this message translates to:
+  /// **'This feature is not implemented yet.'**
+  String get notImplemented;
+
+  /// Bad gateway error
+  ///
+  /// In en, this message translates to:
+  /// **'Bad gateway. Please try again later.'**
+  String get badGateway;
+
+  /// Gateway timeout error
+  ///
+  /// In en, this message translates to:
+  /// **'Gateway timeout. Please try again later.'**
+  String get gatewayTimeout;
+
+  /// HTTP version not supported error
+  ///
+  /// In en, this message translates to:
+  /// **'HTTP version not supported.'**
+  String get httpVersionNotSupported;
+
+  /// Variant also negotiates error
+  ///
+  /// In en, this message translates to:
+  /// **'Variant also negotiates error.'**
+  String get variantAlsoNegotiates;
+
+  /// Insufficient storage error
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient storage on the server.'**
+  String get insufficientStorage;
+
+  /// Loop detected error
+  ///
+  /// In en, this message translates to:
+  /// **'Infinite loop detected.'**
+  String get loopDetected;
+
+  /// Not extended error
+  ///
+  /// In en, this message translates to:
+  /// **'Not extended error.'**
+  String get notExtended;
+
+  /// Network authentication required error
+  ///
+  /// In en, this message translates to:
+  /// **'Network authentication required.'**
+  String get networkAuthenticationRequired;
+
+  /// Invalid amount error
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid amount. Please enter a valid number.'**
+  String get invalidAmount;
+
+  /// Invalid email error
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email address. Please enter a valid email.'**
+  String get invalidEmail;
+
+  /// Invalid phone error
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid phone number. Please enter a valid phone number.'**
+  String get invalidPhone;
+
+  /// Invalid password error
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid password. Please check your password.'**
+  String get invalidPassword;
+
+  /// Field required error
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required. Please fill it out.'**
+  String get fieldRequired;
+
+  /// Bad response error
+  ///
+  /// In en, this message translates to:
+  /// **'Bad response from server. Please try again.'**
+  String get badResponse;
+
+  /// Connection timeout error
+  ///
+  /// In en, this message translates to:
+  /// **'Connection timeout. Please check your internet connection.'**
+  String get connectionTimeout;
+
+  /// Send timeout error
+  ///
+  /// In en, this message translates to:
+  /// **'Send timeout. Please try again.'**
+  String get sendTimeout;
+
+  /// Receive timeout error
+  ///
+  /// In en, this message translates to:
+  /// **'Receive timeout. Please try again.'**
+  String get receiveTimeout;
+
+  /// Request cancelled error
+  ///
+  /// In en, this message translates to:
+  /// **'Request was cancelled.'**
+  String get requestCancelled;
+
+  /// Unknown error message
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown error occurred. Please try again.'**
+  String get unknownError;
 }
 
 class _AppLocalizationsDelegate

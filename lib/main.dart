@@ -51,6 +51,7 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> {
   Locale _locale = const Locale('ar'); // Default to Arabic
+  final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
@@ -82,6 +83,7 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      navigatorKey: _navKey,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       title: _getAppTitle(),
@@ -89,8 +91,46 @@ class MyAppState extends State<MyApp> {
       locale: _locale,
       home: WillPopScope(
         onWillPop: () async {
-          // Do not allow system back to close the app when at root
-          return Navigator.canPop(context);
+          // If there is a route to pop, allow normal navigation
+          final navCtx = _navKey.currentContext ?? context;
+          if (Navigator.canPop(navCtx)) return true;
+
+          // At root: confirm before closing the app
+          final localizations = AppLocalizations.of(navCtx)!;
+          final shouldExit =
+              await showDialog<bool>(
+                context: navCtx,
+                builder:
+                    (ctx) => AlertDialog(
+                      title: Text(localizations.exitApp),
+                      content: Text(localizations.exitAppConfirmation),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(ctx).pop(false),
+                          child: Text(localizations.stay),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.of(ctx).pop(true),
+                          child: Text(
+                            localizations.exit,
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    ),
+              ) ??
+              false;
+
+          if (shouldExit) {
+            if (Platform.isAndroid) {
+              SystemNavigator.pop();
+            } else if (Platform.isIOS) {
+              exit(0);
+            }
+            return false; // prevent further pop handling
+          }
+
+          return false;
         },
         child: MultiBlocProvider(
           providers: [

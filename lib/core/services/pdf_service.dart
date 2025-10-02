@@ -52,11 +52,4 @@ class PdfService {
       return false;
     }
   }
-
-  /// Get a safe filename from invoice number
-  static String getSafeFileName(String invoiceNo) {
-    // Remove or replace invalid filename characters
-    String safeFileName = invoiceNo.replaceAll(RegExp(r'[<>:"/\\|?*]'), '_');
-    return 'Invoice_$safeFileName';
-  }
 }

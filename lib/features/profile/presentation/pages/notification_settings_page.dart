@@ -1,4 +1,5 @@
 import 'package:client_app/core/models/client_settings_models.dart';
+import 'package:client_app/core/services/messaging_service.dart';
 import 'package:client_app/features/profile/cubit/client_settings_cubit.dart';
 import 'package:client_app/features/profile/cubit/client_settings_state.dart';
 import 'package:client_app/injections.dart';
@@ -83,16 +84,7 @@ class NotificationSettingsView extends StatelessWidget {
       body: BlocConsumer<ClientSettingsCubit, ClientSettingsState>(
         listener: (context, state) {
           if (state is ClientSettingsUpdateSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.green,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            );
+            MessagingService.showSuccess(context, state.message);
           } else if (state is ClientSettingsError ||
               state is ClientSettingsUpdateError) {
             final message =
@@ -100,16 +92,7 @@ class NotificationSettingsView extends StatelessWidget {
                     ? state.message
                     : (state as ClientSettingsUpdateError).message;
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(message),
-                backgroundColor: Colors.red,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            );
+            MessagingService.showError(context, message);
           }
         },
         builder: (context, state) {

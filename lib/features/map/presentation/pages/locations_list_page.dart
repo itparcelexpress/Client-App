@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:client_app/core/services/messaging_service.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 
 import '../../data/models/hub_model.dart' as hub_models;
@@ -135,13 +136,9 @@ class _LocationsListPageState extends State<LocationsListPage>
               if (widget.onItemSelected != null) {
                 widget.onItemSelected!(station);
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      AppLocalizations.of(context)!.selected(station.name),
-                    ),
-                    duration: const Duration(seconds: 2),
-                  ),
+                MessagingService.showInfo(
+                  context,
+                  AppLocalizations.of(context)!.selected(station.name),
                 );
               }
             },
@@ -194,13 +191,9 @@ class _LocationsListPageState extends State<LocationsListPage>
               if (widget.onItemSelected != null) {
                 widget.onItemSelected!(hub);
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      AppLocalizations.of(context)!.selected(hub.name),
-                    ),
-                    duration: const Duration(seconds: 2),
-                  ),
+                MessagingService.showInfo(
+                  context,
+                  AppLocalizations.of(context)!.selected(hub.name),
                 );
               }
             },

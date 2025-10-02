@@ -198,6 +198,14 @@
   "@viewDeliveryPricing": {
     "description": "View pricing subtitle"
   },
+  "deleteAccountTitle": "Delete Account",
+  "@deleteAccountTitle": {"description": "Delete account setting title"},
+  "deleteAccountSubtitle": "Permanently deactivate your account",
+  "@deleteAccountSubtitle": {"description": "Delete account setting subtitle"},
+  "deleteAccountConfirm": "Are you sure you want to delete your account? This will deactivate your account and you will no longer be able to access it.",
+  "@deleteAccountConfirm": {"description": "Delete account confirmation"},
+  "accountDeletedSuccess": "Your account has been deactivated successfully.",
+  "@accountDeletedSuccess": {"description": "Delete account success"},
   "signOutAccount": "Sign out of your account",
   "@signOutAccount": {
     "description": "Logout subtitle"
@@ -350,10 +358,6 @@
   "@orders": {
     "description": "Orders navigation label"
   },
-  "invoices": "Invoices",
-  "@invoices": {
-    "description": "Invoices navigation label"
-  },
   "profile": "Profile",
   "@profile": {
     "description": "Profile navigation label"
@@ -502,39 +506,9 @@
   "@logoutConfirmation": {
     "description": "Logout confirmation message"
   },
-  "invoicesAndPayments": "Invoices & Payments",
-  "@invoicesAndPayments": {
-    "description": "Invoices and payments page title"
-  },
-  "searchByInvoiceNumber": "Search by invoice number...",
-  "@searchByInvoiceNumber": {
-    "description": "Invoice search placeholder"
-  },
-  "loadingInvoices": "Loading invoices...",
-  "@loadingInvoices": {
-    "description": "Loading invoices message"
-  },
-  "noInvoices": "No Invoices",
-  "@noInvoices": {
-    "description": "No invoices message"
-  },
-  "noInvoicesYet": "You don't have any invoices yet.",
-  "@noInvoicesYet": {
-    "description": "No invoices yet message"
-  },
   "noResults": "No Results",
   "@noResults": {
     "description": "No search results message"
-  },
-  "noInvoicesFound": "No invoices found for \"{query}\"",
-  "@noInvoicesFound": {
-    "description": "No invoices found message",
-    "placeholders": {
-      "query": {
-        "type": "String",
-        "example": "INV-123"
-      }
-    }
   },
   "clearSearch": "Clear Search",
   "@clearSearch": {
@@ -1205,10 +1179,6 @@
     "description": "Payments page title"
   },
 
-  "invoices": "Invoices",
-  "@invoices": {
-    "description": "Invoices tab title"
-  },
 
   "retry": "Retry",
   "@retry": {
@@ -1315,20 +1285,12 @@
     "description": "Total balance label"
   },
 
-  "invoiceSummary": "Invoice Summary",
-  "@invoiceSummary": {
-    "description": "Invoice summary section title"
-  },
 
   "totalAmount": "Total Amount",
   "@totalAmount": {
     "description": "Total amount label"
   },
 
-  "totalInvoices": "Total Invoices",
-  "@totalInvoices": {
-    "description": "Total invoices label"
-  },
 
   "paid": "Paid",
   "@paid": {
@@ -1340,27 +1302,7 @@
     "description": "Overdue status label"
   },
 
-  "invoicesCount": "{count} invoices",
-  "@invoicesCount": {
-    "description": "Invoices count with number",
-    "placeholders": {
-      "count": {
-        "type": "int",
-        "example": "5"
-      }
-    }
-  },
 
-  "invoiceNumber": "Invoice #{number}",
-  "@invoiceNumber": {
-    "description": "Invoice number with hash",
-    "placeholders": {
-      "number": {
-        "type": "String",
-        "example": "INV-001"
-      }
-    }
-  },
 
   "id": "ID: {id}",
   "@id": {
@@ -1904,12 +1846,6 @@
     "description": "Alternate phone number input information text"
   }
   ,
-  "wallet": "Wallet",
-  "@wallet": {"description": "Wallet page title"},
-  "viewWallet": "Wallet",
-  "@viewWallet": {"description": "Wallet menu item title"},
-  "viewWalletSubtitle": "View balance and transactions",
-  "@viewWalletSubtitle": {"description": "Wallet menu item subtitle"},
 
   "feePayer": "Fee Payer",
   "@feePayer": {"description": "Fee payer field label"},
@@ -2190,8 +2126,6 @@
   "@failedToOpenPdf": {"description": "PDF open failure message"},
   "errorSavingPdf": "Error saving PDF",
   "@errorSavingPdf": {"description": "PDF save error message"},
-  "invoice": "Invoice",
-  "@invoice": {"description": "Invoice file prefix"},
   
   "update_required": "Update Required",
   "@update_required": {"description": "Update required title"},
@@ -2433,5 +2367,139 @@
   "exit": "Exit",
   "@exit": {"description": "Exit button text"},
   "stay": "Stay",
-  "@stay": {"description": "Stay button text"}
+  "@stay": {"description": "Stay button text"},
+  "settlementAmountExceedsBalance": "The requested amount exceeds your current balance. Please enter a smaller amount.",
+  "@settlementAmountExceedsBalance": {"description": "Settlement amount exceeds balance error"},
+  "insufficientBalance": "Insufficient balance. Please check your account balance.",
+  "@insufficientBalance": {"description": "Insufficient balance error"},
+  "invalidSettlementAmount": "Invalid settlement amount. Please enter a valid amount.",
+  "@invalidSettlementAmount": {"description": "Invalid settlement amount error"},
+  "settlementRequestAlreadyExists": "A settlement request already exists. Please wait for it to be processed.",
+  "@settlementRequestAlreadyExists": {"description": "Settlement request already exists error"},
+  "minimumSettlementAmount": "The settlement amount is below the minimum required amount.",
+  "@minimumSettlementAmount": {"description": "Minimum settlement amount error"},
+  "maximumSettlementAmount": "The settlement amount exceeds the maximum allowed amount.",
+  "@maximumSettlementAmount": {"description": "Maximum settlement amount error"},
+  "accountNotFound": "Account not found. Please contact support.",
+  "@accountNotFound": {"description": "Account not found error"},
+  "sessionExpired": "Your session has expired. Please log in again.",
+  "@sessionExpired": {"description": "Session expired error"},
+  "accessDenied": "Access denied. You don't have permission to perform this action.",
+  "@accessDenied": {"description": "Access denied error"},
+  "resourceNotFound": "The requested resource was not found.",
+  "@resourceNotFound": {"description": "Resource not found error"},
+  "validationFailed": "Validation failed. Please check your input and try again.",
+  "@validationFailed": {"description": "Validation failed error"},
+  "networkError": "Network error. Please check your internet connection.",
+  "@networkError": {"description": "Network error message"},
+  "requestTimeout": "Request timed out. Please try again.",
+  "@requestTimeout": {"description": "Request timeout error"},
+  "serverError": "Server error. Please try again later.",
+  "@serverError": {"description": "Server error message"},
+  "serviceUnavailable": "Service is temporarily unavailable. Please try again later.",
+  "@serviceUnavailable": {"description": "Service unavailable error"},
+  "tooManyRequests": "Too many requests. Please wait a moment and try again.",
+  "@tooManyRequests": {"description": "Too many requests error"},
+  "paymentRequired": "Payment required to access this feature.",
+  "@paymentRequired": {"description": "Payment required error"},
+  "resourceConflict": "The resource already exists or conflicts with existing data.",
+  "@resourceConflict": {"description": "Resource conflict error"},
+  "preconditionFailed": "Precondition failed. Please try again.",
+  "@preconditionFailed": {"description": "Precondition failed error"},
+  "requestTooLarge": "Request is too large. Please reduce the data size.",
+  "@requestTooLarge": {"description": "Request too large error"},
+  "unsupportedMediaType": "Unsupported media type. Please check your file format.",
+  "@unsupportedMediaType": {"description": "Unsupported media type error"},
+  "unprocessableEntity": "The request could not be processed. Please check your input.",
+  "@unprocessableEntity": {"description": "Unprocessable entity error"},
+  "resourceLocked": "The resource is locked and cannot be modified.",
+  "@resourceLocked": {"description": "Resource locked error"},
+  "failedDependency": "The request failed due to a dependency issue.",
+  "@failedDependency": {"description": "Failed dependency error"},
+  "upgradeRequired": "An upgrade is required to access this feature.",
+  "@upgradeRequired": {"description": "Upgrade required error"},
+  "preconditionRequired": "A precondition is required for this request.",
+  "@preconditionRequired": {"description": "Precondition required error"},
+  "tooManyConnections": "Too many connections. Please try again later.",
+  "@tooManyConnections": {"description": "Too many connections error"},
+  "unavailableForLegalReasons": "This service is unavailable for legal reasons.",
+  "@unavailableForLegalReasons": {"description": "Unavailable for legal reasons error"},
+  "badRequest": "Bad request. Please check your input and try again.",
+  "@badRequest": {"description": "Bad request error"},
+  "unauthorized": "Unauthorized access. Please log in again.",
+  "@unauthorized": {"description": "Unauthorized error"},
+  "forbidden": "Access forbidden. You don't have permission.",
+  "@forbidden": {"description": "Forbidden error"},
+  "notFound": "The requested resource was not found.",
+  "@notFound": {"description": "Not found error"},
+  "methodNotAllowed": "This method is not allowed for this resource.",
+  "@methodNotAllowed": {"description": "Method not allowed error"},
+  "notAcceptable": "The request is not acceptable.",
+  "@notAcceptable": {"description": "Not acceptable error"},
+  "gone": "The resource is no longer available.",
+  "@gone": {"description": "Gone error"},
+  "lengthRequired": "Content length is required for this request.",
+  "@lengthRequired": {"description": "Length required error"},
+  "payloadTooLarge": "The request payload is too large.",
+  "@payloadTooLarge": {"description": "Payload too large error"},
+  "uriTooLong": "The request URI is too long.",
+  "@uriTooLong": {"description": "URI too long error"},
+  "rangeNotSatisfiable": "The requested range is not satisfiable.",
+  "@rangeNotSatisfiable": {"description": "Range not satisfiable error"},
+  "expectationFailed": "The expectation could not be met.",
+  "@expectationFailed": {"description": "Expectation failed error"},
+  "imATeapot": "I'm a teapot. This is a joke error.",
+  "@imATeapot": {"description": "I'm a teapot error"},
+  "misdirectedRequest": "The request was misdirected.",
+  "@misdirectedRequest": {"description": "Misdirected request error"},
+  "locked": "The resource is locked.",
+  "@locked": {"description": "Locked error"},
+  "tooEarly": "The request was made too early.",
+  "@tooEarly": {"description": "Too early error"},
+  "requestHeaderFieldsTooLarge": "Request header fields are too large.",
+  "@requestHeaderFieldsTooLarge": {"description": "Request header fields too large error"},
+  "internalServerError": "Internal server error. Please try again later.",
+  "@internalServerError": {"description": "Internal server error"},
+  "notImplemented": "This feature is not implemented yet.",
+  "@notImplemented": {"description": "Not implemented error"},
+  "badGateway": "Bad gateway. Please try again later.",
+  "@badGateway": {"description": "Bad gateway error"},
+  "gatewayTimeout": "Gateway timeout. Please try again later.",
+  "@gatewayTimeout": {"description": "Gateway timeout error"},
+  "httpVersionNotSupported": "HTTP version not supported.",
+  "@httpVersionNotSupported": {"description": "HTTP version not supported error"},
+  "variantAlsoNegotiates": "Variant also negotiates error.",
+  "@variantAlsoNegotiates": {"description": "Variant also negotiates error"},
+  "insufficientStorage": "Insufficient storage on the server.",
+  "@insufficientStorage": {"description": "Insufficient storage error"},
+  "loopDetected": "Infinite loop detected.",
+  "@loopDetected": {"description": "Loop detected error"},
+  "notExtended": "Not extended error.",
+  "@notExtended": {"description": "Not extended error"},
+  "networkAuthenticationRequired": "Network authentication required.",
+  "@networkAuthenticationRequired": {"description": "Network authentication required error"},
+  "invalidAmount": "Invalid amount. Please enter a valid number.",
+  "@invalidAmount": {"description": "Invalid amount error"},
+  "invalidEmail": "Invalid email address. Please enter a valid email.",
+  "@invalidEmail": {"description": "Invalid email error"},
+  "invalidPhone": "Invalid phone number. Please enter a valid phone number.",
+  "@invalidPhone": {"description": "Invalid phone error"},
+  "invalidPassword": "Invalid password. Please check your password.",
+  "@invalidPassword": {"description": "Invalid password error"},
+  "fieldRequired": "This field is required. Please fill it out.",
+  "@fieldRequired": {"description": "Field required error"},
+  "badResponse": "Bad response from server. Please try again.",
+  "@badResponse": {"description": "Bad response error"},
+  "connectionTimeout": "Connection timeout. Please check your internet connection.",
+  "@connectionTimeout": {"description": "Connection timeout error"},
+  "sendTimeout": "Send timeout. Please try again.",
+  "@sendTimeout": {"description": "Send timeout error"},
+  "receiveTimeout": "Receive timeout. Please try again.",
+  "@receiveTimeout": {"description": "Receive timeout error"},
+  "requestCancelled": "Request was cancelled.",
+  "@requestCancelled": {"description": "Request cancelled error"},
+  "connectionError": "Connection error. Please check your internet connection.",
+  "@connectionError": {"description": "Connection error"},
+  "unknownError": "An unknown error occurred. Please try again.",
+  "@unknownError": {"description": "Unknown error message"}
 }

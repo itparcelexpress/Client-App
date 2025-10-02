@@ -1,4 +1,5 @@
 import 'package:client_app/core/models/notification_models.dart';
+import 'package:client_app/core/services/messaging_service.dart';
 import 'package:client_app/features/notifications/cubit/notification_cubit.dart';
 import 'package:client_app/features/notifications/cubit/notification_state.dart';
 import 'package:client_app/injections.dart';
@@ -206,30 +207,17 @@ class _NotificationsViewState extends State<NotificationsView> {
       body: BlocConsumer<NotificationCubit, NotificationState>(
         listener: (context, state) {
           if (state is NotificationMarkAsReadSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  AppLocalizations.of(context)!.notificationMarkedAsRead,
-                ),
-                backgroundColor: Colors.green,
-              ),
+            MessagingService.showSuccess(
+              context,
+              AppLocalizations.of(context)!.notificationMarkedAsRead,
             );
           } else if (state is NotificationDeleteSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  AppLocalizations.of(context)!.notificationDeleted,
-                ),
-                backgroundColor: Colors.orange,
-              ),
+            MessagingService.showWarning(
+              context,
+              AppLocalizations.of(context)!.notificationDeleted,
             );
           } else if (state is NotificationActionError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
-              ),
-            );
+            MessagingService.showError(context, state.message);
           }
         },
         builder: (context, state) {

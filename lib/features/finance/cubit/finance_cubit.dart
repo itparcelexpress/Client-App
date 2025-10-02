@@ -5,6 +5,7 @@ import 'package:client_app/features/finance/data/repositories/finance_repository
 import 'package:client_app/features/finance/data/services/pdf_export_service.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'finance_state.dart';
@@ -192,6 +193,7 @@ class FinanceCubit extends Cubit<FinanceState> {
   Future<void> submitSettlementRequest({
     required double amount,
     required String notes,
+    required BuildContext context,
   }) async {
     if (_isSubmittingSettlementRequest || isClosed) return;
 
@@ -205,6 +207,7 @@ class FinanceCubit extends Cubit<FinanceState> {
       final response = await _financeRepository.submitSettlementRequest(
         amount: amount,
         notes: notes,
+        context: context,
       );
 
       if (isClosed) return;

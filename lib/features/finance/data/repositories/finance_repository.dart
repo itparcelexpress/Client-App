@@ -1,11 +1,13 @@
 import 'package:client_app/core/utilities/app_endpoints.dart';
 import 'package:client_app/core/utilities/error_message_sanitizer.dart';
+import 'package:client_app/core/utilities/global_error_mapper.dart';
 import 'package:client_app/data/remote/app_request.dart';
 import 'package:client_app/data/remote/helper/app_response.dart';
 import 'package:client_app/features/finance/data/models/finance_filter_model.dart';
 import 'package:client_app/features/finance/data/models/finance_models.dart';
 import 'package:client_app/features/finance/data/models/settlement_request_model.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 /// Abstract repository interface for finance operations
 abstract class FinanceRepository {
@@ -20,6 +22,7 @@ abstract class FinanceRepository {
   Future<SettlementRequestResponse> submitSettlementRequest({
     required double amount,
     required String notes,
+    required BuildContext context,
   });
 }
 
@@ -94,6 +97,7 @@ class FinanceRepositoryImpl implements FinanceRepository {
   Future<SettlementRequestResponse> submitSettlementRequest({
     required double amount,
     required String notes,
+    required BuildContext context,
   }) async {
     try {
       final AppResponse response = await AppRequest.post(
@@ -117,32 +121,31 @@ class FinanceRepositoryImpl implements FinanceRepository {
 
         return settlementResponse;
       } else {
-        // Extract error message from API response
-        String errorMessage =
-            response.message ?? 'Failed to submit settlement request';
+        // Use the global error mapper to get localized error message
+        final localizedErrorMessage =
+            GlobalErrorMapper.mapErrorToLocalizedMessage(
+              message: response.message,
+              errors: response.origin?['errors'] as List<String>?,
+              data: response.origin?['data'] as Map<String, dynamic>?,
+              statusCode: response.statusCode,
+              context: context,
+            );
 
-        // Check if there are specific errors in the response
-        if (response.origin != null) {
-          final origin = response.origin!;
-          if (origin['errors'] != null && origin['errors'] is List) {
-            final errors = origin['errors'] as List;
-            if (errors.isNotEmpty) {
-              errorMessage = errors.join(', ');
-            }
-          }
-        }
-
-        throw Exception(ErrorMessageSanitizer.sanitize(errorMessage));
+        throw Exception(localizedErrorMessage);
       }
     } catch (e) {
       if (kDebugMode) {
         print('🔴 Settlement Request Repository Error: $e');
       }
-      throw Exception(
-        ErrorMessageSanitizer.sanitize(
-          'Error submitting settlement request: ${e.toString()}',
-        ),
+
+      // Use the global error mapper for any other errors
+      final localizedErrorMessage = GlobalErrorMapper.sanitizeAndMapError(
+        error: e,
+        context: context,
+        message: e.toString(),
       );
+
+      throw Exception(localizedErrorMessage);
     }
   }
 }

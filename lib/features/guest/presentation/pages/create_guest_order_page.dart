@@ -7,6 +7,7 @@ import 'package:client_app/core/utilities/currency_utils.dart';
 import 'package:client_app/core/utilities/taost_service.dart';
 import 'package:client_app/core/utilities/unified_phone_input.dart';
 import 'package:client_app/core/utilities/validators.dart';
+import 'package:client_app/core/widgets/messaging/toast_notification.dart';
 import 'package:client_app/core/widgets/overflow_safe_dropdown.dart';
 import 'package:client_app/features/guest/cubit/guest_cubit.dart';
 import 'package:client_app/features/guest/cubit/guest_state.dart';

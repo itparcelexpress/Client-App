@@ -156,6 +156,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get viewDeliveryPricing => 'View delivery pricing per state';
 
   @override
+  String get deleteAccountTitle => 'Delete Account';
+
+  @override
+  String get deleteAccountSubtitle => 'Permanently deactivate your account';
+
+  @override
+  String get deleteAccountConfirm =>
+      'Are you sure you want to delete your account? This will deactivate your account and you will no longer be able to access it.';
+
+  @override
+  String get accountDeletedSuccess =>
+      'Your account has been deactivated successfully.';
+
+  @override
   String get signOutAccount => 'Sign out of your account';
 
   @override
@@ -263,16 +277,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tryAgain => 'Try Again';
 
   @override
-  String get connectionError => 'Connection error';
+  String get connectionError =>
+      'Connection error. Please check your internet connection.';
 
   @override
   String get invalidData => 'Invalid data';
 
   @override
   String get orders => 'Orders';
-
-  @override
-  String get invoices => 'Invoices';
 
   @override
   String get profile => 'Profile';
@@ -383,27 +395,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logoutConfirmation => 'Are you sure you want to logout?';
 
   @override
-  String get invoicesAndPayments => 'Invoices & Payments';
-
-  @override
-  String get searchByInvoiceNumber => 'Search by invoice number...';
-
-  @override
-  String get loadingInvoices => 'Loading invoices...';
-
-  @override
-  String get noInvoices => 'No Invoices';
-
-  @override
-  String get noInvoicesYet => 'You don\'t have any invoices yet.';
-
-  @override
   String get noResults => 'No Results';
-
-  @override
-  String noInvoicesFound(String query) {
-    return 'No invoices found for \"$query\"';
-  }
 
   @override
   String get clearSearch => 'Clear Search';
@@ -865,29 +857,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get totalBalance => 'Total Balance';
 
   @override
-  String get invoiceSummary => 'Invoice Summary';
-
-  @override
   String get totalAmount => 'Total Amount';
-
-  @override
-  String get totalInvoices => 'Total Invoices';
 
   @override
   String get paid => 'Paid';
 
   @override
   String get overdue => 'Overdue';
-
-  @override
-  String invoicesCount(int count) {
-    return '$count invoices';
-  }
-
-  @override
-  String invoiceNumber(String number) {
-    return 'Invoice #$number';
-  }
 
   @override
   String id(int id) {
@@ -984,7 +960,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginErrorUnknown => 'Unable to login. Please try again.';
 
   @override
-  String get networkError => 'Network error. Please check your connection.';
+  String get networkError =>
+      'Network error. Please check your internet connection.';
 
   @override
   String get serverError => 'Server error. Please try again later.';
@@ -1179,15 +1156,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get wallet => 'Wallet';
-
-  @override
-  String get viewWallet => 'Wallet';
-
-  @override
-  String get viewWalletSubtitle => 'View balance and transactions';
-
-  @override
   String get feePayer => 'Fee Payer';
 
   @override
@@ -1277,7 +1245,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please check your internet connection and try again';
 
   @override
-  String get requestTimeout => 'Request timeout';
+  String get requestTimeout => 'Request timed out. Please try again.';
 
   @override
   String get requestTookTooLong =>
@@ -1532,9 +1500,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorSavingPdf => 'Error saving PDF';
-
-  @override
-  String get invoice => 'Invoice';
 
   @override
   String get update_required => 'Update Required';
@@ -1899,4 +1864,220 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stay => 'Stay';
+
+  @override
+  String get settlementAmountExceedsBalance =>
+      'The requested amount exceeds your current balance. Please enter a smaller amount.';
+
+  @override
+  String get insufficientBalance =>
+      'Insufficient balance. Please check your account balance.';
+
+  @override
+  String get invalidSettlementAmount =>
+      'Invalid settlement amount. Please enter a valid amount.';
+
+  @override
+  String get settlementRequestAlreadyExists =>
+      'A settlement request already exists. Please wait for it to be processed.';
+
+  @override
+  String get minimumSettlementAmount =>
+      'The settlement amount is below the minimum required amount.';
+
+  @override
+  String get maximumSettlementAmount =>
+      'The settlement amount exceeds the maximum allowed amount.';
+
+  @override
+  String get accountNotFound => 'Account not found. Please contact support.';
+
+  @override
+  String get sessionExpired => 'Your session has expired. Please log in again.';
+
+  @override
+  String get accessDenied =>
+      'Access denied. You don\'t have permission to perform this action.';
+
+  @override
+  String get resourceNotFound => 'The requested resource was not found.';
+
+  @override
+  String get validationFailed =>
+      'Validation failed. Please check your input and try again.';
+
+  @override
+  String get serviceUnavailable =>
+      'Service is temporarily unavailable. Please try again later.';
+
+  @override
+  String get tooManyRequests =>
+      'Too many requests. Please wait a moment and try again.';
+
+  @override
+  String get paymentRequired => 'Payment required to access this feature.';
+
+  @override
+  String get resourceConflict =>
+      'The resource already exists or conflicts with existing data.';
+
+  @override
+  String get preconditionFailed => 'Precondition failed. Please try again.';
+
+  @override
+  String get requestTooLarge =>
+      'Request is too large. Please reduce the data size.';
+
+  @override
+  String get unsupportedMediaType =>
+      'Unsupported media type. Please check your file format.';
+
+  @override
+  String get unprocessableEntity =>
+      'The request could not be processed. Please check your input.';
+
+  @override
+  String get resourceLocked => 'The resource is locked and cannot be modified.';
+
+  @override
+  String get failedDependency =>
+      'The request failed due to a dependency issue.';
+
+  @override
+  String get upgradeRequired =>
+      'An upgrade is required to access this feature.';
+
+  @override
+  String get preconditionRequired =>
+      'A precondition is required for this request.';
+
+  @override
+  String get tooManyConnections =>
+      'Too many connections. Please try again later.';
+
+  @override
+  String get unavailableForLegalReasons =>
+      'This service is unavailable for legal reasons.';
+
+  @override
+  String get badRequest =>
+      'Bad request. Please check your input and try again.';
+
+  @override
+  String get unauthorized => 'Unauthorized access. Please log in again.';
+
+  @override
+  String get forbidden => 'Access forbidden. You don\'t have permission.';
+
+  @override
+  String get notFound => 'The requested resource was not found.';
+
+  @override
+  String get methodNotAllowed =>
+      'This method is not allowed for this resource.';
+
+  @override
+  String get notAcceptable => 'The request is not acceptable.';
+
+  @override
+  String get gone => 'The resource is no longer available.';
+
+  @override
+  String get lengthRequired => 'Content length is required for this request.';
+
+  @override
+  String get payloadTooLarge => 'The request payload is too large.';
+
+  @override
+  String get uriTooLong => 'The request URI is too long.';
+
+  @override
+  String get rangeNotSatisfiable => 'The requested range is not satisfiable.';
+
+  @override
+  String get expectationFailed => 'The expectation could not be met.';
+
+  @override
+  String get imATeapot => 'I\'m a teapot. This is a joke error.';
+
+  @override
+  String get misdirectedRequest => 'The request was misdirected.';
+
+  @override
+  String get locked => 'The resource is locked.';
+
+  @override
+  String get tooEarly => 'The request was made too early.';
+
+  @override
+  String get requestHeaderFieldsTooLarge =>
+      'Request header fields are too large.';
+
+  @override
+  String get internalServerError =>
+      'Internal server error. Please try again later.';
+
+  @override
+  String get notImplemented => 'This feature is not implemented yet.';
+
+  @override
+  String get badGateway => 'Bad gateway. Please try again later.';
+
+  @override
+  String get gatewayTimeout => 'Gateway timeout. Please try again later.';
+
+  @override
+  String get httpVersionNotSupported => 'HTTP version not supported.';
+
+  @override
+  String get variantAlsoNegotiates => 'Variant also negotiates error.';
+
+  @override
+  String get insufficientStorage => 'Insufficient storage on the server.';
+
+  @override
+  String get loopDetected => 'Infinite loop detected.';
+
+  @override
+  String get notExtended => 'Not extended error.';
+
+  @override
+  String get networkAuthenticationRequired =>
+      'Network authentication required.';
+
+  @override
+  String get invalidAmount => 'Invalid amount. Please enter a valid number.';
+
+  @override
+  String get invalidEmail =>
+      'Invalid email address. Please enter a valid email.';
+
+  @override
+  String get invalidPhone =>
+      'Invalid phone number. Please enter a valid phone number.';
+
+  @override
+  String get invalidPassword => 'Invalid password. Please check your password.';
+
+  @override
+  String get fieldRequired => 'This field is required. Please fill it out.';
+
+  @override
+  String get badResponse => 'Bad response from server. Please try again.';
+
+  @override
+  String get connectionTimeout =>
+      'Connection timeout. Please check your internet connection.';
+
+  @override
+  String get sendTimeout => 'Send timeout. Please try again.';
+
+  @override
+  String get receiveTimeout => 'Receive timeout. Please try again.';
+
+  @override
+  String get requestCancelled => 'Request was cancelled.';
+
+  @override
+  String get unknownError => 'An unknown error occurred. Please try again.';
 }

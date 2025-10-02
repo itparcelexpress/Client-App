@@ -1,25 +1,24 @@
 import 'dart:io';
 import 'package:animate_do/animate_do.dart';
+import 'package:client_app/core/services/messaging_service.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/core/widgets/stylish_bottom_navigation.dart';
 import 'package:client_app/core/widgets/more_pages_popup.dart';
 import 'package:client_app/core/services/global_auth_manager.dart';
 import 'package:client_app/data/local/local_data.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
+import 'package:client_app/features/auth/data/repositories/auth_repository.dart';
 import 'package:client_app/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client_app/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:client_app/features/auth/presentation/pages/login_page.dart';
 import 'package:client_app/features/finance/cubit/finance_cubit.dart';
 import 'package:client_app/features/finance/presentation/pages/finance_page.dart';
-import 'package:client_app/features/invoices/invoices.dart';
 import 'package:client_app/features/notifications/notifications.dart';
 import 'package:client_app/features/pricing/pricing.dart';
 import 'package:client_app/features/profile/presentation/pages/notification_settings_page.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/presentation/pages/orders_list_page.dart';
 import 'package:client_app/features/shipment/presentation/pages/create_order_page.dart';
-import 'package:client_app/features/wallet/cubit/wallet_cubit.dart';
-import 'package:client_app/features/wallet/data/repositories/wallet_repository.dart';
-import 'package:client_app/features/wallet/presentation/pages/wallet_page.dart';
 import 'package:client_app/features/map/cubit/map_cubit.dart';
 import 'package:client_app/features/map/presentation/pages/enhanced_map_page.dart';
 import 'package:client_app/injections.dart';
@@ -571,15 +570,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   print(
                     '🔴 Missing user data - userId: $userId, clientId: $clientId',
                   );
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(AppLocalizations.of(context)!.notAvailable),
-                      backgroundColor: Colors.orange,
-                      behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
+                  MessagingService.showWarning(
+                    context,
+                    AppLocalizations.of(context)!.notAvailable,
                   );
                 }
               },
@@ -598,28 +591,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
             const SizedBox(height: 16),
             _buildSettingItem(
-              icon: Icons.account_balance_wallet_rounded,
-              title: AppLocalizations.of(context)!.viewWallet,
-              subtitle: AppLocalizations.of(context)!.viewWalletSubtitle,
-              color: const Color(0xFF0ea5e9),
-              onTap: () {
-                _navigateWithSlideTransition(
-                  BlocProvider(
-                    create:
-                        (_) =>
-                            WalletCubit(const WalletRepository())..loadWallet(),
-                    child: const WalletPage(),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-            _buildSettingItem(
               icon: Icons.price_check_rounded,
               title: AppLocalizations.of(context)!.viewPricing,
               subtitle: AppLocalizations.of(context)!.viewDeliveryPricing,
               color: const Color(0xFF10b981),
               onTap: () => _navigateWithSlideTransition(const PricingPage()),
+            ),
+            const SizedBox(height: 16),
+            _buildSettingItem(
+              icon: Icons.delete_forever_rounded,
+              title: AppLocalizations.of(context)!.deleteAccountTitle,
+              subtitle: AppLocalizations.of(context)!.deleteAccountSubtitle,
+              color: const Color(0xFFef4444),
+              onTap: _showDeleteAccountDialog,
+              isDestructive: true,
             ),
             const SizedBox(height: 16),
             _buildSettingItem(
@@ -651,19 +636,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         MyApp.of(context)?.setLocale(newLocale);
 
         // Show feedback to user
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              isEnglish
-                  ? AppLocalizations.of(context)!.languageChangedToArabic
-                  : AppLocalizations.of(context)!.languageChangedToEnglish,
-            ),
-            backgroundColor: const Color(0xFF667eea),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
+        MessagingService.showInfo(
+          context,
+          isEnglish
+              ? AppLocalizations.of(context)!.languageChangedToArabic
+              : AppLocalizations.of(context)!.languageChangedToEnglish,
         );
       },
       child: Container(
@@ -911,29 +888,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     // Show loading indicator
     if (mounted) {
       final localizations = AppLocalizations.of(context)!;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Text(localizations.logout),
-            ],
-          ),
-          duration: const Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      );
+      MessagingService.showInfo(context, localizations.logout);
     }
 
     try {
@@ -942,6 +897,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
       // Call logout - this will call the API and clear local data
       await authCubit.logout();
+
+      // Enforce immediate navigation to login screen
+      await GlobalAuthManager.instance.performLogout();
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const LoginPage()),
+          (route) => false,
+        );
+      }
 
       if (kDebugMode) {
         print('🚪 HomePage: Logout completed successfully via AuthCubit');
@@ -960,21 +924,77 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
       // Trigger the global auth manager to force state change and navigation
       await GlobalAuthManager.instance.performLogout();
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const LoginPage()),
+          (route) => false,
+        );
+      }
 
       if (kDebugMode) {
         print('🚪 HomePage: Fallback logout completed');
       }
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.logoutSuccessful),
-            backgroundColor: Colors.green,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+        MessagingService.showSuccess(
+          context,
+          AppLocalizations.of(context)!.logoutSuccessful,
+        );
+      }
+    }
+  }
+
+  Future<void> _showDeleteAccountDialog() async {
+    final localizations = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text(localizations.deleteAccountTitle),
+            content: Text(localizations.deleteAccountConfirm),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(localizations.cancel),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(
+                  localizations.delete,
+                  style: const TextStyle(color: Color(0xFFef4444)),
+                ),
+              ),
+            ],
           ),
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      final authRepo = getIt<AuthRepository>();
+      final response = await authRepo.deleteAccount();
+      if (response.success) {
+        if (mounted) {
+          MessagingService.showSuccess(
+            context,
+            response.message ?? localizations.accountDeletedSuccess,
+          );
+        }
+        // Immediately trigger app logout flow and navigation to login
+        _performLogout();
+      } else {
+        if (mounted) {
+          MessagingService.showError(
+            context,
+            response.message ?? localizations.somethingWentWrong,
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        MessagingService.showError(
+          context,
+          AppLocalizations.of(context)!.somethingWentWrong,
         );
       }
     }
@@ -1006,16 +1026,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           (context) => MorePagesPopup(
             items: [
               MorePageItem(
-                icon: Icons.receipt_outlined,
-                title: AppLocalizations.of(context)!.invoices,
-                subtitle: AppLocalizations.of(context)!.invoicesAndPayments,
-                color: const Color(0xFF8B5CF6),
-                onTap: () {
-                  Navigator.pop(context);
-                  _navigateToInvoices();
-                },
-              ),
-              MorePageItem(
                 icon: Icons.map_outlined,
                 title: AppLocalizations.of(context)!.map,
                 subtitle: AppLocalizations.of(context)!.viewLocationsAndRoutes,
@@ -1028,19 +1038,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               // Add more items here as needed
             ],
           ),
-    );
-  }
-
-  void _navigateToInvoices() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder:
-            (context) => BlocProvider(
-              create: (context) => getIt<InvoiceCubit>(),
-              child: const InvoicesPage(),
-            ),
-      ),
     );
   }
 

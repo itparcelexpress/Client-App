@@ -161,17 +161,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                 textAlign: TextAlign.center,
               ),
             ),
-            GestureDetector(
-              onTap: _loadOrders,
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(Icons.refresh, size: 20),
-              ),
-            ),
+            const SizedBox(width: 36),
           ],
         ),
       ),
@@ -201,28 +191,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: _loadOrders,
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.refresh,
-                  size: 20,
-                  color: Color(0xFF666666),
-                ),
-              ),
-            ),
+            const SizedBox(width: 36),
           ],
         ),
       ),

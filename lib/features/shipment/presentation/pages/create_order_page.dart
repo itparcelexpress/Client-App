@@ -5,6 +5,8 @@ import 'package:client_app/core/services/country_localization_service.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/core/utilities/taost_service.dart';
 import 'package:client_app/core/utilities/unified_phone_input.dart';
+import 'package:client_app/core/widgets/messaging/toast_notification.dart'
+    show ToastType;
 import 'package:client_app/core/widgets/searchable_country_dropdown.dart';
 import 'package:client_app/core/widgets/searchable_governorate_dropdown.dart';
 import 'package:client_app/core/widgets/searchable_state_dropdown.dart';

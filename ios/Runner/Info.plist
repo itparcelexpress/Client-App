@@ -57,9 +57,9 @@
 
 	<!-- Permissions: Photo Library (File picker / attachments) -->
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Photo Library access lets you pick images and files to upload.</string>
+	<string>ParcelExpress needs access to your photo library so you can choose photos or documents to attach to orders (e.g., package photos and proof of delivery). Selected items are uploaded securely to your account and used only to process and support your shipments.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>We save images or documents to your library when you export or download.</string>
+	<string>ParcelExpress saves exported files (such as shipping labels or PDFs) to your photo library only when you explicitly choose to export or download them.</string>
 
 	<!-- Permissions: Contacts (flutter_contacts) -->
 	<key>NSContactsUsageDescription</key>

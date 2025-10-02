@@ -9,6 +9,7 @@ abstract class AuthRepository {
   Future<LoginResponse> login(LoginRequest request);
   Future<bool> logout();
   Future<bool> isLoggedIn();
+  Future<AppResponse> deleteAccount();
 }
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -156,5 +157,14 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<bool> isLoggedIn() async {
     return LocalData.isLoggedIn && LocalData.token.isNotEmpty;
+  }
+
+  @override
+  Future<AppResponse> deleteAccount() async {
+    final AppResponse response = await AppRequest.delete(
+      AppEndPoints.deleteClientAccount,
+      true,
+    );
+    return response;
   }
 }
