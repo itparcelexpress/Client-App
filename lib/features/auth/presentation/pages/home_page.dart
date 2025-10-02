@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:animate_do/animate_do.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/core/widgets/stylish_bottom_navigation.dart';
@@ -25,6 +26,7 @@ import 'package:client_app/injections.dart';
 import 'package:client_app/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 
@@ -78,25 +80,33 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     // Bottom navigation destinations are now built directly in _buildNavigationBar()
-    return Scaffold(
-      backgroundColor: Colors.grey[50],
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: _onPageChanged,
-        children: [
-          BlocProvider(
-            create: (context) => getIt<DashboardCubit>(),
-            child: const DashboardPage(),
-          ),
-          _buildOrdersPage(),
-          _buildCreateOrderPage(),
-          _buildFinancePage(),
-          _buildProfilePage(),
-        ],
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        if (!didPop) {
+          await _onWillPop(context);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.grey[50],
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: _onPageChanged,
+          children: [
+            BlocProvider(
+              create: (context) => getIt<DashboardCubit>(),
+              child: const DashboardPage(),
+            ),
+            _buildOrdersPage(),
+            _buildCreateOrderPage(),
+            _buildFinancePage(),
+            _buildProfilePage(),
+          ],
+        ),
+        bottomNavigationBar: _buildNavigationBar(),
+        floatingActionButton: _buildMoreButton(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       ),
-      bottomNavigationBar: _buildNavigationBar(),
-      floatingActionButton: _buildMoreButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 
@@ -188,6 +198,48 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         _iconControllers[i].reverse();
       }
     }
+  }
+
+  // Show exit confirmation dialog
+  Future<bool> _showExitConfirmationDialog(BuildContext context) async {
+    return await showDialog<bool>(
+          context: context,
+          builder:
+              (context) => AlertDialog(
+                title: Text(AppLocalizations.of(context)!.exitApp),
+                content: Text(
+                  AppLocalizations.of(context)!.exitAppConfirmation,
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: Text(AppLocalizations.of(context)!.stay),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: Text(
+                      AppLocalizations.of(context)!.exit,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ],
+              ),
+        ) ??
+        false;
+  }
+
+  // Handle back button press
+  Future<bool> _onWillPop(BuildContext context) async {
+    final shouldExit = await _showExitConfirmationDialog(context);
+    if (shouldExit) {
+      // Exit the app
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+    }
+    return false; // Always return false to prevent default pop behavior
   }
 
   Widget _buildOrdersPage() {

@@ -1392,5 +1392,13 @@
   "from": "من",
   "@from": {"description": "تسمية التاريخ من"},
   "to": "إلى",
-  "@to": {"description": "تسمية التاريخ إلى"}
+  "@to": {"description": "تسمية التاريخ إلى"},
+  "exitApp": "إغلاق التطبيق",
+  "@exitApp": {"description": "عنوان مربع حوار إغلاق التطبيق"},
+  "exitAppConfirmation": "هل أنت متأكد من أنك تريد إغلاق التطبيق؟",
+  "@exitAppConfirmation": {"description": "رسالة تأكيد إغلاق التطبيق"},
+  "exit": "إغلاق",
+  "@exit": {"description": "نص زر الإغلاق"},
+  "stay": "البقاء",
+  "@stay": {"description": "نص زر البقاء"}
 }

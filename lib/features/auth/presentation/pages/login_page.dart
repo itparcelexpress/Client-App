@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/core/widgets/app_footer.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
@@ -6,6 +7,7 @@ import 'package:client_app/features/guest/cubit/guest_cubit.dart';
 import 'package:client_app/features/guest/presentation/pages/create_guest_order_page.dart';
 import 'package:client_app/injections.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:client_app/core/utilities/taost_service.dart';
@@ -96,113 +98,164 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  // Show exit confirmation dialog
+  Future<bool> _showExitConfirmationDialog(BuildContext context) async {
+    return await showDialog<bool>(
+          context: context,
+          builder:
+              (context) => AlertDialog(
+                title: Text(AppLocalizations.of(context)!.exitApp),
+                content: Text(
+                  AppLocalizations.of(context)!.exitAppConfirmation,
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: Text(AppLocalizations.of(context)!.stay),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: Text(
+                      AppLocalizations.of(context)!.exit,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ],
+              ),
+        ) ??
+        false;
+  }
+
+  // Handle back button press
+  Future<bool> _onWillPop(BuildContext context) async {
+    final shouldExit = await _showExitConfirmationDialog(context);
+    if (shouldExit) {
+      // Exit the app
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+    }
+    return false; // Always return false to prevent default pop behavior
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<AuthCubit>(),
-      child: Scaffold(
-        backgroundColor: Colors.grey.shade50,
-        body: Container(
-          decoration: const BoxDecoration(color: Colors.white),
-          child: SafeArea(
-            child: BlocConsumer<AuthCubit, AuthState>(
-              listener: (context, state) {
-                if (state is AuthSuccess) {
-                  setState(() {
-                    _isLoading = false;
-                  });
-                  // Clear sensitive data from controllers
-                  _clearSensitiveData();
+      child: PopScope(
+        canPop: false,
+        onPopInvoked: (bool didPop) async {
+          if (!didPop) {
+            await _onWillPop(context);
+          }
+        },
+        child: Scaffold(
+          backgroundColor: Colors.grey.shade50,
+          body: Container(
+            decoration: const BoxDecoration(color: Colors.white),
+            child: SafeArea(
+              child: BlocConsumer<AuthCubit, AuthState>(
+                listener: (context, state) {
+                  if (state is AuthSuccess) {
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    // Clear sensitive data from controllers
+                    _clearSensitiveData();
 
-                  // Show success message
-                  ToastService.showSuccess(
-                    context,
-                    AppLocalizations.of(context)!.loginSuccess,
-                  );
+                    // Show success message
+                    ToastService.showSuccess(
+                      context,
+                      AppLocalizations.of(context)!.loginSuccess,
+                    );
 
-                  // Navigate to home page
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const HomePage()),
-                  );
-                } else if (state is AuthFailure) {
-                  setState(() {
-                    _isLoading = false;
-                  });
-                  // Don't clear fields on failure - let user retry with same credentials
-                  final key = mapLoginErrorToKey(
-                    message: state.message,
-                    errors: state.errors,
-                  );
-                  ToastService.showError(context, key);
-                } else if (state is AuthLoading) {
-                  setState(() {
-                    _isLoading = true;
-                  });
-                } else {
-                  setState(() {
-                    _isLoading = false;
-                  });
-                }
-              },
-              builder: (context, state) {
-                return Column(
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
-                          context,
-                          const EdgeInsets.all(24.0),
-                        ),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: ResponsiveUtils.getResponsivePadding(
+                    // Navigate to home page
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => const HomePage()),
+                    );
+                  } else if (state is AuthFailure) {
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    // Don't clear fields on failure - let user retry with same credentials
+                    final key = mapLoginErrorToKey(
+                      message: state.message,
+                      errors: state.errors,
+                    );
+                    ToastService.showError(context, key);
+                  } else if (state is AuthLoading) {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                  } else {
+                    setState(() {
+                      _isLoading = false;
+                    });
+                  }
+                },
+                builder: (context, state) {
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          padding:
+                              ResponsiveUtils.getResponsivePaddingEdgeInsets(
                                 context,
-                                40,
+                                const EdgeInsets.all(24.0),
                               ),
-                            ),
-                            _buildHeader(),
-                            SizedBox(
-                              height: ResponsiveUtils.getResponsivePadding(
-                                context,
-                                60,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: ResponsiveUtils.getResponsivePadding(
+                                  context,
+                                  40,
+                                ),
                               ),
-                            ),
-                            _buildLoginForm(context, state),
-                            SizedBox(
-                              height: ResponsiveUtils.getResponsivePadding(
-                                context,
-                                40,
+                              _buildHeader(),
+                              SizedBox(
+                                height: ResponsiveUtils.getResponsivePadding(
+                                  context,
+                                  60,
+                                ),
                               ),
-                            ),
-                            _buildLoginButton(context, state),
-                            SizedBox(
-                              height: ResponsiveUtils.getResponsivePadding(
-                                context,
-                                20,
+                              _buildLoginForm(context, state),
+                              SizedBox(
+                                height: ResponsiveUtils.getResponsivePadding(
+                                  context,
+                                  40,
+                                ),
                               ),
-                            ),
-                            _buildGuestButton(context),
-                            SizedBox(
-                              height: ResponsiveUtils.getResponsivePadding(
-                                context,
-                                20,
+                              _buildLoginButton(context, state),
+                              SizedBox(
+                                height: ResponsiveUtils.getResponsivePadding(
+                                  context,
+                                  20,
+                                ),
                               ),
-                            ),
-                          ],
+                              _buildGuestButton(context),
+                              SizedBox(
+                                height: ResponsiveUtils.getResponsivePadding(
+                                  context,
+                                  20,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    // Footer at the bottom
-                    const SimpleAppFooter(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 24.0,
-                        vertical: 8.0,
+                      // Footer at the bottom
+                      const SimpleAppFooter(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 24.0,
+                          vertical: 8.0,
+                        ),
                       ),
-                    ),
-                  ],
-                );
-              },
+                    ],
+                  );
+                },
+              ),
             ),
           ),
         ),

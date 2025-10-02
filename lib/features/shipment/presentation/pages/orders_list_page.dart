@@ -12,6 +12,16 @@ import 'package:client_app/core/utilities/taost_service.dart';
 import 'package:intl/intl.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 
+/// Orders List Page with advanced filtering capabilities
+///
+/// Implements filters according to API specification (client/orders endpoint):
+/// - status: Filter by order status (pending or created only)
+/// - from_date: Start date filter in 'yyyy-MM-dd' format
+/// - to_date: End date filter in 'yyyy-MM-dd' format
+/// - query: Search by tracking number
+/// - page: Pagination support (handled automatically)
+///
+/// All filters are applied in real-time and persist across pagination.
 class OrdersListPage extends StatefulWidget {
   final bool showAppBar;
 
@@ -42,13 +52,11 @@ class _OrdersListPageState extends State<OrdersListPage> {
     super.didChangeDependencies();
 
     // Initialize status options after dependencies are available
+    // API only supports 'pending' and 'created' status filters
     _statusOptions = [
       AppLocalizations.of(context)!.all,
+      AppLocalizations.of(context)!.pending,
       AppLocalizations.of(context)!.created,
-      AppLocalizations.of(context)!.processing,
-      AppLocalizations.of(context)!.shipped,
-      AppLocalizations.of(context)!.delivered,
-      AppLocalizations.of(context)!.cancelled,
     ];
   }
 
@@ -59,6 +67,8 @@ class _OrdersListPageState extends State<OrdersListPage> {
   }
 
   void _loadOrders() {
+    // Prepare status filter: convert localized status to API format
+    // API expects: 'pending', 'created', or null for all
     String? apiStatus;
     if (_selectedStatus != null &&
         _selectedStatus != AppLocalizations.of(context)!.all) {
@@ -66,6 +76,11 @@ class _OrdersListPageState extends State<OrdersListPage> {
       apiStatus = _getEnglishStatus(_selectedStatus!);
     }
 
+    // Call API with filters
+    // - status: order status filter ('pending', 'created', or null for all)
+    // - fromDate: start date in 'yyyy-MM-dd' format
+    // - toDate: end date in 'yyyy-MM-dd' format
+    // - query: search text for tracking number
     context.read<ShipmentCubit>().loadClientOrders(
       status: apiStatus,
       fromDate: _fromDate,
@@ -75,16 +90,13 @@ class _OrdersListPageState extends State<OrdersListPage> {
   }
 
   String _getEnglishStatus(String localizedStatus) {
-    if (localizedStatus == AppLocalizations.of(context)!.created)
+    // API only supports 'pending' and 'created' status values
+    if (localizedStatus == AppLocalizations.of(context)!.pending) {
+      return 'pending';
+    }
+    if (localizedStatus == AppLocalizations.of(context)!.created) {
       return 'created';
-    if (localizedStatus == AppLocalizations.of(context)!.processing)
-      return 'processing';
-    if (localizedStatus == AppLocalizations.of(context)!.shipped)
-      return 'shipped';
-    if (localizedStatus == AppLocalizations.of(context)!.delivered)
-      return 'delivered';
-    if (localizedStatus == AppLocalizations.of(context)!.cancelled)
-      return 'cancelled';
+    }
     return localizedStatus; // fallback
   }
 
@@ -241,6 +253,25 @@ class _OrdersListPageState extends State<OrdersListPage> {
                     Icons.search,
                     color: Color(0xFF666666),
                   ),
+                  suffixIcon: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (_searchController.text.isNotEmpty)
+                        IconButton(
+                          icon: const Icon(Icons.clear, size: 20),
+                          color: Colors.grey[600],
+                          onPressed: () {
+                            _searchController.clear();
+                            _loadOrders();
+                          },
+                        ),
+                      IconButton(
+                        icon: const Icon(Icons.search, size: 20),
+                        color: const Color(0xFF667eea),
+                        onPressed: _loadOrders,
+                      ),
+                    ],
+                  ),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -248,6 +279,10 @@ class _OrdersListPageState extends State<OrdersListPage> {
                   ),
                 ),
                 onSubmitted: (_) => _loadOrders(),
+                onChanged: (_) {
+                  // Rebuild to show/hide clear button
+                  setState(() {});
+                },
               ),
             ),
             const SizedBox(height: 16),
@@ -322,6 +357,15 @@ class _OrdersListPageState extends State<OrdersListPage> {
                               ),
                             ),
                           ),
+                          if (_fromDate != null && _toDate != null)
+                            GestureDetector(
+                              onTap: _clearDateRange,
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.grey[600],
+                                size: 16,
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -1037,10 +1081,20 @@ class _OrdersListPageState extends State<OrdersListPage> {
     }
   }
 
+  void _clearDateRange() {
+    setState(() {
+      _fromDate = null;
+      _toDate = null;
+    });
+    _loadOrders();
+  }
+
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
+      case 'pending':
+        return const Color(0xFFf59e0b); // Orange for pending
       case 'created':
-        return const Color(0xFF667eea);
+        return const Color(0xFF667eea); // Blue for created
       case 'processing':
         return const Color(0xFFf59e0b);
       case 'shipped':

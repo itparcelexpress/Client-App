@@ -2425,5 +2425,13 @@
   "from": "From",
   "@from": {"description": "From date label"},
   "to": "To",
-  "@to": {"description": "To date label"}
+  "@to": {"description": "To date label"},
+  "exitApp": "Exit App",
+  "@exitApp": {"description": "Exit app dialog title"},
+  "exitAppConfirmation": "Are you sure you want to exit the app?",
+  "@exitAppConfirmation": {"description": "Exit app confirmation message"},
+  "exit": "Exit",
+  "@exit": {"description": "Exit button text"},
+  "stay": "Stay",
+  "@stay": {"description": "Stay button text"}
 }

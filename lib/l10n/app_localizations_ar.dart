@@ -1878,4 +1878,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get to => 'إلى';
+
+  @override
+  String get exitApp => 'إغلاق التطبيق';
+
+  @override
+  String get exitAppConfirmation => 'هل أنت متأكد من أنك تريد إغلاق التطبيق؟';
+
+  @override
+  String get exit => 'إغلاق';
+
+  @override
+  String get stay => 'البقاء';
 }
