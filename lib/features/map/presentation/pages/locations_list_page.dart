@@ -102,7 +102,7 @@ class _LocationsListPageState extends State<LocationsListPage>
             Icon(Icons.location_off, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
-              'No Stations Available',
+              AppLocalizations.of(context)!.noStationsAvailable,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -111,7 +111,7 @@ class _LocationsListPageState extends State<LocationsListPage>
             ),
             const SizedBox(height: 8),
             Text(
-              'Stations will appear here once the API is available.',
+              AppLocalizations.of(context)!.stationsWillAppearHere,
               style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),
@@ -157,7 +157,7 @@ class _LocationsListPageState extends State<LocationsListPage>
             Icon(Icons.warehouse_outlined, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
-              'No Hubs Available',
+              AppLocalizations.of(context)!.noHubsAvailable,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -166,7 +166,7 @@ class _LocationsListPageState extends State<LocationsListPage>
             ),
             const SizedBox(height: 8),
             Text(
-              'Hubs will appear here once the API is available.',
+              AppLocalizations.of(context)!.hubsWillAppearHere,
               style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),

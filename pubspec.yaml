@@ -32,9 +32,6 @@ dependencies:
   audioplayers: ^6.4.0
   badges: ^3.1.2
   cached_network_image: ^3.4.1
-  call_service:
-    git:
-      url: https://github.com/YSamer/call_service.git
   country_picker: ^2.0.27
   cupertino_icons: ^1.0.6
   device_info_plus: ^11.3.3

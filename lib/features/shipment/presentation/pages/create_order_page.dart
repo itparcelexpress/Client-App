@@ -107,6 +107,28 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   // Track if user dismissed the save suggestion
   bool _dismissedSaveSuggestion = false;
 
+  // Track if additional info section is expanded
+  bool _isAdditionalInfoExpanded = false;
+
+  // Helper method to preserve scroll position during setState
+  void _setStateWithScrollPreservation(VoidCallback fn) {
+    if (!mounted) return;
+
+    final currentScrollPosition =
+        _scrollController.hasClients ? _scrollController.offset : 0.0;
+
+    setState(fn);
+
+    // Restore scroll position after setState
+    if (_scrollController.hasClients) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_scrollController.hasClients) {
+          _scrollController.jumpTo(currentScrollPosition);
+        }
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -489,7 +511,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         body: SafeArea(
           child: Column(
             children: [
-              _buildAppBar(),
               Expanded(
                 child: BlocListener<ShipmentCubit, ShipmentState>(
                   listener: (context, state) {
@@ -503,79 +524,35 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       _showErrorToast(state.message);
                     }
                   },
-                  child: SingleChildScrollView(
-                    key: const PageStorageKey('create_order_scroll'),
-                    controller: _scrollController,
-                    padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
-                      context,
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                    ),
-                    child: Form(
-                      key: _formKey,
+                  child: Form(
+                    key: _formKey,
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.all(20),
                       child: Column(
                         children: [
-                          _buildHeader(),
-                          SizedBox(
-                            height: ResponsiveUtils.getResponsivePadding(
-                              context,
-                              32,
-                            ),
-                          ),
+                          _buildSimpleTopBar(),
+                          const SizedBox(height: 16),
+                          _buildCompactProgressIndicator(),
+                          const SizedBox(height: 20),
                           _buildStickerSection(),
-                          SizedBox(
-                            height: ResponsiveUtils.getResponsivePadding(
-                              context,
-                              32,
-                            ),
-                          ),
+                          const SizedBox(height: 20),
                           _buildAddressBookSection(),
-                          SizedBox(
-                            height: ResponsiveUtils.getResponsivePadding(
-                              context,
-                              32,
-                            ),
-                          ),
+                          const SizedBox(height: 20),
                           _buildPersonalInfoSection(),
-                          SizedBox(
-                            height: ResponsiveUtils.getResponsivePadding(
-                              context,
-                              32,
-                            ),
-                          ),
+                          const SizedBox(height: 20),
                           _buildAddressSection(),
-                          SizedBox(
-                            height: ResponsiveUtils.getResponsivePadding(
-                              context,
-                              32,
-                            ),
-                          ),
                           if (_hasFormData &&
                               _selectedAddress == null &&
-                              !_dismissedSaveSuggestion)
+                              !_dismissedSaveSuggestion) ...[
+                            const SizedBox(height: 24),
                             _buildSaveAddressSuggestion(),
-                          if (_hasFormData &&
-                              _selectedAddress == null &&
-                              !_dismissedSaveSuggestion)
-                            SizedBox(
-                              height: ResponsiveUtils.getResponsivePadding(
-                                context,
-                                24,
-                              ),
-                            ),
+                            const SizedBox(height: 32),
+                          ],
                           _buildOrderDetailsSection(),
-                          SizedBox(
-                            height: ResponsiveUtils.getResponsivePadding(
-                              context,
-                              40,
-                            ),
-                          ),
-                          _buildSubmitButton(),
-                          SizedBox(
-                            height: ResponsiveUtils.getResponsivePadding(
-                              context,
-                              20,
-                            ),
-                          ),
+                          const SizedBox(
+                            height: 100,
+                          ), // Extra space for floating button
                         ],
                       ),
                     ),
@@ -585,97 +562,156 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             ],
           ),
         ),
+        floatingActionButton: _buildFloatingSubmitButton(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );
   }
 
-  Widget _buildAppBar() {
-    return FadeInDown(
-      duration: const Duration(milliseconds: 400),
-      child: Container(
-        padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
-          context,
-          const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        ),
-        color: Colors.white,
-        child: Row(
-          children: [
-            if (Navigator.canPop(context))
-              GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(12),
+  Widget _buildFloatingSubmitButton() {
+    return BlocBuilder<ShipmentCubit, ShipmentState>(
+      builder: (context, state) {
+        final isLoading = state is OrderCreating;
+
+        return Container(
+          width: double.infinity,
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          child: FloatingActionButton.extended(
+            onPressed: isLoading ? null : _submitOrder,
+            backgroundColor:
+                isLoading ? Colors.grey.shade400 : Colors.blue.shade600,
+            elevation: 8,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            label: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (isLoading) ...[
+                  const SpinKitThreeBounce(color: Colors.white, size: 20),
+                  const SizedBox(width: 12),
+                ] else ...[
+                  Icon(
+                    Icons.check_circle_outline,
+                    color: Colors.white,
+                    size: 20,
                   ),
-                  child: const Icon(Icons.arrow_back, size: 20),
+                  const SizedBox(width: 8),
+                ],
+                Text(
+                  isLoading
+                      ? AppLocalizations.of(context)!.creatingOrder
+                      : AppLocalizations.of(context)!.createOrder,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
                 ),
-              )
-            else
-              const SizedBox(width: 36),
-            Expanded(
-              child: Text(
-                AppLocalizations.of(context)!.createOrder,
-                style: TextStyle(
-                  fontSize: ResponsiveUtils.getResponsiveFontSize(context, 18),
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xFF1a1a1a),
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(width: 36),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 500),
-      child: Column(
-        children: [
-          Container(
-            width: ResponsiveUtils.getResponsiveWidth(context, 80),
-            height: ResponsiveUtils.getResponsiveHeight(context, 80),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF667eea), Color(0xFF764ba2)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(25),
-            ),
-            child: Icon(
-              Icons.add_box_rounded,
-              color: Colors.white,
-              size: ResponsiveUtils.getResponsiveWidth(context, 40),
+              ],
             ),
           ),
-          SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 20)),
-          Text(
-            AppLocalizations.of(context)!.newOrder,
+        );
+      },
+    );
+  }
+
+  Widget _buildSimpleTopBar() {
+    return Row(
+      children: [
+        if (Navigator.canPop(context))
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(Icons.arrow_back, size: 20),
+            ),
+          )
+        else
+          const SizedBox(width: 40),
+        Expanded(
+          child: Text(
+            AppLocalizations.of(context)!.createOrder,
             style: TextStyle(
-              fontSize: ResponsiveUtils.getResponsiveFontSize(context, 28),
-              fontWeight: FontWeight.w700,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
               color: const Color(0xFF1a1a1a),
             ),
+            textAlign: TextAlign.center,
           ),
-          SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 8)),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: ResponsiveUtils.getResponsivePadding(context, 16),
+        ),
+        const SizedBox(width: 40),
+      ],
+    );
+  }
+
+  Widget _buildCompactProgressIndicator() {
+    // Calculate form completion percentage
+    int completedFields = 0;
+    int totalFields = 6; // sticker, name, phone, country, governorate, state
+
+    if (_stickerController.text.isNotEmpty) completedFields++;
+    if (_nameController.text.isNotEmpty) completedFields++;
+    if (_phoneController.text.isNotEmpty) completedFields++;
+    if (_selectedCountry != null) completedFields++;
+    if (_selectedGovernorate != null) completedFields++;
+    if (_selectedState != null) completedFields++;
+
+    final progress = completedFields / totalFields;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.check_circle_outline,
+            size: 16,
+            color: progress > 0 ? Colors.green.shade600 : Colors.grey.shade400,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.formProgress,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade700,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                LinearProgressIndicator(
+                  value: progress,
+                  backgroundColor: Colors.grey.shade300,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    progress > 0.5
+                        ? Colors.green.shade600
+                        : Colors.blue.shade600,
+                  ),
+                  minHeight: 4,
+                ),
+              ],
             ),
-            child: Text(
-              AppLocalizations.of(context)!.fillDetailsToCreateOrder,
-              style: TextStyle(
-                fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
-                color: Colors.grey[600],
-                fontWeight: FontWeight.w400,
-              ),
-              textAlign: TextAlign.center,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            '${(progress * 100).round()}%',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color:
+                  progress > 0.5 ? Colors.green.shade600 : Colors.blue.shade600,
             ),
           ),
         ],
@@ -684,181 +720,55 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   }
 
   Widget _buildStickerSection() {
-    final isRTL = Localizations.localeOf(context).languageCode == 'ar';
-
     return FadeInUp(
       duration: const Duration(milliseconds: 600),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey.shade200),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 15,
-              offset: const Offset(0, 5),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment:
-                  isRTL ? MainAxisAlignment.end : MainAxisAlignment.start,
-              children:
-                  isRTL
-                      ? [
-                        Text(
-                          AppLocalizations.of(context)!.stickerNumber,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFF1a1a1a),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFF10b981), Color(0xFF059669)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(
-                            Icons.qr_code_scanner,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                      ]
-                      : [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFF10b981), Color(0xFF059669)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(
-                            Icons.qr_code_scanner,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          AppLocalizations.of(context)!.stickerNumber,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFF1a1a1a),
-                          ),
-                        ),
-                      ],
+        child: _buildTextField(
+          controller: _stickerController,
+          label: AppLocalizations.of(context)!.stickerNumber,
+          hint: AppLocalizations.of(context)!.examplePhoneNumber,
+          icon: Icons.confirmation_number_outlined,
+          keyboardType: TextInputType.text,
+          validator:
+              (value) =>
+                  (value == null || value.trim().isEmpty)
+                      ? AppLocalizations.of(context)!.pleaseEnterField(
+                        AppLocalizations.of(context)!.stickerNumber,
+                      )
+                      : null,
+          suffixIcon: IconButton(
+            onPressed: _openStickerScanner,
+            icon: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF10b981), Color(0xFF059669)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(
+                Icons.qr_code_scanner,
+                color: Colors.white,
+                size: 18,
+              ),
             ),
-            const SizedBox(height: 20),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children:
-                  isRTL
-                      ? [
-                        ElevatedButton.icon(
-                          onPressed: _openStickerScanner,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF10b981),
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 14,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            elevation: 0,
-                          ),
-                          icon: const Icon(Icons.qr_code_scanner, size: 18),
-                          label: Text(AppLocalizations.of(context)!.scan),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: _buildTextField(
-                            controller: _stickerController,
-                            label: AppLocalizations.of(context)!.stickerNumber,
-                            hint:
-                                AppLocalizations.of(
-                                  context,
-                                )!.examplePhoneNumber,
-                            icon: Icons.confirmation_number_outlined,
-                            keyboardType: TextInputType.text,
-                            validator:
-                                (value) =>
-                                    (value == null || value.trim().isEmpty)
-                                        ? AppLocalizations.of(
-                                          context,
-                                        )!.pleaseEnterField(
-                                          AppLocalizations.of(
-                                            context,
-                                          )!.stickerNumber,
-                                        )
-                                        : null,
-                          ),
-                        ),
-                      ]
-                      : [
-                        Expanded(
-                          child: _buildTextField(
-                            controller: _stickerController,
-                            label: AppLocalizations.of(context)!.stickerNumber,
-                            hint:
-                                AppLocalizations.of(
-                                  context,
-                                )!.examplePhoneNumber,
-                            icon: Icons.confirmation_number_outlined,
-                            keyboardType: TextInputType.text,
-                            validator:
-                                (value) =>
-                                    (value == null || value.trim().isEmpty)
-                                        ? AppLocalizations.of(
-                                          context,
-                                        )!.pleaseEnterField(
-                                          AppLocalizations.of(
-                                            context,
-                                          )!.stickerNumber,
-                                        )
-                                        : null,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        ElevatedButton.icon(
-                          onPressed: _openStickerScanner,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF10b981),
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 14,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            elevation: 0,
-                          ),
-                          icon: const Icon(Icons.qr_code_scanner, size: 18),
-                          label: Text(AppLocalizations.of(context)!.scan),
-                        ),
-                      ],
-            ),
-          ],
+            tooltip: AppLocalizations.of(context)!.scan,
+          ),
         ),
       ),
     );
@@ -920,15 +830,16 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     return FadeInUp(
       duration: const Duration(milliseconds: 500),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey.shade200),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 15,
-              offset: const Offset(0, 5),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -965,7 +876,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             BlocProvider(
               create: (context) => getIt<AddressBookCubit>(),
               child: AddressSelectionWidget(
@@ -1103,7 +1014,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           value: _selectedCountry,
           onChanged: (country) async {
             if (mounted) {
-              setState(() {
+              _setStateWithScrollPreservation(() {
                 _selectedCountry = country;
                 // Reset other location fields when country changes
                 _selectedGovernorate = null;
@@ -1122,7 +1033,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 debugPrint('Failed to refresh governorates: $e');
               }
               if (mounted) {
-                setState(() {
+                _setStateWithScrollPreservation(() {
                   _governorates =
                       LocationService.getAllGovernorates()
                           .where((g) => g.countryId == country.id)
@@ -1147,7 +1058,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           value: _selectedGovernorate,
           onChanged: (governorate) async {
             if (mounted) {
-              setState(() {
+              _setStateWithScrollPreservation(() {
                 _selectedGovernorate = governorate;
                 if (governorate != null) {
                   _loadStatesForGovernorate(governorate.id);
@@ -1163,7 +1074,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 debugPrint('Failed to refresh states: $e');
               }
               if (mounted) {
-                setState(() {
+                _setStateWithScrollPreservation(() {
                   _states =
                       LocationService.getAllStates()
                           .where((s) => s.governorateId == governorate.id)
@@ -1189,7 +1100,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           value: _selectedState,
           onChanged: (state) async {
             if (mounted) {
-              setState(() {
+              _setStateWithScrollPreservation(() {
                 _selectedState = state;
                 if (state != null) {
                   _loadPlacesForState(state.id);
@@ -1210,7 +1121,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 debugPrint('Failed to refresh places: $e');
               }
               if (mounted) {
-                setState(() {
+                _setStateWithScrollPreservation(() {
                   _places =
                       LocationService.getAllPlaces()
                           .where((p) => p.stateId == state.id)
@@ -1236,7 +1147,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           value: _selectedPlace,
           onChanged: (place) {
             if (mounted) {
-              setState(() {
+              _setStateWithScrollPreservation(() {
                 _selectedPlace = place;
               });
             }
@@ -1276,25 +1187,42 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
   Widget _buildOrderDetailsSection() {
     return _buildSection(
-      title: AppLocalizations.of(context)!.additionalInformation,
+      title: AppLocalizations.of(context)!.orderDetails,
       icon: Icons.receipt_long_rounded,
       children: [
-        _buildDropdownField(
-          label: AppLocalizations.of(context)!.paymentType,
-          value: _paymentType,
-          icon: Icons.payment_rounded,
-          items: const ['cod', 'prepaid'],
-          onChanged: (value) => setState(() => _paymentType = value!),
+        // Compact Payment & Fee Row
+        Row(
+          children: [
+            Expanded(
+              child: _buildDropdownField(
+                label: AppLocalizations.of(context)!.paymentType,
+                value: _paymentType,
+                icon: Icons.payment_rounded,
+                items: const ['cod', 'prepaid'],
+                onChanged:
+                    (value) => _setStateWithScrollPreservation(
+                      () => _paymentType = value!,
+                    ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildDropdownField(
+                label: AppLocalizations.of(context)!.feePayer,
+                value: _feePayer,
+                icon: Icons.account_balance_wallet_outlined,
+                items: const ['client', 'customer'],
+                onChanged:
+                    (value) => _setStateWithScrollPreservation(
+                      () => _feePayer = value!,
+                    ),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 20),
-        _buildDropdownField(
-          label: AppLocalizations.of(context)!.feePayer,
-          value: _feePayer,
-          icon: Icons.account_balance_wallet_outlined,
-          items: const ['client', 'customer'],
-          onChanged: (value) => setState(() => _feePayer = value!),
-        ),
-        const SizedBox(height: 20),
+
+        // Compact Amount & Delivery Fee Row
         Row(
           children: [
             Expanded(
@@ -1390,7 +1318,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 ],
               ),
             ),
-            const SizedBox(width: 20),
+            const SizedBox(width: 16),
             Expanded(
               child: _buildTextField(
                 controller: _amountController,
@@ -1412,6 +1340,132 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         ),
         const SizedBox(height: 24),
 
+        // Additional Information Expandable Section
+        _buildExpandableAdditionalInfo(),
+      ],
+    );
+  }
+
+  Widget _buildExpandableAdditionalInfo() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // Expandable Header
+          InkWell(
+            onTap: () {
+              _setStateWithScrollPreservation(() {
+                _isAdditionalInfoExpanded = !_isAdditionalInfoExpanded;
+              });
+            },
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade50,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.info_outline,
+                      color: Colors.blue.shade600,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      AppLocalizations.of(context)!.additionalInformation,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey.shade900,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    _isAdditionalInfoExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    color: Colors.grey.shade600,
+                    size: 24,
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Expandable Content
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            height: _isAdditionalInfoExpanded ? null : 0,
+            child:
+                _isAdditionalInfoExpanded
+                    ? Container(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      child: Column(
+                        children: [
+                          // Dimensions & Weight Section
+                          _buildDimensionsSection(),
+                          const SizedBox(height: 24),
+
+                          // Items Section
+                          _buildItemsSection(),
+                          const SizedBox(height: 20),
+
+                          // Location URL field
+                          _buildTextField(
+                            controller: _locationUrlController,
+                            label:
+                                '${AppLocalizations.of(context)!.locationUrl} (${AppLocalizations.of(context)!.optional})',
+                            hint:
+                                AppLocalizations.of(
+                                  context,
+                                )!.locationUrlPlaceholder,
+                            icon: Icons.location_on_outlined,
+                            keyboardType: TextInputType.url,
+                            validator: (value) {
+                              if (value != null && value.isNotEmpty) {
+                                final uri = Uri.tryParse(value);
+                                if (uri == null || !uri.hasAbsolutePath) {
+                                  return AppLocalizations.of(
+                                    context,
+                                  )!.pleaseEnterValidLocationUrl;
+                                }
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                    : const SizedBox.shrink(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDimensionsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         // Dimensions & Weight Section Header
         Row(
           children: [
@@ -1469,7 +1523,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       value: _unit,
                       icon: Icons.straighten,
                       items: const ['Kg', 'length'],
-                      onChanged: (v) => setState(() => _unit = v!),
+                      onChanged:
+                          (v) =>
+                              _setStateWithScrollPreservation(() => _unit = v!),
                     ),
                   ),
                 ],
@@ -1569,7 +1625,14 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             ],
           ),
         ),
-        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  Widget _buildItemsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         // Items Section Header
         Row(
           children: [
@@ -1655,7 +1718,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       child: IconButton(
                         onPressed: () {
                           if (mounted) {
-                            setState(() {
+                            _setStateWithScrollPreservation(() {
                               _itemNameCtrls.removeAt(index).dispose();
                               _itemCategoryCtrls.removeAt(index).dispose();
                               _itemQuantityCtrls.removeAt(index).dispose();
@@ -1726,7 +1789,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           child: ElevatedButton.icon(
             onPressed: () {
               if (mounted) {
-                setState(() {
+                _setStateWithScrollPreservation(() {
                   _itemNameCtrls.add(TextEditingController());
                   _itemCategoryCtrls.add(TextEditingController());
                   _itemQuantityCtrls.add(TextEditingController());
@@ -1751,28 +1814,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               elevation: 2,
             ),
           ),
-        ),
-        const SizedBox(height: 20),
-
-        // Location URL field
-        _buildTextField(
-          controller: _locationUrlController,
-          label:
-              '${AppLocalizations.of(context)!.locationUrl} (${AppLocalizations.of(context)!.optional})',
-          hint: AppLocalizations.of(context)!.locationUrlPlaceholder,
-          icon: Icons.location_on_outlined,
-          keyboardType: TextInputType.url,
-          validator: (value) {
-            if (value != null && value.isNotEmpty) {
-              final uri = Uri.tryParse(value);
-              if (uri == null || !uri.hasAbsolutePath) {
-                return AppLocalizations.of(
-                  context,
-                )!.pleaseEnterValidLocationUrl;
-              }
-            }
-            return null;
-          },
         ),
       ],
     );
@@ -1832,6 +1873,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     int maxLines = 1,
     List<TextInputFormatter>? inputFormatters,
     String? suffixText,
+    Widget? suffixIcon,
   }) {
     final isRTL = Localizations.localeOf(context).languageCode == 'ar';
 
@@ -1865,9 +1907,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       ? null
                       : Icon(icon, color: Colors.grey.shade600, size: 20),
               suffixIcon:
-                  isRTL
+                  suffixIcon ??
+                  (isRTL
                       ? Icon(icon, color: Colors.grey.shade600, size: 20)
-                      : null,
+                      : null),
               suffixText: suffixText,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -1964,62 +2007,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     );
   }
 
-  Widget _buildSubmitButton() {
-    return BlocBuilder<ShipmentCubit, ShipmentState>(
-      builder: (context, state) {
-        final isLoading = state is OrderCreating;
-
-        return GestureDetector(
-          onTap: isLoading ? null : _submitOrder,
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 18),
-            decoration: BoxDecoration(
-              color: isLoading ? Colors.grey.shade400 : Colors.blue.shade600,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow:
-                  isLoading
-                      ? null
-                      : [
-                        BoxShadow(
-                          color: Colors.blue.shade600.withOpacity(0.3),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (isLoading) ...[
-                  const SpinKitThreeBounce(color: Colors.white, size: 20),
-                  const SizedBox(width: 20),
-                ] else ...[
-                  const Icon(
-                    Icons.check_circle_outline,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 8),
-                ],
-                Text(
-                  isLoading
-                      ? AppLocalizations.of(context)!.creatingOrder
-                      : AppLocalizations.of(context)!.createOrder,
-                  style: TextStyle(
-                    color: isLoading ? Colors.grey[500] : Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   void _submitOrder() {
     if (_formKey.currentState!.validate()) {
       // Validate required location selections
@@ -2061,7 +2048,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             AppLocalizations.of(
               context,
             )!.orderCreatedViaMobileApp, // Default note
-        paymentType: _paymentType == 'cod' ? 'COD' : 'PREPAID',
+        paymentType:
+            _paymentType == 'cod'
+                ? AppLocalizations.of(context)!.cod
+                : AppLocalizations.of(context)!.prepaid,
         amount: double.parse(_amountController.text),
         deliveryFee: double.parse(_deliveryFeeController.text),
         clientId: clientId,

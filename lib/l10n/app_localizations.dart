@@ -206,6 +206,12 @@ abstract class AppLocalizations {
   /// **'Additional Information'**
   String get additionalInformation;
 
+  /// Order details section title
+  ///
+  /// In en, this message translates to:
+  /// **'Order Details'**
+  String get orderDetails;
+
   /// New order page title
   ///
   /// In en, this message translates to:
@@ -3062,7 +3068,7 @@ abstract class AppLocalizations {
   /// **'Stations and hubs will appear here once the API is available.'**
   String get stationsAndHubsWillAppearHere;
 
-  /// Locations count header
+  /// Locations count with number
   ///
   /// In en, this message translates to:
   /// **'Locations ({count})'**
@@ -3949,6 +3955,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An unknown error occurred. Please try again.'**
   String get unknownError;
+
+  /// Form progress indicator title
+  ///
+  /// In en, this message translates to:
+  /// **'Form Progress'**
+  String get formProgress;
+
+  /// Estimated completion time
+  ///
+  /// In en, this message translates to:
+  /// **'2-3 min'**
+  String get estimatedTime;
+
+  /// Station type label
+  ///
+  /// In en, this message translates to:
+  /// **'Station'**
+  String get station;
+
+  /// Hub type label
+  ///
+  /// In en, this message translates to:
+  /// **'Hub'**
+  String get hub;
+
+  /// No stations available message
+  ///
+  /// In en, this message translates to:
+  /// **'No Stations Available'**
+  String get noStationsAvailable;
+
+  /// No hubs available message
+  ///
+  /// In en, this message translates to:
+  /// **'No Hubs Available'**
+  String get noHubsAvailable;
+
+  /// Stations placeholder message
+  ///
+  /// In en, this message translates to:
+  /// **'Stations will appear here once the API is available.'**
+  String get stationsWillAppearHere;
+
+  /// Hubs placeholder message
+  ///
+  /// In en, this message translates to:
+  /// **'Hubs will appear here once the API is available.'**
+  String get hubsWillAppearHere;
+
+  /// Tap to view on map instruction
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to view on map'**
+  String get tapToViewOnMap;
+
+  /// Tap to view instruction
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to view'**
+  String get tapToView;
+
+  /// Show all locations tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Show all locations'**
+  String get showAllLocations;
+
+  /// Stations and hubs count
+  ///
+  /// In en, this message translates to:
+  /// **'{stations} Stations • {hubs} Hubs'**
+  String stationsAndHubsCount(int stations, int hubs);
 }
 
 class _AppLocalizationsDelegate

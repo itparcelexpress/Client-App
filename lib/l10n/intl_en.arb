@@ -72,6 +72,10 @@
   "@additionalInformation": {
     "description": "Additional information section title"
   },
+  "orderDetails": "Order Details",
+  "@orderDetails": {
+    "description": "Order details section title"
+  },
   "newOrder": "New Order",
   "@newOrder": {
     "description": "New order page title"
@@ -2501,5 +2505,37 @@
   "connectionError": "Connection error. Please check your internet connection.",
   "@connectionError": {"description": "Connection error"},
   "unknownError": "An unknown error occurred. Please try again.",
-  "@unknownError": {"description": "Unknown error message"}
+  "@unknownError": {"description": "Unknown error message"},
+  
+  "formProgress": "Form Progress",
+  "@formProgress": {"description": "Form progress indicator title"},
+  "estimatedTime": "2-3 min",
+  "@estimatedTime": {"description": "Estimated completion time"},
+  
+  "stations": "Stations",
+  "@stations": {"description": "Stations label"},
+  "hubs": "Hubs",
+  "@hubs": {"description": "Hubs label"},
+  "station": "Station",
+  "@station": {"description": "Station type label"},
+  "hub": "Hub",
+  "@hub": {"description": "Hub type label"},
+  "noStationsAvailable": "No Stations Available",
+  "@noStationsAvailable": {"description": "No stations available message"},
+  "noHubsAvailable": "No Hubs Available",
+  "@noHubsAvailable": {"description": "No hubs available message"},
+  "stationsWillAppearHere": "Stations will appear here once the API is available.",
+  "@stationsWillAppearHere": {"description": "Stations placeholder message"},
+  "hubsWillAppearHere": "Hubs will appear here once the API is available.",
+  "@hubsWillAppearHere": {"description": "Hubs placeholder message"},
+  "tapToViewOnMap": "Tap to view on map",
+  "@tapToViewOnMap": {"description": "Tap to view on map instruction"},
+  "tapToView": "Tap to view",
+  "@tapToView": {"description": "Tap to view instruction"},
+  "showAllLocations": "Show all locations",
+  "@showAllLocations": {"description": "Show all locations tooltip"},
+  "locationsCount": "Locations ({count})",
+  "@locationsCount": {"description": "Locations count with number", "placeholders": {"count": {"type": "int", "example": "5"}}},
+  "stationsAndHubsCount": "{stations} Stations • {hubs} Hubs",
+  "@stationsAndHubsCount": {"description": "Stations and hubs count", "placeholders": {"stations": {"type": "int", "example": "3"}, "hubs": {"type": "int", "example": "2"}}}
 }

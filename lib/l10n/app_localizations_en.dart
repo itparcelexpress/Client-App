@@ -63,6 +63,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get additionalInformation => 'Additional Information';
 
   @override
+  String get orderDetails => 'Order Details';
+
+  @override
   String get newOrder => 'New Order';
 
   @override
@@ -2080,4 +2083,44 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unknownError => 'An unknown error occurred. Please try again.';
+
+  @override
+  String get formProgress => 'Form Progress';
+
+  @override
+  String get estimatedTime => '2-3 min';
+
+  @override
+  String get station => 'Station';
+
+  @override
+  String get hub => 'Hub';
+
+  @override
+  String get noStationsAvailable => 'No Stations Available';
+
+  @override
+  String get noHubsAvailable => 'No Hubs Available';
+
+  @override
+  String get stationsWillAppearHere =>
+      'Stations will appear here once the API is available.';
+
+  @override
+  String get hubsWillAppearHere =>
+      'Hubs will appear here once the API is available.';
+
+  @override
+  String get tapToViewOnMap => 'Tap to view on map';
+
+  @override
+  String get tapToView => 'Tap to view';
+
+  @override
+  String get showAllLocations => 'Show all locations';
+
+  @override
+  String stationsAndHubsCount(int stations, int hubs) {
+    return '$stations Stations • $hubs Hubs';
+  }
 }

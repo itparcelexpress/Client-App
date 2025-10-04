@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:client_app/l10n/app_localizations.dart';
 
 import '../../data/models/station_model.dart';
 
@@ -113,7 +114,9 @@ class _LocationCardState extends State<LocationCard>
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 Text(
-                                  isStation ? 'Station' : 'Hub',
+                                  isStation
+                                      ? AppLocalizations.of(context)!.station
+                                      : AppLocalizations.of(context)!.hub,
                                   style: Theme.of(
                                     context,
                                   ).textTheme.bodySmall?.copyWith(
@@ -208,7 +211,7 @@ class _LocationCardState extends State<LocationCard>
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          'Tap to view on map',
+                          AppLocalizations.of(context)!.tapToViewOnMap,
                           style: Theme.of(
                             context,
                           ).textTheme.bodySmall?.copyWith(

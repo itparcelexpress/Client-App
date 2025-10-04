@@ -384,7 +384,7 @@ class _MapPageState extends State<MapPage> {
               backgroundColor: Colors.white,
               foregroundColor: Theme.of(context).primaryColor,
               onPressed: _fitMarkersInView,
-              tooltip: 'Show all locations',
+              tooltip: AppLocalizations.of(context)!.showAllLocations,
               child: const Icon(Icons.my_location),
             ),
           ),

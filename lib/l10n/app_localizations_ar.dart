@@ -63,6 +63,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get additionalInformation => 'معلومات إضافية';
 
   @override
+  String get orderDetails => 'تفاصيل الطلب';
+
+  @override
   String get newOrder => 'طلب جديد';
 
   @override
@@ -2063,4 +2066,44 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get unknownError => 'حدث خطأ غير معروف. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get formProgress => 'تقدم النموذج';
+
+  @override
+  String get estimatedTime => '2-3 دقائق';
+
+  @override
+  String get station => 'محطة';
+
+  @override
+  String get hub => 'مركز';
+
+  @override
+  String get noStationsAvailable => 'لا توجد محطات متاحة';
+
+  @override
+  String get noHubsAvailable => 'لا توجد مراكز متاحة';
+
+  @override
+  String get stationsWillAppearHere =>
+      'ستظهر المحطات هنا بمجرد توفر واجهة برمجة التطبيقات.';
+
+  @override
+  String get hubsWillAppearHere =>
+      'ستظهر المراكز هنا بمجرد توفر واجهة برمجة التطبيقات.';
+
+  @override
+  String get tapToViewOnMap => 'اضغط لعرض على الخريطة';
+
+  @override
+  String get tapToView => 'اضغط للعرض';
+
+  @override
+  String get showAllLocations => 'عرض جميع المواقع';
+
+  @override
+  String stationsAndHubsCount(int stations, int hubs) {
+    return '$stations محطات • $hubs مراكز';
+  }
 }

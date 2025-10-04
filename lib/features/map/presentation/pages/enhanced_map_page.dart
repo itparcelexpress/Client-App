@@ -361,7 +361,7 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
                     backgroundColor: Colors.white,
                     foregroundColor: Theme.of(context).primaryColor,
                     onPressed: _fitMarkersInView,
-                    tooltip: 'Show all locations',
+                    tooltip: AppLocalizations.of(context)!.showAllLocations,
                     child: const Icon(Icons.my_location),
                   ),
                 );
@@ -388,13 +388,18 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Locations (${_allItems.length})',
+                      AppLocalizations.of(
+                        context,
+                      )!.locationsCount(_allItems.length),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      '${state.stations.length} Stations • ${state.hubs.length} Hubs',
+                      AppLocalizations.of(context)!.stationsAndHubsCount(
+                        state.stations.length,
+                        state.hubs.length,
+                      ),
                       style: Theme.of(
                         context,
                       ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
