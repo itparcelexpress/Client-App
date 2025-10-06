@@ -211,12 +211,17 @@ class _UnifiedPhoneInputState extends State<UnifiedPhoneInput> {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      // Phone Code
-                      Text(
-                        selectedPhoneCode,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColor.primaryColor,
-                          fontWeight: FontWeight.w600,
+                      // Phone Code (force LTR so '+' appears on the left)
+                      Directionality(
+                        textDirection: TextDirection.ltr,
+                        child: Text(
+                          selectedPhoneCode,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.copyWith(
+                            color: AppColor.primaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 4),
@@ -237,6 +242,7 @@ class _UnifiedPhoneInputState extends State<UnifiedPhoneInput> {
                   controller: widget.controller,
                   keyboardType: TextInputType.phone,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  textDirection: TextDirection.ltr,
                   decoration: InputDecoration(
                     hintText:
                         widget.hint ??
@@ -274,13 +280,28 @@ class _UnifiedPhoneInputState extends State<UnifiedPhoneInput> {
                 Icon(Icons.info_outline, size: 16, color: Colors.grey.shade600),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text(
-                    AppLocalizations.of(context)!.fullPhoneNumberPreview(
-                      '$selectedPhoneCode${widget.controller.text}',
-                    ),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.grey.shade700,
-                    ),
+                  child: Wrap(
+                    alignment: WrapAlignment.start,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 4,
+                    children: [
+                      Text(
+                        AppLocalizations.of(
+                          context,
+                        )!.fullPhoneNumberPreview(''),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.grey.shade700,
+                        ),
+                      ),
+                      Directionality(
+                        textDirection: TextDirection.ltr,
+                        child: Text(
+                          '$selectedPhoneCode${widget.controller.text}',
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: Colors.grey.shade700),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

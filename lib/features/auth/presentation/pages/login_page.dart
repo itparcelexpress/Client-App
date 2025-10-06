@@ -14,6 +14,7 @@ import 'package:client_app/core/utilities/taost_service.dart';
 import 'package:client_app/features/auth/util/login_error_mapper.dart';
 import 'package:client_app/core/utilities/validators.dart';
 import 'package:client_app/l10n/app_localizations.dart';
+import 'package:client_app/core/utilities/app_strings.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -267,18 +268,10 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       children: [
         SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 60)),
-        Container(
+        SizedBox(
           height: ResponsiveUtils.getResponsiveHeight(context, 80),
           width: ResponsiveUtils.getResponsiveWidth(context, 80),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.blue.shade600,
-          ),
-          child: Icon(
-            Icons.local_shipping,
-            size: ResponsiveUtils.getResponsiveWidth(context, 40),
-            color: Colors.white,
-          ),
+          child: Image.asset(AppStrings.appLogo, fit: BoxFit.contain),
         ),
         SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 32)),
         Text(

@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/l10n/app_localizations.dart';
+import 'package:client_app/core/utilities/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -43,27 +44,10 @@ class SplashPage extends StatelessWidget {
               children: [
                 BounceInDown(
                   duration: const Duration(milliseconds: 1000),
-                  child: Container(
+                  child: SizedBox(
                     height: ResponsiveUtils.getResponsiveHeight(context, 150),
                     width: ResponsiveUtils.getResponsiveWidth(context, 150),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        colors: [Colors.blue.shade400, Colors.purple.shade400],
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.blue.withValues(alpha: 0.3),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: Icon(
-                      Icons.local_shipping,
-                      size: ResponsiveUtils.getResponsiveWidth(context, 75),
-                      color: Colors.white,
-                    ),
+                    child: Image.asset(AppStrings.appLogo, fit: BoxFit.contain),
                   ),
                 ),
                 SizedBox(
