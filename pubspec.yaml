@@ -138,18 +138,17 @@ flutter_launcher_icons:
   ios: true
   # Android adaptive icon to prevent circular mask clipping
   adaptive_icon_background: "#FFFFFF"
-  adaptive_icon_foreground: "assets/images/playstore.png"
-  adaptive_icon_monochrome: "assets/images/playstore_padded_mono.png"
-  image_path_android: "assets/images/playstore.png"
-  # iOS icon - Using new appstore.png with proper background
-  image_path_ios: "assets/images/appstore.png"
+  adaptive_icon_foreground: "assets/images/logo.png"
+  image_path_android: "assets/images/logo.png"
+  # iOS icon
+  image_path_ios: "assets/images/logo.png"
   remove_alpha_ios: true
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
     generate: true
     image_path: "assets/images/logo.png"
-    background_color: "#hexcode"
-    theme_color: "#hexcode"
+    background_color: "#FFFFFF"
+    theme_color: "#FFFFFF"
   windows:
     generate: true
     image_path: "assets/images/logo.png"
