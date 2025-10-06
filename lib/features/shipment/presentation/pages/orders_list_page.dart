@@ -3,6 +3,7 @@ import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/features/shipment/cubit/shipment_cubit.dart';
 import 'package:client_app/features/shipment/data/models/order_models.dart';
 import 'package:client_app/features/shipment/presentation/pages/create_order_page.dart';
+import 'package:client_app/core/utilities/currency_utils.dart';
 import 'package:client_app/injections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -655,7 +656,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                 child: _buildInfoItem(
                   icon: Icons.attach_money_rounded,
                   label: AppLocalizations.of(context)!.amount,
-                  value: '\$${order.amount}',
+                  value: '${CurrencyUtils.symbol(context)}${order.amount}',
                   color: const Color(0xFF10b981),
                 ),
               ),
@@ -669,7 +670,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
                 child: _buildInfoItem(
                   icon: Icons.local_shipping_outlined,
                   label: AppLocalizations.of(context)!.deliveryFee,
-                  value: '\$${order.deliveryFee}',
+                  value: '${CurrencyUtils.symbol(context)}${order.deliveryFee}',
                   color: const Color(0xFF667eea),
                 ),
               ),
@@ -1082,7 +1083,7 @@ class _OrdersListPageState extends State<OrdersListPage> {
       final date = DateTime.parse(dateString);
       return DateFormat('MMM d, y').format(date);
     } catch (e) {
-      return 'Unknown';
+      return AppLocalizations.of(context)!.unknownError;
     }
   }
 
@@ -1091,12 +1092,15 @@ class _OrdersListPageState extends State<OrdersListPage> {
       final date = DateTime.parse(dateString);
       return DateFormat('MMM d').format(date);
     } catch (e) {
-      return 'Unknown';
+      return AppLocalizations.of(context)!.unknownError;
     }
   }
 
   void _copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
-    ToastService.showSuccess(context, 'copyToClipboardSuccess');
+    ToastService.showSuccess(
+      context,
+      AppLocalizations.of(context)!.copyToClipboardSuccess,
+    );
   }
 }

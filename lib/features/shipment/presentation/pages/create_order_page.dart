@@ -813,6 +813,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                           context,
                         )!.trackingLabel(code),
                         type: ToastType.success,
+                        context: context,
                       );
                     }
                   },
@@ -1187,7 +1188,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
   Widget _buildOrderDetailsSection() {
     return _buildSection(
-      title: AppLocalizations.of(context)!.orderDetails,
+      title: AppLocalizations.of(context)!.payment,
       icon: Icons.receipt_long_rounded,
       children: [
         // Compact Payment & Fee Row
@@ -1200,9 +1201,12 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 icon: Icons.payment_rounded,
                 items: const ['cod', 'prepaid'],
                 onChanged:
-                    (value) => _setStateWithScrollPreservation(
-                      () => _paymentType = value!,
-                    ),
+                    (value) => _setStateWithScrollPreservation(() {
+                      _paymentType = value!;
+                      if (_paymentType == 'prepaid') {
+                        _amountController.text = '0';
+                      }
+                    }),
               ),
             ),
             const SizedBox(width: 16),
@@ -1320,20 +1324,80 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: _buildTextField(
-                controller: _amountController,
-                label: AppLocalizations.of(context)!.amount,
-                hint: AppLocalizations.of(context)!.amountHint,
-                icon: Icons.payments_outlined,
-                keyboardType: TextInputType.number,
-                validator:
-                    (value) =>
-                        value?.isEmpty == true
-                            ? AppLocalizations.of(
-                              context,
-                            )!.pleaseEnterAmountField
-                            : null,
-                suffixText: CurrencyUtils.symbol(context),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.amount,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey.shade800,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _amountController,
+                    keyboardType: TextInputType.number,
+                    readOnly: _paymentType != 'cod',
+                    validator: (value) {
+                      if (_paymentType == 'cod') {
+                        if (value == null || value.trim().isEmpty) {
+                          return AppLocalizations.of(
+                            context,
+                          )!.pleaseEnterAmountField;
+                        }
+                        final parsed = double.tryParse(value.trim());
+                        if (parsed == null || parsed <= 0) {
+                          return AppLocalizations.of(
+                            context,
+                          )!.pleaseEnterAmountField;
+                        }
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context)!.amountHint,
+                      prefixIcon: Icon(
+                        Icons.payments_outlined,
+                        color: Colors.grey.shade600,
+                        size: 20,
+                      ),
+                      suffixText: CurrencyUtils.symbol(context),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: Colors.blue.shade600,
+                          width: 2,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: Colors.red.shade400,
+                          width: 1,
+                        ),
+                      ),
+                      filled: true,
+                      fillColor:
+                          _paymentType == 'cod'
+                              ? Colors.grey.shade50
+                              : Colors.grey.shade100,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 18,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -1963,6 +2027,36 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         DropdownButtonFormField<String>(
           value: value,
           onChanged: onChanged,
+          isExpanded:
+              true, // prevent overflow by letting button take full width
+          icon: const Icon(Icons.arrow_drop_down),
+          style: TextStyle(fontSize: 14, color: Colors.grey.shade900),
+          selectedItemBuilder: (context) {
+            return items.map((item) {
+              String displayText = item;
+              if (item == 'cod') {
+                displayText = AppLocalizations.of(context)!.cod;
+              } else if (item == 'prepaid') {
+                displayText = AppLocalizations.of(context)!.prepaid;
+              } else if (item == 'customer') {
+                displayText = AppLocalizations.of(context)!.customer;
+              } else if (item == 'client') {
+                displayText = AppLocalizations.of(context)!.client;
+              } else if (item == 'Kg') {
+                displayText = AppLocalizations.of(context)!.kg;
+              } else if (item == 'length') {
+                displayText = AppLocalizations.of(context)!.lengthUnit;
+              }
+              return Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  displayText,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              );
+            }).toList();
+          },
           decoration: InputDecoration(
             prefixIcon: Icon(icon, color: Colors.grey.shade600, size: 20),
             border: OutlineInputBorder(
@@ -2000,7 +2094,14 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 } else if (item == 'length') {
                   displayText = AppLocalizations.of(context)!.lengthUnit;
                 }
-                return DropdownMenuItem(value: item, child: Text(displayText));
+                return DropdownMenuItem(
+                  value: item,
+                  child: Text(
+                    displayText,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                );
               }).toList(),
         ),
       ],
@@ -2021,6 +2122,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       // Use the authenticated user ID when creating orders (backend expects user id)
       final clientId = user?.id ?? 1; // Fallback to 1 if not found
 
+      final isCod = _paymentType == 'cod';
       final request = CreateOrderRequest(
         stickerNumber:
             _stickerController.text.trim().isNotEmpty
@@ -2048,11 +2150,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             AppLocalizations.of(
               context,
             )!.orderCreatedViaMobileApp, // Default note
-        paymentType:
-            _paymentType == 'cod'
-                ? AppLocalizations.of(context)!.cod
-                : AppLocalizations.of(context)!.prepaid,
-        amount: double.parse(_amountController.text),
+        paymentType: _paymentType,
+        amount: isCod ? double.parse(_amountController.text) : 0,
         deliveryFee: double.parse(_deliveryFeeController.text),
         clientId: clientId,
         locationUrl:
@@ -2095,11 +2194,11 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
       context.read<ShipmentCubit>().createOrder(request);
     } else {
-      // Scroll to first error
-      _scrollController.animateTo(
-        0,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
+      // Keep current position; show a clear error message
+      ToastService.showCustomToast(
+        message: AppLocalizations.of(context)!.pleaseCheckYourInputAndTryAgain,
+        type: ToastType.error,
+        context: context,
       );
     }
   }
@@ -2199,25 +2298,22 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     // Don't show empty error messages
     if (message.trim().isEmpty) return;
 
-    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
     final lc = message.toLowerCase();
 
     String display = message;
 
     // Friendly, localized mappings for common server messages
     if (lc.contains('tracking') && lc.contains('taken')) {
-      display =
-          isArabic
-              ? 'رقم التتبع مستخدم بالفعل. يرجى مسح ملصقًا آخر.'
-              : AppLocalizations.of(context)!.thisTrackingNumberIsAlreadyUsed;
+      display = AppLocalizations.of(context)!.thisTrackingNumberIsAlreadyUsed;
     } else if (lc.contains('validation') || lc.contains('unprocessable')) {
-      display =
-          isArabic
-              ? 'يرجى التحقق من المدخلات والمحاولة مرة أخرى.'
-              : AppLocalizations.of(context)!.pleaseCheckYourInputAndTryAgain;
+      display = AppLocalizations.of(context)!.pleaseCheckYourInputAndTryAgain;
     }
 
-    ToastService.showCustomToast(message: display, type: ToastType.error);
+    ToastService.showCustomToast(
+      message: display,
+      type: ToastType.error,
+      context: context,
+    );
   }
 
   Widget _buildSaveAddressSuggestion() {
