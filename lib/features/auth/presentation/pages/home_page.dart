@@ -506,7 +506,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     // If no location data, return "Oman" as fallback
     if (locationParts.isEmpty) {
-      return 'Oman';
+      return AppLocalizations.of(context)!.oman;
     }
 
     return locationParts.join(', ');
@@ -797,7 +797,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    isEnglish ? 'التبديل إلى العربية' : 'Switch to English',
+                    isEnglish
+                        ? AppLocalizations.of(context)!.switchToArabic
+                        : AppLocalizations.of(context)!.switchToEnglish,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -806,7 +808,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    isEnglish ? 'العربية' : 'English',
+                    isEnglish
+                        ? AppLocalizations.of(context)!.arabic
+                        : AppLocalizations.of(context)!.english,
                     style: const TextStyle(
                       fontSize: 14,
                       color: Color(0xFF667eea),
@@ -823,7 +827,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                isEnglish ? 'AR' : 'EN',
+                isEnglish
+                    ? AppLocalizations.of(context)!.arabicCode
+                    : AppLocalizations.of(context)!.englishCode,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,
@@ -1123,9 +1129,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        '⚠️ Warning',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!.warningLabel,
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFFef4444),

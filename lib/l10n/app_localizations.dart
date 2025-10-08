@@ -2522,7 +2522,7 @@ abstract class AppLocalizations {
   /// **'Bahrain'**
   String get bahrain;
 
-  /// Oman country name
+  /// Oman country name as fallback
   ///
   /// In en, this message translates to:
   /// **'Oman'**
@@ -4099,6 +4099,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Keep My Account'**
   String get keepMyAccount;
+
+  /// Warning label with emoji
+  ///
+  /// In en, this message translates to:
+  /// **'⚠️ Warning'**
+  String get warningLabel;
+
+  /// Switch to Arabic text
+  ///
+  /// In en, this message translates to:
+  /// **'التبديل إلى العربية'**
+  String get switchToArabic;
+
+  /// Switch to English text
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to English'**
+  String get switchToEnglish;
+
+  /// Arabic language name
+  ///
+  /// In en, this message translates to:
+  /// **'العربية'**
+  String get arabic;
+
+  /// English language name
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// Arabic language code
+  ///
+  /// In en, this message translates to:
+  /// **'AR'**
+  String get arabicCode;
+
+  /// English language code
+  ///
+  /// In en, this message translates to:
+  /// **'EN'**
+  String get englishCode;
 }
 
 class _AppLocalizationsDelegate

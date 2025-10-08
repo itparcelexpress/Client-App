@@ -2144,4 +2144,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get keepMyAccount => 'الاحتفاظ بحسابي';
+
+  @override
+  String get warningLabel => '⚠️ تحذير';
+
+  @override
+  String get switchToArabic => 'التبديل إلى العربية';
+
+  @override
+  String get switchToEnglish => 'Switch to English';
+
+  @override
+  String get arabic => 'العربية';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get arabicCode => 'AR';
+
+  @override
+  String get englishCode => 'EN';
 }

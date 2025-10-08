@@ -1550,5 +1550,21 @@
   "lastChanceWarning": "هذه فرصتك الأخيرة للإلغاء. بمجرد الحذف، لا يمكن استرداد حسابك.",
   "@lastChanceWarning": {"description": "رسالة تحذير الفرصة الأخيرة"},
   "keepMyAccount": "الاحتفاظ بحسابي",
-  "@keepMyAccount": {"description": "نص زر الاحتفاظ بالحساب"}
+  "@keepMyAccount": {"description": "نص زر الاحتفاظ بالحساب"},
+  "warningLabel": "⚠️ تحذير",
+  "@warningLabel": {"description": "تسمية التحذير مع الرمز التعبيري"},
+  "switchToArabic": "التبديل إلى العربية",
+  "@switchToArabic": {"description": "نص التبديل إلى العربية"},
+  "switchToEnglish": "Switch to English",
+  "@switchToEnglish": {"description": "نص التبديل إلى الإنجليزية"},
+  "arabic": "العربية",
+  "@arabic": {"description": "اسم اللغة العربية"},
+  "english": "English",
+  "@english": {"description": "اسم اللغة الإنجليزية"},
+  "arabicCode": "AR",
+  "@arabicCode": {"description": "رمز اللغة العربية"},
+  "englishCode": "EN",
+  "@englishCode": {"description": "رمز اللغة الإنجليزية"},
+  "oman": "عُمان",
+  "@oman": {"description": "اسم دولة عُمان كخيار احتياطي"}
 }

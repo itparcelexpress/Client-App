@@ -2562,5 +2562,21 @@
   "lastChanceWarning": "This is your last chance to cancel. Once deleted, your account cannot be recovered.",
   "@lastChanceWarning": {"description": "Last chance warning message"},
   "keepMyAccount": "Keep My Account",
-  "@keepMyAccount": {"description": "Keep account button text"}
+  "@keepMyAccount": {"description": "Keep account button text"},
+  "warningLabel": "⚠️ Warning",
+  "@warningLabel": {"description": "Warning label with emoji"},
+  "switchToArabic": "التبديل إلى العربية",
+  "@switchToArabic": {"description": "Switch to Arabic text"},
+  "switchToEnglish": "Switch to English",
+  "@switchToEnglish": {"description": "Switch to English text"},
+  "arabic": "العربية",
+  "@arabic": {"description": "Arabic language name"},
+  "english": "English",
+  "@english": {"description": "English language name"},
+  "arabicCode": "AR",
+  "@arabicCode": {"description": "Arabic language code"},
+  "englishCode": "EN",
+  "@englishCode": {"description": "English language code"},
+  "oman": "Oman",
+  "@oman": {"description": "Oman country name as fallback"}
 }
