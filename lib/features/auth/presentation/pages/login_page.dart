@@ -268,10 +268,24 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       children: [
         SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 60)),
-        SizedBox(
-          height: ResponsiveUtils.getResponsiveHeight(context, 80),
-          width: ResponsiveUtils.getResponsiveWidth(context, 80),
-          child: Image.asset(AppStrings.appLogo, fit: BoxFit.contain),
+        Container(
+          height: ResponsiveUtils.getResponsiveHeight(context, 112),
+          width: ResponsiveUtils.getResponsiveWidth(context, 112),
+          decoration: BoxDecoration(
+            color: Colors.blue.shade50,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.06),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.all(12),
+          child: ClipOval(
+            child: Image.asset(AppStrings.appLogo, fit: BoxFit.contain),
+          ),
         ),
         SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 32)),
         Text(

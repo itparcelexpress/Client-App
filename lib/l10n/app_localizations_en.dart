@@ -2123,4 +2123,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String stationsAndHubsCount(int stations, int hubs) {
     return '$stations Stations • $hubs Hubs';
   }
+
+  @override
+  String get dangerZone => 'Danger Zone';
+
+  @override
+  String get dangerZoneWarning =>
+      'This action is permanent and cannot be undone. Please proceed with caution.';
+
+  @override
+  String get thisWill => 'This will:';
+
+  @override
+  String get permanentlyDeleteData => 'Permanently delete all your data';
+
+  @override
+  String get removeOrdersHistory => 'Remove all your orders and history';
+
+  @override
+  String get cancelPendingTransactions => 'Cancel any pending transactions';
+
+  @override
+  String get cannotBeReversed => 'Cannot be reversed or undone';
+
+  @override
+  String get understandConsequences =>
+      'Please make sure you understand the consequences.';
+
+  @override
+  String get continueAction => 'Continue';
+
+  @override
+  String get areYouAbsolutelySure => 'Are you absolutely sure?';
+
+  @override
+  String get lastChanceWarning =>
+      'This is your last chance to cancel. Once deleted, your account cannot be recovered.';
+
+  @override
+  String get keepMyAccount => 'Keep My Account';
 }

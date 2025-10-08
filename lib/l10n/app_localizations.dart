@@ -4027,6 +4027,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{stations} Stations • {hubs} Hubs'**
   String stationsAndHubsCount(int stations, int hubs);
+
+  /// Danger zone section title
+  ///
+  /// In en, this message translates to:
+  /// **'Danger Zone'**
+  String get dangerZone;
+
+  /// Danger zone warning message
+  ///
+  /// In en, this message translates to:
+  /// **'This action is permanent and cannot be undone. Please proceed with caution.'**
+  String get dangerZoneWarning;
+
+  /// This will consequences list header
+  ///
+  /// In en, this message translates to:
+  /// **'This will:'**
+  String get thisWill;
+
+  /// Permanently delete data consequence
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently delete all your data'**
+  String get permanentlyDeleteData;
+
+  /// Remove orders and history consequence
+  ///
+  /// In en, this message translates to:
+  /// **'Remove all your orders and history'**
+  String get removeOrdersHistory;
+
+  /// Cancel pending transactions consequence
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel any pending transactions'**
+  String get cancelPendingTransactions;
+
+  /// Cannot be reversed consequence
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot be reversed or undone'**
+  String get cannotBeReversed;
+
+  /// Understand consequences warning
+  ///
+  /// In en, this message translates to:
+  /// **'Please make sure you understand the consequences.'**
+  String get understandConsequences;
+
+  /// Continue button text
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueAction;
+
+  /// Final confirmation dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Are you absolutely sure?'**
+  String get areYouAbsolutelySure;
+
+  /// Last chance warning message
+  ///
+  /// In en, this message translates to:
+  /// **'This is your last chance to cancel. Once deleted, your account cannot be recovered.'**
+  String get lastChanceWarning;
+
+  /// Keep account button text
+  ///
+  /// In en, this message translates to:
+  /// **'Keep My Account'**
+  String get keepMyAccount;
 }
 
 class _AppLocalizationsDelegate

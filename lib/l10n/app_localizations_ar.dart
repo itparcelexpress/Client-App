@@ -2106,4 +2106,42 @@ class AppLocalizationsAr extends AppLocalizations {
   String stationsAndHubsCount(int stations, int hubs) {
     return '$stations محطات • $hubs مراكز';
   }
+
+  @override
+  String get dangerZone => 'منطقة الخطر';
+
+  @override
+  String get dangerZoneWarning =>
+      'هذا الإجراء دائم ولا يمكن التراجع عنه. يرجى المتابعة بحذر.';
+
+  @override
+  String get thisWill => 'سيؤدي هذا إلى:';
+
+  @override
+  String get permanentlyDeleteData => 'حذف جميع بياناتك نهائياً';
+
+  @override
+  String get removeOrdersHistory => 'إزالة جميع طلباتك وسجل عملك';
+
+  @override
+  String get cancelPendingTransactions => 'إلغاء أي معاملات معلقة';
+
+  @override
+  String get cannotBeReversed => 'لا يمكن التراجع عنه أو إلغاؤه';
+
+  @override
+  String get understandConsequences => 'يرجى التأكد من فهمك للعواقب.';
+
+  @override
+  String get continueAction => 'متابعة';
+
+  @override
+  String get areYouAbsolutelySure => 'هل أنت متأكد تماماً؟';
+
+  @override
+  String get lastChanceWarning =>
+      'هذه فرصتك الأخيرة للإلغاء. بمجرد الحذف، لا يمكن استرداد حسابك.';
+
+  @override
+  String get keepMyAccount => 'الاحتفاظ بحسابي';
 }
