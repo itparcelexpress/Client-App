@@ -101,108 +101,117 @@ class _MapCarouselSliderState extends State<MapCarouselSlider> {
 
     return Container(
       height: 200,
-      margin: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          // Header with title and indicators
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(12),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, -2),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  AppLocalizations.of(
-                    context,
-                  )!.locationsCount(_allItems.length),
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Row(
-                  children:
-                      _allItems.asMap().entries.map((entry) {
-                        return Container(
-                          width: 8,
-                          height: 8,
-                          margin: const EdgeInsets.symmetric(horizontal: 2),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color:
-                                widget.currentIndex == entry.key
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.grey[300],
-                          ),
-                        );
-                      }).toList(),
-                ),
-              ],
-            ),
-          ),
-          // Carousel
-          Expanded(
-            child: Container(
+      margin: const EdgeInsets.fromLTRB(
+        16,
+        16,
+        16,
+        0,
+      ), // Remove bottom margin to prevent overflow
+      child: ClipRect(
+        child: Column(
+          children: [
+            // Header with title and indicators
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: const BorderRadius.vertical(
-                  bottom: Radius.circular(12),
+                  top: Radius.circular(12),
                 ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+                    blurRadius: 4,
+                    offset: const Offset(0, -2),
                   ),
                 ],
               ),
-              child: CarouselSlider.builder(
-                carouselController: _carouselController,
-                itemCount: _allItems.length,
-                itemBuilder: (context, index, realIndex) {
-                  final item = _allItems[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: LocationCard(
-                      item: item,
-                      onTap: () => widget.onItemSelected(index, item),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.locationsCount(_allItems.length),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                  );
-                },
-                options: CarouselOptions(
-                  height: double.infinity,
-                  viewportFraction: 0.8,
-                  initialPage: widget.currentIndex,
-                  enableInfiniteScroll: true,
-                  reverse: false,
-                  autoPlay: false,
-                  autoPlayInterval: const Duration(seconds: 5),
-                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                  autoPlayCurve: Curves.fastOutSlowIn,
-                  enlargeCenterPage: true,
-                  enlargeFactor: 0.2,
-                  scrollPhysics: const BouncingScrollPhysics(),
-                  onPageChanged: (index, reason) {
-                    if (reason == CarouselPageChangedReason.manual) {
-                      widget.onItemSelected(index, _allItems[index]);
-                    }
+                  ),
+                  Row(
+                    children:
+                        _allItems.asMap().entries.map((entry) {
+                          return Container(
+                            width: 8,
+                            height: 8,
+                            margin: const EdgeInsets.symmetric(horizontal: 2),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color:
+                                  widget.currentIndex == entry.key
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.grey[300],
+                            ),
+                          );
+                        }).toList(),
+                  ),
+                ],
+              ),
+            ),
+            // Carousel
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.vertical(
+                    bottom: Radius.circular(12),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: CarouselSlider.builder(
+                  carouselController: _carouselController,
+                  itemCount: _allItems.length,
+                  itemBuilder: (context, index, realIndex) {
+                    final item = _allItems[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: LocationCard(
+                        item: item,
+                        onTap: () => widget.onItemSelected(index, item),
+                      ),
+                    );
                   },
+                  options: CarouselOptions(
+                    height: double.infinity,
+                    viewportFraction: 0.8,
+                    initialPage: widget.currentIndex,
+                    enableInfiniteScroll: true,
+                    reverse: false,
+                    autoPlay: false,
+                    autoPlayInterval: const Duration(seconds: 5),
+                    autoPlayAnimationDuration: const Duration(
+                      milliseconds: 800,
+                    ),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enlargeCenterPage: true,
+                    enlargeFactor: 0.2,
+                    scrollPhysics: const BouncingScrollPhysics(),
+                    onPageChanged: (index, reason) {
+                      if (reason == CarouselPageChangedReason.manual) {
+                        widget.onItemSelected(index, _allItems[index]);
+                      }
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

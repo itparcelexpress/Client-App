@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:client_app/core/widgets/loading_widgets.dart';
 import 'package:client_app/l10n/app_localizations.dart';
+import 'package:client_app/core/utilities/coordinate_utils.dart';
 
 import '../../cubit/map_cubit.dart';
 import '../../data/models/hub_model.dart' as hub_models;
@@ -149,10 +150,7 @@ class _MapPageState extends State<MapPage> {
       _markers.add(
         Marker(
           markerId: MarkerId('station_${station.id}'),
-          position: LatLng(
-            double.parse(station.lat),
-            double.parse(station.lng),
-          ),
+          position: CoordinateUtils.parseCoordinates(station.lat, station.lng),
           infoWindow: InfoWindow(
             title: station.name,
             snippet: station.location,
@@ -171,7 +169,7 @@ class _MapPageState extends State<MapPage> {
             context.read<MapCubit>().selectStation(station);
             _animateCarouselToItem(station);
             _animateToLocation(
-              LatLng(double.parse(station.lat), double.parse(station.lng)),
+              CoordinateUtils.parseCoordinates(station.lat, station.lng),
             );
           },
         ),
@@ -185,7 +183,7 @@ class _MapPageState extends State<MapPage> {
       _markers.add(
         Marker(
           markerId: MarkerId('hub_${hub.id}'),
-          position: LatLng(double.parse(hub.lat), double.parse(hub.lng)),
+          position: CoordinateUtils.parseCoordinates(hub.lat, hub.lng),
           infoWindow: InfoWindow(title: hub.name, snippet: hub.location),
           icon:
               isSelected
@@ -201,7 +199,7 @@ class _MapPageState extends State<MapPage> {
             context.read<MapCubit>().selectHub(hub);
             _animateCarouselToItem(hub);
             _animateToLocation(
-              LatLng(double.parse(hub.lat), double.parse(hub.lng)),
+              CoordinateUtils.parseCoordinates(hub.lat, hub.lng),
             );
           },
         ),
@@ -241,14 +239,10 @@ class _MapPageState extends State<MapPage> {
     });
     if (item is Station) {
       context.read<MapCubit>().selectStation(item);
-      _animateToLocation(
-        LatLng(double.parse(item.lat), double.parse(item.lng)),
-      );
+      _animateToLocation(CoordinateUtils.parseCoordinates(item.lat, item.lng));
     } else if (item is hub_models.HubDetail) {
       context.read<MapCubit>().selectHub(item);
-      _animateToLocation(
-        LatLng(double.parse(item.lat), double.parse(item.lng)),
-      );
+      _animateToLocation(CoordinateUtils.parseCoordinates(item.lat, item.lng));
     }
   }
 
@@ -351,11 +345,18 @@ class _MapPageState extends State<MapPage> {
           bottom: 0,
           left: 0,
           right: 0,
-          child: MapCarouselSlider(
-            stations: state.stations,
-            hubs: state.hubs,
-            currentIndex: _currentCarouselIndex,
-            onItemSelected: _onCarouselItemSelected,
+          child: SafeArea(
+            top: false,
+            child: Container(
+              // Add extra padding to prevent overflow during animations
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: MapCarouselSlider(
+                stations: state.stations,
+                hubs: state.hubs,
+                currentIndex: _currentCarouselIndex,
+                onItemSelected: _onCarouselItemSelected,
+              ),
+            ),
           ),
         ),
         // Debug info overlay

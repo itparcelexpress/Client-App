@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:client_app/core/widgets/loading_widgets.dart';
 import 'package:client_app/l10n/app_localizations.dart';
+import 'package:client_app/core/utilities/coordinate_utils.dart';
 
 import '../../cubit/map_cubit.dart';
 import '../../data/models/hub_model.dart' as hub_models;
@@ -38,6 +39,15 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
     );
 
     _fabAnimationController.forward();
+
+    // Load map data safely
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        context.read<MapCubit>().loadMapData();
+      } catch (e) {
+        print('⚠️ Error loading map data: $e');
+      }
+    });
   }
 
   @override
@@ -47,18 +57,32 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
   }
 
   void _onMapCreated(GoogleMapController controller) {
-    _mapController = controller;
-    // Fit all markers in view after a delay
-    Future.delayed(const Duration(milliseconds: 1000), () {
-      _fitMarkersInView();
-    });
+    try {
+      _mapController = controller;
+      // Fit all markers in view after a delay
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        try {
+          _fitMarkersInView();
+        } catch (e) {
+          print('⚠️ Error fitting markers in view: $e');
+        }
+      });
+    } catch (e) {
+      print('⚠️ Error in onMapCreated: $e');
+    }
   }
 
   void _fitMarkersInView() {
-    if (_markers.isEmpty || _mapController == null) return;
+    try {
+      if (_markers.isEmpty || _mapController == null) return;
 
-    final LatLngBounds bounds = _createBoundsFromMarkers();
-    _mapController!.animateCamera(CameraUpdate.newLatLngBounds(bounds, 100.0));
+      final LatLngBounds bounds = _createBoundsFromMarkers();
+      _mapController!.animateCamera(
+        CameraUpdate.newLatLngBounds(bounds, 100.0),
+      );
+    } catch (e) {
+      print('⚠️ Error fitting markers in view: $e');
+    }
   }
 
   LatLngBounds _createBoundsFromMarkers() {
@@ -84,80 +108,115 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
   }
 
   void _updateMarkers(List<Station> stations, List<hub_models.HubDetail> hubs) {
-    print(
-      '🗺️ EnhancedMapPage: Updating markers with ${stations.length} stations and ${hubs.length} hubs',
-    );
-    _markers.clear();
-    final state = context.read<MapCubit>().state;
-    final selectedStationId =
-        state is MapLoaded ? state.selectedStationId : null;
-    final selectedHubId = state is MapLoaded ? state.selectedHubId : null;
-
-    // Add station markers
-    for (final station in stations) {
+    try {
       print(
-        '🗺️ EnhancedMapPage: Adding station marker: ${station.name} at ${station.lat}, ${station.lng}',
+        '🗺️ EnhancedMapPage: Updating markers with ${stations.length} stations and ${hubs.length} hubs',
       );
-      final isSelected = selectedStationId == station.id.toString();
-      _markers.add(
-        Marker(
-          markerId: MarkerId('station_${station.id}'),
-          position: LatLng(
-            double.parse(station.lat),
-            double.parse(station.lng),
-          ),
-          infoWindow: InfoWindow(
-            title: station.name,
-            snippet: station.location,
-          ),
-          icon: BitmapDescriptor.defaultMarkerWithHue(
-            isSelected ? BitmapDescriptor.hueCyan : BitmapDescriptor.hueBlue,
-          ),
-          onTap: () {
-            context.read<MapCubit>().selectStation(station);
-            _animateToLocation(
-              LatLng(double.parse(station.lat), double.parse(station.lng)),
-            );
-            _animateToIndex(_allItems.indexOf(station));
-          },
-        ),
-      );
-    }
+      _markers.clear();
+      final state = context.read<MapCubit>().state;
+      final selectedStationId =
+          state is MapLoaded ? state.selectedStationId : null;
+      final selectedHubId = state is MapLoaded ? state.selectedHubId : null;
 
-    // Add hub markers
-    for (final hub in hubs) {
-      print(
-        '🗺️ EnhancedMapPage: Adding hub marker: ${hub.name} at ${hub.lat}, ${hub.lng}',
-      );
-      final isSelected = selectedHubId == hub.id.toString();
-      _markers.add(
-        Marker(
-          markerId: MarkerId('hub_${hub.id}'),
-          position: LatLng(double.parse(hub.lat), double.parse(hub.lng)),
-          infoWindow: InfoWindow(title: hub.name, snippet: hub.location),
-          icon: BitmapDescriptor.defaultMarkerWithHue(
-            isSelected ? BitmapDescriptor.hueOrange : BitmapDescriptor.hueRed,
-          ),
-          onTap: () {
-            context.read<MapCubit>().selectHub(hub);
-            _animateToLocation(
-              LatLng(double.parse(hub.lat), double.parse(hub.lng)),
-            );
-            _animateToIndex(_allItems.indexOf(hub));
-          },
-        ),
-      );
-    }
+      // Add station markers
+      for (final station in stations) {
+        try {
+          print(
+            '🗺️ EnhancedMapPage: Adding station marker: ${station.name} at ${station.lat}, ${station.lng}',
+          );
+          final isSelected = selectedStationId == station.id.toString();
+          _markers.add(
+            Marker(
+              markerId: MarkerId('station_${station.id}'),
+              position: CoordinateUtils.parseCoordinates(
+                station.lat,
+                station.lng,
+              ),
+              infoWindow: InfoWindow(
+                title: station.name,
+                snippet: station.location,
+              ),
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                isSelected
+                    ? BitmapDescriptor.hueCyan
+                    : BitmapDescriptor.hueBlue,
+              ),
+              onTap: () {
+                try {
+                  context.read<MapCubit>().selectStation(station);
+                  _animateToLocation(
+                    CoordinateUtils.parseCoordinates(station.lat, station.lng),
+                  );
+                  _animateToIndex(_allItems.indexOf(station));
+                } catch (e) {
+                  print('⚠️ Error handling station tap: $e');
+                }
+              },
+            ),
+          );
+        } catch (e) {
+          print('⚠️ Error adding station marker for ${station.name}: $e');
+        }
+      }
 
-    print('🗺️ EnhancedMapPage: Total markers created: ${_markers.length}');
+      // Add hub markers
+      for (final hub in hubs) {
+        try {
+          print(
+            '🗺️ EnhancedMapPage: Adding hub marker: ${hub.name} at ${hub.lat}, ${hub.lng}',
+          );
+          final isSelected = selectedHubId == hub.id.toString();
+          _markers.add(
+            Marker(
+              markerId: MarkerId('hub_${hub.id}'),
+              position: CoordinateUtils.parseCoordinates(hub.lat, hub.lng),
+              infoWindow: InfoWindow(title: hub.name, snippet: hub.location),
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                isSelected
+                    ? BitmapDescriptor.hueOrange
+                    : BitmapDescriptor.hueRed,
+              ),
+              onTap: () {
+                try {
+                  context.read<MapCubit>().selectHub(hub);
+                  _animateToLocation(
+                    CoordinateUtils.parseCoordinates(hub.lat, hub.lng),
+                  );
+                  _animateToIndex(_allItems.indexOf(hub));
+                } catch (e) {
+                  print('⚠️ Error handling hub tap: $e');
+                }
+              },
+            ),
+          );
+        } catch (e) {
+          print('⚠️ Error adding hub marker for ${hub.name}: $e');
+        }
+      }
+
+      print('🗺️ EnhancedMapPage: Total markers created: ${_markers.length}');
+    } catch (e) {
+      print('⚠️ Error updating markers: $e');
+    }
   }
 
   void _animateToLocation(LatLng location) {
-    _mapController?.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(target: location, zoom: 15.0, bearing: 0.0, tilt: 0.0),
-      ),
-    );
+    try {
+      if (_mapController != null) {
+        _mapController!.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: location,
+              zoom: 15.0,
+              bearing: 0.0,
+              tilt: 0.0,
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      print('⚠️ Error animating to location: $e');
+    }
   }
 
   void _animateToIndex(int index) {
@@ -175,14 +234,10 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
 
     if (item is Station) {
       context.read<MapCubit>().selectStation(item);
-      _animateToLocation(
-        LatLng(double.parse(item.lat), double.parse(item.lng)),
-      );
+      _animateToLocation(CoordinateUtils.parseCoordinates(item.lat, item.lng));
     } else if (item is hub_models.HubDetail) {
       context.read<MapCubit>().selectHub(item);
-      _animateToLocation(
-        LatLng(double.parse(item.lat), double.parse(item.lng)),
-      );
+      _animateToLocation(CoordinateUtils.parseCoordinates(item.lat, item.lng));
     }
   }
 
@@ -333,17 +388,24 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
           tiltGesturesEnabled: true,
           zoomGesturesEnabled: true,
         ),
-        // Carousel at the bottom
+        // Carousel at the bottom with safe area padding
         Positioned(
           bottom: 0,
           left: 0,
           right: 0,
-          child: LocationsCarousel(
-            stations: state.stations,
-            hubs: state.hubs,
-            currentIndex: _currentIndex,
-            onItemSelected: _onCarouselItemSelected,
-            onRefresh: () => context.read<MapCubit>().refreshMapData(),
+          child: SafeArea(
+            top: false,
+            child: Container(
+              // Add extra padding to prevent overflow during animations
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: LocationsCarousel(
+                stations: state.stations,
+                hubs: state.hubs,
+                currentIndex: _currentIndex,
+                onItemSelected: _onCarouselItemSelected,
+                onRefresh: () => context.read<MapCubit>().refreshMapData(),
+              ),
+            ),
           ),
         ),
         // Floating action button to fit all markers

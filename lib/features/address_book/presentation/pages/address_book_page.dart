@@ -4,9 +4,9 @@ import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/features/address_book/cubit/address_book_cubit.dart';
 import 'package:client_app/features/address_book/cubit/address_book_state.dart';
 import 'package:client_app/features/address_book/data/models/address_book_models.dart';
-import 'package:client_app/features/address_book/presentation/pages/add_address_page.dart';
+// import 'package:client_app/features/address_book/presentation/pages/add_address_page.dart'; // Removed - Add Address functionality disabled
 import 'package:client_app/features/address_book/presentation/pages/address_details_page.dart';
-import 'package:client_app/injections.dart';
+// import 'package:client_app/injections.dart'; // Removed - no longer needed after disabling Add Address functionality
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client_app/core/widgets/loading_widgets.dart';
@@ -84,7 +84,7 @@ class _AddressBookPageState extends State<AddressBookPage> {
           return const SizedBox();
         },
       ),
-      floatingActionButton: _buildFloatingActionButton(),
+      // floatingActionButton removed - Add Address functionality disabled
     );
   }
 
@@ -189,39 +189,13 @@ class _AddressBookPageState extends State<AddressBookPage> {
                 height: ResponsiveUtils.getResponsivePadding(context, 12),
               ),
               Text(
-                AppLocalizations.of(context)!.addYourFirstAddressHint,
+                AppLocalizations.of(context)!.addressManagementDisabledMain,
                 style: TextStyle(
                   fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
                   color: Colors.grey[600],
                   fontWeight: FontWeight.w400,
                 ),
                 textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: ResponsiveUtils.getResponsivePadding(context, 32),
-              ),
-              ElevatedButton.icon(
-                onPressed: _navigateToAddAddress,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF667eea),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 16,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  elevation: 0,
-                ),
-                icon: const Icon(Icons.add_rounded),
-                label: Text(
-                  AppLocalizations.of(context)!.addAddress,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                  ),
-                ),
               ),
             ],
           ),
@@ -501,19 +475,7 @@ class _AddressBookPageState extends State<AddressBookPage> {
     );
   }
 
-  Widget _buildFloatingActionButton() {
-    return FloatingActionButton.extended(
-      onPressed: _navigateToAddAddress,
-      backgroundColor: const Color(0xFF667eea),
-      foregroundColor: Colors.white,
-      elevation: 6,
-      icon: const Icon(Icons.add_rounded),
-      label: const Text(
-        'Add Address',
-        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-      ),
-    );
-  }
+  // FloatingActionButton removed - Add Address functionality disabled
 
   Color _getColorForIndex(int index) {
     final colors = [
@@ -527,18 +489,7 @@ class _AddressBookPageState extends State<AddressBookPage> {
     return colors[index % colors.length];
   }
 
-  void _navigateToAddAddress() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder:
-            (context) => BlocProvider(
-              create: (context) => getIt<AddressBookCubit>(),
-              child: const AddAddressPage(),
-            ),
-      ),
-    );
-  }
+  // _navigateToAddAddress method removed - Add Address functionality disabled
 
   void _navigateToAddressDetails(AddressBookEntry entry) {
     Navigator.push(

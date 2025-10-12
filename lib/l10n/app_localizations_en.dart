@@ -1396,6 +1396,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addNewAddress => 'Add New Address';
 
   @override
+  String get addressManagementDisabled =>
+      'Address management is currently disabled. You can only select from existing addresses.';
+
+  @override
+  String get addressManagementDisabledMain =>
+      'Address management is currently disabled. You can view existing addresses but cannot add or edit them.';
+
+  @override
   String get pleaseEnterYourFullName => 'Please enter your full name';
 
   @override

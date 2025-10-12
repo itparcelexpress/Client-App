@@ -1,7 +1,7 @@
 import 'package:client_app/features/address_book/cubit/address_book_cubit.dart';
 import 'package:client_app/features/address_book/cubit/address_book_state.dart';
 import 'package:client_app/features/address_book/data/models/address_book_models.dart';
-import 'package:client_app/features/address_book/presentation/pages/address_book_page.dart';
+// import 'package:client_app/features/address_book/presentation/pages/address_book_page.dart'; // Removed - Address management disabled
 import 'package:client_app/injections.dart';
 import 'package:client_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -250,30 +250,15 @@ class _AddressSelectionBottomSheetState
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
-          const Text(
-            'Select Address',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context)!.selectAddress,
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w700,
               color: Color(0xFF1a1a1a),
             ),
           ),
-          const Spacer(),
-          TextButton.icon(
-            onPressed: _navigateToFullAddressBook,
-            icon: const Icon(
-              Icons.add_rounded,
-              size: 18,
-              color: Color(0xFF667eea),
-            ),
-            label: const Text(
-              'Add New',
-              style: TextStyle(
-                color: Color(0xFF667eea),
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
+          // Add New button removed - Address management disabled
         ],
       ),
     );
@@ -381,9 +366,9 @@ class _AddressSelectionBottomSheetState
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'No Addresses Found',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!.noAddressesFound,
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
                 color: Color(0xFF1a1a1a),
@@ -391,27 +376,11 @@ class _AddressSelectionBottomSheetState
             ),
             const SizedBox(height: 8),
             Text(
-              AppLocalizations.of(context)!.addYourFirstAddress,
+              AppLocalizations.of(context)!.addressManagementDisabled,
               style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
-              onPressed: _navigateToFullAddressBook,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF667eea),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 12,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              icon: const Icon(Icons.add_rounded),
-              label: Text(AppLocalizations.of(context)!.addAddress),
-            ),
+            // Add Address button removed - Address management disabled
           ],
         ),
       ),
@@ -472,17 +441,5 @@ class _AddressSelectionBottomSheetState
     );
   }
 
-  void _navigateToFullAddressBook() {
-    Navigator.pop(context); // Close bottom sheet
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder:
-            (context) => BlocProvider(
-              create: (context) => getIt<AddressBookCubit>(),
-              child: const AddressBookPage(),
-            ),
-      ),
-    );
-  }
+  // _navigateToFullAddressBook method removed - Address management disabled
 }

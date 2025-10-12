@@ -1392,6 +1392,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addNewAddress => 'إضافة عنوان جديد';
 
   @override
+  String get addressManagementDisabled =>
+      'إدارة العناوين معطلة حالياً. يمكنك فقط اختيار من العناوين الموجودة.';
+
+  @override
+  String get addressManagementDisabledMain =>
+      'إدارة العناوين معطلة حالياً. يمكنك عرض العناوين الموجودة ولكن لا يمكنك إضافة أو تعديل أي منها.';
+
+  @override
   String get pleaseEnterYourFullName => 'يرجى إدخال اسمك الكامل';
 
   @override

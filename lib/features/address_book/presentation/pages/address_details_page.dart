@@ -1,12 +1,10 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:client_app/core/utilities/responsive_utils.dart';
-import 'package:client_app/features/address_book/cubit/address_book_cubit.dart';
 import 'package:client_app/features/address_book/data/models/address_book_models.dart';
-import 'package:client_app/features/address_book/presentation/pages/add_address_page.dart';
-import 'package:client_app/injections.dart';
+// import 'package:client_app/features/address_book/presentation/pages/add_address_page.dart'; // Removed - Add Address functionality disabled
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart';
 
 class AddressDetailsPage extends StatelessWidget {
   final AddressBookEntry entry;
@@ -28,7 +26,7 @@ class AddressDetailsPage extends StatelessWidget {
           children: [
             _buildHeaderCard(),
             const SizedBox(height: 24),
-            _buildContactInfoCard(),
+            _buildContactInfoCard(context),
             const SizedBox(height: 24),
             _buildLocationCard(),
             if (entry.zipcode != null || entry.locationUrl != null) ...[
@@ -39,7 +37,7 @@ class AddressDetailsPage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: _buildFloatingActionButton(context),
+      // floatingActionButton removed - Edit Address functionality disabled
     );
   }
 
@@ -150,7 +148,7 @@ class AddressDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildContactInfoCard() {
+  Widget _buildContactInfoCard(BuildContext context) {
     return FadeInUp(
       duration: const Duration(milliseconds: 500),
       child: Container(
@@ -201,14 +199,14 @@ class AddressDetailsPage extends StatelessWidget {
               Icons.phone_rounded,
               'Primary Phone',
               entry.cellphone,
-              onTap: () => _launchPhone(entry.cellphone),
+              onTap: () => _copyPhoneNumber(context, entry.cellphone),
             ),
             const SizedBox(height: 16),
             _buildInfoRow(
               Icons.phone_outlined,
               'Alternate Phone',
               entry.alternatePhone,
-              onTap: () => _launchPhone(entry.alternatePhone),
+              onTap: () => _copyPhoneNumber(context, entry.alternatePhone),
             ),
             const SizedBox(height: 16),
             _buildInfoRow(
@@ -446,40 +444,34 @@ class AddressDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildFloatingActionButton(BuildContext context) {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 800),
-      child: FloatingActionButton.extended(
-        onPressed: () => _navigateToEditAddress(context),
-        backgroundColor: const Color(0xFF667eea),
-        foregroundColor: Colors.white,
-        elevation: 6,
-        icon: const Icon(Icons.edit_rounded),
-        label: const Text(
-          'Edit Address',
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-        ),
-      ),
-    );
-  }
+  // _buildFloatingActionButton removed - Edit Address functionality disabled
 
-  void _navigateToEditAddress(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder:
-            (context) => BlocProvider(
-              create: (context) => getIt<AddressBookCubit>(),
-              child: AddAddressPage(existingEntry: entry),
-            ),
-      ),
-    );
-  }
+  // _navigateToEditAddress method removed - Edit Address functionality disabled
 
-  Future<void> _launchPhone(String phoneNumber) async {
-    final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
-    if (await canLaunchUrl(phoneUri)) {
-      await launchUrl(phoneUri);
+  Future<void> _copyPhoneNumber(
+    BuildContext context,
+    String phoneNumber,
+  ) async {
+    try {
+      await Clipboard.setData(ClipboardData(text: phoneNumber));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Phone number copied to clipboard'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Unable to copy phone number'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 

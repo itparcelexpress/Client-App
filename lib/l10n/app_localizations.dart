@@ -2720,6 +2720,18 @@ abstract class AppLocalizations {
   /// **'Add New Address'**
   String get addNewAddress;
 
+  /// Message shown when address management is disabled in address selection
+  ///
+  /// In en, this message translates to:
+  /// **'Address management is currently disabled. You can only select from existing addresses.'**
+  String get addressManagementDisabled;
+
+  /// Message shown in main address book when address management is disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Address management is currently disabled. You can view existing addresses but cannot add or edit them.'**
+  String get addressManagementDisabledMain;
+
   /// Full name validation message
   ///
   /// In en, this message translates to:

@@ -16,11 +16,11 @@ class PermissionService {
     ph.Permission.notification:
         'Notifications keep you updated about delivery status and important updates.',
     ph.Permission.phone:
-        'Phone access is needed for calling delivery agents and customer support.',
+        'Phone access is needed for contact management and order processing.',
     ph.Permission.contacts:
         'Contact access helps you quickly select recipients from your contacts.',
     ph.Permission.microphone:
-        'Microphone access is needed for voice notes and customer support calls.',
+        'Microphone access is needed for voice notes and audio features.',
   };
 
   /// Get all permissions that the app needs
@@ -31,7 +31,7 @@ class PermissionService {
       ph.Permission.camera,
       ph.Permission.location,
       ph.Permission.notification,
-      // Phone permission doesn't exist on iOS (calls work via URL schemes)
+      // Phone permission for contact management (iOS uses different approach)
       if (!Platform.isIOS) ph.Permission.phone,
       // On iOS, use photo library for file access
       if (Platform.isIOS) ph.Permission.photos,

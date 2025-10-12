@@ -76,8 +76,13 @@ class _LocationsCarouselState extends State<LocationsCarousel> {
     );
     return Container(
       height: 180,
-      margin: const EdgeInsets.all(16),
-      child: _buildCarousel(),
+      margin: const EdgeInsets.fromLTRB(
+        16,
+        16,
+        16,
+        0,
+      ), // Remove bottom margin to prevent overflow
+      child: ClipRect(child: _buildCarousel()),
     );
   }
 
@@ -94,16 +99,15 @@ class _LocationsCarouselState extends State<LocationsCarousel> {
 
         return AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          margin: EdgeInsets.symmetric(
-            horizontal: isActive ? 8 : 16,
-            vertical: isActive ? 0 : 8,
-          ),
-          child: Transform.scale(
-            scale: isActive ? 1.0 : 0.9,
-            child: EnhancedLocationCard(
-              item: item,
-              isSelected: isActive,
-              onTap: () => widget.onItemSelected(index, item),
+          margin: EdgeInsets.symmetric(horizontal: isActive ? 8 : 16),
+          child: ClipRect(
+            child: Transform.scale(
+              scale: isActive ? 1.0 : 0.95,
+              child: EnhancedLocationCard(
+                item: item,
+                isSelected: isActive,
+                onTap: () => widget.onItemSelected(index, item),
+              ),
             ),
           ),
         );
