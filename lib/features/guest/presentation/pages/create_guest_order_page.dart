@@ -43,6 +43,11 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
   final _amountController = TextEditingController(text: '5.0');
   final _locationUrlController = TextEditingController();
 
+  // Store full phone numbers with country codes
+  String _fullPhoneNumber = '';
+  String _fullAlternatePhoneNumber = '';
+  String _fullCustomerPhoneNumber = '';
+
   List<Governorate> governorates = [];
   List<StateModel> states = [];
   List<Place> places = [];
@@ -110,8 +115,14 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
       final request = GuestOrderRequest(
         name: _nameController.text.trim(),
         email: _emailController.text.trim(),
-        cellphone: _phoneController.text.trim(),
-        alternatePhone: _alternatePhoneController.text.trim(),
+        cellphone:
+            _fullPhoneNumber.isNotEmpty
+                ? _fullPhoneNumber
+                : _phoneController.text.trim(),
+        alternatePhone:
+            _fullAlternatePhoneNumber.isNotEmpty
+                ? _fullAlternatePhoneNumber
+                : _alternatePhoneController.text.trim(),
         district: _districtController.text.trim(),
         zipcode: _zipcodeController.text.trim(),
         streetAddress: _streetAddressController.text.trim(),
@@ -119,7 +130,10 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
         payment_type: 'COD',
         amount: double.tryParse(_amountController.text.trim()) ?? 5.0,
         customer_name: _customerNameController.text.trim(),
-        customer_phone: _customerPhoneController.text.trim(),
+        customer_phone:
+            _fullCustomerPhoneNumber.isNotEmpty
+                ? _fullCustomerPhoneNumber
+                : _customerPhoneController.text.trim(),
         country_id: 165,
         governorate_id: selectedGovernorate?.id ?? 0,
         state_id: selectedState?.id ?? 0,
@@ -331,7 +345,7 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
             label: AppLocalizations.of(context)!.phoneNumber,
             isRequired: true,
             onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
-              // Handle phone number change if needed
+              _fullPhoneNumber = fullPhoneNumber;
             },
           ),
           const SizedBox(height: 16),
@@ -340,7 +354,7 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
             label: AppLocalizations.of(context)!.alternatePhone,
             isRequired: false,
             onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
-              // Handle alternate phone number change if needed
+              _fullAlternatePhoneNumber = fullPhoneNumber;
             },
           ),
           const SizedBox(height: 16),
@@ -558,7 +572,7 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
             label: AppLocalizations.of(context)!.customerPhone,
             isRequired: true,
             onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
-              // Handle customer phone number change if needed
+              _fullCustomerPhoneNumber = fullPhoneNumber;
             },
           ),
           const SizedBox(height: 16),

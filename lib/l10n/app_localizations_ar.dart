@@ -770,6 +770,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trackingNumberCopied => 'تم نسخ رقم التتبع! 📋';
 
   @override
+  String get clearAll => 'مسح الكل';
+
+  @override
+  String get selectDateRange => 'اختر نطاق التاريخ';
+
+  @override
+  String get filterOrders => 'تصفية الطلبات';
+
+  @override
   String get scan => 'مسح';
 
   @override
@@ -1114,10 +1123,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clearSelection => 'مسح الاختيار';
 
   @override
-  String get phoneNumberHint => 'أدخل رقم الهاتف';
+  String get phoneNumberHint => '12345678';
 
   @override
-  String get alternatePhoneHint => 'أدخل رقم هاتف بديل';
+  String get alternatePhoneHint => '12345678';
 
   @override
   String fullPhoneNumberPreview(String fullNumber) {

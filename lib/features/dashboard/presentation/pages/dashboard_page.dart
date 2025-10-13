@@ -45,20 +45,13 @@ class _DashboardPageState extends State<DashboardPage> {
         },
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
-            context,
-            const EdgeInsets.all(20),
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: ResponsiveUtils.getResponsivePadding(context, 40),
-              ),
-              _buildGreeting(userName),
-              SizedBox(
-                height: ResponsiveUtils.getResponsivePadding(context, 30),
-              ),
+              const SizedBox(height: 16),
+              _buildCompactGreeting(userName),
+              const SizedBox(height: 12),
               BlocBuilder<DashboardCubit, DashboardState>(
                 builder: (context, state) {
                   if (state is DashboardLoading) {
@@ -79,7 +72,7 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildGreeting(String userName) {
+  Widget _buildCompactGreeting(String userName) {
     return FadeInDown(
       duration: const Duration(milliseconds: 400),
       child: Row(
@@ -90,25 +83,17 @@ class _DashboardPageState extends State<DashboardPage> {
               children: [
                 Text(
                   AppLocalizations.of(context)!.helloUser(userName),
-                  style: TextStyle(
-                    fontSize: ResponsiveUtils.getResponsiveFontSize(
-                      context,
-                      28,
-                    ),
+                  style: const TextStyle(
+                    fontSize: 20,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF1a1a1a),
+                    color: Color(0xFF1a1a1a),
                   ),
                 ),
-                SizedBox(
-                  height: ResponsiveUtils.getResponsivePadding(context, 8),
-                ),
+                const SizedBox(height: 3),
                 Text(
                   AppLocalizations.of(context)!.businessOverview,
                   style: TextStyle(
-                    fontSize: ResponsiveUtils.getResponsiveFontSize(
-                      context,
-                      16,
-                    ),
+                    fontSize: 13,
                     color: Colors.grey[600],
                     fontWeight: FontWeight.w400,
                   ),
@@ -119,18 +104,18 @@ class _DashboardPageState extends State<DashboardPage> {
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 10,
+                  color: Colors.black.withValues(alpha: 0.08),
+                  blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
               ],
             ),
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(9),
             child: const NotificationIconWidget(
-              size: 24,
+              size: 18,
               color: Color(0xFF667eea),
             ),
           ),
@@ -146,7 +131,7 @@ class _DashboardPageState extends State<DashboardPage> {
       children: [
         // Quick Stats Grid
         _buildQuickStatsGrid(data),
-        SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 24)),
+        const SizedBox(height: 12),
 
         // Financial Summary
         FinancialSummaryWidget(
@@ -156,7 +141,7 @@ class _DashboardPageState extends State<DashboardPage> {
           parcelValue: data.parcelValue,
           avgOrderValue: data.avgOrderValue,
         ),
-        SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 24)),
+        const SizedBox(height: 12),
 
         // Performance Metrics
         PerformanceWidget(
@@ -166,11 +151,11 @@ class _DashboardPageState extends State<DashboardPage> {
           activeTasks: data.activeTasks,
           completedTasks: data.completedTasks,
         ),
-        SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 24)),
+        const SizedBox(height: 12),
 
         // Recent Activity
         RecentActivityWidget(activities: data.recentActivity),
-        SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 20)),
+        const SizedBox(height: 12),
       ],
     );
   }
@@ -188,7 +173,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 color: const Color(0xFF667eea),
               ),
             ),
-            SizedBox(width: ResponsiveUtils.getResponsivePadding(context, 16)),
+            const SizedBox(width: 10),
             Expanded(
               child: StatCardWidget(
                 title: AppLocalizations.of(context)!.todayOrders,
@@ -199,7 +184,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           ],
         ),
-        SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 16)),
+        const SizedBox(height: 10),
         Row(
           children: [
             Expanded(
@@ -210,7 +195,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 color: const Color(0xFFf59e0b),
               ),
             ),
-            SizedBox(width: ResponsiveUtils.getResponsivePadding(context, 16)),
+            const SizedBox(width: 10),
             Expanded(
               child: StatCardWidget(
                 title: AppLocalizations.of(context)!.pickedOrders,

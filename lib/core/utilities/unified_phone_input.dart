@@ -2,7 +2,6 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:client_app/l10n/app_localizations.dart';
-import 'package:client_app/core/utilities/app_color.dart';
 
 class UnifiedPhoneInput extends StatefulWidget {
   final TextEditingController controller;
@@ -83,25 +82,30 @@ class _UnifiedPhoneInputState extends State<UnifiedPhoneInput> {
       context: context,
       showPhoneCode: true,
       countryListTheme: CountryListThemeData(
-        flagSize: 25,
+        flagSize: 20,
         backgroundColor: Colors.white,
-        textStyle: const TextStyle(fontSize: 16, color: Colors.black),
-        bottomSheetHeight: 500,
+        textStyle: const TextStyle(fontSize: 14, color: Colors.black),
+        bottomSheetHeight: 450,
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20.0),
-          topRight: Radius.circular(20.0),
+          topLeft: Radius.circular(16.0),
+          topRight: Radius.circular(16.0),
         ),
         inputDecoration: InputDecoration(
           labelText: AppLocalizations.of(context)!.searchCountry,
           hintText: AppLocalizations.of(context)!.startTypingToSearch,
-          prefixIcon: const Icon(Icons.search),
+          prefixIcon: const Icon(Icons.search, size: 20),
           border: OutlineInputBorder(
             borderSide: BorderSide(
               color: const Color(0xFF8C98A8).withValues(alpha: 0.2),
             ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
           ),
         ),
-        searchTextStyle: const TextStyle(fontSize: 18, color: Colors.black),
+        searchTextStyle: const TextStyle(fontSize: 16, color: Colors.black),
       ),
       onSelect: (Country country) {
         setState(() {
@@ -159,152 +163,131 @@ class _UnifiedPhoneInputState extends State<UnifiedPhoneInput> {
         if (widget.label != null) ...[
           Text(
             widget.label!,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            style: TextStyle(
+              fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: AppColor.textSecondaryColor,
+              color: Colors.grey.shade800,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
         ],
 
-        // Unified Phone Input Field
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade300, width: 1),
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.white,
-          ),
-          child: Row(
-            children: [
-              // Country Code Selector
-              InkWell(
-                onTap: _showCountryPicker,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  bottomLeft: Radius.circular(12),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 16,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      right: BorderSide(color: Colors.grey.shade300, width: 1),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Flag
-                      Container(
-                        width: 20,
-                        height: 14,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(2),
-                          image: DecorationImage(
-                            image: AssetImage(
-                              'packages/country_picker/assets/flags/${selectedCountryCode.toLowerCase()}.png',
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      // Phone Code (force LTR so '+' appears on the left)
-                      Directionality(
-                        textDirection: TextDirection.ltr,
-                        child: Text(
-                          selectedPhoneCode,
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodyMedium?.copyWith(
-                            color: AppColor.primaryColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      // Dropdown Icon
-                      Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 16,
-                        color: Colors.grey.shade600,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              // Phone Number Input
-              Expanded(
-                child: TextFormField(
-                  controller: widget.controller,
-                  keyboardType: TextInputType.phone,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  textDirection: TextDirection.ltr,
-                  decoration: InputDecoration(
-                    hintText:
-                        widget.hint ??
-                        AppLocalizations.of(context)!.phoneNumberHint,
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
-                    isDense: true,
-                  ),
-                  validator: _validatePhone,
-                  onChanged: (value) {
-                    _onPhoneNumberChanged();
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        // Display full phone number preview
-        if (widget.controller.text.isNotEmpty)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        // Compact Unified Phone Input Field - Always LTR structure
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: Container(
+            height: 48, // Fixed height for consistency
             decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey.shade300),
+              border: Border.all(color: Colors.grey.shade300, width: 1),
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.grey.shade50,
             ),
             child: Row(
               children: [
-                Icon(Icons.info_outline, size: 16, color: Colors.grey.shade600),
-                const SizedBox(width: 8),
+                // Compact Country Code Selector - Always on the LEFT
+                InkWell(
+                  onTap: _showCountryPicker,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                  ),
+                  child: Container(
+                    height: 48,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 0,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        right: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Compact Flag
+                        Container(
+                          width: 18,
+                          height: 12,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(1.5),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                'packages/country_picker/assets/flags/${selectedCountryCode.toLowerCase()}.png',
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        // Compact Phone Code - Always LTR
+                        Text(
+                          selectedPhoneCode,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.blue.shade600,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(width: 2),
+                        // Compact Dropdown Icon
+                        Icon(
+                          Icons.keyboard_arrow_down,
+                          size: 14,
+                          color: Colors.grey.shade600,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // Compact Phone Number Input - Always LTR
                 Expanded(
-                  child: Wrap(
-                    alignment: WrapAlignment.start,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 4,
-                    children: [
-                      Text(
-                        AppLocalizations.of(
-                          context,
-                        )!.fullPhoneNumberPreview(''),
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey.shade700,
-                        ),
+                  child: TextFormField(
+                    controller: widget.controller,
+                    keyboardType: TextInputType.phone,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    textDirection: TextDirection.ltr,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(fontSize: 14, color: Colors.grey.shade900),
+                    decoration: InputDecoration(
+                      hintText:
+                          widget.hint ??
+                          AppLocalizations.of(context)!.phoneNumberHint,
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey.shade500,
                       ),
-                      Directionality(
-                        textDirection: TextDirection.ltr,
-                        child: Text(
-                          '$selectedPhoneCode${widget.controller.text}',
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(color: Colors.grey.shade700),
-                        ),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
                       ),
-                    ],
+                      isDense: true,
+                    ),
+                    validator: _validatePhone,
+                    onChanged: (value) {
+                      _onPhoneNumberChanged();
+                    },
                   ),
                 ),
               ],
+            ),
+          ),
+        ),
+
+        // Compact validation error display
+        if (widget.controller.text.isNotEmpty &&
+            _validatePhone(widget.controller.text) != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(
+              _validatePhone(widget.controller.text) ?? '',
+              style: TextStyle(fontSize: 11, color: Colors.red.shade600),
             ),
           ),
       ],

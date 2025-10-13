@@ -23,19 +23,19 @@ class FinancialSummaryWidget extends StatelessWidget {
     return FadeInUp(
       duration: const Duration(milliseconds: 700),
       child: Container(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: [Color(0xFF667eea), Color(0xFF764ba2)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF667eea).withValues(alpha: 0.3),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
+              color: const Color(0xFF667eea).withValues(alpha: 0.25),
+              blurRadius: 15,
+              offset: const Offset(0, 8),
             ),
           ],
         ),
@@ -45,30 +45,30 @@ class FinancialSummaryWidget extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  width: 48,
-                  height: 48,
+                  width: 36,
+                  height: 36,
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Icon(
                     Icons.account_balance_wallet,
                     color: Colors.white,
-                    size: 24,
+                    size: 18,
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 10),
                 Text(
                   AppLocalizations.of(context)!.financialOverview,
                   style: const TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 14),
             Row(
               children: [
                 Expanded(
@@ -78,7 +78,7 @@ class FinancialSummaryWidget extends StatelessWidget {
                     Icons.monetization_on,
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 10),
                 Expanded(
                   child: _buildFinancialItem(
                     AppLocalizations.of(context)!.thisMonth,
@@ -88,7 +88,7 @@ class FinancialSummaryWidget extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
@@ -98,7 +98,7 @@ class FinancialSummaryWidget extends StatelessWidget {
                     Icons.account_balance,
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 10),
                 Expanded(
                   child: _buildFinancialItem(
                     AppLocalizations.of(context)!.avgOrder,
@@ -116,10 +116,10 @@ class FinancialSummaryWidget extends StatelessWidget {
 
   Widget _buildFinancialItem(String title, String value, IconData icon) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.2),
           width: 1,
@@ -128,21 +128,21 @@ class FinancialSummaryWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: Colors.white.withValues(alpha: 0.8), size: 20),
-          const SizedBox(height: 8),
+          Icon(icon, color: Colors.white.withValues(alpha: 0.8), size: 16),
+          const SizedBox(height: 5),
           Text(
             value,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
               color: Colors.white,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           Text(
             title,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 10,
               fontWeight: FontWeight.w500,
               color: Colors.white.withValues(alpha: 0.8),
             ),

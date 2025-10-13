@@ -775,6 +775,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trackingNumberCopied => 'Tracking number copied! 📋';
 
   @override
+  String get clearAll => 'Clear All';
+
+  @override
+  String get selectDateRange => 'Select Date Range';
+
+  @override
+  String get filterOrders => 'Filter Orders';
+
+  @override
   String get scan => 'Scan';
 
   @override
@@ -1118,10 +1127,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clearSelection => 'Clear Selection';
 
   @override
-  String get phoneNumberHint => 'Enter phone number';
+  String get phoneNumberHint => '12345678';
 
   @override
-  String get alternatePhoneHint => 'Enter alternate phone number';
+  String get alternatePhoneHint => '12345678';
 
   @override
   String fullPhoneNumberPreview(String fullNumber) {

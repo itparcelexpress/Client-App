@@ -1,5 +1,4 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:flutter/material.dart';
 
 class StatCardWidget extends StatelessWidget {
@@ -27,18 +26,15 @@ class StatCardWidget extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
-            context,
-            const EdgeInsets.all(20),
-          ),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: backgroundColor ?? Colors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 20,
-                offset: const Offset(0, 5),
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 12,
+                offset: const Offset(0, 3),
               ),
             ],
           ),
@@ -49,44 +45,36 @@ class StatCardWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: ResponsiveUtils.getResponsiveWidth(context, 48),
-                    height: ResponsiveUtils.getResponsiveHeight(context, 48),
+                    width: 36,
+                    height: 36,
                     decoration: BoxDecoration(
                       color: color.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Icon(
-                      icon,
-                      color: color,
-                      size: ResponsiveUtils.getResponsiveWidth(context, 24),
-                    ),
+                    child: Icon(icon, color: color, size: 18),
                   ),
                   if (onTap != null)
                     Icon(
                       Icons.arrow_forward_ios,
                       color: Colors.grey[400],
-                      size: ResponsiveUtils.getResponsiveWidth(context, 16),
+                      size: 14,
                     ),
                 ],
               ),
-              SizedBox(
-                height: ResponsiveUtils.getResponsivePadding(context, 16),
-              ),
+              const SizedBox(height: 10),
               Text(
                 value,
-                style: TextStyle(
-                  fontSize: ResponsiveUtils.getResponsiveFontSize(context, 28),
+                style: const TextStyle(
+                  fontSize: 20,
                   fontWeight: FontWeight.w700,
-                  color: const Color(0xFF1a1a1a),
+                  color: Color(0xFF1a1a1a),
                 ),
               ),
-              SizedBox(
-                height: ResponsiveUtils.getResponsivePadding(context, 4),
-              ),
+              const SizedBox(height: 2),
               Text(
                 title,
                 style: TextStyle(
-                  fontSize: ResponsiveUtils.getResponsiveFontSize(context, 14),
+                  fontSize: 11,
                   fontWeight: FontWeight.w500,
                   color: Colors.grey[600],
                 ),

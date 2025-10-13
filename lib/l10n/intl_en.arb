@@ -1099,6 +1099,22 @@
   "@trackingNumberCopied": {
     "description": "Tracking number copied message"
   },
+
+  "clearAll": "Clear All",
+  "@clearAll": {
+    "description": "Clear all filters button text"
+  },
+
+  "selectDateRange": "Select Date Range",
+  "@selectDateRange": {
+    "description": "Select date range placeholder text"
+  },
+
+  "filterOrders": "Filter Orders",
+  "@filterOrders": {
+    "description": "Filter orders bottom sheet title"
+  },
+
   "scan": "Scan",
   "@scan": {"description": "Scan action label"},
   "trackingAlreadyTaken": "This tracking number is already used. Please scan a different sticker.",
@@ -1802,14 +1818,14 @@
     "description": "Clear selection button text"
   },
 
-  "phoneNumberHint": "Enter phone number",
+  "phoneNumberHint": "12345678",
   "@phoneNumberHint": {
-    "description": "Phone number input hint text"
+    "description": "Phone number input hint text - digits only for LTR display"
   },
 
-  "alternatePhoneHint": "Enter alternate phone number",
+  "alternatePhoneHint": "12345678",
   "@alternatePhoneHint": {
-    "description": "Alternate phone number input hint text"
+    "description": "Alternate phone number input hint text - digits only for LTR display"
   },
 
   "fullPhoneNumberPreview": "Full Phone Number: {fullNumber}",

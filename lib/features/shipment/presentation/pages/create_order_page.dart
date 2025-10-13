@@ -46,6 +46,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _alternatePhoneController = TextEditingController();
+
+  // Store full phone numbers with country codes
+  String _fullPhoneNumber = '';
+  String _fullAlternatePhoneNumber = '';
   final _emailController = TextEditingController();
   final _zipcodeController = TextEditingController();
   final _streetAddressController = TextEditingController();
@@ -98,7 +102,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   // Track if form has data to suggest saving as address book entry
   bool get _hasFormData {
     return _nameController.text.isNotEmpty &&
-        _phoneController.text.isNotEmpty &&
+        (_phoneController.text.isNotEmpty || _fullPhoneNumber.isNotEmpty) &&
         _selectedCountry != null &&
         _selectedGovernorate != null &&
         _selectedState != null;
@@ -421,8 +425,14 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     final request = AddressBookRequest(
       name: _nameController.text.trim(),
       email: _emailController.text.trim(),
-      cellphone: _phoneController.text.trim(),
-      alternatePhone: _alternatePhoneController.text.trim(),
+      cellphone:
+          _fullPhoneNumber.isNotEmpty
+              ? _fullPhoneNumber
+              : _phoneController.text.trim(),
+      alternatePhone:
+          _fullAlternatePhoneNumber.isNotEmpty
+              ? _fullAlternatePhoneNumber
+              : _alternatePhoneController.text.trim(),
       countryId: _selectedCountry!.id,
       governorateId: _selectedGovernorate!.id,
       stateId: _selectedState!.id,
@@ -528,31 +538,34 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                     key: _formKey,
                     child: SingleChildScrollView(
                       controller: _scrollController,
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
                       child: Column(
                         children: [
-                          _buildSimpleTopBar(),
-                          const SizedBox(height: 16),
+                          _buildCompactTopBar(),
+                          const SizedBox(height: 12),
                           _buildCompactProgressIndicator(),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 16),
                           _buildStickerSection(),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 16),
                           _buildAddressBookSection(),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 16),
                           _buildPersonalInfoSection(),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 16),
                           _buildAddressSection(),
                           if (_hasFormData &&
                               _selectedAddress == null &&
                               !_dismissedSaveSuggestion) ...[
-                            const SizedBox(height: 24),
+                            const SizedBox(height: 16),
                             _buildSaveAddressSuggestion(),
-                            const SizedBox(height: 32),
+                            const SizedBox(height: 20),
                           ],
                           _buildOrderDetailsSection(),
-                          const SizedBox(
-                            height: 100,
-                          ), // Extra space for floating button
+                          const SizedBox(height: 20),
+                          _buildSubmitButton(),
+                          const SizedBox(height: 16),
                         ],
                       ),
                     ),
@@ -562,50 +575,51 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             ],
           ),
         ),
-        floatingActionButton: _buildFloatingSubmitButton(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );
   }
 
-  Widget _buildFloatingSubmitButton() {
+  Widget _buildSubmitButton() {
     return BlocBuilder<ShipmentCubit, ShipmentState>(
       builder: (context, state) {
         final isLoading = state is OrderCreating;
 
-        return Container(
+        return SizedBox(
           width: double.infinity,
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          child: FloatingActionButton.extended(
+          child: ElevatedButton(
             onPressed: isLoading ? null : _submitOrder,
-            backgroundColor:
-                isLoading ? Colors.grey.shade400 : Colors.blue.shade600,
-            elevation: 8,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue.shade600,
+              foregroundColor: Colors.white,
+              disabledBackgroundColor: Colors.grey.shade400,
+              elevation: 2,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
-            label: Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (isLoading) ...[
-                  const SpinKitThreeBounce(color: Colors.white, size: 20),
-                  const SizedBox(width: 12),
+                  const SpinKitThreeBounce(color: Colors.white, size: 18),
+                  const SizedBox(width: 10),
                 ] else ...[
-                  Icon(
+                  const Icon(
                     Icons.check_circle_outline,
                     color: Colors.white,
-                    size: 20,
+                    size: 18,
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 6),
                 ],
                 Text(
                   isLoading
                       ? AppLocalizations.of(context)!.creatingOrder
                       : AppLocalizations.of(context)!.createOrder,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
-                    fontSize: 16,
+                    fontSize: 15,
                   ),
                 ),
               ],
@@ -616,35 +630,35 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     );
   }
 
-  Widget _buildSimpleTopBar() {
+  Widget _buildCompactTopBar() {
     return Row(
       children: [
         if (Navigator.canPop(context))
           GestureDetector(
             onTap: () => Navigator.pop(context),
             child: Container(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(6),
               ),
-              child: const Icon(Icons.arrow_back, size: 20),
+              child: const Icon(Icons.arrow_back, size: 18),
             ),
           )
         else
-          const SizedBox(width: 40),
+          const SizedBox(width: 30),
         Expanded(
           child: Text(
             AppLocalizations.of(context)!.createOrder,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.w600,
               color: const Color(0xFF1a1a1a),
             ),
             textAlign: TextAlign.center,
           ),
         ),
-        const SizedBox(width: 40),
+        const SizedBox(width: 30),
       ],
     );
   }
@@ -664,20 +678,20 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     final progress = completedFields / totalFields;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.grey.shade50,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.grey.shade200),
       ),
       child: Row(
         children: [
           Icon(
             Icons.check_circle_outline,
-            size: 16,
+            size: 14,
             color: progress > 0 ? Colors.green.shade600 : Colors.grey.shade400,
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -685,12 +699,12 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 Text(
                   AppLocalizations.of(context)!.formProgress,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: FontWeight.w600,
                     color: Colors.grey.shade700,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 3),
                 LinearProgressIndicator(
                   value: progress,
                   backgroundColor: Colors.grey.shade300,
@@ -699,16 +713,16 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                         ? Colors.green.shade600
                         : Colors.blue.shade600,
                   ),
-                  minHeight: 4,
+                  minHeight: 3,
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
           Text(
             '${(progress * 100).round()}%',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 11,
               fontWeight: FontWeight.w600,
               color:
                   progress > 0.5 ? Colors.green.shade600 : Colors.blue.shade600,
@@ -723,15 +737,15 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     return FadeInUp(
       duration: const Duration(milliseconds: 600),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.grey.shade200),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 8,
               offset: const Offset(0, 2),
             ),
           ],
@@ -962,27 +976,27 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       ? AppLocalizations.of(context)!.nameRequired
                       : null,
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
         UnifiedPhoneInput(
           controller: _phoneController,
           label: AppLocalizations.of(context)!.phoneNumber,
           hint: AppLocalizations.of(context)!.phoneNumberInfo,
           isRequired: true,
           onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
-            // Handle phone number change if needed
+            _fullPhoneNumber = fullPhoneNumber;
           },
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
         UnifiedPhoneInput(
           controller: _alternatePhoneController,
           label: AppLocalizations.of(context)!.alternatePhone,
           hint: AppLocalizations.of(context)!.alternatePhoneInfo,
           isRequired: false,
           onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
-            // Handle alternate phone number change if needed
+            _fullAlternatePhoneNumber = fullPhoneNumber;
           },
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
         _buildTextField(
           controller: _emailController,
           label:
@@ -1053,7 +1067,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       )!.pleaseEnterField(AppLocalizations.of(context)!.country)
                       : null,
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
         // Governorate Dropdown with Search
         SearchableGovernorateDropdown(
           value: _selectedGovernorate,
@@ -1095,7 +1109,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       )
                       : null,
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
         // State Dropdown with Search
         SearchableStateDropdown(
           value: _selectedState,
@@ -1142,7 +1156,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       )!.pleaseEnterField(AppLocalizations.of(context)!.state)
                       : null,
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
         // Place Dropdown with Search
         SearchablePlaceDropdown(
           value: _selectedPlace,
@@ -1160,7 +1174,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           isRequired: false,
           validator: null, // No validation - optional field
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
         _buildTextField(
           controller: _streetAddressController,
           label:
@@ -1170,7 +1184,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           maxLines: 2,
           validator: null, // No validation - optional field
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
         _buildTextField(
           controller: _zipcodeController,
           label:
@@ -1224,7 +1238,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             ),
           ],
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
 
         // Compact Amount & Delivery Fee Row
         Row(
@@ -1889,11 +1903,18 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     required List<Widget> children,
   }) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1901,26 +1922,26 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           Row(
             children: [
               Container(
-                width: 40,
-                height: 40,
+                width: 34,
+                height: 34,
                 decoration: BoxDecoration(
                   color: Colors.blue.shade50,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(9),
                 ),
-                child: Icon(icon, color: Colors.blue.shade600, size: 20),
+                child: Icon(icon, color: Colors.blue.shade600, size: 17),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 9),
               Text(
                 title,
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 15,
                   fontWeight: FontWeight.w600,
                   color: Colors.grey.shade900,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 14),
           ...children,
         ],
       ),
@@ -1947,13 +1968,13 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         Text(
           label,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 13,
             fontWeight: FontWeight.w600,
             color: Colors.grey.shade800,
           ),
           textAlign: isRTL ? TextAlign.right : TextAlign.left,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 6),
         Directionality(
           textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
           child: TextFormField(
@@ -1969,34 +1990,34 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               prefixIcon:
                   isRTL
                       ? null
-                      : Icon(icon, color: Colors.grey.shade600, size: 20),
+                      : Icon(icon, color: Colors.grey.shade600, size: 18),
               suffixIcon:
                   suffixIcon ??
                   (isRTL
-                      ? Icon(icon, color: Colors.grey.shade600, size: 20)
+                      ? Icon(icon, color: Colors.grey.shade600, size: 18)
                       : null),
               suffixText: suffixText,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(color: Colors.grey.shade300),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(color: Colors.grey.shade300),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(color: Colors.blue.shade600, width: 2),
               ),
               errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(color: Colors.red.shade400, width: 1),
               ),
               filled: true,
               fillColor: Colors.grey.shade50,
               contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 18,
+                horizontal: 14,
+                vertical: 12,
               ),
             ),
           ),
@@ -2018,19 +2039,19 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         Text(
           label,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 13,
             fontWeight: FontWeight.w600,
             color: Colors.grey.shade800,
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 6),
         DropdownButtonFormField<String>(
           value: value,
           onChanged: onChanged,
           isExpanded:
               true, // prevent overflow by letting button take full width
           icon: const Icon(Icons.arrow_drop_down),
-          style: TextStyle(fontSize: 14, color: Colors.grey.shade900),
+          style: TextStyle(fontSize: 13, color: Colors.grey.shade900),
           selectedItemBuilder: (context) {
             return items.map((item) {
               String displayText = item;
@@ -2058,24 +2079,24 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             }).toList();
           },
           decoration: InputDecoration(
-            prefixIcon: Icon(icon, color: Colors.grey.shade600, size: 20),
+            prefixIcon: Icon(icon, color: Colors.grey.shade600, size: 18),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(color: Colors.grey.shade300),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(color: Colors.grey.shade300),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(color: Colors.blue.shade600, width: 2),
             ),
             filled: true,
             fillColor: Colors.grey.shade50,
             contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 18,
+              horizontal: 14,
+              vertical: 12,
             ),
           ),
           items:
@@ -2129,8 +2150,14 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 ? _stickerController.text.trim()
                 : null,
         name: _nameController.text.trim(),
-        cellphone: _phoneController.text.trim(),
-        alternatePhone: _alternatePhoneController.text.trim(),
+        cellphone:
+            _fullPhoneNumber.isNotEmpty
+                ? _fullPhoneNumber
+                : _phoneController.text.trim(),
+        alternatePhone:
+            _fullAlternatePhoneNumber.isNotEmpty
+                ? _fullAlternatePhoneNumber
+                : _alternatePhoneController.text.trim(),
         email: _emailController.text.trim(),
         district: "", // Default empty as per API spec
         countryId: _selectedCountry!.id,

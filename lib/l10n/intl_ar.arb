@@ -473,6 +473,22 @@
   "@trackingNumberCopied": {
     "description": "Tracking number copied message"
   },
+
+  "clearAll": "مسح الكل",
+  "@clearAll": {
+    "description": "Clear all filters button text"
+  },
+
+  "selectDateRange": "اختر نطاق التاريخ",
+  "@selectDateRange": {
+    "description": "Select date range placeholder text"
+  },
+
+  "filterOrders": "تصفية الطلبات",
+  "@filterOrders": {
+    "description": "Filter orders bottom sheet title"
+  },
+
   "scan": "مسح",
   "@scan": {"description": "زر مسح"},
   "trackingAlreadyTaken": "رقم التتبع مستخدم بالفعل. يرجى مسح ملصقًا آخر.",
@@ -824,8 +840,8 @@
   "tapToSelectAddress": "انقر لاختيار العنوان",
   "clearSelection": "مسح الاختيار",
 
-  "phoneNumberHint": "أدخل رقم الهاتف",
-  "alternatePhoneHint": "أدخل رقم هاتف بديل",
+  "phoneNumberHint": "12345678",
+  "alternatePhoneHint": "12345678",
   "fullPhoneNumberPreview": "رقم الهاتف الكامل: {fullNumber}",
   "phoneNumberInfo": "أدخل رقم هاتفك بدون رمز الدولة",
   "alternatePhoneInfo": "أدخل رقم هاتف بديل (اختياري)",

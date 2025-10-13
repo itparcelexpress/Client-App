@@ -1532,6 +1532,24 @@ abstract class AppLocalizations {
   /// **'Tracking number copied! 📋'**
   String get trackingNumberCopied;
 
+  /// Clear all filters button text
+  ///
+  /// In en, this message translates to:
+  /// **'Clear All'**
+  String get clearAll;
+
+  /// Select date range placeholder text
+  ///
+  /// In en, this message translates to:
+  /// **'Select Date Range'**
+  String get selectDateRange;
+
+  /// Filter orders bottom sheet title
+  ///
+  /// In en, this message translates to:
+  /// **'Filter Orders'**
+  String get filterOrders;
+
   /// Scan button text
   ///
   /// In en, this message translates to:
@@ -2192,16 +2210,16 @@ abstract class AppLocalizations {
   /// **'Clear Selection'**
   String get clearSelection;
 
-  /// Phone number input hint text
+  /// Phone number input hint text - digits only for LTR display
   ///
   /// In en, this message translates to:
-  /// **'Enter phone number'**
+  /// **'12345678'**
   String get phoneNumberHint;
 
-  /// Alternate phone number input hint text
+  /// Alternate phone number input hint text - digits only for LTR display
   ///
   /// In en, this message translates to:
-  /// **'Enter alternate phone number'**
+  /// **'12345678'**
   String get alternatePhoneHint;
 
   /// Full phone number preview text

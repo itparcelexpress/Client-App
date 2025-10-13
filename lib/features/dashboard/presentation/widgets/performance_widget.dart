@@ -23,15 +23,15 @@ class PerformanceWidget extends StatelessWidget {
     return FadeInUp(
       duration: const Duration(milliseconds: 800),
       child: Container(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 20,
-              offset: const Offset(0, 5),
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 15,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -41,30 +41,30 @@ class PerformanceWidget extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  width: 48,
-                  height: 48,
+                  width: 36,
+                  height: 36,
                   decoration: BoxDecoration(
                     color: const Color(0xFF10b981).withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Icon(
                     Icons.trending_up,
                     color: Color(0xFF10b981),
-                    size: 24,
+                    size: 18,
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 10),
                 Text(
                   AppLocalizations.of(context)!.performanceMetrics,
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 15,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF1a1a1a),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 14),
             // Delivery Rate with Progress Bar
             _buildPerformanceMetric(
               AppLocalizations.of(context)!.deliveryRate,
@@ -73,7 +73,7 @@ class PerformanceWidget extends StatelessWidget {
               const Color(0xFF10b981),
               Icons.local_shipping,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 12),
             // Task Completion Rate
             _buildPerformanceMetric(
               AppLocalizations.of(context)!.taskCompletion,
@@ -82,7 +82,7 @@ class PerformanceWidget extends StatelessWidget {
               const Color(0xFF8b5cf6),
               Icons.task_alt,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 12),
             // Performance Summary
             Row(
               children: [
@@ -94,7 +94,7 @@ class PerformanceWidget extends StatelessWidget {
                     Icons.check_circle,
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 8),
                 Expanded(
                   child: _buildMetricCard(
                     AppLocalizations.of(context)!.activeTasks,
@@ -103,7 +103,7 @@ class PerformanceWidget extends StatelessWidget {
                     Icons.pending_actions,
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 8),
                 Expanded(
                   child: _buildMetricCard(
                     AppLocalizations.of(context)!.completedTasks,
@@ -135,12 +135,12 @@ class PerformanceWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, size: 16, color: color),
-                const SizedBox(width: 8),
+                Icon(icon, size: 14, color: color),
+                const SizedBox(width: 6),
                 Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 13,
                     fontWeight: FontWeight.w500,
                     color: Color(0xFF1a1a1a),
                   ),
@@ -150,20 +150,20 @@ class PerformanceWidget extends StatelessWidget {
             Text(
               value,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: color,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         LinearProgressIndicator(
           value: progress.clamp(0.0, 1.0),
           backgroundColor: Colors.grey[200],
           valueColor: AlwaysStoppedAnimation<Color>(color),
-          minHeight: 8,
-          borderRadius: BorderRadius.circular(4),
+          minHeight: 6,
+          borderRadius: BorderRadius.circular(3),
         ),
       ],
     );
@@ -176,29 +176,29 @@ class PerformanceWidget extends StatelessWidget {
     IconData icon,
   ) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: color.withValues(alpha: 0.2), width: 1),
       ),
       child: Column(
         children: [
-          Icon(icon, color: color, size: 20),
-          const SizedBox(height: 8),
+          Icon(icon, color: color, size: 16),
+          const SizedBox(height: 5),
           Text(
             value,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
               color: color,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           Text(
             title,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 10,
               fontWeight: FontWeight.w500,
               color: Colors.grey[600],
             ),

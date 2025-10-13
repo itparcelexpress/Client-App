@@ -275,58 +275,58 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       child: SingleChildScrollView(
         padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
           context,
-          const EdgeInsets.all(20),
+          const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 40)),
-            _buildProfileHeader(),
-            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 24)),
-            _buildProfileCard(user),
-            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 24)),
-            _buildSettingsSection(),
-            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 24)),
-            _buildDangerZoneSection(),
+            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 10)),
+            _buildCompactProfileHeader(),
+            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 12)),
+            _buildCompactProfileCard(user),
+            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 16)),
+            _buildCompactSettingsSection(),
+            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 16)),
+            _buildCompactDangerZoneSection(),
             SizedBox(
-              height: ResponsiveUtils.getResponsivePadding(context, 80),
-            ), // Space for FAB - reduced from 100
+              height: ResponsiveUtils.getResponsivePadding(context, 20),
+            ), // Reduced bottom spacing
           ],
         ),
       ),
     );
   }
 
-  Widget _buildProfileHeader() {
+  Widget _buildCompactProfileHeader() {
     return FadeInDown(
       duration: const Duration(milliseconds: 400),
       child: Row(
         children: [
           Container(
-            width: ResponsiveUtils.getResponsiveWidth(context, 50),
-            height: ResponsiveUtils.getResponsiveHeight(context, 50),
+            width: ResponsiveUtils.getResponsiveWidth(context, 36),
+            height: ResponsiveUtils.getResponsiveHeight(context, 36),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [Color(0xFF8b5cf6), Color(0xFF7c3aed)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF8b5cf6).withValues(alpha: 0.3),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
+                  color: const Color(0xFF8b5cf6).withValues(alpha: 0.18),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
             child: Icon(
               Icons.person_rounded,
               color: Colors.white,
-              size: ResponsiveUtils.getResponsiveWidth(context, 24),
+              size: ResponsiveUtils.getResponsiveWidth(context, 18),
             ),
           ),
-          SizedBox(width: ResponsiveUtils.getResponsivePadding(context, 16)),
+          SizedBox(width: ResponsiveUtils.getResponsivePadding(context, 10)),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -336,24 +336,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   style: TextStyle(
                     fontSize: ResponsiveUtils.getResponsiveFontSize(
                       context,
-                      24,
+                      18,
                     ),
                     fontWeight: FontWeight.w700,
                     color: const Color(0xFF1a1a1a),
                   ),
                 ),
                 Text(
-                  AppLocalizations.of(
-                    context,
-                  )!.manageNotificationPreferences, // Closest available
+                  AppLocalizations.of(context)!.manageNotificationPreferences,
                   style: TextStyle(
                     fontSize: ResponsiveUtils.getResponsiveFontSize(
                       context,
-                      14,
+                      11,
                     ),
                     fontWeight: FontWeight.w400,
                     color: const Color(0xFF666666),
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
@@ -361,18 +361,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(9),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 10,
+                  color: Colors.black.withValues(alpha: 0.06),
+                  blurRadius: 6,
                   offset: const Offset(0, 2),
                 ),
               ],
             ),
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(7),
             child: const NotificationIconWidget(
-              size: 24,
+              size: 18,
               color: Color(0xFF8b5cf6),
               showBadge: true,
             ),
@@ -382,90 +382,90 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildProfileCard(dynamic user) {
+  Widget _buildCompactProfileCard(dynamic user) {
     return FadeInUp(
       duration: const Duration(milliseconds: 500),
       child: Container(
         padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
           context,
-          const EdgeInsets.all(24),
+          const EdgeInsets.all(14),
         ),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 15,
-              offset: const Offset(0, 5),
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
             ),
           ],
         ),
         child: Column(
           children: [
             Container(
-              width: ResponsiveUtils.getResponsiveWidth(context, 90),
-              height: ResponsiveUtils.getResponsiveHeight(context, 90),
+              width: ResponsiveUtils.getResponsiveWidth(context, 60),
+              height: ResponsiveUtils.getResponsiveHeight(context, 60),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [Color(0xFF8b5cf6), Color(0xFF7c3aed)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF8b5cf6).withValues(alpha: 0.3),
-                    blurRadius: 15,
-                    offset: const Offset(0, 8),
+                    color: const Color(0xFF8b5cf6).withValues(alpha: 0.18),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
               child: Icon(
                 Icons.person_rounded,
                 color: Colors.white,
-                size: ResponsiveUtils.getResponsiveWidth(context, 45),
+                size: ResponsiveUtils.getResponsiveWidth(context, 30),
               ),
             ),
-            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 20)),
+            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 12)),
             Text(
               user?.name ?? AppLocalizations.of(context)!.user,
               style: TextStyle(
-                fontSize: ResponsiveUtils.getResponsiveFontSize(context, 22),
+                fontSize: ResponsiveUtils.getResponsiveFontSize(context, 17),
                 fontWeight: FontWeight.w700,
                 color: const Color(0xFF1a1a1a),
               ),
             ),
-            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 8)),
+            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 5)),
             Text(
               user?.email ?? AppLocalizations.of(context)!.notAvailable,
               style: TextStyle(
-                fontSize: ResponsiveUtils.getResponsiveFontSize(context, 14),
+                fontSize: ResponsiveUtils.getResponsiveFontSize(context, 12),
                 color: Colors.grey[600],
                 fontWeight: FontWeight.w400,
               ),
             ),
             if (user?.client?.contactNo != null) ...[
               SizedBox(
-                height: ResponsiveUtils.getResponsivePadding(context, 4),
+                height: ResponsiveUtils.getResponsivePadding(context, 2),
               ),
               Text(
                 user!.client!.contactNo!,
                 style: TextStyle(
-                  fontSize: ResponsiveUtils.getResponsiveFontSize(context, 12),
+                  fontSize: ResponsiveUtils.getResponsiveFontSize(context, 11),
                   color: Colors.grey[500],
                   fontWeight: FontWeight.w400,
                 ),
               ),
             ],
-            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 24)),
+            SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 12)),
             if (user?.client?.governorate != null ||
                 user?.client?.state != null ||
                 user?.client?.place != null)
               Row(
                 children: [
                   Expanded(
-                    child: _buildInfoItem(
+                    child: _buildCompactInfoItem(
                       icon: Icons.location_on_rounded,
                       title: AppLocalizations.of(context)!.location,
                       value: _getLocationString(user?.client),
@@ -512,19 +512,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return locationParts.join(', ');
   }
 
-  Widget _buildSettingsSection() {
+  Widget _buildCompactSettingsSection() {
     return FadeInUp(
       duration: const Duration(milliseconds: 600),
       child: Container(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 15,
-              offset: const Offset(0, 5),
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -534,13 +534,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Text(
               AppLocalizations.of(context)!.settings,
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: Color(0xFF1a1a1a),
               ),
             ),
-            const SizedBox(height: 20),
-            _buildSettingItem(
+            const SizedBox(height: 14),
+            _buildCompactSettingItem(
               icon: Icons.settings_rounded,
               title: AppLocalizations.of(context)!.notificationSettings,
               subtitle:
@@ -579,11 +579,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 }
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             // Language toggle button
-            _buildLanguageToggleItem(),
-            const SizedBox(height: 16),
-            _buildSettingItem(
+            _buildCompactLanguageToggleItem(),
+            const SizedBox(height: 12),
+            _buildCompactSettingItem(
               icon: Icons.notifications_rounded,
               title: AppLocalizations.of(context)!.viewNotifications,
               subtitle: AppLocalizations.of(context)!.viewAllNotifications,
@@ -591,16 +591,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               onTap:
                   () => _navigateWithSlideTransition(const NotificationsPage()),
             ),
-            const SizedBox(height: 16),
-            _buildSettingItem(
+            const SizedBox(height: 12),
+            _buildCompactSettingItem(
               icon: Icons.price_check_rounded,
               title: AppLocalizations.of(context)!.viewPricing,
               subtitle: AppLocalizations.of(context)!.viewDeliveryPricing,
               color: const Color(0xFF10b981),
               onTap: () => _navigateWithSlideTransition(const PricingPage()),
             ),
-            const SizedBox(height: 16),
-            _buildSettingItem(
+            const SizedBox(height: 12),
+            _buildCompactSettingItem(
               icon: Icons.logout_rounded,
               title: AppLocalizations.of(context)!.logout,
               subtitle: AppLocalizations.of(context)!.signOutAccount,
@@ -614,21 +614,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildDangerZoneSection() {
+  Widget _buildCompactDangerZoneSection() {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFFef4444).withValues(alpha: 0.2),
-          width: 2,
+          color: const Color(0xFFef4444).withValues(alpha: 0.15),
+          width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFFef4444).withValues(alpha: 0.1),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
+            color: const Color(0xFFef4444).withValues(alpha: 0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -638,39 +638,39 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
                   color: const Color(0xFFef4444).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
                   Icons.warning_rounded,
                   color: Color(0xFFef4444),
-                  size: 24,
+                  size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 10),
               Text(
                 AppLocalizations.of(context)!.dangerZone,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: Color(0xFFef4444),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           Text(
             AppLocalizations.of(context)!.dangerZoneWarning,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 12,
               color: Colors.grey[600],
-              height: 1.5,
+              height: 1.4,
             ),
           ),
-          const SizedBox(height: 20),
-          _buildDangerZoneItem(
+          const SizedBox(height: 16),
+          _buildCompactDangerZoneItem(
             icon: Icons.delete_forever_rounded,
             title: AppLocalizations.of(context)!.deleteAccountTitle,
             subtitle: AppLocalizations.of(context)!.deleteAccountSubtitle,
@@ -737,6 +737,70 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Icon(
               Icons.arrow_forward_ios_rounded,
               size: 16,
+              color: const Color(0xFFef4444).withValues(alpha: 0.5),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCompactDangerZoneItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: const Color(0xFFef4444).withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: const Color(0xFFef4444).withValues(alpha: 0.15),
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: const Color(0xFFef4444).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: const Color(0xFFef4444), size: 20),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFFef4444),
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 14,
               color: const Color(0xFFef4444).withValues(alpha: 0.5),
             ),
           ],
@@ -843,6 +907,104 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
+  Widget _buildCompactLanguageToggleItem() {
+    // Get current locale from context
+    final currentLocale = Localizations.localeOf(context);
+    final isEnglish = currentLocale.languageCode == 'en';
+
+    return GestureDetector(
+      onTap: () {
+        // Toggle between Arabic and English
+        final newLocale =
+            isEnglish ? const Locale('ar', 'SA') : const Locale('en', 'US');
+
+        // Use the existing MyApp.setLocale mechanism
+        MyApp.of(context)?.setLocale(newLocale);
+
+        // Show feedback to user
+        MessagingService.showInfo(
+          context,
+          isEnglish
+              ? AppLocalizations.of(context)!.languageChangedToArabic
+              : AppLocalizations.of(context)!.languageChangedToEnglish,
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: const Color(0xFF667eea).withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: const Color(0xFF667eea).withValues(alpha: 0.1),
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: const Color(0xFF667eea).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(
+                Icons.language,
+                color: Color(0xFF667eea),
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    isEnglish
+                        ? AppLocalizations.of(context)!.switchToArabic
+                        : AppLocalizations.of(context)!.switchToEnglish,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF1a1a1a),
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    isEnglish
+                        ? AppLocalizations.of(context)!.arabic
+                        : AppLocalizations.of(context)!.english,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF667eea),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: const Color(0xFF667eea),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Text(
+                isEnglish
+                    ? AppLocalizations.of(context)!.arabicCode
+                    : AppLocalizations.of(context)!.englishCode,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildInfoItem({
     required IconData icon,
     required String title,
@@ -878,6 +1040,48 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             color: Color(0xFF1a1a1a),
           ),
           textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCompactInfoItem({
+    required IconData icon,
+    required String title,
+    required String value,
+    required Color color,
+  }) {
+    return Column(
+      children: [
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, color: color, size: 20),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 11,
+            color: Colors.grey[600],
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 3),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF1a1a1a),
+          ),
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );
@@ -939,6 +1143,70 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Icon(
               Icons.arrow_forward_ios_rounded,
               size: 16,
+              color: Colors.grey[400],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCompactSettingItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required Color color,
+    required VoidCallback onTap,
+    bool isDestructive = false,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: color.withValues(alpha: 0.1)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: color, size: 20),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: isDestructive ? color : const Color(0xFF1a1a1a),
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 14,
               color: Colors.grey[400],
             ),
           ],
