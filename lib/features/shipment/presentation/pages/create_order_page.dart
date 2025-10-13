@@ -28,6 +28,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CreateOrderPage extends StatefulWidget {
   final String? stickerNumber;
@@ -41,6 +42,9 @@ class CreateOrderPage extends StatefulWidget {
 class _CreateOrderPageState extends State<CreateOrderPage> {
   final _formKey = GlobalKey<FormState>();
   final _scrollController = ScrollController();
+
+  // Scanner Controller
+  MobileScannerController? _scannerController;
 
   // Form Controllers
   final _nameController = TextEditingController();
@@ -92,6 +96,12 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
   // Address book selection
   AddressBookEntry? _selectedAddress;
+
+  // Country codes for phone inputs
+  String? _phoneCountryCode;
+  String? _phoneCountryDialCode;
+  String? _altPhoneCountryCode;
+  String? _altPhoneCountryDialCode;
 
   // Pricing data
   List<PricingData> _pricingData = [];
@@ -162,6 +172,98 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         _dismissedSaveSuggestion = false;
       }
     });
+  }
+
+  /// Extract national number from full phone number by removing common country codes
+  String _extractNationalNumber(String fullPhoneNumber) {
+    if (fullPhoneNumber.isEmpty) return '';
+
+    // Remove any whitespace and special characters except +
+    String cleaned = fullPhoneNumber.replaceAll(RegExp(r'[^\d+]'), '');
+
+    // If it doesn't start with +, assume it's already a national number
+    if (!cleaned.startsWith('+')) return cleaned;
+
+    // Common country codes to strip (sorted by length, longest first)
+    final countryCodes = [
+      '+971', // UAE
+      '+966', // Saudi Arabia
+      '+968', // Oman
+      '+965', // Kuwait
+      '+974', // Qatar
+      '+973', // Bahrain
+      '+962', // Jordan
+      '+961', // Lebanon
+      '+20', // Egypt
+      '+1', // US/Canada
+      '+44', // UK
+    ];
+
+    // Try to match and remove country code
+    for (final code in countryCodes) {
+      if (cleaned.startsWith(code)) {
+        return cleaned.substring(code.length);
+      }
+    }
+
+    // If no known country code matched, try to remove + and first 1-3 digits
+    // This is a fallback for unknown country codes
+    if (cleaned.startsWith('+')) {
+      // Remove + and assume country code is 1-4 digits
+      final withoutPlus = cleaned.substring(1);
+      // For common patterns, country codes are 1-4 digits
+      // Keep at least 8 digits for the national number
+      if (withoutPlus.length > 10) {
+        // Likely has a 2-3 digit country code
+        return withoutPlus.substring(2);
+      } else if (withoutPlus.length > 9) {
+        // Likely has a 1-2 digit country code
+        return withoutPlus.substring(1);
+      }
+      return withoutPlus;
+    }
+
+    return cleaned;
+  }
+
+  /// Detect country code and dial code from full phone number
+  Map<String, String> _detectCountryInfo(String fullPhoneNumber) {
+    if (fullPhoneNumber.isEmpty) {
+      return {'countryCode': 'OM', 'dialCode': '+968'};
+    }
+
+    // Remove any whitespace and special characters except +
+    String cleaned = fullPhoneNumber.replaceAll(RegExp(r'[^\d+]'), '');
+
+    // If it doesn't start with +, assume Oman
+    if (!cleaned.startsWith('+')) {
+      return {'countryCode': 'OM', 'dialCode': '+968'};
+    }
+
+    // Map of dial codes to country codes
+    final dialToCountry = {
+      '+971': 'AE', // UAE
+      '+966': 'SA', // Saudi Arabia
+      '+968': 'OM', // Oman
+      '+965': 'KW', // Kuwait
+      '+974': 'QA', // Qatar
+      '+973': 'BH', // Bahrain
+      '+962': 'JO', // Jordan
+      '+961': 'LB', // Lebanon
+      '+20': 'EG', // Egypt
+      '+1': 'US', // US/Canada
+      '+44': 'GB', // UK
+    };
+
+    // Try to match dial code
+    for (final entry in dialToCountry.entries) {
+      if (cleaned.startsWith(entry.key)) {
+        return {'countryCode': entry.value, 'dialCode': entry.key};
+      }
+    }
+
+    // Default to Oman if no match
+    return {'countryCode': 'OM', 'dialCode': '+968'};
   }
 
   void _loadCountries() async {
@@ -348,14 +450,50 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     if (mounted) {
       setState(() {
         _selectedAddress = address;
+
+        // Reset country codes if address is cleared
+        if (address == null) {
+          _phoneCountryCode = null;
+          _phoneCountryDialCode = null;
+          _altPhoneCountryCode = null;
+          _altPhoneCountryDialCode = null;
+        }
       });
     }
 
     if (address != null) {
       // Auto-fill form fields from selected address
       _nameController.text = address.name;
-      _phoneController.text = address.cellphone;
-      _alternatePhoneController.text = address.alternatePhone;
+
+      // Detect country codes from saved phone numbers
+      final phoneInfo = _detectCountryInfo(address.cellphone);
+      final altPhoneInfo = _detectCountryInfo(address.alternatePhone);
+
+      if (mounted) {
+        setState(() {
+          _phoneCountryCode = phoneInfo['countryCode'];
+          _phoneCountryDialCode = phoneInfo['dialCode'];
+          _altPhoneCountryCode = altPhoneInfo['countryCode'];
+          _altPhoneCountryDialCode = altPhoneInfo['dialCode'];
+        });
+      }
+
+      // Parse phone numbers to extract national number (remove country code)
+      // The UnifiedPhoneInput will add the country code back
+      _phoneController.text = _extractNationalNumber(address.cellphone);
+      _alternatePhoneController.text = _extractNationalNumber(
+        address.alternatePhone,
+      );
+
+      // Store full phone numbers AFTER setting controllers
+      // Use post-frame callback to ensure this happens after UnifiedPhoneInput listeners fire
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _fullPhoneNumber = address.cellphone;
+          _fullAlternatePhoneNumber = address.alternatePhone;
+        }
+      });
+
       _emailController.text = address.email;
       _streetAddressController.text = address.streetAddress;
 
@@ -504,6 +642,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     for (final c in _itemQuantityCtrls) c.dispose();
 
     _scrollController.dispose();
+    _scannerController?.dispose();
     _pricingSubscription?.cancel(); // Cancel the stream subscription
     _pricingCubit?.close();
     super.dispose();
@@ -788,57 +927,84 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     );
   }
 
-  void _openStickerScanner() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (context) {
-        return SizedBox(
-          height: ResponsiveUtils.getScreenHeight(context) * 0.6,
-          child: Column(
-            children: [
-              const SizedBox(height: 12),
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Expanded(
-                child: MobileScanner(
-                  onDetect: (capture) {
-                    final code = capture.barcodes.first.rawValue;
-                    if (code != null && code.isNotEmpty) {
-                      Navigator.pop(context);
-                      if (mounted) {
-                        setState(() {
-                          _stickerNumber = code;
-                          _stickerController.text = code;
-                        });
-                      }
-                      ToastService.showCustomToast(
-                        message: AppLocalizations.of(
-                          context,
-                        )!.trackingLabel(code),
-                        type: ToastType.success,
-                        context: context,
-                      );
-                    }
-                  },
-                ),
-              ),
-              const SizedBox(height: 12),
-            ],
-          ),
+  void _openStickerScanner() async {
+    // Request camera permission first
+    final permission = await Permission.camera.request();
+
+    if (!permission.isGranted) {
+      if (mounted) {
+        ToastService.showError(
+          context,
+          AppLocalizations.of(context)!.cameraPermissionDenied,
         );
-      },
-    );
+      }
+      return;
+    }
+
+    // Create a new scanner controller for this scan session
+    if (mounted) {
+      setState(() {
+        _scannerController = MobileScannerController();
+      });
+    }
+
+    if (mounted) {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        builder: (context) {
+          return SizedBox(
+            height: ResponsiveUtils.getScreenHeight(context) * 0.6,
+            child: Column(
+              children: [
+                const SizedBox(height: 12),
+                Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Expanded(
+                  child: MobileScanner(
+                    controller: _scannerController,
+                    onDetect: (capture) {
+                      final code = capture.barcodes.first.rawValue;
+                      if (code != null && code.isNotEmpty) {
+                        Navigator.pop(context);
+                        if (mounted) {
+                          setState(() {
+                            _stickerNumber = code;
+                            _stickerController.text = code;
+                          });
+                        }
+                        ToastService.showCustomToast(
+                          message: AppLocalizations.of(
+                            context,
+                          )!.trackingLabel(code),
+                          type: ToastType.success,
+                          context: context,
+                        );
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(height: 12),
+              ],
+            ),
+          );
+        },
+      ).then((_) {
+        // Dispose controller when bottom sheet is closed
+        _scannerController?.dispose();
+        _scannerController = null;
+      });
+    }
   }
 
   Widget _buildAddressBookSection() {
@@ -978,20 +1144,28 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         ),
         const SizedBox(height: 12),
         UnifiedPhoneInput(
+          key: ValueKey('phone_${_phoneCountryCode}_${_phoneCountryDialCode}'),
           controller: _phoneController,
           label: AppLocalizations.of(context)!.phoneNumber,
           hint: AppLocalizations.of(context)!.phoneNumberInfo,
           isRequired: true,
+          initialCountryCode: _phoneCountryCode,
+          initialPhoneCode: _phoneCountryDialCode,
           onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
             _fullPhoneNumber = fullPhoneNumber;
           },
         ),
         const SizedBox(height: 12),
         UnifiedPhoneInput(
+          key: ValueKey(
+            'alt_phone_${_altPhoneCountryCode}_${_altPhoneCountryDialCode}',
+          ),
           controller: _alternatePhoneController,
           label: AppLocalizations.of(context)!.alternatePhone,
           hint: AppLocalizations.of(context)!.alternatePhoneInfo,
           isRequired: false,
+          initialCountryCode: _altPhoneCountryCode,
+          initialPhoneCode: _altPhoneCountryDialCode,
           onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
             _fullAlternatePhoneNumber = fullPhoneNumber;
           },
