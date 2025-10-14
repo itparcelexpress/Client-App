@@ -14,6 +14,7 @@ class SearchableCountryDropdown extends StatefulWidget {
   final bool isRequired;
   final bool showPopularCountries;
   final bool enableSearch;
+  final bool shouldShowErrors;
 
   const SearchableCountryDropdown({
     super.key,
@@ -25,6 +26,7 @@ class SearchableCountryDropdown extends StatefulWidget {
     this.isRequired = true,
     this.showPopularCountries = true,
     this.enableSearch = true,
+    this.shouldShowErrors = false,
   });
 
   @override
@@ -38,6 +40,7 @@ class _SearchableCountryDropdownState extends State<SearchableCountryDropdown> {
   List<Country> _popularCountries = [];
   bool _isSearching = false;
   String _searchQuery = '';
+  bool _hasInteracted = false;
 
   @override
   void initState() {
@@ -152,16 +155,41 @@ class _SearchableCountryDropdownState extends State<SearchableCountryDropdown> {
         ),
 
         // Validation error
-        if (widget.validator != null)
+        if (widget.validator != null &&
+            (_hasInteracted || widget.shouldShowErrors))
           Builder(
             builder: (context) {
               final error = widget.validator!(widget.value);
               if (error != null) {
                 return Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    error,
-                    style: TextStyle(color: Colors.red.shade600, fontSize: 12),
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade50,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.red.shade200, width: 1),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            error,
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.red.shade700,
+                              height: 1.3,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }
@@ -183,6 +211,9 @@ class _SearchableCountryDropdownState extends State<SearchableCountryDropdown> {
           (context) => _CountrySelectionModal(
             selectedCountry: widget.value,
             onCountrySelected: (country) {
+              setState(() {
+                _hasInteracted = true;
+              });
               widget.onChanged(country);
               Navigator.pop(context);
             },

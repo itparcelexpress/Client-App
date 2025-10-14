@@ -124,6 +124,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   // Track if additional info section is expanded
   bool _isAdditionalInfoExpanded = false;
 
+  // Track if form has been validated (to show errors only after user interaction)
+  bool _hasValidated = false;
+
   // Helper method to preserve scroll position during setState
   void _setStateWithScrollPreservation(VoidCallback fn) {
     if (!mounted) return;
@@ -1151,6 +1154,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           isRequired: true,
           initialCountryCode: _phoneCountryCode,
           initialPhoneCode: _phoneCountryDialCode,
+          shouldShowErrors: _hasValidated,
           onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
             _fullPhoneNumber = fullPhoneNumber;
           },
@@ -1166,6 +1170,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           isRequired: false,
           initialCountryCode: _altPhoneCountryCode,
           initialPhoneCode: _altPhoneCountryDialCode,
+          shouldShowErrors: _hasValidated,
           onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
             _fullAlternatePhoneNumber = fullPhoneNumber;
           },
@@ -1233,6 +1238,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           },
           label: AppLocalizations.of(context)!.country,
           icon: Icons.public_outlined,
+          shouldShowErrors: _hasValidated,
           validator:
               (value) =>
                   value == null
@@ -1275,6 +1281,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           label: AppLocalizations.of(context)!.governorate,
           icon: Icons.location_city_outlined,
           countryId: _selectedCountry?.id,
+          shouldShowErrors: _hasValidated,
           validator:
               (value) =>
                   value == null
@@ -1322,6 +1329,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           label: AppLocalizations.of(context)!.state,
           icon: Icons.location_searching_outlined,
           governorateId: _selectedGovernorate?.id,
+          shouldShowErrors: _hasValidated,
           validator:
               (value) =>
                   value == null
@@ -1346,6 +1354,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           icon: Icons.place_outlined,
           stateId: _selectedState?.id,
           isRequired: false,
+          shouldShowErrors: _hasValidated,
           validator: null, // No validation - optional field
         ),
         const SizedBox(height: 12),
@@ -1459,13 +1468,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                         controller: _deliveryFeeController,
                         keyboardType: TextInputType.number,
                         readOnly: true,
-                        validator:
-                            (value) =>
-                                value?.isEmpty == true
-                                    ? AppLocalizations.of(
-                                      context,
-                                    )!.pleaseEnterDeliveryFee
-                                    : null,
+                        validator: null,
                         decoration: InputDecoration(
                           hintText:
                               AppLocalizations.of(context)!.deliveryFeeHint,
@@ -1492,11 +1495,13 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                           ),
                           errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                              color: Colors.red.shade400,
-                              width: 1,
-                            ),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
                           ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          errorStyle: const TextStyle(height: 0, fontSize: 0),
                           filled: true,
                           fillColor: Colors.grey.shade50,
                           contentPadding: const EdgeInsets.symmetric(
@@ -1505,6 +1510,54 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                           ),
                         ),
                       ),
+                      if (_hasValidated)
+                        Builder(
+                          builder: (context) {
+                            final error =
+                                _deliveryFeeController.text.isEmpty
+                                    ? AppLocalizations.of(
+                                      context,
+                                    )!.pleaseEnterDeliveryFee
+                                    : null;
+                            if (error != null) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 6),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.shade50,
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: Colors.red.shade200,
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          error,
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            color: Colors.red.shade700,
+                                            height: 1.3,
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          softWrap: true,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          },
+                        ),
                     ],
                   ),
                 ],
@@ -1528,21 +1581,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                     controller: _amountController,
                     keyboardType: TextInputType.number,
                     readOnly: _paymentType != 'cod',
-                    validator: (value) {
-                      if (_paymentType == 'cod') {
-                        if (value == null || value.trim().isEmpty) {
-                          return AppLocalizations.of(
-                            context,
-                          )!.pleaseEnterAmountField;
-                        }
-                        final parsed = double.tryParse(value.trim());
-                        if (parsed == null || parsed <= 0) {
-                          return AppLocalizations.of(
-                            context,
-                          )!.pleaseEnterAmountField;
-                        }
-                      }
-                      return null;
+                    validator: null,
+                    onChanged: (value) {
+                      setState(() {}); // Trigger rebuild to show/hide error
                     },
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.amountHint,
@@ -1569,11 +1610,13 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       ),
                       errorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: Colors.red.shade400,
-                          width: 1,
-                        ),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
                       ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      errorStyle: const TextStyle(height: 0, fontSize: 0),
                       filled: true,
                       fillColor:
                           _paymentType == 'cod'
@@ -1585,6 +1628,67 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       ),
                     ),
                   ),
+                  if (_hasValidated)
+                    Builder(
+                      builder: (context) {
+                        String? error;
+                        if (_paymentType == 'cod') {
+                          if (_amountController.text.trim().isEmpty) {
+                            error =
+                                AppLocalizations.of(
+                                  context,
+                                )!.pleaseEnterAmountField;
+                          } else {
+                            final parsed = double.tryParse(
+                              _amountController.text.trim(),
+                            );
+                            if (parsed == null || parsed <= 0) {
+                              error =
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.pleaseEnterAmountField;
+                            }
+                          }
+                        }
+                        if (error != null) {
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.red.shade50,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: Colors.red.shade200,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      error,
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color: Colors.red.shade700,
+                                        height: 1.3,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: true,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    ),
                 ],
               ),
             ),
@@ -2154,10 +2258,13 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           child: TextFormField(
             controller: controller,
             keyboardType: keyboardType,
-            validator: validator,
+            validator: null,
             maxLines: maxLines,
             inputFormatters: inputFormatters,
             textAlign: isRTL ? TextAlign.right : TextAlign.left,
+            onChanged: (value) {
+              setState(() {}); // Trigger rebuild to show/hide error
+            },
             decoration: InputDecoration(
               hintText: hint,
               hintStyle: TextStyle(color: Colors.grey.shade500),
@@ -2185,8 +2292,13 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Colors.red.shade400, width: 1),
+                borderSide: BorderSide(color: Colors.grey.shade300),
               ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
+              errorStyle: const TextStyle(height: 0, fontSize: 0),
               filled: true,
               fillColor: Colors.grey.shade50,
               contentPadding: const EdgeInsets.symmetric(
@@ -2196,6 +2308,47 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             ),
           ),
         ),
+        // Custom validation error display
+        if (_hasValidated)
+          Builder(
+            builder: (context) {
+              final error = validator?.call(controller.text);
+              if (error != null) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade50,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.red.shade200, width: 1),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            error,
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.red.shade700,
+                              height: 1.3,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
       ],
     );
   }
@@ -2304,12 +2457,52 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   }
 
   void _submitOrder() {
+    // Mark form as validated to show errors
+    setState(() {
+      _hasValidated = true;
+    });
+
     if (_formKey.currentState!.validate()) {
+      // Validate required sticker number
+      if (_stickerController.text.trim().isEmpty) {
+        _showErrorToast(
+          AppLocalizations.of(
+            context,
+          )!.pleaseEnterField(AppLocalizations.of(context)!.stickerNumber),
+        );
+        return;
+      }
+
+      // Validate required phone number
+      if (_phoneController.text.trim().isEmpty && _fullPhoneNumber.isEmpty) {
+        _showErrorToast(AppLocalizations.of(context)!.phoneRequired);
+        return;
+      }
+
       // Validate required location selections
       if (_selectedCountry == null ||
           _selectedGovernorate == null ||
           _selectedState == null) {
         _showErrorToast(AppLocalizations.of(context)!.pleaseSelectGovernorate);
+        return;
+      }
+
+      // Validate amount for COD payment
+      if (_paymentType == 'cod') {
+        if (_amountController.text.trim().isEmpty) {
+          _showErrorToast(AppLocalizations.of(context)!.pleaseEnterAmountField);
+          return;
+        }
+        final amount = double.tryParse(_amountController.text.trim());
+        if (amount == null || amount <= 0) {
+          _showErrorToast(AppLocalizations.of(context)!.pleaseEnterAmountField);
+          return;
+        }
+      }
+
+      // Validate delivery fee
+      if (_deliveryFeeController.text.trim().isEmpty) {
+        _showErrorToast(AppLocalizations.of(context)!.pleaseEnterDeliveryFee);
         return;
       }
 

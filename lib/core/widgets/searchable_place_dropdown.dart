@@ -14,6 +14,7 @@ class SearchablePlaceDropdown extends StatefulWidget {
   final bool isRequired;
   final bool enableSearch;
   final int? stateId; // Filter places by state
+  final bool shouldShowErrors;
 
   const SearchablePlaceDropdown({
     super.key,
@@ -25,6 +26,7 @@ class SearchablePlaceDropdown extends StatefulWidget {
     this.isRequired = true,
     this.enableSearch = true,
     this.stateId,
+    this.shouldShowErrors = false,
   });
 
   @override
@@ -34,6 +36,7 @@ class SearchablePlaceDropdown extends StatefulWidget {
 
 class _SearchablePlaceDropdownState extends State<SearchablePlaceDropdown> {
   final TextEditingController _searchController = TextEditingController();
+  bool _hasInteracted = false;
   List<Place> _filteredPlaces = [];
   bool _isSearching = false;
   String _searchQuery = '';
@@ -168,16 +171,41 @@ class _SearchablePlaceDropdownState extends State<SearchablePlaceDropdown> {
         ),
 
         // Validation error
-        if (widget.validator != null)
+        if (widget.validator != null &&
+            (_hasInteracted || widget.shouldShowErrors))
           Builder(
             builder: (context) {
               final error = widget.validator!(widget.value);
               if (error != null) {
                 return Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    error,
-                    style: TextStyle(color: Colors.red.shade600, fontSize: 12),
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade50,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.red.shade200, width: 1),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            error,
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.red.shade700,
+                              height: 1.3,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }
@@ -199,6 +227,9 @@ class _SearchablePlaceDropdownState extends State<SearchablePlaceDropdown> {
           (context) => _PlaceSelectionModal(
             selectedPlace: widget.value,
             onPlaceSelected: (place) {
+              setState(() {
+                _hasInteracted = true;
+              });
               widget.onChanged(place);
               Navigator.pop(context);
             },
