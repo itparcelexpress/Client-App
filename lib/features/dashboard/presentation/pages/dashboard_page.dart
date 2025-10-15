@@ -33,39 +33,41 @@ class _DashboardPageState extends State<DashboardPage> {
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      body: RefreshIndicator(
-        onRefresh: () async {
-          // Check if user is still authenticated before refreshing
-          if (GlobalAuthManager.instance.isAuthenticated) {
-            await context.read<DashboardCubit>().refreshDashboardStats();
-          } else {
-            // User has been logged out, trigger logout
-            context.read<AuthCubit>().logout();
-          }
-        },
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-              _buildCompactGreeting(userName),
-              const SizedBox(height: 12),
-              BlocBuilder<DashboardCubit, DashboardState>(
-                builder: (context, state) {
-                  if (state is DashboardLoading) {
-                    return _buildLoadingState();
-                  } else if (state is DashboardError) {
-                    return _buildErrorState(state.message);
-                  } else if (state is DashboardLoaded) {
-                    return _buildDashboardContent(state);
-                  } else {
-                    return _buildEmptyState();
-                  }
-                },
-              ),
-            ],
+      body: SafeArea(
+        child: RefreshIndicator(
+          onRefresh: () async {
+            // Check if user is still authenticated before refreshing
+            if (GlobalAuthManager.instance.isAuthenticated) {
+              await context.read<DashboardCubit>().refreshDashboardStats();
+            } else {
+              // User has been logged out, trigger logout
+              context.read<AuthCubit>().logout();
+            }
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 16),
+                _buildCompactGreeting(userName),
+                const SizedBox(height: 12),
+                BlocBuilder<DashboardCubit, DashboardState>(
+                  builder: (context, state) {
+                    if (state is DashboardLoading) {
+                      return _buildLoadingState();
+                    } else if (state is DashboardError) {
+                      return _buildErrorState(state.message);
+                    } else if (state is DashboardLoaded) {
+                      return _buildDashboardContent(state);
+                    } else {
+                      return _buildEmptyState();
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

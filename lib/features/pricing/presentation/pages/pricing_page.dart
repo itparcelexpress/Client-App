@@ -64,28 +64,30 @@ class _PricingViewState extends State<PricingView> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: _buildAppBar(),
-      body: BlocConsumer<PricingCubit, PricingState>(
-        listener: (context, state) {
-          if (state is PricingLoaded) {
-            setState(() {
-              _allPricingData = state.pricingData;
-              _filteredPricingData = state.pricingData;
-            });
-          }
-        },
-        builder: (context, state) {
-          if (state is PricingLoading) {
-            return _buildLoadingState();
-          } else if (state is PricingError) {
-            return _buildErrorState(state.message);
-          } else if (state is PricingLoaded) {
-            return _buildLoadedState();
-          } else if (state is PricingEmpty) {
-            return _buildEmptyState(state.message);
-          } else {
-            return _buildEmptyState('Loading pricing data...');
-          }
-        },
+      body: SafeArea(
+        child: BlocConsumer<PricingCubit, PricingState>(
+          listener: (context, state) {
+            if (state is PricingLoaded) {
+              setState(() {
+                _allPricingData = state.pricingData;
+                _filteredPricingData = state.pricingData;
+              });
+            }
+          },
+          builder: (context, state) {
+            if (state is PricingLoading) {
+              return _buildLoadingState();
+            } else if (state is PricingError) {
+              return _buildErrorState(state.message);
+            } else if (state is PricingLoaded) {
+              return _buildLoadedState();
+            } else if (state is PricingEmpty) {
+              return _buildEmptyState(state.message);
+            } else {
+              return _buildEmptyState('Loading pricing data...');
+            }
+          },
+        ),
       ),
     );
   }

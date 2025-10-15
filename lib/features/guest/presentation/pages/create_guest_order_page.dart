@@ -29,11 +29,9 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
   final Map<String, bool> _touchedFields = {};
   bool _formSubmitted = false;
   final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _alternatePhoneController = TextEditingController();
   final _districtController = TextEditingController();
-  final _zipcodeController = TextEditingController();
   final _streetAddressController = TextEditingController();
   final _notesController = TextEditingController();
   final _customerNameController = TextEditingController();
@@ -114,7 +112,7 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
     if (_formKey.currentState?.validate() ?? false) {
       final request = GuestOrderRequest(
         name: _nameController.text.trim(),
-        email: _emailController.text.trim(),
+        email: "", // Email removed from form
         cellphone:
             _fullPhoneNumber.isNotEmpty
                 ? _fullPhoneNumber
@@ -124,7 +122,7 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
                 ? _fullAlternatePhoneNumber
                 : _alternatePhoneController.text.trim(),
         district: _districtController.text.trim(),
-        zipcode: _zipcodeController.text.trim(),
+        zipcode: "", // Zipcode removed from form
         streetAddress: _streetAddressController.text.trim(),
         notes: _notesController.text.trim(),
         payment_type: 'COD',
@@ -333,13 +331,6 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
                 ),
           ),
           const SizedBox(height: 16),
-          _buildTextField(
-            controller: _emailController,
-            label: AppLocalizations.of(context)!.email,
-            validator: (value) => Validators.email(value, context: context),
-            keyboardType: TextInputType.emailAddress,
-          ),
-          const SizedBox(height: 16),
           UnifiedPhoneInput(
             controller: _phoneController,
             label: AppLocalizations.of(context)!.phoneNumber,
@@ -496,13 +487,6 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
                   context: context,
                   fieldName: AppLocalizations.of(context)!.district,
                 ),
-          ),
-          const SizedBox(height: 16),
-          _buildTextField(
-            controller: _zipcodeController,
-            label: AppLocalizations.of(context)!.zipcode,
-            validator: (value) => Validators.zipcode(value, context: context),
-            keyboardType: TextInputType.number,
           ),
           const SizedBox(height: 16),
           _buildTextField(
@@ -685,11 +669,9 @@ class _CreateGuestOrderPageState extends State<CreateGuestOrderPage> {
   @override
   void dispose() {
     _nameController.dispose();
-    _emailController.dispose();
     _phoneController.dispose();
     _alternatePhoneController.dispose();
     _districtController.dispose();
-    _zipcodeController.dispose();
     _streetAddressController.dispose();
     _notesController.dispose();
     _customerNameController.dispose();

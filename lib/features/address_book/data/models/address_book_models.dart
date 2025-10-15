@@ -261,7 +261,7 @@ class AddressBookRequest extends Equatable {
 
   const AddressBookRequest({
     required this.name,
-    required this.email,
+    this.email = "",
     required this.cellphone,
     required this.alternatePhone,
     required this.countryId,

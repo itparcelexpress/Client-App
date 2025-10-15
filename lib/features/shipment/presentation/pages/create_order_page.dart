@@ -54,8 +54,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   // Store full phone numbers with country codes
   String _fullPhoneNumber = '';
   String _fullAlternatePhoneNumber = '';
-  final _emailController = TextEditingController();
-  final _zipcodeController = TextEditingController();
   final _streetAddressController = TextEditingController();
   final _deliveryFeeController = TextEditingController();
   final _amountController = TextEditingController();
@@ -84,18 +82,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   String _paymentType = 'cod'; // Use key instead of display value
 
   // Location dropdowns
-  List<location_models.Country> _countries = [];
-  List<location_models.Governorate> _governorates = [];
-  List<location_models.StateModel> _states = [];
-  List<location_models.Place> _places = [];
-
   location_models.Country? _selectedCountry;
   location_models.Governorate? _selectedGovernorate;
   location_models.StateModel? _selectedState;
   location_models.Place? _selectedPlace;
-
-  // Address book selection
-  AddressBookEntry? _selectedAddress;
 
   // Country codes for phone inputs
   String? _phoneCountryCode;
@@ -109,23 +99,14 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   PricingCubit? _pricingCubit;
   StreamSubscription? _pricingSubscription;
 
-  // Track if form has data to suggest saving as address book entry
-  bool get _hasFormData {
-    return _nameController.text.isNotEmpty &&
-        (_phoneController.text.isNotEmpty || _fullPhoneNumber.isNotEmpty) &&
-        _selectedCountry != null &&
-        _selectedGovernorate != null &&
-        _selectedState != null;
-  }
-
-  // Track if user dismissed the save suggestion
-  bool _dismissedSaveSuggestion = false;
-
   // Track if additional info section is expanded
   bool _isAdditionalInfoExpanded = false;
 
   // Track if form has been validated (to show errors only after user interaction)
   bool _hasValidated = false;
+
+  // Address suggestions based on phone search
+  List<AddressBookEntry> _addressSuggestions = [];
 
   // Helper method to preserve scroll position during setState
   void _setStateWithScrollPreservation(VoidCallback fn) {
@@ -160,113 +141,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       _stickerNumber = widget.stickerNumber;
       _stickerController.text = widget.stickerNumber!;
     }
-
-    // Add listeners to form fields to detect when user has filled form
-    _nameController.addListener(_onFormDataChanged);
-    _phoneController.addListener(_onFormDataChanged);
-    _emailController.addListener(_onFormDataChanged);
-    _streetAddressController.addListener(_onFormDataChanged);
-  }
-
-  void _onFormDataChanged() {
-    setState(() {
-      // Reset dismissed flag when form data changes
-      if (!_hasFormData) {
-        _dismissedSaveSuggestion = false;
-      }
-    });
-  }
-
-  /// Extract national number from full phone number by removing common country codes
-  String _extractNationalNumber(String fullPhoneNumber) {
-    if (fullPhoneNumber.isEmpty) return '';
-
-    // Remove any whitespace and special characters except +
-    String cleaned = fullPhoneNumber.replaceAll(RegExp(r'[^\d+]'), '');
-
-    // If it doesn't start with +, assume it's already a national number
-    if (!cleaned.startsWith('+')) return cleaned;
-
-    // Common country codes to strip (sorted by length, longest first)
-    final countryCodes = [
-      '+971', // UAE
-      '+966', // Saudi Arabia
-      '+968', // Oman
-      '+965', // Kuwait
-      '+974', // Qatar
-      '+973', // Bahrain
-      '+962', // Jordan
-      '+961', // Lebanon
-      '+20', // Egypt
-      '+1', // US/Canada
-      '+44', // UK
-    ];
-
-    // Try to match and remove country code
-    for (final code in countryCodes) {
-      if (cleaned.startsWith(code)) {
-        return cleaned.substring(code.length);
-      }
-    }
-
-    // If no known country code matched, try to remove + and first 1-3 digits
-    // This is a fallback for unknown country codes
-    if (cleaned.startsWith('+')) {
-      // Remove + and assume country code is 1-4 digits
-      final withoutPlus = cleaned.substring(1);
-      // For common patterns, country codes are 1-4 digits
-      // Keep at least 8 digits for the national number
-      if (withoutPlus.length > 10) {
-        // Likely has a 2-3 digit country code
-        return withoutPlus.substring(2);
-      } else if (withoutPlus.length > 9) {
-        // Likely has a 1-2 digit country code
-        return withoutPlus.substring(1);
-      }
-      return withoutPlus;
-    }
-
-    return cleaned;
-  }
-
-  /// Detect country code and dial code from full phone number
-  Map<String, String> _detectCountryInfo(String fullPhoneNumber) {
-    if (fullPhoneNumber.isEmpty) {
-      return {'countryCode': 'OM', 'dialCode': '+968'};
-    }
-
-    // Remove any whitespace and special characters except +
-    String cleaned = fullPhoneNumber.replaceAll(RegExp(r'[^\d+]'), '');
-
-    // If it doesn't start with +, assume Oman
-    if (!cleaned.startsWith('+')) {
-      return {'countryCode': 'OM', 'dialCode': '+968'};
-    }
-
-    // Map of dial codes to country codes
-    final dialToCountry = {
-      '+971': 'AE', // UAE
-      '+966': 'SA', // Saudi Arabia
-      '+968': 'OM', // Oman
-      '+965': 'KW', // Kuwait
-      '+974': 'QA', // Qatar
-      '+973': 'BH', // Bahrain
-      '+962': 'JO', // Jordan
-      '+961': 'LB', // Lebanon
-      '+20': 'EG', // Egypt
-      '+1': 'US', // US/Canada
-      '+44': 'GB', // UK
-    };
-
-    // Try to match dial code
-    for (final entry in dialToCountry.entries) {
-      if (cleaned.startsWith(entry.key)) {
-        return {'countryCode': entry.value, 'dialCode': entry.key};
-      }
-    }
-
-    // Default to Oman if no match
-    return {'countryCode': 'OM', 'dialCode': '+968'};
   }
 
   void _loadCountries() async {
@@ -274,7 +148,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       final countries = CountryLocalizationService.getAllCountries();
       if (mounted) {
         setState(() {
-          _countries = countries;
           // Set default to Oman (ID: 165) if available
           _selectedCountry = countries.firstWhere(
             (country) => country.id == 165,
@@ -290,7 +163,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         final countries = await LocationService.fetchCountries();
         if (mounted) {
           setState(() {
-            _countries = countries;
             _selectedCountry = countries.firstWhere(
               (country) => country.id == 165,
               orElse:
@@ -312,13 +184,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     } catch (e) {
       debugPrint('Failed to refresh governorates: $e');
     }
-
-    if (mounted) {
-      setState(() {
-        _governorates = LocationService.getAllGovernorates();
-        // Don't set default selection - let user choose
-      });
-    }
+    // Governorates are fetched by SearchableGovernorateDropdown
   }
 
   void _loadPricingData() async {
@@ -431,141 +297,139 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
   void _loadStatesForGovernorate(int governorateId) {
     setState(() {
-      _states = LocationService.getStatesByGovernorateId(governorateId);
       _selectedState = null;
       _selectedPlace = null;
-      _places = [];
-
+      // States are fetched by SearchableStateDropdown
       // Don't set default selection - let user choose
     });
   }
 
   void _loadPlacesForState(int stateId) {
     setState(() {
-      _places = LocationService.getPlacesByStateId(stateId);
       _selectedPlace = null;
-
+      // Places are fetched by SearchablePlaceDropdown
       // Don't set default selection - let user choose
     });
   }
 
-  void _onAddressSelected(AddressBookEntry? address) {
-    if (mounted) {
+  void _searchAddressesByPhone(String phoneDigits) async {
+    // Only search if we have at least 2 digits
+    if (phoneDigits.length < 2) {
       setState(() {
-        _selectedAddress = address;
-
-        // Reset country codes if address is cleared
-        if (address == null) {
-          _phoneCountryCode = null;
-          _phoneCountryDialCode = null;
-          _altPhoneCountryCode = null;
-          _altPhoneCountryDialCode = null;
-        }
+        _addressSuggestions = [];
       });
+      return;
     }
 
-    if (address != null) {
-      // Auto-fill form fields from selected address
-      _nameController.text = address.name;
+    try {
+      final addressBookCubit = getIt<AddressBookCubit>();
+      await addressBookCubit.loadAddressBookEntries(
+        refresh: true,
+        perPage: 100,
+      );
 
-      // Detect country codes from saved phone numbers
-      final phoneInfo = _detectCountryInfo(address.cellphone);
-      final altPhoneInfo = _detectCountryInfo(address.alternatePhone);
+      // Get all entries from the cubit
+      final allEntries = addressBookCubit.allEntries;
+
+      // Filter addresses by phone number (search in cellphone)
+      final matches =
+          allEntries
+              .where((address) {
+                return address.cellphone.contains(phoneDigits);
+              })
+              .take(3)
+              .toList(); // Limit to 3 suggestions
 
       if (mounted) {
         setState(() {
-          _phoneCountryCode = phoneInfo['countryCode'];
-          _phoneCountryDialCode = phoneInfo['dialCode'];
-          _altPhoneCountryCode = altPhoneInfo['countryCode'];
-          _altPhoneCountryDialCode = altPhoneInfo['dialCode'];
+          _addressSuggestions = matches;
         });
       }
-
-      // Parse phone numbers to extract national number (remove country code)
-      // The UnifiedPhoneInput will add the country code back
-      _phoneController.text = _extractNationalNumber(address.cellphone);
-      _alternatePhoneController.text = _extractNationalNumber(
-        address.alternatePhone,
-      );
-
-      // Store full phone numbers AFTER setting controllers
-      // Use post-frame callback to ensure this happens after UnifiedPhoneInput listeners fire
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          _fullPhoneNumber = address.cellphone;
-          _fullAlternatePhoneNumber = address.alternatePhone;
-        }
-      });
-
-      _emailController.text = address.email;
-      _streetAddressController.text = address.streetAddress;
-
-      if (address.zipcode != null) {
-        _zipcodeController.text = address.zipcode!;
-      }
-
-      // Set location dropdowns based on selected address
-      if (address.governorate != null) {
-        // Find and set country first
-        final country = _countries.firstWhere(
-          (c) => c.id == address.countryId,
-          orElse:
-              () => _countries.firstWhere(
-                (c) => c.id == 165, // Default to Oman
-                orElse: () => _countries.first,
-              ),
-        );
-        _selectedCountry = country;
-
-        // Find and set governorate
-        final governorate = _governorates.firstWhere(
-          (g) => g.id == address.governorateId,
-          orElse: () => _governorates.first,
-        );
-        _selectedGovernorate = governorate;
-        _loadStatesForGovernorate(governorate.id);
-
-        // Set state after loading
-        Future.delayed(const Duration(milliseconds: 100), () {
-          if (address.state != null && _states.isNotEmpty) {
-            final stateIndex = _states.indexWhere(
-              (s) => s.id == address.stateId,
-            );
-            final state = stateIndex >= 0 ? _states[stateIndex] : _states.first;
-
-            setState(() {
-              _selectedState = state;
-            });
-            _loadPlacesForState(state.id);
-            // Update delivery fee based on selected state from address
-            _updateDeliveryFeeForState(state.id);
-
-            // Set place after loading
-            Future.delayed(const Duration(milliseconds: 100), () {
-              if (address.place != null && _places.isNotEmpty) {
-                final placeIndex = _places.indexWhere(
-                  (p) => p.id == address.placeId,
-                );
-                final place =
-                    placeIndex >= 0 ? _places[placeIndex] : _places.first;
-
-                setState(() {
-                  _selectedPlace = place;
-                });
-              }
-            });
-          }
+    } catch (e) {
+      debugPrint('Error searching addresses: $e');
+      if (mounted) {
+        setState(() {
+          _addressSuggestions = [];
         });
       }
     }
   }
 
+  void _fillFormFromAddress(AddressBookEntry address) {
+    _nameController.text = address.name;
+
+    // Extract national number and detect country info
+    final phoneNumber = address.cellphone;
+    final altPhoneNumber = address.alternatePhone;
+
+    // Set full phone numbers
+    _fullPhoneNumber = phoneNumber;
+    _fullAlternatePhoneNumber = altPhoneNumber;
+
+    _streetAddressController.text = address.streetAddress;
+
+    // Set location selections based on address
+    if (address.governorate != null) {
+      _selectedGovernorate = LocationService.getAllGovernorates().firstWhere(
+        (g) => g.id == address.governorateId,
+        orElse: () => LocationService.getAllGovernorates().first,
+      );
+      _loadStatesForGovernorate(address.governorateId);
+
+      // Set state after a delay to allow states to load
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (address.state != null) {
+          final states = LocationService.getStatesByGovernorateId(
+            address.governorateId,
+          );
+          final state = states.firstWhere(
+            (s) => s.id == address.stateId,
+            orElse: () => states.first,
+          );
+
+          setState(() {
+            _selectedState = state;
+          });
+          _loadPlacesForState(state.id);
+          _updateDeliveryFeeForState(state.id);
+
+          // Set place after loading places
+          Future.delayed(const Duration(milliseconds: 100), () {
+            if (address.place != null) {
+              final places = LocationService.getPlacesByStateId(state.id);
+              final place = places.firstWhere(
+                (p) => p.id == address.placeId,
+                orElse: () => places.first,
+              );
+
+              setState(() {
+                _selectedPlace = place;
+              });
+            }
+          });
+        }
+      });
+    }
+
+    // Clear suggestions after selection
+    setState(() {
+      _addressSuggestions = [];
+    });
+  }
+
   void _saveCurrentFormAsAddress() async {
-    if (!_hasFormData) return;
+    // Only save if we have the required data
+    if (_nameController.text.trim().isEmpty ||
+        (_phoneController.text.trim().isEmpty && _fullPhoneNumber.isEmpty) ||
+        _selectedCountry == null ||
+        _selectedGovernorate == null ||
+        _selectedState == null) {
+      return;
+    }
 
     final request = AddressBookRequest(
       name: _nameController.text.trim(),
-      email: _emailController.text.trim(),
+      email: "", // Email removed from order form
       cellphone:
           _fullPhoneNumber.isNotEmpty
               ? _fullPhoneNumber
@@ -579,10 +443,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       stateId: _selectedState!.id,
       placeId: _selectedPlace?.id ?? 1,
       streetAddress: _streetAddressController.text.trim(),
-      zipcode:
-          _zipcodeController.text.trim().isNotEmpty
-              ? _zipcodeController.text.trim()
-              : null,
+      zipcode: null, // Zipcode removed from order form
       locationUrl:
           _locationUrlController.text.trim().isNotEmpty
               ? _locationUrlController.text.trim()
@@ -595,32 +456,14 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       await addressBookCubit.createAddressBookEntry(request);
 
       if (mounted) {
-        setState(() {
-          _dismissedSaveSuggestion = true;
-        });
-      }
-
-      if (mounted) {
         ToastService.showSuccess(
           context,
           AppLocalizations.of(context)!.addressSavedSuccessfully,
         );
       }
     } catch (e) {
-      if (mounted) {
-        ToastService.showError(
-          context,
-          AppLocalizations.of(context)!.addressSaveFailed,
-        );
-      }
-    }
-  }
-
-  void _dismissSaveSuggestion() {
-    if (mounted) {
-      setState(() {
-        _dismissedSaveSuggestion = true;
-      });
+      // Silently fail - don't show error for automatic save
+      debugPrint('Failed to save address automatically: $e');
     }
   }
 
@@ -629,8 +472,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     _nameController.dispose();
     _phoneController.dispose();
     _alternatePhoneController.dispose();
-    _emailController.dispose();
-    _zipcodeController.dispose();
     _streetAddressController.dispose();
     _deliveryFeeController.dispose();
     _amountController.dispose();
@@ -670,6 +511,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       print(
                         'Order created successfully: ${state.orderData.id}',
                       );
+                      // Automatically save address to address book
+                      _saveCurrentFormAsAddress();
                       _showSuccessDialog(state.orderData);
                     } else if (state is OrderCreationError) {
                       print('Order creation error: ${state.message}');
@@ -692,18 +535,16 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                           const SizedBox(height: 16),
                           _buildStickerSection(),
                           const SizedBox(height: 16),
-                          _buildAddressBookSection(),
+                          _buildPhoneSection(),
+                          if (_addressSuggestions.isNotEmpty) ...[
+                            const SizedBox(height: 12),
+                            _buildAddressSuggestions(),
+                          ],
                           const SizedBox(height: 16),
                           _buildPersonalInfoSection(),
                           const SizedBox(height: 16),
                           _buildAddressSection(),
-                          if (_hasFormData &&
-                              _selectedAddress == null &&
-                              !_dismissedSaveSuggestion) ...[
-                            const SizedBox(height: 16),
-                            _buildSaveAddressSuggestion(),
-                            const SizedBox(height: 20),
-                          ],
+                          const SizedBox(height: 16),
                           _buildOrderDetailsSection(),
                           const SizedBox(height: 20),
                           _buildSubmitButton(),
@@ -1010,19 +851,19 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     }
   }
 
-  Widget _buildAddressBookSection() {
+  Widget _buildPhoneSection() {
     return FadeInUp(
       duration: const Duration(milliseconds: 500),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.grey.shade200),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 8,
               offset: const Offset(0, 2),
             ),
           ],
@@ -1033,94 +874,169 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             Row(
               children: [
                 Container(
-                  width: 40,
-                  height: 40,
+                  width: 34,
+                  height: 34,
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF06b6d4), Color(0xFF0891b2)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.blue.shade50,
+                    borderRadius: BorderRadius.circular(9),
                   ),
-                  child: const Icon(
-                    Icons.contacts_rounded,
-                    color: Colors.white,
-                    size: 20,
+                  child: Icon(
+                    Icons.phone,
+                    color: Colors.blue.shade600,
+                    size: 17,
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 9),
                 Text(
-                  AppLocalizations.of(context)!.addressBook,
+                  AppLocalizations.of(context)!.phoneNumber,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF1a1a1a),
+                    color: Colors.grey.shade900,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            BlocProvider(
-              create: (context) => getIt<AddressBookCubit>(),
-              child: AddressSelectionWidget(
-                selectedAddress: _selectedAddress,
-                onAddressSelected: _onAddressSelected,
-                label: AppLocalizations.of(context)!.selectFromSavedAddresses,
-                isRequired: false,
+            const SizedBox(height: 14),
+            UnifiedPhoneInput(
+              key: ValueKey(
+                'phone_${_phoneCountryCode}_${_phoneCountryDialCode}',
               ),
+              controller: _phoneController,
+              label: AppLocalizations.of(context)!.phoneNumber,
+              hint: AppLocalizations.of(context)!.phoneNumberInfo,
+              isRequired: true,
+              initialCountryCode: _phoneCountryCode,
+              initialPhoneCode: _phoneCountryDialCode,
+              shouldShowErrors: _hasValidated,
+              onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
+                _fullPhoneNumber = fullPhoneNumber;
+                // Search addresses when phone changes
+                if (_phoneController.text.length >= 2) {
+                  _searchAddressesByPhone(_phoneController.text);
+                } else {
+                  setState(() {
+                    _addressSuggestions = [];
+                  });
+                }
+              },
             ),
-            if (_selectedAddress != null) ...[
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF10b981).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: const Color(0xFF10b981).withValues(alpha: 0.2),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAddressSuggestions() {
+    return FadeInUp(
+      duration: const Duration(milliseconds: 300),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              const Color(0xFF10b981).withValues(alpha: 0.1),
+              const Color(0xFF059669).withValues(alpha: 0.05),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: const Color(0xFF10b981).withValues(alpha: 0.3),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.contacts_rounded,
+                  color: const Color(0xFF10b981),
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  AppLocalizations.of(context)!.savedAddresses,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF10b981),
                   ),
                 ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.check_circle_rounded,
-                      color: Color(0xFF10b981),
-                      size: 16,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      AppLocalizations.of(context)!.formAutoFilled,
-                      style: TextStyle(
-                        color: Color(0xFF10b981),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
+              ],
+            ),
+            const SizedBox(height: 12),
+            ...List.generate(_addressSuggestions.length, (index) {
+              final address = _addressSuggestions[index];
+              return Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                child: Material(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  child: InkWell(
+                    onTap: () => _fillFormFromAddress(address),
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey.shade200),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: const Color(
+                                0xFF10b981,
+                              ).withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(
+                              Icons.person_outline,
+                              color: const Color(0xFF10b981),
+                              size: 20,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  address.name,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey.shade900,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  address.cellphone,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: const Color(0xFF10b981),
+                            size: 16,
+                          ),
+                        ],
                       ),
                     ),
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () => _onAddressSelected(null),
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.clear,
-                        style: TextStyle(
-                          color: Color(0xFF10b981),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              );
+            }),
           ],
         ),
       ),
@@ -1147,20 +1063,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         ),
         const SizedBox(height: 12),
         UnifiedPhoneInput(
-          key: ValueKey('phone_${_phoneCountryCode}_${_phoneCountryDialCode}'),
-          controller: _phoneController,
-          label: AppLocalizations.of(context)!.phoneNumber,
-          hint: AppLocalizations.of(context)!.phoneNumberInfo,
-          isRequired: true,
-          initialCountryCode: _phoneCountryCode,
-          initialPhoneCode: _phoneCountryDialCode,
-          shouldShowErrors: _hasValidated,
-          onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
-            _fullPhoneNumber = fullPhoneNumber;
-          },
-        ),
-        const SizedBox(height: 12),
-        UnifiedPhoneInput(
           key: ValueKey(
             'alt_phone_${_altPhoneCountryCode}_${_altPhoneCountryDialCode}',
           ),
@@ -1173,25 +1075,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           shouldShowErrors: _hasValidated,
           onPhoneChanged: (countryCode, phoneCode, fullPhoneNumber) {
             _fullAlternatePhoneNumber = fullPhoneNumber;
-          },
-        ),
-        const SizedBox(height: 12),
-        _buildTextField(
-          controller: _emailController,
-          label:
-              '${AppLocalizations.of(context)!.emailAddress} (${AppLocalizations.of(context)!.optional})',
-          hint: AppLocalizations.of(context)!.emailPlaceholder,
-          icon: Icons.email_outlined,
-          keyboardType: TextInputType.emailAddress,
-          validator: (value) {
-            if (value != null && value.isNotEmpty) {
-              if (!RegExp(
-                r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-              ).hasMatch(value)) {
-                return AppLocalizations.of(context)!.pleaseEnterValidEmail;
-              }
-            }
-            return null;
           },
         ),
       ],
@@ -1214,8 +1097,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 _selectedGovernorate = null;
                 _selectedState = null;
                 _selectedPlace = null;
-                _states = [];
-                _places = [];
               });
             }
 
@@ -1226,14 +1107,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               } catch (e) {
                 debugPrint('Failed to refresh governorates: $e');
               }
-              if (mounted) {
-                _setStateWithScrollPreservation(() {
-                  _governorates =
-                      LocationService.getAllGovernorates()
-                          .where((g) => g.countryId == country.id)
-                          .toList();
-                });
-              }
+              // Governorates are fetched by SearchableGovernorateDropdown
             }
           },
           label: AppLocalizations.of(context)!.country,
@@ -1268,14 +1142,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               } catch (e) {
                 debugPrint('Failed to refresh states: $e');
               }
-              if (mounted) {
-                _setStateWithScrollPreservation(() {
-                  _states =
-                      LocationService.getAllStates()
-                          .where((s) => s.governorateId == governorate.id)
-                          .toList();
-                });
-              }
+              // States are fetched by SearchableStateDropdown
             }
           },
           label: AppLocalizations.of(context)!.governorate,
@@ -1316,14 +1183,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               } catch (e) {
                 debugPrint('Failed to refresh places: $e');
               }
-              if (mounted) {
-                _setStateWithScrollPreservation(() {
-                  _places =
-                      LocationService.getAllPlaces()
-                          .where((p) => p.stateId == state.id)
-                          .toList();
-                });
-              }
+              // Places are fetched by SearchablePlaceDropdown
             }
           },
           label: AppLocalizations.of(context)!.state,
@@ -1365,18 +1225,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           hint: AppLocalizations.of(context)!.streetAddressHint,
           icon: Icons.home_outlined,
           maxLines: 2,
-          validator: null, // No validation - optional field
-        ),
-        const SizedBox(height: 12),
-        _buildTextField(
-          controller: _zipcodeController,
-          label:
-              '${AppLocalizations.of(context)!.zipcode} (${AppLocalizations.of(context)!.optional})',
-          hint: AppLocalizations.of(
-            context,
-          )!.pleaseEnterField(AppLocalizations.of(context)!.zipcode),
-          icon: Icons.mail_outlined,
-          keyboardType: TextInputType.number,
           validator: null, // No validation - optional field
         ),
       ],
@@ -2525,7 +2373,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             _fullAlternatePhoneNumber.isNotEmpty
                 ? _fullAlternatePhoneNumber
                 : _alternatePhoneController.text.trim(),
-        email: _emailController.text.trim(),
+        email: "", // Email removed from form
         district: "", // Default empty as per API spec
         countryId: _selectedCountry!.id,
         governorateId: _selectedGovernorate!.id,
@@ -2533,7 +2381,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         placeId:
             _selectedPlace?.id, // Only send place ID if a place is selected
         cityId: 1, // Default as per API spec
-        zipcode: _zipcodeController.text.trim(),
+        zipcode: "", // Zipcode removed from form
         streetAddress: _streetAddressController.text.trim(),
         identify: "", // Default empty as per API spec
         taxNumber: "", // Default empty as per API spec
@@ -2707,171 +2555,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       message: display,
       type: ToastType.error,
       context: context,
-    );
-  }
-
-  Widget _buildSaveAddressSuggestion() {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 500),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              const Color(0xFF06b6d4).withValues(alpha: 0.1),
-              const Color(0xFF0891b2).withValues(alpha: 0.05),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: const Color(0xFF06b6d4).withValues(alpha: 0.2),
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF06b6d4).withValues(alpha: 0.1),
-              blurRadius: 15,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF06b6d4), Color(0xFF0891b2)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF06b6d4).withValues(alpha: 0.3),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: const Icon(
-                    Icons.bookmark_add_rounded,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.saveForLater,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF1a1a1a),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        AppLocalizations.of(context)!.addToAddressBook,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[600],
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.7),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.lightbulb_rounded,
-                    color: const Color(0xFF06b6d4),
-                    size: 20,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      AppLocalizations.of(context)!.saveAddressHint,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[700],
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: _saveCurrentFormAsAddress,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF06b6d4),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 0,
-                    ),
-                    icon: const Icon(Icons.save_rounded, size: 18),
-                    label: Text(
-                      AppLocalizations.of(context)!.saveAddress,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                TextButton(
-                  onPressed: _dismissSaveSuggestion,
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 14,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: Text(
-                    AppLocalizations.of(context)!.notNow,
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

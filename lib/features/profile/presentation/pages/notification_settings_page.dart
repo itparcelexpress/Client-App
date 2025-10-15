@@ -81,28 +81,32 @@ class NotificationSettingsView extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocConsumer<ClientSettingsCubit, ClientSettingsState>(
-        listener: (context, state) {
-          if (state is ClientSettingsUpdateSuccess) {
-            MessagingService.showSuccess(context, state.message);
-          } else if (state is ClientSettingsError ||
-              state is ClientSettingsUpdateError) {
-            final message =
-                state is ClientSettingsError
-                    ? state.message
-                    : (state as ClientSettingsUpdateError).message;
+      body: SafeArea(
+        child: BlocConsumer<ClientSettingsCubit, ClientSettingsState>(
+          listener: (context, state) {
+            if (state is ClientSettingsUpdateSuccess) {
+              MessagingService.showSuccess(context, state.message);
+            } else if (state is ClientSettingsError ||
+                state is ClientSettingsUpdateError) {
+              final message =
+                  state is ClientSettingsError
+                      ? state.message
+                      : (state as ClientSettingsUpdateError).message;
 
-            MessagingService.showError(context, message);
-          }
-        },
-        builder: (context, state) {
-          return RefreshIndicator(
-            onRefresh: () async {
-              context.read<ClientSettingsCubit>().refreshClientSettings(userId);
-            },
-            child: _buildBody(context, state),
-          );
-        },
+              MessagingService.showError(context, message);
+            }
+          },
+          builder: (context, state) {
+            return RefreshIndicator(
+              onRefresh: () async {
+                context.read<ClientSettingsCubit>().refreshClientSettings(
+                  userId,
+                );
+              },
+              child: _buildBody(context, state),
+            );
+          },
+        ),
       ),
     );
   }

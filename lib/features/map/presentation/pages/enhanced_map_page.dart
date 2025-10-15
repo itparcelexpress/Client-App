@@ -283,58 +283,62 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
           ),
         ],
       ),
-      body: BlocBuilder<MapCubit, MapState>(
-        builder: (context, state) {
-          print('🗺️ EnhancedMapPage: Current state: ${state.runtimeType}');
+      body: SafeArea(
+        child: BlocBuilder<MapCubit, MapState>(
+          builder: (context, state) {
+            print('🗺️ EnhancedMapPage: Current state: ${state.runtimeType}');
 
-          if (state is MapInitial) {
-            print(
-              '🗺️ EnhancedMapPage: Showing initial state, loading data...',
-            );
-            // Automatically load data when in initial state
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              context.read<MapCubit>().loadMapData();
-            });
-            return LoadingWidgets.mapLoading();
-          } else if (state is MapLoading) {
-            print('🗺️ EnhancedMapPage: Showing loading state');
-            return LoadingWidgets.mapLoading();
-          } else if (state is MapError) {
-            print('🗺️ EnhancedMapPage: Showing error state: ${state.message}');
-            return _buildErrorState(state.message);
-          } else if (state is MapLoaded) {
-            print(
-              '🗺️ EnhancedMapPage: Showing MapLoaded with ${state.stations.length} stations and ${state.hubs.length} hubs',
-            );
-            if (_isMapView) {
-              return _buildMapView(state);
-            } else {
-              return _buildListView(state);
+            if (state is MapInitial) {
+              print(
+                '🗺️ EnhancedMapPage: Showing initial state, loading data...',
+              );
+              // Automatically load data when in initial state
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                context.read<MapCubit>().loadMapData();
+              });
+              return LoadingWidgets.mapLoading();
+            } else if (state is MapLoading) {
+              print('🗺️ EnhancedMapPage: Showing loading state');
+              return LoadingWidgets.mapLoading();
+            } else if (state is MapError) {
+              print(
+                '🗺️ EnhancedMapPage: Showing error state: ${state.message}',
+              );
+              return _buildErrorState(state.message);
+            } else if (state is MapLoaded) {
+              print(
+                '🗺️ EnhancedMapPage: Showing MapLoaded with ${state.stations.length} stations and ${state.hubs.length} hubs',
+              );
+              if (_isMapView) {
+                return _buildMapView(state);
+              } else {
+                return _buildListView(state);
+              }
             }
-          }
 
-          print(
-            '🗺️ EnhancedMapPage: Showing default state: ${state.runtimeType}',
-          );
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.location_off, size: 64, color: Colors.grey[400]),
-                const SizedBox(height: 16),
-                Text(
-                  AppLocalizations.of(context)!.noDataAvailable,
-                  style: const TextStyle(fontSize: 18, color: Colors.grey),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () => context.read<MapCubit>().loadMapData(),
-                  child: Text(AppLocalizations.of(context)!.retry),
-                ),
-              ],
-            ),
-          );
-        },
+            print(
+              '🗺️ EnhancedMapPage: Showing default state: ${state.runtimeType}',
+            );
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.location_off, size: 64, color: Colors.grey[400]),
+                  const SizedBox(height: 16),
+                  Text(
+                    AppLocalizations.of(context)!.noDataAvailable,
+                    style: const TextStyle(fontSize: 18, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => context.read<MapCubit>().loadMapData(),
+                    child: Text(AppLocalizations.of(context)!.retry),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

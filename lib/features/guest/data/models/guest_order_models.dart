@@ -22,11 +22,11 @@ class GuestOrderRequest {
 
   GuestOrderRequest({
     required this.name,
-    required this.email,
+    this.email = "",
     required this.cellphone,
     required this.alternatePhone,
     this.district,
-    required this.zipcode,
+    this.zipcode = "",
     required this.streetAddress,
     this.notes,
     required this.payment_type,

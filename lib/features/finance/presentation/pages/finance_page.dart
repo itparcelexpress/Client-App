@@ -409,47 +409,49 @@ class _FinancePageState extends State<FinancePage> {
             ),
           ],
         ),
-        body: BlocConsumer<FinanceCubit, FinanceState>(
-          listener: (context, state) {
-            if (state is FinanceError) {
-              MessagingService.showError(context, state.message);
-            } else if (state is FinancePdfExportError) {
-              MessagingService.showError(context, state.message);
-            } else if (state is FinanceSettlementRequestSuccess) {
-              MessagingService.showSuccess(context, state.message);
-            } else if (state is FinanceSettlementRequestError) {
-              MessagingService.showError(context, state.message);
-            }
-          },
-          builder: (context, state) {
-            if (state is FinanceLoading) {
-              return LoadingWidgets.fullScreenLoading(
-                message: AppLocalizations.of(context)!.loadingFinanceData,
-              );
-            } else if (state is FinanceError) {
-              return _buildErrorState(context, state.message);
-            } else if (state is FinanceLoaded) {
-              return _buildLoadedState(context, state);
-            } else if (state is FinanceSettlementRequestSubmitting) {
-              // Show loading with settlement request message
-              return LoadingWidgets.fullScreenLoading(
-                message:
-                    AppLocalizations.of(context)!.submittingSettlementRequest,
-              );
-            } else if (state is FinanceSettlementRequestSuccess) {
-              // Show success message and return to previous state
-              // The cubit will handle returning to FinanceLoaded state
-              return LoadingWidgets.fullScreenLoading(message: state.message);
-            } else if (state is FinanceSettlementRequestError) {
-              // Show error message and return to previous state
-              // The cubit will handle returning to FinanceLoaded state
-              return LoadingWidgets.fullScreenLoading(message: state.message);
-            } else {
-              return LoadingWidgets.fullScreenLoading(
-                message: AppLocalizations.of(context)!.loadingFinanceData,
-              );
-            }
-          },
+        body: SafeArea(
+          child: BlocConsumer<FinanceCubit, FinanceState>(
+            listener: (context, state) {
+              if (state is FinanceError) {
+                MessagingService.showError(context, state.message);
+              } else if (state is FinancePdfExportError) {
+                MessagingService.showError(context, state.message);
+              } else if (state is FinanceSettlementRequestSuccess) {
+                MessagingService.showSuccess(context, state.message);
+              } else if (state is FinanceSettlementRequestError) {
+                MessagingService.showError(context, state.message);
+              }
+            },
+            builder: (context, state) {
+              if (state is FinanceLoading) {
+                return LoadingWidgets.fullScreenLoading(
+                  message: AppLocalizations.of(context)!.loadingFinanceData,
+                );
+              } else if (state is FinanceError) {
+                return _buildErrorState(context, state.message);
+              } else if (state is FinanceLoaded) {
+                return _buildLoadedState(context, state);
+              } else if (state is FinanceSettlementRequestSubmitting) {
+                // Show loading with settlement request message
+                return LoadingWidgets.fullScreenLoading(
+                  message:
+                      AppLocalizations.of(context)!.submittingSettlementRequest,
+                );
+              } else if (state is FinanceSettlementRequestSuccess) {
+                // Show success message and return to previous state
+                // The cubit will handle returning to FinanceLoaded state
+                return LoadingWidgets.fullScreenLoading(message: state.message);
+              } else if (state is FinanceSettlementRequestError) {
+                // Show error message and return to previous state
+                // The cubit will handle returning to FinanceLoaded state
+                return LoadingWidgets.fullScreenLoading(message: state.message);
+              } else {
+                return LoadingWidgets.fullScreenLoading(
+                  message: AppLocalizations.of(context)!.loadingFinanceData,
+                );
+              }
+            },
+          ),
         ),
       ),
     );

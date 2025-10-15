@@ -288,41 +288,43 @@ class _MapPageState extends State<MapPage> {
           ),
         ],
       ),
-      body: BlocBuilder<MapCubit, MapState>(
-        builder: (context, state) {
-          if (state is MapLoading) {
-            return LoadingWidgets.mapLoading();
-          } else if (state is MapError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
-                  const SizedBox(height: 16),
-                  Text(
-                    state.message,
-                    style: const TextStyle(fontSize: 18, color: Colors.red),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => context.read<MapCubit>().loadMapData(),
-                    child: Text(AppLocalizations.of(context)!.retry),
-                  ),
-                ],
-              ),
-            );
-          } else if (state is MapLoaded) {
-            if (_isMapView) {
-              return _buildMapView(state);
-            } else {
-              return _buildListView(state);
+      body: SafeArea(
+        child: BlocBuilder<MapCubit, MapState>(
+          builder: (context, state) {
+            if (state is MapLoading) {
+              return LoadingWidgets.mapLoading();
+            } else if (state is MapError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
+                    const SizedBox(height: 16),
+                    Text(
+                      state.message,
+                      style: const TextStyle(fontSize: 18, color: Colors.red),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => context.read<MapCubit>().loadMapData(),
+                      child: Text(AppLocalizations.of(context)!.retry),
+                    ),
+                  ],
+                ),
+              );
+            } else if (state is MapLoaded) {
+              if (_isMapView) {
+                return _buildMapView(state);
+              } else {
+                return _buildListView(state);
+              }
             }
-          }
-          return Center(
-            child: Text(AppLocalizations.of(context)!.noDataAvailable),
-          );
-        },
+            return Center(
+              child: Text(AppLocalizations.of(context)!.noDataAvailable),
+            );
+          },
+        ),
       ),
     );
   }
