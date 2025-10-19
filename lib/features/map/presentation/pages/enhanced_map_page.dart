@@ -45,7 +45,7 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
       try {
         context.read<MapCubit>().loadMapData();
       } catch (e) {
-        print('⚠️ Error loading map data: $e');
+        // Error loading map data
       }
     });
   }
@@ -53,35 +53,40 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
   @override
   void dispose() {
     _fabAnimationController.dispose();
+    _mapController?.dispose();
+    _mapController = null;
     super.dispose();
   }
 
   void _onMapCreated(GoogleMapController controller) {
     try {
+      if (!mounted) return;
       _mapController = controller;
       // Fit all markers in view after a delay
       Future.delayed(const Duration(milliseconds: 1000), () {
         try {
-          _fitMarkersInView();
+          if (mounted) {
+            _fitMarkersInView();
+          }
         } catch (e) {
-          print('⚠️ Error fitting markers in view: $e');
+          // Error fitting markers
         }
       });
     } catch (e) {
-      print('⚠️ Error in onMapCreated: $e');
+      // Error in onMapCreated
     }
   }
 
   void _fitMarkersInView() {
     try {
-      if (_markers.isEmpty || _mapController == null) return;
+      if (!mounted || _markers.isEmpty || _mapController == null) return;
 
       final LatLngBounds bounds = _createBoundsFromMarkers();
       _mapController!.animateCamera(
         CameraUpdate.newLatLngBounds(bounds, 100.0),
       );
     } catch (e) {
-      print('⚠️ Error fitting markers in view: $e');
+      // Error fitting markers
     }
   }
 
@@ -109,9 +114,6 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
 
   void _updateMarkers(List<Station> stations, List<hub_models.HubDetail> hubs) {
     try {
-      print(
-        '🗺️ EnhancedMapPage: Updating markers with ${stations.length} stations and ${hubs.length} hubs',
-      );
       _markers.clear();
       final state = context.read<MapCubit>().state;
       final selectedStationId =
@@ -121,9 +123,6 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
       // Add station markers
       for (final station in stations) {
         try {
-          print(
-            '🗺️ EnhancedMapPage: Adding station marker: ${station.name} at ${station.lat}, ${station.lng}',
-          );
           final isSelected = selectedStationId == station.id.toString();
           _markers.add(
             Marker(
@@ -149,22 +148,19 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
                   );
                   _animateToIndex(_allItems.indexOf(station));
                 } catch (e) {
-                  print('⚠️ Error handling station tap: $e');
+                  // Error handling station tap
                 }
               },
             ),
           );
         } catch (e) {
-          print('⚠️ Error adding station marker for ${station.name}: $e');
+          // Error adding station marker
         }
       }
 
       // Add hub markers
       for (final hub in hubs) {
         try {
-          print(
-            '🗺️ EnhancedMapPage: Adding hub marker: ${hub.name} at ${hub.lat}, ${hub.lng}',
-          );
           final isSelected = selectedHubId == hub.id.toString();
           _markers.add(
             Marker(
@@ -184,38 +180,31 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
                   );
                   _animateToIndex(_allItems.indexOf(hub));
                 } catch (e) {
-                  print('⚠️ Error handling hub tap: $e');
+                  // Error handling hub tap
                 }
               },
             ),
           );
         } catch (e) {
-          print('⚠️ Error adding hub marker for ${hub.name}: $e');
+          // Error adding hub marker
         }
       }
-
-      print('🗺️ EnhancedMapPage: Total markers created: ${_markers.length}');
     } catch (e) {
-      print('⚠️ Error updating markers: $e');
+      // Error updating markers
     }
   }
 
   void _animateToLocation(LatLng location) {
     try {
-      if (_mapController != null) {
-        _mapController!.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(
-              target: location,
-              zoom: 15.0,
-              bearing: 0.0,
-              tilt: 0.0,
-            ),
-          ),
-        );
-      }
+      if (!mounted || _mapController == null) return;
+
+      _mapController!.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: location, zoom: 15.0, bearing: 0.0, tilt: 0.0),
+        ),
+      );
     } catch (e) {
-      print('⚠️ Error animating to location: $e');
+      // Error animating to location
     }
   }
 
@@ -286,29 +275,17 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
       body: SafeArea(
         child: BlocBuilder<MapCubit, MapState>(
           builder: (context, state) {
-            print('🗺️ EnhancedMapPage: Current state: ${state.runtimeType}');
-
             if (state is MapInitial) {
-              print(
-                '🗺️ EnhancedMapPage: Showing initial state, loading data...',
-              );
               // Automatically load data when in initial state
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 context.read<MapCubit>().loadMapData();
               });
               return LoadingWidgets.mapLoading();
             } else if (state is MapLoading) {
-              print('🗺️ EnhancedMapPage: Showing loading state');
               return LoadingWidgets.mapLoading();
             } else if (state is MapError) {
-              print(
-                '🗺️ EnhancedMapPage: Showing error state: ${state.message}',
-              );
               return _buildErrorState(state.message);
             } else if (state is MapLoaded) {
-              print(
-                '🗺️ EnhancedMapPage: Showing MapLoaded with ${state.stations.length} stations and ${state.hubs.length} hubs',
-              );
               if (_isMapView) {
                 return _buildMapView(state);
               } else {
@@ -316,9 +293,6 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
               }
             }
 
-            print(
-              '🗺️ EnhancedMapPage: Showing default state: ${state.runtimeType}',
-            );
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -366,11 +340,7 @@ class _EnhancedMapPageState extends State<EnhancedMapPage>
   }
 
   Widget _buildMapView(MapLoaded state) {
-    print(
-      '🗺️ EnhancedMapPage: Building map view with ${state.stations.length} stations and ${state.hubs.length} hubs',
-    );
     _updateMarkers(state.stations, state.hubs);
-    print('🗺️ EnhancedMapPage: Created ${_markers.length} markers');
 
     return Stack(
       children: [

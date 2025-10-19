@@ -141,7 +141,6 @@ class _DashboardPageState extends State<DashboardPage> {
           thisMonthValue: data.thisMonthValue,
           accountBalance: data.accountBalance,
           parcelValue: data.parcelValue,
-          avgOrderValue: data.avgOrderValue,
         ),
         const SizedBox(height: 12),
 

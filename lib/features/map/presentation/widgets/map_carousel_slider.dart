@@ -52,9 +52,6 @@ class _MapCarouselSliderState extends State<MapCarouselSlider> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-      '🗺️ CarouselSlider: Building with ${_allItems.length} items (${widget.stations.length} stations, ${widget.hubs.length} hubs)',
-    );
     if (_allItems.isEmpty) {
       return Container(
         height: 200,

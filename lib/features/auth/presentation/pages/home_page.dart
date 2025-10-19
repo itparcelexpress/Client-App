@@ -265,12 +265,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget _buildProfilePage() {
     final user = LocalData.user;
 
-    // Debug: Print user data when profile page loads
-    print('🟢 Profile Page - User Data:');
-    print('🟢 User ID: ${user?.id}');
-    print('🟢 Client ID: ${user?.client?.id}');
-    print('🟢 Full User: ${user?.toJson()}');
-
     return SafeArea(
       child: SingleChildScrollView(
         padding: ResponsiveUtils.getResponsivePaddingEdgeInsets(
@@ -552,16 +546,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 final clientId =
                     user?.client?.id; // Client ID for the form data
 
-                print('🟢 User Data Debug:');
-                print('🟢 User ID: $userId');
-                print('🟢 Client ID: $clientId');
-                print('🟢 User: ${user?.toJson()}');
-                print('🟢 Client: ${user?.client?.toJson()}');
-
                 if (userId != null && clientId != null) {
-                  print(
-                    '🟢 Navigating to NotificationSettingsPage with userId: $userId, clientId: $clientId',
-                  );
                   _navigateWithSlideTransition(
                     NotificationSettingsPage(
                       userId: userId, // For API endpoint
@@ -569,9 +554,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                   );
                 } else {
-                  print(
-                    '🔴 Missing user data - userId: $userId, clientId: $clientId',
-                  );
                   MessagingService.showWarning(
                     context,
                     AppLocalizations.of(context)!.notAvailable,

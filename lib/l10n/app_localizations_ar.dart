@@ -694,6 +694,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get avgOrder => 'متوسط الطلب';
 
   @override
+  String get parcelValue => 'قيمة الطرود';
+
+  @override
   String get performanceMetrics => 'مقاييس الأداء';
 
   @override

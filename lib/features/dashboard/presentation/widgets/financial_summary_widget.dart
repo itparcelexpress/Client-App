@@ -7,7 +7,6 @@ class FinancialSummaryWidget extends StatelessWidget {
   final String thisMonthValue;
   final String accountBalance;
   final String parcelValue;
-  final String avgOrderValue;
 
   const FinancialSummaryWidget({
     super.key,
@@ -15,7 +14,6 @@ class FinancialSummaryWidget extends StatelessWidget {
     required this.thisMonthValue,
     required this.accountBalance,
     required this.parcelValue,
-    required this.avgOrderValue,
   });
 
   @override
@@ -101,9 +99,9 @@ class FinancialSummaryWidget extends StatelessWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: _buildFinancialItem(
-                    AppLocalizations.of(context)!.avgOrder,
-                    '$avgOrderValue OMR',
-                    Icons.trending_up,
+                    AppLocalizations.of(context)!.parcelValue,
+                    '$parcelValue OMR',
+                    Icons.inventory_2,
                   ),
                 ),
               ],

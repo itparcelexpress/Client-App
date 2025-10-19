@@ -3,8 +3,6 @@ import 'package:client_app/core/utilities/responsive_utils.dart';
 import 'package:client_app/core/widgets/app_footer.dart';
 import 'package:client_app/features/auth/cubit/auth_cubit.dart';
 import 'package:client_app/features/auth/presentation/pages/home_page.dart';
-import 'package:client_app/features/guest/cubit/guest_cubit.dart';
-import 'package:client_app/features/guest/presentation/pages/create_guest_order_page.dart';
 import 'package:client_app/injections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -229,13 +227,6 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               _buildLoginButton(context, state),
-                              SizedBox(
-                                height: ResponsiveUtils.getResponsivePadding(
-                                  context,
-                                  20,
-                                ),
-                              ),
-                              _buildGuestButton(context),
                               SizedBox(
                                 height: ResponsiveUtils.getResponsivePadding(
                                   context,
@@ -476,38 +467,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
       ),
-    );
-  }
-
-  Widget _buildGuestButton(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: ResponsiveUtils.getResponsivePadding(context, 16)),
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder:
-                    (context) => BlocProvider(
-                      create: (context) => getIt<GuestCubit>(),
-                      child: const CreateGuestOrderPage(),
-                    ),
-              ),
-            );
-          },
-          style: TextButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-          ),
-          child: Text(
-            AppLocalizations.of(context)!.continueAsGuest,
-            style: _systemFont(
-              fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade700,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

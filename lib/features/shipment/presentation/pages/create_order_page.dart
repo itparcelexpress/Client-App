@@ -157,7 +157,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         });
       }
     } catch (e) {
-      print('Error loading countries: $e');
       // Fallback to API if local data fails
       try {
         final countries = await LocationService.fetchCountries();
@@ -172,7 +171,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           });
         }
       } catch (apiError) {
-        print('Error loading countries from API: $apiError');
+        // Error loading countries from API
       }
     }
   }
@@ -208,13 +207,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           if (!mounted) return; // Check if widget is still mounted
 
           if (state is PricingLoaded) {
-            print('🟢 Pricing loaded: ${state.pricingData.length} items');
-            for (var pricing in state.pricingData) {
-              print(
-                '🟢 Pricing item - State ID: ${pricing.stateId}, Delivery Fee: ${pricing.deliveryFee}',
-              );
-            }
-
             // Store pricing data permanently
             _pricingData = List.from(state.pricingData);
             if (mounted) {
@@ -223,13 +215,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               });
             }
 
-            print('🟢 Pricing data stored: ${_pricingData.length} items');
-
             // Update delivery fee if state is already selected
             if (_selectedState != null) {
-              print(
-                '🟢 Auto-updating delivery fee for state: ${_selectedState!.id}',
-              );
               _updateDeliveryFeeForState(_selectedState!.id);
             }
           } else if (state is PricingError) {
@@ -238,14 +225,12 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 _isLoadingPricing = false;
               });
             }
-            print('🔴 Pricing loading error: ${state.message}');
           } else if (state is PricingEmpty) {
             if (mounted) {
               setState(() {
                 _isLoadingPricing = false;
               });
             }
-            print('🟡 Pricing data is empty: ${state.message}');
           }
         });
       }
@@ -255,17 +240,12 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           _isLoadingPricing = false;
         });
       }
-      print('Error loading pricing data: $e');
     }
   }
 
   void _updateDeliveryFeeForState(int stateId) {
-    print('🟢 Looking for pricing for state ID: $stateId');
-    print('🟢 Available pricing data: ${_pricingData.length} items');
-
     // If no pricing data available, try to reload it
     if (_pricingData.isEmpty && _pricingCubit != null) {
-      print('🟡 No pricing data available, attempting to reload...');
       _pricingCubit!.loadPricingForClient(LocalData.user!.id!);
       return;
     }
@@ -273,7 +253,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     final pricingForState = _pricingData.firstWhere(
       (pricing) => pricing.stateId == stateId,
       orElse: () {
-        print('🟡 No pricing found for state $stateId, using default');
         return PricingData(
           id: 0,
           clientId: 0,
@@ -287,7 +266,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       },
     );
 
-    print('🟢 Setting delivery fee to: ${pricingForState.deliveryFee}');
     if (mounted) {
       setState(() {
         _deliveryFeeController.text = pricingForState.deliveryFee;
@@ -508,14 +486,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 child: BlocListener<ShipmentCubit, ShipmentState>(
                   listener: (context, state) {
                     if (state is OrderCreated) {
-                      print(
-                        'Order created successfully: ${state.orderData.id}',
-                      );
                       // Automatically save address to address book
                       _saveCurrentFormAsAddress();
                       _showSuccessDialog(state.orderData);
                     } else if (state is OrderCreationError) {
-                      print('Order creation error: ${state.message}');
                       _showErrorToast(state.message);
                     }
                   },
@@ -1168,9 +1142,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 if (state != null) {
                   _loadPlacesForState(state.id);
                   // Update delivery fee based on selected state
-                  print(
-                    '🟢 State changed to: ${state.id}, pricing data available: ${_pricingData.length}',
-                  );
                   _updateDeliveryFeeForState(state.id);
                 }
               });

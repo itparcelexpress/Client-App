@@ -324,6 +324,11 @@
     "description": "Average order label"
   },
 
+  "parcelValue": "قيمة الطرود",
+  "@parcelValue": {
+    "description": "Parcel value label"
+  },
+
   "performanceMetrics": "مقاييس الأداء",
   "@performanceMetrics": {
     "description": "Performance metrics section title"

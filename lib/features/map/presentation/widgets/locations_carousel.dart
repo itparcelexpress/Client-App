@@ -62,18 +62,10 @@ class _LocationsCarouselState extends State<LocationsCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-      '🗺️ LocationsCarousel: Building with ${_allItems.length} items (${widget.stations.length} stations, ${widget.hubs.length} hubs)',
-    );
-
     if (_allItems.isEmpty) {
-      print('🗺️ LocationsCarousel: Showing empty state');
       return _buildEmptyState();
     }
 
-    print(
-      '🗺️ LocationsCarousel: Showing carousel with ${_allItems.length} items',
-    );
     return Container(
       height: 180,
       margin: const EdgeInsets.fromLTRB(

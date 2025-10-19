@@ -17,7 +17,6 @@ class MapViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('🗺️ MapViewWidget: Building with ${markers.length} markers');
     return GoogleMap(
       onMapCreated: onMapCreated,
       initialCameraPosition: initialCameraPosition,

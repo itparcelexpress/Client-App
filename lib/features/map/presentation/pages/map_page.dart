@@ -36,6 +36,13 @@ class _MapPageState extends State<MapPage> {
     context.read<MapCubit>().loadMapData();
   }
 
+  @override
+  void dispose() {
+    _mapController?.dispose();
+    _mapController = null;
+    super.dispose();
+  }
+
   Future<void> _createCustomMarkers() async {
     // Create custom markers with better styling
     _stationIcon = await BitmapDescriptor.fromAssetImage(
@@ -72,23 +79,20 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _onMapCreated(GoogleMapController controller) {
+    if (!mounted) return;
     _mapController = controller;
-    print('🗺️ Map created, controller set');
     // Fit all markers in view after a short delay to ensure markers are loaded
     Future.delayed(const Duration(milliseconds: 1000), () {
-      _fitMarkersInView();
+      if (mounted) {
+        _fitMarkersInView();
+      }
     });
   }
 
   void _fitMarkersInView() {
-    if (_markers.isEmpty || _mapController == null) {
-      print(
-        '🗺️ Cannot fit markers: markers=${_markers.length}, controller=${_mapController != null}',
-      );
+    if (!mounted || _markers.isEmpty || _mapController == null) {
       return;
     }
-
-    print('🗺️ Fitting ${_markers.length} markers in view');
     final LatLngBounds bounds = _createBoundsFromMarkers();
     _mapController!.animateCamera(
       CameraUpdate.newLatLngBounds(bounds, 100.0), // 100px padding
@@ -118,9 +122,6 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _updateMarkers(List<Station> stations, List<hub_models.HubDetail> hubs) {
-    print(
-      '🗺️ Updating markers: ${stations.length} stations, ${hubs.length} hubs',
-    );
     _markers.clear();
 
     // Add a test marker at Muscat center to verify map is working
@@ -143,9 +144,6 @@ class _MapPageState extends State<MapPage> {
 
     // Add station markers
     for (final station in stations) {
-      print(
-        '🗺️ Adding station marker: ${station.name} at ${station.lat}, ${station.lng}',
-      );
       final isSelected = selectedStationId == station.id.toString();
       _markers.add(
         Marker(
@@ -178,7 +176,6 @@ class _MapPageState extends State<MapPage> {
 
     // Add hub markers
     for (final hub in hubs) {
-      print('🗺️ Adding hub marker: ${hub.name} at ${hub.lat}, ${hub.lng}');
       final isSelected = selectedHubId == hub.id.toString();
       _markers.add(
         Marker(
@@ -205,7 +202,6 @@ class _MapPageState extends State<MapPage> {
         ),
       );
     }
-    print('🗺️ Total markers created: ${_markers.length}');
   }
 
   void _animateCarouselToItem(dynamic item) {
@@ -221,7 +217,9 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _animateToLocation(LatLng location) {
-    _mapController?.animateCamera(
+    if (!mounted || _mapController == null) return;
+
+    _mapController!.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
           target: location,

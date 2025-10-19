@@ -17,17 +17,11 @@ class MapRepositoryImpl implements MapRepository {
       );
 
       if (response.success && response.data != null) {
-        print('🗺️ Repository: Parsing stations response data');
-        print('🗺️ Repository: Raw response data: ${response.data}');
-
         // response.data contains the pagination data, we need to parse it as StationData
         StationData stationData;
         try {
           stationData = StationData.fromJson(response.data);
-          print('🗺️ Repository: Parsed ${stationData.data.length} stations');
-        } catch (e, stackTrace) {
-          print('🗺️ Repository: Detailed error parsing stations: $e');
-          print('🗺️ Repository: Stack trace: $stackTrace');
+        } catch (e) {
           rethrow;
         }
         return AppResponse(
@@ -38,7 +32,6 @@ class MapRepositoryImpl implements MapRepository {
         );
       }
 
-      print('🗺️ Repository: Stations response failed or null data');
       // Return empty data instead of error for now
       return AppResponse(
         data: StationData(
@@ -61,7 +54,6 @@ class MapRepositoryImpl implements MapRepository {
         statusCode: 200,
       );
     } catch (e) {
-      print('🗺️ Repository: Error parsing stations: $e');
       // Return empty data instead of error for now
       return AppResponse(
         data: StationData(
@@ -95,17 +87,11 @@ class MapRepositoryImpl implements MapRepository {
       );
 
       if (response.success && response.data != null) {
-        print('🗺️ Repository: Parsing hubs response data');
-        print('🗺️ Repository: Raw response data: ${response.data}');
-
         // response.data contains the pagination data, we need to parse it as HubData
         HubData hubData;
         try {
           hubData = HubData.fromJson(response.data);
-          print('🗺️ Repository: Parsed ${hubData.data.length} hubs');
-        } catch (e, stackTrace) {
-          print('🗺️ Repository: Detailed error parsing hubs: $e');
-          print('🗺️ Repository: Stack trace: $stackTrace');
+        } catch (e) {
           rethrow;
         }
         return AppResponse(
@@ -116,7 +102,6 @@ class MapRepositoryImpl implements MapRepository {
         );
       }
 
-      print('🗺️ Repository: Hubs response failed or null data');
       // Return empty data instead of error for now
       return AppResponse(
         data: HubData(
@@ -139,7 +124,6 @@ class MapRepositoryImpl implements MapRepository {
         statusCode: 200,
       );
     } catch (e) {
-      print('🗺️ Repository: Error parsing hubs: $e');
       // Return empty data instead of error for now
       return AppResponse(
         data: HubData(

@@ -950,6 +950,11 @@
     "description": "Average order label"
   },
 
+  "parcelValue": "Parcel Value",
+  "@parcelValue": {
+    "description": "Parcel value label"
+  },
+
   "performanceMetrics": "Performance Metrics",
   "@performanceMetrics": {
     "description": "Performance metrics section title"

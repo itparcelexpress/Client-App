@@ -698,6 +698,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get avgOrder => 'Avg Order';
 
   @override
+  String get parcelValue => 'Parcel Value';
+
+  @override
   String get performanceMetrics => 'Performance Metrics';
 
   @override

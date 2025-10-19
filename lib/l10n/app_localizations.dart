@@ -1388,6 +1388,12 @@ abstract class AppLocalizations {
   /// **'Avg Order'**
   String get avgOrder;
 
+  /// Parcel value label
+  ///
+  /// In en, this message translates to:
+  /// **'Parcel Value'**
+  String get parcelValue;
+
   /// Performance metrics section title
   ///
   /// In en, this message translates to:
