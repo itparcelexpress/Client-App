@@ -32,9 +32,34 @@ Future<void> main() async {
   // Note: Removed automatic logout on app start for better UX
   // Authentication state will be checked in AuthWrapper
 
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  // Support all orientations for iOS (iPhone and iPad)
+  // Lock portrait mode for Android only
+  if (Platform.isIOS) {
+    // Support all orientations on iOS to work properly on both iPhone and iPad
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.portraitDown,
+    ]);
+  } else {
+    // Android: Keep portrait-only
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  }
+
   HttpOverrides.global = MyHttpOverrides();
-  FlutterError.onError = (FlutterErrorDetails details) {};
+
+  // Proper error handling - log errors in debug mode, handle gracefully in release
+  FlutterError.onError = (FlutterErrorDetails details) {
+    if (kDebugMode) {
+      // In debug mode, print full error details
+      FlutterError.presentError(details);
+    } else {
+      // In release mode, log the error but don't crash the app
+      // You can integrate with crash reporting services like Firebase Crashlytics here
+      debugPrint('Flutter Error: ${details.exception}');
+    }
+  };
 
   runApp(const MyApp());
 }
