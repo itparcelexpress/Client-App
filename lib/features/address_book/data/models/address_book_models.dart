@@ -254,7 +254,7 @@ class AddressBookRequest extends Equatable {
   final int countryId;
   final int governorateId;
   final int stateId;
-  final int placeId;
+  final int? placeId;
   final String streetAddress;
   final String? zipcode;
   final String? locationUrl;
@@ -267,7 +267,7 @@ class AddressBookRequest extends Equatable {
     required this.countryId,
     required this.governorateId,
     required this.stateId,
-    required this.placeId,
+    this.placeId,
     required this.streetAddress,
     this.zipcode,
     this.locationUrl,
@@ -282,7 +282,7 @@ class AddressBookRequest extends Equatable {
       'country_id': countryId.toString(),
       'governorate_id': governorateId.toString(),
       'state_id': stateId.toString(),
-      'place_id': placeId.toString(),
+      if (placeId != null) 'place_id': placeId.toString(),
       'streetAddress': streetAddress,
       if (zipcode != null) 'zipcode': zipcode,
       if (locationUrl != null) 'location_url': locationUrl,

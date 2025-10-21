@@ -375,14 +375,16 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           Future.delayed(const Duration(milliseconds: 100), () {
             if (address.place != null) {
               final places = LocationService.getPlacesByStateId(state.id);
-              final place = places.firstWhere(
-                (p) => p.id == address.placeId,
-                orElse: () => places.first,
-              );
+              try {
+                final place = places.firstWhere((p) => p.id == address.placeId);
 
-              setState(() {
-                _selectedPlace = place;
-              });
+                setState(() {
+                  _selectedPlace = place;
+                });
+              } catch (e) {
+                // Place not found, leave _selectedPlace as null
+                debugPrint('Place not found for address: ${address.placeId}');
+              }
             }
           });
         }
@@ -419,7 +421,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       countryId: _selectedCountry!.id,
       governorateId: _selectedGovernorate!.id,
       stateId: _selectedState!.id,
-      placeId: _selectedPlace?.id ?? 1,
+      placeId: _selectedPlace?.id, // Only send place ID if a place is selected
       streetAddress: _streetAddressController.text.trim(),
       zipcode: null, // Zipcode removed from order form
       locationUrl:
